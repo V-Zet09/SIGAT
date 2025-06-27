@@ -21,3 +21,13 @@ Homestead.yaml
 Homestead.json
 /.vagrant
 .phpunit.result.cache
+<<<<<<< HEAD
+=======
+
+/public/build
+/storage/pail
+.env.backup
+.env.production
+.phpactor.json
+auth.json
+>>>>>>> 018c1ff4ad5f8b2bcfdbee8b4917a7f9f9c93027
