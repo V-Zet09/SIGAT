@@ -11,7 +11,7 @@
             Dashboards
         @endslot
         @slot('title')
-            Analytics
+            MARIANA
         @endslot
     @endcomponent
 

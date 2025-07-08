@@ -10,7 +10,7 @@
             Dashboards
         <?php $__env->endSlot(); ?>
         <?php $__env->slot('title'); ?>
-            Analytics
+            MARIANA
         <?php $__env->endSlot(); ?>
     <?php echo $__env->renderComponent(); ?>
 
