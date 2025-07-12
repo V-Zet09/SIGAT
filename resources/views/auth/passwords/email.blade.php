@@ -1,120 +1,137 @@
 @extends('layouts.master-without-nav')
+
 @section('title')
     @lang('translation.password-reset')
 @endsection
+
 @section('content')
 
-    <div class="auth-page-wrapper pt-5">
-        <!-- auth page bg -->
-        <div class="auth-one-bg-position auth-one-bg" id="auth-particles">
-            <div class="bg-overlay"></div>
+<style>
+    :root {
+        --primary-blue: #2776BA;
+        --secondary-blue: #5490AA;
+        --light-blue: #7480AA;
+        --accent-wine: #854256;
+        --card-bg: rgba(255, 255, 255, 0.95);
+    }
+    
+    .bg-persianas-gruesas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: 
+            linear-gradient(
+                90deg,
+                rgba(255,255,255,0.15) 0%,
+                rgba(255,255,255,0) 10%,
+                rgba(255,255,255,0) 90%,
+                rgba(255,255,255,0.15) 100%
+            ),
+            url('{{ asset('images/fondo.jpeg') }}');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        z-index: -1;
+        opacity: 0.9;
+        mask-image: repeating-linear-gradient(
+            90deg,
+            transparent 0px,
+            transparent 15px,       <!-- Espacio transparente reducido -->
+            rgba(0,0,0,0.8) 15px,  <!-- Persianas más gruesas -->
+            rgba(0,0,0,0.8) 60px   <!-- Ancho aumentado -->
+        );
+        -webkit-mask-image: repeating-linear-gradient(
+            90deg,
+            transparent 0px,
+            transparent 15px,
+            rgba(0,0,0,0.8) 15px,
+            rgba(0,0,0,0.8) 60px
+        );
+    }
+    
+    .compact-card {
+        max-width: 480px;
+        padding: 1.75rem;
+        border-radius: 12px;
+        backdrop-filter: blur(6px);
+        background-color: var(--card-bg);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.35);
+    }
+</style>
 
-            <div class="shape">
-                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink"
-                    viewBox="0 0 1440 120">
-                    <path d="M 0,36 C 144,53.6 432,123.2 720,124 C 1008,124.8 1296,56.8 1440,40L1440 140L0 140z"></path>
-                </svg>
+<div class="auth-page-wrapper pt-4 position-relative" style="min-height: 100vh;">
+    
+    <!-- Fondo con persianas gruesas -->
+    <div class="bg-persianas-gruesas"></div>
+    
+    <!-- Contenido compacto -->
+    <div class="container d-flex justify-content-center align-items-center min-vh-100">
+        <div class="compact-card shadow-sm">
+            <div class="text-center">
+                <h4 class="text-primary fw-bold mb-2">¿Olvidaste tu contraseña?</h4>
+                <p class="mb-3" style="color: var(--secondary-blue);">Solicita el restablecimiento de tu acceso al sistema SIGAT</p>
+                <lord-icon src="https://cdn.lordicon.com/rhvddzym.json" trigger="loop" colors="primary:#2776BA" style="width:80px;height:80px;"></lord-icon>
             </div>
+
+            <div class="alert alert-warning text-start py-2 mb-3">
+                <i class="fas fa-info-circle me-2"></i> Ingresa tu correo electrónico registrado y sigue las instrucciones enviadas.
+            </div>
+
+            @if (session('status'))
+                <div class="alert alert-success text-center py-2 mb-3">
+                    <i class="fas fa-check-circle me-2"></i> {{ session('status') }}
+                </div>
+            @endif
+
+            <form method="POST" action="{{ route('password.email') }}">
+                @csrf
+                <div class="mb-3">
+                    <label for="email" class="form-label" style="color: var(--secondary-blue); font-weight: 500;">Correo electrónico</label>
+                    <input type="email" name="email" id="email" class="form-control py-2 @error('email') is-invalid @enderror" placeholder="Ingresa tu correo electrónico" value="{{ old('email') }}" required>
+                    @error('email')
+                        <div class="invalid-feedback">
+                            <i class="fas fa-exclamation-circle me-1"></i> {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+
+                <div class="d-grid mb-3">
+                    <button type="submit" class="btn btn-primary py-2">
+                        <i class="fas fa-paper-plane me-2"></i> Enviar enlace de recuperación
+                    </button>
+                </div>
+            </form>
+
+            <div class="text-center mt-3">
+                <a href="{{ route('login') }}" style="color: var(--light-blue);">
+                    <i class="fas fa-sign-in-alt me-1"></i> ¿Ya recuerdas tu contraseña? Inicia sesión aquí
+                </a>
+            </div>
+
+            <hr class="my-3" style="border-top: 1px solid rgba(116, 128, 170, 0.2);">
+
+            <footer class="text-center" style="color: var(--secondary-blue); font-size: 0.9rem;">
+                <div class="mb-1">
+                    &copy; <script>document.write(new Date().getFullYear())</script> <strong>SIGAT</strong>
+                </div>
+                <div class="mb-1">
+                    Desarrollado por estudiantes de Educación Dual:
+                </div>
+                <div class="mb-1">
+                    <strong>Maico Zaet</strong>, <strong>Mariana Lilibeth</strong>, <strong>Jorge</strong>, <strong>José Ángel</strong>
+                </div>
+                <div class="mb-1">
+                    Carrera: <strong>Ingeniería Informática</strong>
+                </div>
+                <div>
+                    Contacto: <a href="mailto:educaciondualsigat@gmail.com" style="color: var(--light-blue);">educaciondualsigat@gmail.com</a>
+                </div>
+            </footer>
         </div>
-
-        <!-- auth page content -->
-        <div class="auth-page-content">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="text-center mt-sm-5 mb-4 text-white-50">
-                            <div>
-                                <a href="index" class="d-inline-block auth-logo">
-                                    <img src="{{ URL::asset('build/images/logo-light.png') }}" alt=""
-                                        height="20">
-                                </a>
-                            </div>
-                            <p class="mt-3 fs-15 fw-medium">Premium Admin & Dashboard Template</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- end row -->
-
-                <div class="row justify-content-center">
-                    <div class="col-md-8 col-lg-6 col-xl-5">
-                        <div class="card mt-4">
-
-                            <div class="card-body p-4">
-                                <div class="text-center mt-2">
-                                    <h5 class="text-primary">Forgot Password?</h5>
-                                    <p class="text-muted">Reset password with velzon</p>
-
-                                    <lord-icon src="https://cdn.lordicon.com/rhvddzym.json" trigger="loop"
-                                        colors="primary:#0ab39c" class="avatar-xl">
-                                    </lord-icon>
-
-                                </div>
-
-                                <div class="alert alert-borderless alert-warning text-center mb-2 mx-2" role="alert">
-                                    Enter your email and instructions will be sent to you!
-                                </div>
-                                <div class="p-2">
-                                    @if (session('status'))
-                                        <div class="alert alert-success text-center mb-4" role="alert">
-                                            {{ session('status') }}
-                                        </div>
-                                    @endif
-                                    <form class="form-horizontal" method="POST" action="{{ route('password.email') }}">
-                                        @csrf
-                                        <div class="mb-3">
-                                            <label for="useremail" class="form-label">Email</label>
-                                            <input type="email"
-                                                class="form-control @error('email') is-invalid @enderror" id="useremail"
-                                                name="email" placeholder="Enter email" value="{{ old('email') }}"
-                                                id="email">
-                                            @error('email')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                            @enderror
-                                        </div>
-
-                                        <div class="text-end">
-                                            <button class="btn btn-primary w-md waves-effect waves-light"
-                                                type="button">Reset</button>
-                                        </div>
-
-                                    </form>
-                                </div>
-                            </div>
-                            <!-- end card body -->
-                        </div>
-                        <!-- end card -->
-
-                        <div class="mt-4 text-center">
-                            <p class="mb-0">Wait, I remember my password... <a href="{{ route('login') }}"
-                                    class="fw-semibold text-primary text-decoration-underline"> Click here </a> </p>
-                        </div>
-
-                    </div>
-                </div>
-                <!-- end row -->
-            </div>
-            <!-- end container -->
-        </div>
-        <!-- end auth page content -->
-
-        <!-- footer -->
-        <footer class="footer">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="text-center">
-                            <script>
-                                document.write(new Date().getFullYear())
-                            </script> Velzon. Crafted with <i class="mdi mdi-heart text-danger"></i> by
-                            Themesbrand</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </footer>
-        <!-- end Footer -->
     </div>
-    <!-- end auth-page-wrapper -->
+</div>
+
 @endsection
