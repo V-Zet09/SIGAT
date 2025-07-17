@@ -1,8 +1,7 @@
 
 
-<?php $__env->startSection('title'); ?>
-<?php echo app('translator')->get('translation.signin'); ?>
-<?php $__env->stopSection(); ?>
+<?php $__env->startSection('title', 'SIGAT'); ?>
+
 
 <?php $__env->startSection('content'); ?>
 <div class="container-fluid vh-100">
