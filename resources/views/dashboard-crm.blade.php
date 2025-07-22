@@ -29,7 +29,7 @@
 
 
 @extends('layouts.master')
-@section('title') @lang('translation.crm') @endsection
+@section('title', 'Presidente Municipal')
 @section('content')
 
     @component('components.breadcrumb')

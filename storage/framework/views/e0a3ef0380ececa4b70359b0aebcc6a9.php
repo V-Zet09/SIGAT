@@ -1,16 +1,16 @@
-@extends('layouts.master')
-@section('title', 'Regidor')
-@section('css')
 
-    <link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
+<?php $__env->startSection('title', 'Regidor'); ?>
+<?php $__env->startSection('css'); ?>
 
-@endsection
-@section('content')
+    <link href="<?php echo e(URL::asset('build/libs/swiper/swiper-bundle.min.css')); ?>" rel="stylesheet">
 
-    @component('components.breadcrumb')
-        @slot('li_1') Dashboards @endslot
-        @slot('title') Crypto @endslot
-    @endcomponent
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+
+    <?php $__env->startComponent('components.breadcrumb'); ?>
+        <?php $__env->slot('li_1'); ?> Dashboards <?php $__env->endSlot(); ?>
+        <?php $__env->slot('title'); ?> Crypto <?php $__env->endSlot(); ?>
+    <?php echo $__env->renderComponent(); ?>
     <div class="row">
         <div class="col-xxl-3">
             <div class="card card-height-100">
@@ -37,7 +37,7 @@
                             <div class="d-flex">
                                 <div class="flex-shrink-0 avatar-xs">
                                     <span class="avatar-title bg-light p-1 rounded-circle material-shadow">
-                                        <img src="{{ URL::asset('build/images/svg/crypto-icons/btc.svg') }}" class="img-fluid" alt="">
+                                        <img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/btc.svg')); ?>" class="img-fluid" alt="">
                                     </span>
                                 </div>
                                 <div class="flex-grow-1 ms-2">
@@ -54,7 +54,7 @@
                             <div class="d-flex">
                                 <div class="flex-shrink-0 avatar-xs">
                                     <span class="avatar-title bg-light p-1 rounded-circle material-shadow">
-                                        <img src="{{ URL::asset('build/images/svg/crypto-icons/eth.svg') }}" class="img-fluid" alt="">
+                                        <img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/eth.svg')); ?>" class="img-fluid" alt="">
                                     </span>
                                 </div>
                                 <div class="flex-grow-1 ms-2">
@@ -71,7 +71,7 @@
                             <div class="d-flex">
                                 <div class="flex-shrink-0 avatar-xs">
                                     <span class="avatar-title bg-light p-1 rounded-circle material-shadow">
-                                        <img src="{{ URL::asset('build/images/svg/crypto-icons/ltc.svg') }}" class="img-fluid" alt="">
+                                        <img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/ltc.svg')); ?>" class="img-fluid" alt="">
                                     </span>
                                 </div>
                                 <div class="flex-grow-1 ms-2">
@@ -88,7 +88,7 @@
                             <div class="d-flex">
                                 <div class="flex-shrink-0 avatar-xs">
                                     <span class="avatar-title bg-light p-1 rounded-circle material-shadow">
-                                        <img src="{{ URL::asset('build/images/svg/crypto-icons/dash.svg') }}" class="img-fluid" alt="">
+                                        <img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/dash.svg')); ?>" class="img-fluid" alt="">
                                     </span>
                                 </div>
                                 <div class="flex-grow-1 ms-2">
@@ -256,7 +256,7 @@
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-center">
-                                    <img src="{{ URL::asset('build/images/svg/crypto-icons/btc.svg') }}" class="bg-light rounded-circle p-1 avatar-xs img-fluid material-shadow" alt="">
+                                    <img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/btc.svg')); ?>" class="bg-light rounded-circle p-1 avatar-xs img-fluid material-shadow" alt="">
                                     <h6 class="ms-2 mb-0 fs-14">Bitcoin</h6>
                                 </div>
                                 <div class="row align-items-end g-0">
@@ -287,7 +287,7 @@
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-center">
-                                    <img src="{{ URL::asset('build/images/svg/crypto-icons/ltc.svg') }}" class="bg-light rounded-circle p-1 avatar-xs img-fluid material-shadow" alt="">
+                                    <img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/ltc.svg')); ?>" class="bg-light rounded-circle p-1 avatar-xs img-fluid material-shadow" alt="">
                                     <h6 class="ms-2 mb-0 fs-14">Litecoin</h6>
                                 </div>
                                 <div class="row align-items-end g-0">
@@ -316,7 +316,7 @@
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-center">
-                                    <img src="{{ URL::asset('build/images/svg/crypto-icons/etc.svg') }}" class="bg-light rounded-circle p-1 avatar-xs img-fluid material-shadow" alt="">
+                                    <img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/etc.svg')); ?>" class="bg-light rounded-circle p-1 avatar-xs img-fluid material-shadow" alt="">
                                     <h6 class="ms-2 mb-0 fs-14">Ethereum</h6>
                                 </div>
                                 <div class="row align-items-end g-0">
@@ -347,7 +347,7 @@
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-center">
-                                    <img src="{{ URL::asset('build/images/svg/crypto-icons/bnb.svg') }}" class="bg-light rounded-circle p-1 avatar-xs img-fluid material-shadow" alt="">
+                                    <img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/bnb.svg')); ?>" class="bg-light rounded-circle p-1 avatar-xs img-fluid material-shadow" alt="">
                                     <h6 class="ms-2 mb-0 fs-14">Binance</h6>
                                 </div>
                                 <div class="row align-items-end g-0">
@@ -378,7 +378,7 @@
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-center">
-                                    <img src="{{ URL::asset('build/images/svg/crypto-icons/dash.svg') }}" class="bg-light rounded-circle p-1 avatar-xs img-fluid material-shadow" alt="">
+                                    <img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/dash.svg')); ?>" class="bg-light rounded-circle p-1 avatar-xs img-fluid material-shadow" alt="">
                                     <h6 class="ms-2 mb-0 fs-14">Dash</h6>
                                 </div>
                                 <div class="row align-items-end g-0">
@@ -409,7 +409,7 @@
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-center">
-                                    <img src="{{ URL::asset('build/images/svg/crypto-icons/usdt.svg') }}" class="bg-light rounded-circle p-1 avatar-xs img-fluid material-shadow" alt="">
+                                    <img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/usdt.svg')); ?>" class="bg-light rounded-circle p-1 avatar-xs img-fluid material-shadow" alt="">
                                     <h6 class="ms-2 mb-0 fs-14">Tether</h6>
                                 </div>
                                 <div class="row align-items-end g-0">
@@ -440,7 +440,7 @@
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-center">
-                                    <img src="{{ URL::asset('build/images/svg/crypto-icons/neo.svg') }}"
+                                    <img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/neo.svg')); ?>"
                                         class="bg-light rounded-circle p-1 avatar-xs img-fluid material-shadow" alt="">
                                     <h6 class="ms-2 mb-0 fs-14">NEO</h6>
                                 </div>
@@ -500,7 +500,7 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div class="me-2">
-                                                <img src="{{ URL::asset('build/images/svg/crypto-icons/btc.svg') }}" alt="" class="avatar-xxs material-shadow">
+                                                <img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/btc.svg')); ?>" alt="" class="avatar-xxs material-shadow">
                                             </div>
                                             <div>
                                                 <h6 class="fs-14 mb-0">Bitcoin</h6>
@@ -519,7 +519,7 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div class="me-2">
-                                                <img src="{{ URL::asset('build/images/svg/crypto-icons/ltc.svg') }}" alt="" class="avatar-xxs material-shadow">
+                                                <img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/ltc.svg')); ?>" alt="" class="avatar-xxs material-shadow">
                                             </div>
                                             <div>
                                                 <h6 class="fs-14 mb-0">Litecoin</h6>
@@ -538,7 +538,7 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div class="me-2">
-                                                <img src="{{ URL::asset('build/images/svg/crypto-icons/eth.svg') }}" alt="" class="avatar-xxs material-shadow">
+                                                <img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/eth.svg')); ?>" alt="" class="avatar-xxs material-shadow">
                                             </div>
                                             <div>
                                                 <h6 class="fs-14 mb-0">Ethereum</h6>
@@ -557,7 +557,7 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div class="me-2">
-                                                <img src="{{ URL::asset('build/images/svg/crypto-icons/bnb.svg') }}" alt="" class="avatar-xxs material-shadow">
+                                                <img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/bnb.svg')); ?>" alt="" class="avatar-xxs material-shadow">
                                             </div>
                                             <div>
                                                 <h6 class="fs-14 mb-0">Binance</h6>
@@ -576,7 +576,7 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div class="me-2">
-                                                <img src="{{ URL::asset('build/images/svg/crypto-icons/usdt.svg') }}" alt="" class="avatar-xxs material-shadow">
+                                                <img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/usdt.svg')); ?>" alt="" class="avatar-xxs material-shadow">
                                             </div>
                                             <div>
                                                 <h6 class="fs-14 mb-0">Tether</h6>
@@ -595,7 +595,7 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div class="me-2">
-                                                <img src="{{ URL::asset('build/images/svg/crypto-icons/dash.svg') }}" alt="" class="avatar-xxs material-shadow">
+                                                <img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/dash.svg')); ?>" alt="" class="avatar-xxs material-shadow">
                                             </div>
                                             <div>
                                                 <h6 class="fs-14 mb-0">Dash</h6>
@@ -614,7 +614,7 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div class="me-2">
-                                                <img src="{{ URL::asset('build/images/svg/crypto-icons/neo.svg') }}" alt="" class="avatar-xxs material-shadow">
+                                                <img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/neo.svg')); ?>" alt="" class="avatar-xxs material-shadow">
                                             </div>
                                             <div>
                                                 <h6 class="fs-14 mb-0">Neo</h6>
@@ -633,7 +633,7 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div class="me-2">
-                                                <img src="{{ URL::asset('build/images/svg/crypto-icons/doge.svg') }}" alt="" class="avatar-xxs material-shadow">
+                                                <img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/doge.svg')); ?>" alt="" class="avatar-xxs material-shadow">
                                             </div>
                                             <div>
                                                 <h6 class="fs-14 mb-0">Dogecoin</h6>
@@ -1012,7 +1012,7 @@
                     <ul class="list-group list-group-flush border-dashed mb-0">
                         <li class="list-group-item d-flex align-items-center">
                             <div class="flex-shrink-0">
-                                <img src="{{ URL::asset('build/images/svg/crypto-icons/btc.svg') }}" class="avatar-xs" alt="">
+                                <img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/btc.svg')); ?>" class="avatar-xs" alt="">
                             </div>
                             <div class="flex-grow-1 ms-3">
                                 <h6 class="fs-14 mb-1">Bitcoin</h6>
@@ -1025,7 +1025,7 @@
                         </li><!-- end -->
                         <li class="list-group-item d-flex align-items-center">
                             <div class="flex-shrink-0">
-                                <img src="{{ URL::asset('build/images/svg/crypto-icons/eth.svg') }}" class="avatar-xs material-shadow" alt="">
+                                <img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/eth.svg')); ?>" class="avatar-xs material-shadow" alt="">
                             </div>
                             <div class="flex-grow-1 ms-3">
                                 <h6 class="fs-14 mb-1">Ethereum</h6>
@@ -1038,7 +1038,7 @@
                         </li><!-- end -->
                         <li class="list-group-item d-flex align-items-center">
                             <div class="flex-shrink-0">
-                                <img src="{{ URL::asset('build/images/svg/crypto-icons/aave.svg') }}" class="avatar-xs material-shadow" alt="">
+                                <img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/aave.svg')); ?>" class="avatar-xs material-shadow" alt="">
                             </div>
                             <div class="flex-grow-1 ms-3">
                                 <h6 class="fs-14 mb-1">Avalanche</h6>
@@ -1051,7 +1051,7 @@
                         </li><!-- end -->
                         <li class="list-group-item d-flex align-items-center">
                             <div class="flex-shrink-0">
-                                <img src="{{ URL::asset('build/images/svg/crypto-icons/doge.svg') }}" class="avatar-xs material-shadow" alt="">
+                                <img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/doge.svg')); ?>" class="avatar-xs material-shadow" alt="">
                             </div>
                             <div class="flex-grow-1 ms-3">
                                 <h6 class="fs-14 mb-1">Dogecoin</h6>
@@ -1064,7 +1064,7 @@
                         </li><!-- end -->
                         <li class="list-group-item d-flex align-items-center">
                             <div class="flex-shrink-0">
-                                <img src="{{ URL::asset('build/images/svg/crypto-icons/bnb.svg') }}" class="avatar-xs material-shadow" alt="">
+                                <img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/bnb.svg')); ?>" class="avatar-xs material-shadow" alt="">
                             </div>
                             <div class="flex-grow-1 ms-3">
                                 <h6 class="fs-14 mb-1">Binance</h6>
@@ -1077,7 +1077,7 @@
                         </li><!-- end -->
                         <li class="list-group-item d-flex align-items-center">
                             <div class="flex-shrink-0">
-                                <img src="{{ URL::asset('build/images/svg/crypto-icons/ltc.svg') }}" class="avatar-xs material-shadow" alt="">
+                                <img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/ltc.svg')); ?>" class="avatar-xs material-shadow" alt="">
                             </div>
                             <div class="flex-grow-1 ms-3">
                                 <h6 class="fs-14 mb-1">Litecoin</h6>
@@ -1107,7 +1107,7 @@
                 <div class="card-body">
                     <div class="d-flex align-middle">
                         <div class="flex-shrink-0">
-                            <img src="{{ URL::asset('build/images/small/img-1.jpg') }}" class="rounded img-fluid material-shadow" style="height: 60px;" alt="">
+                            <img src="<?php echo e(URL::asset('build/images/small/img-1.jpg')); ?>" class="rounded img-fluid material-shadow" style="height: 60px;" alt="">
                         </div>
                         <div class="flex-grow-1 ms-3">
                             <h6 class="mb-1 lh-base"><a href="#" class="text-reset">One stop shop destination on all the latest news in crypto currencies</a></h6>
@@ -1116,7 +1116,7 @@
                     </div><!-- end -->
                     <div class="d-flex mt-4">
                         <div class="flex-shrink-0">
-                            <img src="{{ URL::asset('build/images/small/img-2.jpg') }}" class="rounded img-fluid material-shadow" style="height: 60px;" alt="">
+                            <img src="<?php echo e(URL::asset('build/images/small/img-2.jpg')); ?>" class="rounded img-fluid material-shadow" style="height: 60px;" alt="">
                         </div>
                         <div class="flex-grow-1 ms-3">
                             <h6 class="mb-1 lh-base"><a href="#" class="text-reset">Coin Journal is dedicated to delivering stories on the latest crypto</a></h6>
@@ -1125,7 +1125,7 @@
                     </div><!-- end -->
                     <div class="d-flex mt-4">
                         <div class="flex-shrink-0">
-                            <img src="{{ URL::asset('build/images/small/img-3.jpg') }}" class="rounded img-fluid material-shadow" style="height: 60px;" alt="">
+                            <img src="<?php echo e(URL::asset('build/images/small/img-3.jpg')); ?>" class="rounded img-fluid material-shadow" style="height: 60px;" alt="">
                         </div>
                         <div class="flex-grow-1 ms-3">
                             <h6 class="mb-1 lh-base"><a href="#" class="text-reset">The bitcoin-holding U.S. senator is trying to â€œfully integrateâ€ crypto </a></h6>
@@ -1134,7 +1134,7 @@
                     </div><!-- end -->
                     <div class="d-flex mt-4">
                         <div class="flex-shrink-0">
-                            <img src="{{ URL::asset('build/images/small/img-6.jpg') }}" class="rounded img-fluid material-shadow" style="height: 60px;" alt="">
+                            <img src="<?php echo e(URL::asset('build/images/small/img-6.jpg')); ?>" class="rounded img-fluid material-shadow" style="height: 60px;" alt="">
                         </div>
                         <div class="flex-grow-1 ms-3">
                             <h6 class="mb-1 lh-base"><a href="#" class="text-reset">Cryptocurrency price like Bitcoin, Dash, Dogecoin, Ripple and Litecoin</a></h6>
@@ -1150,12 +1150,14 @@
             </div><!-- end card -->
         </div><!-- end col -->
     </div><!-- end row -->
-@endsection
-@section('script')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
     <!-- apexcharts -->
-    <script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
-    <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
+    <script src="<?php echo e(URL::asset('build/libs/apexcharts/apexcharts.min.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('build/libs/swiper/swiper-bundle.min.js')); ?>"></script>
 
-    <script src="{{ URL::asset('build/js/pages/dashboard-crypto.init.js') }}"></script>
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
-@endsection
+    <script src="<?php echo e(URL::asset('build/js/pages/dashboard-crypto.init.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\DELL\Documents\GitHub\SIGAT\resources\views/dashboard-crypto.blade.php ENDPATH**/ ?>

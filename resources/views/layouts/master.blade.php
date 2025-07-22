@@ -5,12 +5,12 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>@yield('title') | Velzon - Admin & Dashboard Template</title>
+    <title>@yield('title') | SIGAT</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ URL::asset('build/images/LOGO_VENTANA_SF.PNG') }}">
+     <link rel="shortcut icon" href="{{ URL::asset('images/LOGO_VENTANA_SF.png') }}">
     @include('layouts.head-css')
 </head>
 

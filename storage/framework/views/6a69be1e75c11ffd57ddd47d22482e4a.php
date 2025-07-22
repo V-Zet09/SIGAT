@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title><?php echo $__env->yieldContent('title'); ?>  - DARK </title>
+    <title><?php echo $__env->yieldContent('title'); ?>  - Inicio Sesión </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
@@ -22,4 +22,4 @@
 </body>
 
 </html>
-<?php /**PATH C:\Users\zaet_\OneDrive\Escritorio\AYUNTAMIENTO\resources\views/layouts/master-without-nav.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\Users\DELL\Documents\GitHub\SIGAT\resources\views/layouts/master-without-nav.blade.php ENDPATH**/ ?>

@@ -1,8 +1,7 @@
 @extends('layouts.master-without-nav')
 
-@section('title')
-@lang('translation.signin')
-@endsection
+@section('title', 'SIGAT')
+
 
 @section('content')
 <div class="container-fluid vh-100">
