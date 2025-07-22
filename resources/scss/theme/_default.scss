@@ -70,8 +70,8 @@
         --#{$prefix}vertical-menu-sub-item-hover-color:                 var(--#{$prefix}primary);
         --#{$prefix}vertical-menu-sub-item-active-color:                var(--#{$prefix}primary);
         --#{$prefix}vertical-menu-title-color:                          #919da9;
-        --#{$prefix}vertical-menu-box-shadow:                           0 2px 4px rgba(15, 34, 58, 0.12);
-        --#{$prefix}vertical-menu-dropdown-box-shadow:                  0 2px 4px rgba(15, 34, 58, 0.12);
+        --#{$prefix}vertical-menu-box-shadow:                           0 2px 4px rgba(217, 224, 231, 0.805);
+        --#{$prefix}vertical-menu-dropdown-box-shadow:                  0 2px 4px rgb(213, 223, 235);
         --#{$prefix}sidebar-user-bg:                                    #{$light};
         --#{$prefix}sidebar-user-name-text:                             #{darken($gray-700, 10%)};
         --#{$prefix}sidebar-user-name-sub-text:                         #{darken($gray-600, 4%)};
@@ -169,7 +169,7 @@
         }
 
         &[data-theme-colors="green"] {
-            --#{$prefix}primary:                                        #{$green-700};
+            --#{$prefix}primary:                                        #{$green};
             --#{$prefix}primary-rgb:                                    #{to-rgb($green-700)};
             --#{$prefix}primary-bg-subtle:                              #{rgba($green-700, 0.15)};
             --#{$prefix}primary-border-subtle:                          #{rgba($green-700, 0.30)};
@@ -195,11 +195,11 @@
         .card-radio {
             .form-check-label {
                 &[for="themeColor-01"] {
-                    background-color: $primary;
+                    background-color: $green;
                 }
 
                 &[for="themeColor-02"] {
-                    background-color: $green-700; 
+                    background-color: $green; 
                 }
 
                 &[for="themeColor-03"] {
