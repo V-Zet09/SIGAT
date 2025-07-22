@@ -1,11 +1,10 @@
-@extends('layouts.master')
-@section('title', 'Presidente Municipal')
-@section('content')
 
-    @component('components.breadcrumb')
-        @slot('li_1') Dashboards @endslot
-        @slot('title') CRM @endslot
-    @endcomponent
+<?php $__env->startSection('title'); ?> <?php echo app('translator')->get('translation.detached'); ?> <?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <?php $__env->startComponent('components.breadcrumb'); ?>
+        <?php $__env->slot('li_1'); ?> Layouts <?php $__env->endSlot(); ?>
+        <?php $__env->slot('title'); ?> Detached <?php $__env->endSlot(); ?>
+    <?php echo $__env->renderComponent(); ?>
     <div class="row">
         <div class="col-xl-12">
             <div class="card crm-widget">
@@ -16,10 +15,10 @@
                                 <h5 class="text-muted text-uppercase fs-13">Campaign Sent <i class="ri-arrow-up-circle-line text-success fs-18 float-end align-middle"></i></h5>
                                 <div class="d-flex align-items-center">
                                     <div class="flex-shrink-0">
-                                        <i class="ri-space-ship-line display-6 text-muted cfs-22"></i>
+                                        <i class="ri-space-ship-line display-6 text-muted"></i>
                                     </div>
                                     <div class="flex-grow-1 ms-3">
-                                        <h2 class="mb-0 cfs-22"><span class="counter-value" data-target="197">0</span></h2>
+                                        <h2 class="mb-0"><span class="counter-value" data-target="197">0</span></h2>
                                     </div>
                                 </div>
                             </div>
@@ -29,23 +28,23 @@
                                 <h5 class="text-muted text-uppercase fs-13">Annual Profit <i class="ri-arrow-up-circle-line text-success fs-18 float-end align-middle"></i></h5>
                                 <div class="d-flex align-items-center">
                                     <div class="flex-shrink-0">
-                                        <i class="ri-exchange-dollar-line display-6 text-muted cfs-22"></i>
+                                        <i class="ri-exchange-dollar-line display-6 text-muted"></i>
                                     </div>
                                     <div class="flex-grow-1 ms-3">
-                                        <h2 class="mb-0 cfs-22">$<span class="counter-value" data-target="489.4">0</span>k</h2>
+                                        <h2 class="mb-0">$<span class="counter-value" data-target="489.4">0</span>k</h2>
                                     </div>
                                 </div>
                             </div>
                         </div><!-- end col -->
                         <div class="col">
                             <div class="mt-3 mt-md-0 py-4 px-3">
-                                <h5 class="text-muted text-uppercase fs-13">Lead Conversation <i class="ri-arrow-down-circle-line text-danger fs-18 float-end align-middle"></i></h5>
+                                <h5 class="text-muted text-uppercase fs-13">Lead Coversation <i class="ri-arrow-down-circle-line text-danger fs-18 float-end align-middle"></i></h5>
                                 <div class="d-flex align-items-center">
                                     <div class="flex-shrink-0">
-                                        <i class="ri-pulse-line display-6 text-muted cfs-22"></i>
+                                        <i class="ri-pulse-line display-6 text-muted"></i>
                                     </div>
                                     <div class="flex-grow-1 ms-3">
-                                        <h2 class="mb-0 cfs-22"><span class="counter-value" data-target="32.89">0</span>%</h2>
+                                        <h2 class="mb-0"><span class="counter-value" data-target="32.89">0</span>%</h2>
                                     </div>
                                 </div>
                             </div>
@@ -55,10 +54,10 @@
                                 <h5 class="text-muted text-uppercase fs-13">Daily Average Income <i class="ri-arrow-up-circle-line text-success fs-18 float-end align-middle"></i></h5>
                                 <div class="d-flex align-items-center">
                                     <div class="flex-shrink-0">
-                                        <i class="ri-trophy-line display-6 text-muted cfs-22"></i>
+                                        <i class="ri-trophy-line display-6 text-muted"></i>
                                     </div>
                                     <div class="flex-grow-1 ms-3">
-                                        <h2 class="mb-0 cfs-22">$<span class="counter-value" data-target="1596.5">0</span></h2>
+                                        <h2 class="mb-0">$<span class="counter-value" data-target="1596.5">0</span></h2>
                                     </div>
                                 </div>
                             </div>
@@ -68,10 +67,10 @@
                                 <h5 class="text-muted text-uppercase fs-13">Annual Deals <i class="ri-arrow-down-circle-line text-danger fs-18 float-end align-middle"></i></h5>
                                 <div class="d-flex align-items-center">
                                     <div class="flex-shrink-0">
-                                        <i class="ri-service-line display-6 text-muted cfs-22"></i>
+                                        <i class="ri-service-line display-6 text-muted"></i>
                                     </div>
                                     <div class="flex-grow-1 ms-3">
-                                        <h2 class="mb-0 cfs-22"><span class="counter-value" data-target="2659">0</span></h2>
+                                        <h2 class="mb-0"><span class="counter-value" data-target="2659">0</span></h2>
                                     </div>
                                 </div>
                             </div>
@@ -102,7 +101,7 @@
                     </div>
                 </div><!-- end card header -->
                 <div class="card-body pb-0">
-                    <div id="sales-forecast-chart" data-colors='["--vz-primary", "--vz-success", "--vz-warning"]' data-colors-minimal='["--vz-primary-rgb, 0.75", "--vz-primary", "--vz-primary-rgb, 0.55"]' data-colors-creative='["--vz-primary", "--vz-secondary", "--vz-info"]' data-colors-corporate='["--vz-primary", "--vz-success", "--vz-secondary"]' data-colors-galaxy='["--vz-primary", "--vz-secondary", "--vz-info"]' data-colors-classic='["--vz-primary", "--vz-warning", "--vz-secondary"]' class="apex-charts" dir="ltr"></div>
+                    <div id="sales-forecast-chart" data-colors='["--vz-primary", "--vz-success", "--vz-warning"]' class="apex-charts" dir="ltr"></div>
                 </div>
             </div><!-- end card -->
         </div><!-- end col -->
@@ -126,7 +125,7 @@
                     </div>
                 </div><!-- end card header -->
                 <div class="card-body pb-0">
-                    <div id="deal-type-charts" data-colors='["--vz-warning", "--vz-danger", "--vz-success"]' data-colors-minimal='["--vz-primary-rgb, 0.15", "--vz-primary-rgb, 0.35", "--vz-primary-rgb, 0.45"]' data-colors-modern='["--vz-warning", "--vz-secondary", "--vz-success"]' data-colors-interactive='["--vz-warning", "--vz-info", "--vz-primary"]' data-colors-corporate='["--vz-secondary", "--vz-info", "--vz-success"]' data-colors-classic='["--vz-secondary", "--vz-danger", "--vz-success"]' class="apex-charts" dir="ltr"></div>
+                    <div id="deal-type-charts" data-colors='["--vz-warning", "--vz-danger", "--vz-success"]' class="apex-charts" dir="ltr"></div>
                 </div><!-- end card body -->
             </div><!-- end card -->
         </div><!-- end col -->
@@ -163,7 +162,7 @@
                         </li>
                     </ul>
 
-                    <div id="revenue-expenses-charts" data-colors='["--vz-success", "--vz-danger"]' data-colors-minimal='["--vz-primary", "--vz-info"]' data-colors-interactive='["--vz-info", "--vz-primary"]' data-colors-galaxy='["--vz-primary", "--vz-secondary"]' data-colors-classic='["--vz-primary", "--vz-secondary"]' class="apex-charts" dir="ltr"></div>
+                    <div id="revenue-expenses-charts" data-colors='["--vz-success", "--vz-danger"]' class="apex-charts" dir="ltr"></div>
                 </div>
             </div><!-- end card -->
         </div><!-- end col -->
@@ -196,7 +195,7 @@
                                 <tr class="text-muted">
                                     <th scope="col">Name</th>
                                     <th scope="col" style="width: 20%;">Last Contacted</th>
-                                    <th scope="col">Sales Representative</th>
+                                    <th scope="col" >Sales Representative</th>
                                     <th scope="col" style="width: 16%;">Status</th>
                                     <th scope="col" style="width: 12%;">Deal Value</th>
                                 </tr>
@@ -206,57 +205,42 @@
                                 <tr>
                                     <td>Absternet LLC</td>
                                     <td>Sep 20, 2021</td>
-                                    <td><img src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" alt="" class="avatar-xs rounded-circle me-2 material-shadow">
-                                        <a href="#javascript: void(0);" class="text-body fw-medium">Donald Risher</a>
-                                    </td>
+                                    <td><img src="<?php echo e(URL::asset('build/images/users/avatar-1.jpg')); ?>" alt="" class="avatar-xs rounded-circle me-2">
+                                        <a href="#javascript: void(0);" class="text-body fw-medium">Donald Risher</a></td>
                                     <td><span class="badge bg-success-subtle text-success p-2">Deal Won</span></td>
-                                    <td>
-                                        <div class="text-nowrap">$100.1K</div>
-                                    </td>
+                                    <td><div class="text-nowrap">$100.1K</div></td>
                                 </tr>
                                 <tr>
                                     <td>Raitech Soft</td>
                                     <td>Sep 23, 2021</td>
-                                    <td><img src="{{ URL::asset('build/images/users/avatar-2.jpg') }}" alt="" class="avatar-xs rounded-circle me-2 material-shadow">
-                                        <a href="#javascript: void(0);" class="text-body fw-medium">Sofia Cunha</a>
-                                    </td>
+                                    <td><img src="<?php echo e(URL::asset('build/images/users/avatar-2.jpg')); ?>" alt="" class="avatar-xs rounded-circle me-2">
+                                        <a href="#javascript: void(0);" class="text-body fw-medium">Sofia Cunha</a></td>
                                     <td><span class="badge bg-warning-subtle text-warning p-2">Intro Call</span></td>
-                                    <td>
-                                        <div class="text-nowrap">$150K</div>
-                                    </td>
+                                    <td><div class="text-nowrap">$150K</div></td>
                                 </tr>
                                 <tr>
                                     <td>William PVT</td>
                                     <td>Sep 27, 2021</td>
-                                    <td><img src="{{ URL::asset('build/images/users/avatar-3.jpg') }}" alt="" class="avatar-xs rounded-circle me-2 material-shadow">
-                                        <a href="#javascript: void(0);" class="text-body fw-medium">Luis Rocha</a>
-                                    </td>
+                                    <td><img src="<?php echo e(URL::asset('build/images/users/avatar-3.jpg')); ?>" alt="" class="avatar-xs rounded-circle me-2">
+                                        <a href="#javascript: void(0);" class="text-body fw-medium">Luis Rocha</a></td>
                                     <td><span class="badge bg-danger-subtle text-danger p-2">Stuck</span></td>
-                                    <td>
-                                        <div class="text-nowrap">$78.18K</div>
-                                    </td>
+                                    <td><div class="text-nowrap">$78.18K</div></td>
                                 </tr>
                                 <tr>
                                     <td>Loiusee LLP</td>
                                     <td>Sep 30, 2021</td>
-                                    <td><img src="{{ URL::asset('build/images/users/avatar-4.jpg') }}" alt="" class="avatar-xs rounded-circle me-2 material-shadow">
-                                        <a href="#javascript: void(0);" class="text-body fw-medium">Vitoria Rodrigues</a>
-                                    </td>
+                                    <td><img src="<?php echo e(URL::asset('build/images/users/avatar-4.jpg')); ?>" alt="" class="avatar-xs rounded-circle me-2">
+                                        <a href="#javascript: void(0);" class="text-body fw-medium">Vitoria Rodrigues</a></td>
                                     <td><span class="badge bg-success-subtle text-success p-2">Deal Won</span></td>
-                                    <td>
-                                        <div class="text-nowrap">$180K</div>
-                                    </td>
+                                    <td><div class="text-nowrap">$180K</div></td>
                                 </tr>
                                 <tr>
                                     <td>Apple Inc.</td>
                                     <td>Sep 30, 2021</td>
-                                    <td><img src="{{ URL::asset('build/images/users/avatar-6.jpg') }}" alt="" class="avatar-xs rounded-circle me-2 material-shadow">
-                                        <a href="#javascript: void(0);" class="text-body fw-medium">Vitoria Rodrigues</a>
-                                    </td>
+                                    <td><img src="<?php echo e(URL::asset('build/images/users/avatar-6.jpg')); ?>" alt="" class="avatar-xs rounded-circle me-2">
+                                        <a href="#javascript: void(0);" class="text-body fw-medium">Vitoria Rodrigues</a></td>
                                     <td><span class="badge bg-info-subtle text-info p-2">New Lead</span></td>
-                                    <td>
-                                        <div class="text-nowrap">$78.9K</div>
-                                    </td>
+                                    <td><div class="text-nowrap">$78.9K</div></td>
                                 </tr>
                             </tbody><!-- end tbody -->
                         </table><!-- end table -->
@@ -272,7 +256,7 @@
                     <div class="flex-shrink-0">
                         <div class="dropdown card-header-dropdown">
                             <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="text-muted"><i class="ri-settings-4-line align-bottom me-1 fs-15"></i>Settings</span>
+                                <span class="text-muted"><i class="ri-settings-4-line align-middle me-1 fs-15"></i>Settings</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a class="dropdown-item" href="#">Edit</a>
@@ -403,10 +387,10 @@
                         <li class="list-group-item ps-0">
                             <div class="row align-items-center g-3">
                                 <div class="col-auto">
-                                    <div class="avatar-sm p-1 py-2 h-auto bg-light rounded-3 material-shadow">
+                                    <div class="avatar-sm p-1 py-2 h-auto bg-light rounded-3">
                                         <div class="text-center">
-                                            <h5 class="mb-0">25</h5>
-                                            <div class="text-muted">Tue</div>
+                                             <h5 class="mb-0">25</h5>
+                                             <div class="text-muted">Tue</div>
                                         </div>
                                     </div>
                                 </div>
@@ -416,22 +400,22 @@
                                 </div>
                                 <div class="col-sm-auto">
                                     <div class="avatar-group">
-                                        <div class="avatar-group-item material-shadow">
+                                        <div class="avatar-group-item">
                                             <a href="javascript: void(0);" class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Stine Nielsen">
-                                                <img src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" alt="" class="rounded-circle avatar-xxs">
+                                                <img src="<?php echo e(URL::asset('build/images/users/avatar-1.jpg')); ?>" alt="" class="rounded-circle avatar-xxs">
                                             </a>
                                         </div>
-                                        <div class="avatar-group-item material-shadow">
+                                        <div class="avatar-group-item">
                                             <a href="javascript: void(0);" class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Jansh Brown">
-                                                <img src="{{ URL::asset('build/images/users/avatar-2.jpg') }}" alt="" class="rounded-circle avatar-xxs">
+                                                <img src="<?php echo e(URL::asset('build/images/users/avatar-2.jpg')); ?>" alt="" class="rounded-circle avatar-xxs">
                                             </a>
                                         </div>
-                                        <div class="avatar-group-item material-shadow">
+                                        <div class="avatar-group-item">
                                             <a href="javascript: void(0);" class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Dan Gibson">
-                                                <img src="{{ URL::asset('build/images/users/avatar-3.jpg') }}" alt="" class="rounded-circle avatar-xxs">
+                                                <img src="<?php echo e(URL::asset('build/images/users/avatar-3.jpg')); ?>" alt="" class="rounded-circle avatar-xxs">
                                             </a>
                                         </div>
-                                        <div class="avatar-group-item material-shadow">
+                                        <div class="avatar-group-item">
                                             <a href="javascript: void(0);">
                                                 <div class="avatar-xxs">
                                                     <span class="avatar-title rounded-circle bg-info text-white">
@@ -448,11 +432,11 @@
                         <li class="list-group-item ps-0">
                             <div class="row align-items-center g-3">
                                 <div class="col-auto">
-                                    <div class="avatar-sm p-1 py-2 h-auto bg-light rounded-3 material-shadow">
+                                    <div class="avatar-sm p-1 py-2 h-auto bg-light rounded-3">
                                         <div class="text-center">
                                             <h5 class="mb-0">20</h5>
                                             <div class="text-muted">Wed</div>
-                                        </div>
+                                       </div>
                                     </div>
                                 </div>
                                 <div class="col">
@@ -461,27 +445,27 @@
                                 </div>
                                 <div class="col-sm-auto">
                                     <div class="avatar-group">
-                                        <div class="avatar-group-item material-shadow">
+                                        <div class="avatar-group-item">
                                             <a href="javascript: void(0);" class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Frida Bang">
-                                                <img src="{{ URL::asset('build/images/users/avatar-4.jpg') }}" alt="" class="rounded-circle avatar-xxs">
+                                                <img src="<?php echo e(URL::asset('build/images/users/avatar-4.jpg')); ?>" alt="" class="rounded-circle avatar-xxs">
                                             </a>
                                         </div>
-                                        <div class="avatar-group-item material-shadow">
+                                        <div class="avatar-group-item">
                                             <a href="javascript: void(0);" class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Malou Silva">
-                                                <img src="{{ URL::asset('build/images/users/avatar-5.jpg') }}" alt="" class="rounded-circle avatar-xxs">
+                                                <img src="<?php echo e(URL::asset('build/images/users/avatar-5.jpg')); ?>" alt="" class="rounded-circle avatar-xxs">
                                             </a>
                                         </div>
-                                        <div class="avatar-group-item material-shadow">
+                                        <div class="avatar-group-item">
                                             <a href="javascript: void(0);" class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Simon Schmidt">
-                                                <img src="{{ URL::asset('build/images/users/avatar-6.jpg') }}" alt="" class="rounded-circle avatar-xxs">
+                                                <img src="<?php echo e(URL::asset('build/images/users/avatar-6.jpg')); ?>" alt="" class="rounded-circle avatar-xxs">
                                             </a>
                                         </div>
-                                        <div class="avatar-group-item material-shadow">
+                                        <div class="avatar-group-item">
                                             <a href="javascript: void(0);" class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Tosh Jessen">
-                                                <img src="{{ URL::asset('build/images/users/avatar-7.jpg') }}" alt="" class="rounded-circle avatar-xxs">
+                                                <img src="<?php echo e(URL::asset('build/images/users/avatar-7.jpg')); ?>" alt="" class="rounded-circle avatar-xxs">
                                             </a>
                                         </div>
-                                        <div class="avatar-group-item material-shadow">
+                                        <div class="avatar-group-item">
                                             <a href="javascript: void(0);">
                                                 <div class="avatar-xxs">
                                                     <span class="avatar-title rounded-circle bg-success text-white">
@@ -498,11 +482,11 @@
                         <li class="list-group-item ps-0">
                             <div class="row align-items-center g-3">
                                 <div class="col-auto">
-                                    <div class="avatar-sm p-1 py-2 h-auto bg-light rounded-3 material-shadow">
+                                    <div class="avatar-sm p-1 py-2 h-auto bg-light rounded-3">
                                         <div class="text-center">
                                             <h5 class="mb-0">17</h5>
                                             <div class="text-muted">Wed</div>
-                                        </div>
+                                       </div>
                                     </div>
                                 </div>
                                 <div class="col">
@@ -511,22 +495,22 @@
                                 </div>
                                 <div class="col-sm-auto">
                                     <div class="avatar-group">
-                                        <div class="avatar-group-item material-shadow">
+                                        <div class="avatar-group-item">
                                             <a href="javascript: void(0);" class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Nina Schmidt">
-                                                <img src="{{ URL::asset('build/images/users/avatar-8.jpg') }}" alt="" class="rounded-circle avatar-xxs">
+                                                <img src="<?php echo e(URL::asset('build/images/users/avatar-8.jpg')); ?>" alt="" class="rounded-circle avatar-xxs">
                                             </a>
                                         </div>
-                                        <div class="avatar-group-item material-shadow">
+                                        <div class="avatar-group-item">
                                             <a href="javascript: void(0);" class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Stine Nielsen">
-                                                <img src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" alt="" class="rounded-circle avatar-xxs">
+                                                <img src="<?php echo e(URL::asset('build/images/users/avatar-1.jpg')); ?>" alt="" class="rounded-circle avatar-xxs">
                                             </a>
                                         </div>
-                                        <div class="avatar-group-item material-shadow">
+                                        <div class="avatar-group-item">
                                             <a href="javascript: void(0);" class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Jansh Brown">
-                                                <img src="{{ URL::asset('build/images/users/avatar-2.jpg') }}" alt="" class="rounded-circle avatar-xxs">
+                                                <img src="<?php echo e(URL::asset('build/images/users/avatar-2.jpg')); ?>" alt="" class="rounded-circle avatar-xxs">
                                             </a>
                                         </div>
-                                        <div class="avatar-group-item material-shadow">
+                                        <div class="avatar-group-item">
                                             <a href="javascript: void(0);">
                                                 <div class="avatar-xxs">
                                                     <span class="avatar-title rounded-circle bg-primary text-white">
@@ -543,11 +527,11 @@
                         <li class="list-group-item ps-0">
                             <div class="row align-items-center g-3">
                                 <div class="col-auto">
-                                    <div class="avatar-sm p-1 py-2 h-auto bg-light rounded-3 material-shadow">
+                                    <div class="avatar-sm p-1 py-2 h-auto bg-light rounded-3">
                                         <div class="text-center">
                                             <h5 class="mb-0">12</h5>
                                             <div class="text-muted">Tue</div>
-                                        </div>
+                                       </div>
                                     </div>
                                 </div>
                                 <div class="col">
@@ -556,22 +540,22 @@
                                 </div>
                                 <div class="col-sm-auto">
                                     <div class="avatar-group">
-                                        <div class="avatar-group-item material-shadow">
+                                        <div class="avatar-group-item">
                                             <a href="javascript: void(0);" class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Stine Nielsen">
-                                                <img src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" alt="" class="rounded-circle avatar-xxs">
+                                                <img src="<?php echo e(URL::asset('build/images/users/avatar-1.jpg')); ?>" alt="" class="rounded-circle avatar-xxs">
                                             </a>
                                         </div>
-                                        <div class="avatar-group-item material-shadow">
+                                        <div class="avatar-group-item">
                                             <a href="javascript: void(0);" class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Jansh Brown">
-                                                <img src="{{ URL::asset('build/images/users/avatar-5.jpg') }}" alt="" class="rounded-circle avatar-xxs">
+                                                <img src="<?php echo e(URL::asset('build/images/users/avatar-5.jpg')); ?>" alt="" class="rounded-circle avatar-xxs">
                                             </a>
                                         </div>
-                                        <div class="avatar-group-item material-shadow">
+                                        <div class="avatar-group-item">
                                             <a href="javascript: void(0);" class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Dan Gibson">
-                                                <img src="{{ URL::asset('build/images/users/avatar-2.jpg') }}" alt="" class="rounded-circle avatar-xxs">
+                                                <img src="<?php echo e(URL::asset('build/images/users/avatar-2.jpg')); ?>" alt="" class="rounded-circle avatar-xxs">
                                             </a>
                                         </div>
-                                        <div class="avatar-group-item material-shadow">
+                                        <div class="avatar-group-item">
                                             <a href="javascript: void(0);">
                                                 <div class="avatar-xxs">
                                                     <span class="avatar-title rounded-circle bg-warning text-white">
@@ -586,31 +570,29 @@
                             <!-- end row -->
                         </li><!-- end -->
                     </ul><!-- end -->
-                    <div class="align-items-center mt-2 row g-3 text-center text-sm-start">
-                        <div class="col-sm">
+                    <div class="align-items-center mt-2 justify-content-between d-flex">
+                        <div class="flex-shrink-0">
                             <div class="text-muted">Showing<span class="fw-semibold">4</span> of <span class="fw-semibold">125</span> Results
                             </div>
                         </div>
-                        <div class="col-sm-auto">
-                            <ul class="pagination pagination-separated pagination-sm justify-content-center justify-content-sm-start mb-0">
-                                <li class="page-item disabled">
-                                    <a href="#" class="page-link">←</a>
-                                </li>
-                                <li class="page-item">
-                                    <a href="#" class="page-link">1</a>
-                                </li>
-                                <li class="page-item active">
-                                    <a href="#" class="page-link">2</a>
-                                </li>
-                                <li class="page-item">
-                                    <a href="#" class="page-link">3</a>
-                                </li>
-                                <li class="page-item">
-                                    <a href="#" class="page-link">→</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+                        <ul class="pagination pagination-separated pagination-sm mb-0">
+                            <li class="page-item disabled">
+                                <a href="#" class="page-link">←</a>
+                            </li>
+                            <li class="page-item">
+                                <a href="#" class="page-link">1</a>
+                            </li>
+                            <li class="page-item active">
+                                <a href="#" class="page-link">2</a>
+                            </li>
+                            <li class="page-item">
+                                <a href="#" class="page-link">3</a>
+                            </li>
+                            <li class="page-item">
+                                <a href="#" class="page-link">→</a>
+                            </li>
+                        </ul>
+                    </div><!-- end card header -->
                 </div><!-- end card body -->
             </div><!-- end card -->
         </div><!-- end col -->
@@ -644,41 +626,36 @@
                             <tbody>
                                 <tr>
                                     <td>Acme Inc Install</td>
-                                    <td><img src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" alt="" class="avatar-xs rounded-circle me-2 material-shadow">
-                                        <a href="#javascript: void(0);" class="text-body fw-medium">Donald Risher</a>
-                                    </td>
+                                    <td><img src="<?php echo e(URL::asset('build/images/users/avatar-1.jpg')); ?>" alt="" class="avatar-xs rounded-circle me-2">
+                                        <a href="#javascript: void(0);" class="text-body fw-medium">Donald Risher</a></td>
                                     <td>$96k</td>
                                     <td>Today</td>
                                 </tr>
                                 <tr>
                                     <td>Save lots Stores</td>
-                                    <td><img src="{{ URL::asset('build/images/users/avatar-2.jpg') }}" alt="" class="avatar-xs rounded-circle me-2 material-shadow">
-                                        <a href="#javascript: void(0);" class="text-body fw-medium">Jansh Brown</a>
-                                    </td>
+                                    <td><img src="<?php echo e(URL::asset('build/images/users/avatar-2.jpg')); ?>" alt="" class="avatar-xs rounded-circle me-2">
+                                        <a href="#javascript: void(0);" class="text-body fw-medium">Jansh Brown</a></td>
                                     <td>$55.7k</td>
                                     <td>30 Dec 2021</td>
                                 </tr>
                                 <tr>
                                     <td>William PVT</td>
-                                    <td><img src="{{ URL::asset('build/images/users/avatar-7.jpg') }}" alt="" class="avatar-xs rounded-circle me-2 material-shadow">
-                                        <a href="#javascript: void(0);" class="text-body fw-medium">Ayaan Hudda</a>
-                                    </td>
+                                    <td><img src="<?php echo e(URL::asset('build/images/users/avatar-7.jpg')); ?>" alt="" class="avatar-xs rounded-circle me-2">
+                                        <a href="#javascript: void(0);" class="text-body fw-medium">Ayaan Hudda</a></td>
                                     <td>$102k</td>
                                     <td>25 Nov 2021</td>
                                 </tr>
                                 <tr>
                                     <td>Raitech Soft</td>
-                                    <td><img src="{{ URL::asset('build/images/users/avatar-4.jpg') }}" alt="" class="avatar-xs rounded-circle me-2 material-shadow">
-                                        <a href="#javascript: void(0);" class="text-body fw-medium">Julia William</a>
-                                    </td>
+                                    <td><img src="<?php echo e(URL::asset('build/images/users/avatar-4.jpg')); ?>" alt="" class="avatar-xs rounded-circle me-2">
+                                        <a href="#javascript: void(0);" class="text-body fw-medium">Julia William</a></td>
                                     <td>$89.5k</td>
                                     <td>20 Sep 2021</td>
                                 </tr>
                                 <tr>
                                     <td>Absternet LLC</td>
-                                    <td><img src="{{ URL::asset('build/images/users/avatar-4.jpg') }}" alt="" class="avatar-xs rounded-circle me-2 material-shadow">
-                                        <a href="#javascript: void(0);" class="text-body fw-medium">Vitoria Rodrigues</a>
-                                    </td>
+                                    <td><img src="<?php echo e(URL::asset('build/images/users/avatar-4.jpg')); ?>" alt="" class="avatar-xs rounded-circle me-2">
+                                        <a href="#javascript: void(0);" class="text-body fw-medium">Vitoria Rodrigues</a></td>
                                     <td>$89.5k</td>
                                     <td>20 Sep 2021</td>
                                 </tr>
@@ -689,10 +666,12 @@
             </div><!-- end card -->
         </div><!-- end col -->
     </div><!-- end row -->
-@endsection
-@section('script')
-    <!-- apexcharts -->
-    <script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
-    <script src="{{ URL::asset('build/js/pages/dashboard-crm.init.js') }}"></script>
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
-@endsection
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
+    <script src="<?php echo e(URL::asset('build/libs/apexcharts/apexcharts.min.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('build/js/pages/dashboard-crm.init.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.layouts-detached', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\DELL\Documents\GitHub\SIGAT\resources\views/layouts-detached.blade.php ENDPATH**/ ?>
