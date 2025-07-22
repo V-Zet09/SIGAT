@@ -1,16 +1,16 @@
-@extends('layouts.master')
-@section('title')
-    @lang('translation.projects')
-@endsection
-@section('content')
-    @component('components.breadcrumb')
-        @slot('li_1')
+
+<?php $__env->startSection('title'); ?>
+    <?php echo app('translator')->get('translation.projects'); ?>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <?php $__env->startComponent('components.breadcrumb'); ?>
+        <?php $__env->slot('li_1'); ?>
             Inicio
-        @endslot
-        @slot('title')
+        <?php $__env->endSlot(); ?>
+        <?php $__env->slot('title'); ?>
             Bienvenido Director 
-        @endslot
-    @endcomponent
+        <?php $__env->endSlot(); ?>
+    <?php echo $__env->renderComponent(); ?>
     <div class="row project-wrapper">
         <div class="row mt-4">
     <!-- Actividades por revisar -->
@@ -424,7 +424,7 @@ function moveToApproved(icon) {
                                 <tr>
                                     <td class="fw-medium">Brand Logo Design</td>
                                     <td>
-                                        <img src="{{ URL::asset('build/images/users/avatar-1.jpg') }}"
+                                        <img src="<?php echo e(URL::asset('build/images/users/avatar-1.jpg')); ?>"
                                             class="avatar-xxs rounded-circle me-1 material-shadow" alt="">
                                         <a href="javascript: void(0);" class="text-reset">Donald Risher</a>
                                     </td>
@@ -442,19 +442,19 @@ function moveToApproved(icon) {
                                         <div class="avatar-group flex-nowrap">
                                             <div class="avatar-group-item">
                                                 <a href="javascript: void(0);" class="d-inline-block">
-                                                    <img src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" alt=""
+                                                    <img src="<?php echo e(URL::asset('build/images/users/avatar-1.jpg')); ?>" alt=""
                                                         class="rounded-circle avatar-xxs material-shadow">
                                                 </a>
                                             </div>
                                             <div class="avatar-group-item">
                                                 <a href="javascript: void(0);" class="d-inline-block">
-                                                    <img src="{{ URL::asset('build/images/users/avatar-2.jpg') }}" alt=""
+                                                    <img src="<?php echo e(URL::asset('build/images/users/avatar-2.jpg')); ?>" alt=""
                                                         class="rounded-circle avatar-xxs material-shadow">
                                                 </a>
                                             </div>
                                             <div class="avatar-group-item">
                                                 <a href="javascript: void(0);" class="d-inline-block">
-                                                    <img src="{{ URL::asset('build/images/users/avatar-3.jpg') }}" alt=""
+                                                    <img src="<?php echo e(URL::asset('build/images/users/avatar-3.jpg')); ?>" alt=""
                                                         class="rounded-circle avatar-xxs material-shadow">
                                                 </a>
                                             </div>
@@ -466,7 +466,7 @@ function moveToApproved(icon) {
                                 <tr>
                                     <td class="fw-medium">Redesign - Landing Page</td>
                                     <td>
-                                        <img src="{{ URL::asset('build/images/users/avatar-2.jpg') }}"
+                                        <img src="<?php echo e(URL::asset('build/images/users/avatar-2.jpg')); ?>"
                                             class="avatar-xxs rounded-circle me-1 material-shadow" alt="">
                                         <a href="javascript: void(0);" class="text-reset">Prezy William</a>
                                     </td>
@@ -484,13 +484,13 @@ function moveToApproved(icon) {
                                         <div class="avatar-group">
                                             <div class="avatar-group-item">
                                                 <a href="javascript: void(0);" class="d-inline-block">
-                                                    <img src="{{ URL::asset('build/images/users/avatar-5.jpg') }}" alt=""
+                                                    <img src="<?php echo e(URL::asset('build/images/users/avatar-5.jpg')); ?>" alt=""
                                                         class="rounded-circle avatar-xxs material-shadow">
                                                 </a>
                                             </div>
                                             <div class="avatar-group-item">
                                                 <a href="javascript: void(0);" class="d-inline-block">
-                                                    <img src="{{ URL::asset('build/images/users/avatar-6.jpg') }}" alt=""
+                                                    <img src="<?php echo e(URL::asset('build/images/users/avatar-6.jpg')); ?>" alt=""
                                                         class="rounded-circle avatar-xxs material-shadow">
                                                 </a>
                                             </div>
@@ -502,7 +502,7 @@ function moveToApproved(icon) {
                                 <tr>
                                     <td class="fw-medium">Multipurpose Landing Template</td>
                                     <td>
-                                        <img src="{{ URL::asset('build/images/users/avatar-3.jpg') }}"
+                                        <img src="<?php echo e(URL::asset('build/images/users/avatar-3.jpg')); ?>"
                                             class="avatar-xxs rounded-circle me-1 material-shadow" alt="">
                                         <a href="javascript: void(0);" class="text-reset">Boonie Hoynas</a>
                                     </td>
@@ -520,13 +520,13 @@ function moveToApproved(icon) {
                                         <div class="avatar-group">
                                             <div class="avatar-group-item">
                                                 <a href="javascript: void(0);" class="d-inline-block">
-                                                    <img src="{{ URL::asset('build/images/users/avatar-7.jpg') }}" alt=""
+                                                    <img src="<?php echo e(URL::asset('build/images/users/avatar-7.jpg')); ?>" alt=""
                                                         class="rounded-circle avatar-xxs material-shadow">
                                                 </a>
                                             </div>
                                             <div class="avatar-group-item">
                                                 <a href="javascript: void(0);" class="d-inline-block">
-                                                    <img src="{{ URL::asset('build/images/users/avatar-8.jpg') }}" alt=""
+                                                    <img src="<?php echo e(URL::asset('build/images/users/avatar-8.jpg')); ?>" alt=""
                                                         class="rounded-circle avatar-xxs material-shadow">
                                                 </a>
                                             </div>
@@ -538,7 +538,7 @@ function moveToApproved(icon) {
                                 <tr>
                                     <td class="fw-medium">Chat Application</td>
                                     <td>
-                                        <img src="{{ URL::asset('build/images/users/avatar-5.jpg') }}"
+                                        <img src="<?php echo e(URL::asset('build/images/users/avatar-5.jpg')); ?>"
                                             class="avatar-xxs rounded-circle me-1 material-shadow" alt="">
                                         <a href="javascript: void(0);" class="text-reset">Pauline Moll</a>
                                     </td>
@@ -556,7 +556,7 @@ function moveToApproved(icon) {
                                         <div class="avatar-group">
                                             <div class="avatar-group-item">
                                                 <a href="javascript: void(0);" class="d-inline-block">
-                                                    <img src="{{ URL::asset('build/images/users/avatar-2.jpg') }}" alt=""
+                                                    <img src="<?php echo e(URL::asset('build/images/users/avatar-2.jpg')); ?>" alt=""
                                                         class="rounded-circle avatar-xxs material-shadow">
                                                 </a>
                                             </div>
@@ -568,7 +568,7 @@ function moveToApproved(icon) {
                                 <tr>
                                     <td class="fw-medium">Create Wireframe</td>
                                     <td>
-                                        <img src="{{ URL::asset('build/images/users/avatar-6.jpg') }}"
+                                        <img src="<?php echo e(URL::asset('build/images/users/avatar-6.jpg')); ?>"
                                             class="avatar-xxs rounded-circle me-1 material-shadow" alt="">
                                         <a href="javascript: void(0);" class="text-reset">James Bangs</a>
                                     </td>
@@ -586,19 +586,19 @@ function moveToApproved(icon) {
                                         <div class="avatar-group">
                                             <div class="avatar-group-item">
                                                 <a href="javascript: void(0);" class="d-inline-block">
-                                                    <img src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" alt=""
+                                                    <img src="<?php echo e(URL::asset('build/images/users/avatar-1.jpg')); ?>" alt=""
                                                         class="rounded-circle avatar-xxs material-shadow">
                                                 </a>
                                             </div>
                                             <div class="avatar-group-item">
                                                 <a href="javascript: void(0);" class="d-inline-block">
-                                                    <img src="{{ URL::asset('build/images/users/avatar-6.jpg') }}" alt=""
+                                                    <img src="<?php echo e(URL::asset('build/images/users/avatar-6.jpg')); ?>" alt=""
                                                         class="rounded-circle avatar-xxs material-shadow">
                                                 </a>
                                             </div>
                                             <div class="avatar-group-item">
                                                 <a href="javascript: void(0);" class="d-inline-block">
-                                                    <img src="{{ URL::asset('build/images/users/avatar-4.jpg') }}" alt=""
+                                                    <img src="<?php echo e(URL::asset('build/images/users/avatar-4.jpg')); ?>" alt=""
                                                         class="rounded-circle avatar-xxs material-shadow">
                                                 </a>
                                             </div>
@@ -685,7 +685,7 @@ function moveToApproved(icon) {
                                     <td>
                                         <a href="javascript: void(0);" class="d-inline-block" data-bs-toggle="tooltip"
                                             data-bs-placement="top" title="" data-bs-original-title="Mary Stoner">
-                                            <img src="{{ URL::asset('build/images/users/avatar-2.jpg') }}" alt=""
+                                            <img src="<?php echo e(URL::asset('build/images/users/avatar-2.jpg')); ?>" alt=""
                                                 class="rounded-circle avatar-xxs material-shadow">
                                         </a>
                                     </td>
@@ -705,7 +705,7 @@ function moveToApproved(icon) {
                                     <td>
                                         <a href="javascript: void(0);" class="d-inline-block" data-bs-toggle="tooltip"
                                             data-bs-placement="top" title="" data-bs-original-title="Den Davis">
-                                            <img src="{{ URL::asset('build/images/users/avatar-7.jpg') }}" alt=""
+                                            <img src="<?php echo e(URL::asset('build/images/users/avatar-7.jpg')); ?>" alt=""
                                                 class="rounded-circle avatar-xxs material-shadow">
                                         </a>
                                     </td>
@@ -725,7 +725,7 @@ function moveToApproved(icon) {
                                     <td>
                                         <a href="javascript: void(0);" class="d-inline-block" data-bs-toggle="tooltip"
                                             data-bs-placement="top" title="" data-bs-original-title="Alex Brown">
-                                            <img src="{{ URL::asset('build/images/users/avatar-6.jpg') }}" alt=""
+                                            <img src="<?php echo e(URL::asset('build/images/users/avatar-6.jpg')); ?>" alt=""
                                                 class="rounded-circle avatar-xxs material-shadow">
                                         </a>
                                     </td>
@@ -745,7 +745,7 @@ function moveToApproved(icon) {
                                     <td>
                                         <a href="javascript: void(0);" class="d-inline-block" data-bs-toggle="tooltip"
                                             data-bs-placement="top" title="" data-bs-original-title="Prezy Morin">
-                                            <img src="{{ URL::asset('build/images/users/avatar-5.jpg') }}" alt=""
+                                            <img src="<?php echo e(URL::asset('build/images/users/avatar-5.jpg')); ?>" alt=""
                                                 class="rounded-circle avatar-xxs material-shadow">
                                         </a>
                                     </td>
@@ -766,7 +766,7 @@ function moveToApproved(icon) {
                                         <a href="javascript: void(0);" class="d-inline-block" data-bs-toggle="tooltip"
                                             data-bs-placement="top" title=""
                                             data-bs-original-title="Stine Nielsen">
-                                            <img src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" alt=""
+                                            <img src="<?php echo e(URL::asset('build/images/users/avatar-1.jpg')); ?>" alt=""
                                                 class="rounded-circle avatar-xxs material-shadow">
                                         </a>
                                     </td>
@@ -787,7 +787,7 @@ function moveToApproved(icon) {
                                         <a href="javascript: void(0);" class="d-inline-block" data-bs-toggle="tooltip"
                                             data-bs-placement="top" title=""
                                             data-bs-original-title="Jansh William">
-                                            <img src="{{ URL::asset('build/images/users/avatar-4.jpg') }}" alt=""
+                                            <img src="<?php echo e(URL::asset('build/images/users/avatar-4.jpg')); ?>" alt=""
                                                 class="rounded-circle avatar-xxs material-shadow">
                                         </a>
                                     </td>
@@ -842,7 +842,7 @@ function moveToApproved(icon) {
                             <tbody>
                                 <tr>
                                     <td class="d-flex">
-                                        <img src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" alt=""
+                                        <img src="<?php echo e(URL::asset('build/images/users/avatar-1.jpg')); ?>" alt=""
                                             class="avatar-xs rounded-3 me-2 material-shadow">
                                         <div>
                                             <h5 class="fs-13 mb-0">Donald Risher</h5>
@@ -862,7 +862,7 @@ function moveToApproved(icon) {
                                 </tr><!-- end tr -->
                                 <tr>
                                     <td class="d-flex">
-                                        <img src="{{ URL::asset('build/images/users/avatar-2.jpg') }}" alt=""
+                                        <img src="<?php echo e(URL::asset('build/images/users/avatar-2.jpg')); ?>" alt=""
                                             class="avatar-xs rounded-3 me-2 material-shadow">
                                         <div>
                                             <h5 class="fs-13 mb-0">Jansh Brown</h5>
@@ -882,7 +882,7 @@ function moveToApproved(icon) {
                                 </tr><!-- end tr -->
                                 <tr>
                                     <td class="d-flex">
-                                        <img src="{{ URL::asset('build/images/users/avatar-7.jpg') }}" alt=""
+                                        <img src="<?php echo e(URL::asset('build/images/users/avatar-7.jpg')); ?>" alt=""
                                             class="avatar-xs rounded-3 me-2 material-shadow">
                                         <div>
                                             <h5 class="fs-13 mb-0">Carroll Adams</h5>
@@ -902,7 +902,7 @@ function moveToApproved(icon) {
                                 </tr><!-- end tr -->
                                 <tr>
                                     <td class="d-flex">
-                                        <img src="{{ URL::asset('build/images/users/avatar-4.jpg') }}" alt=""
+                                        <img src="<?php echo e(URL::asset('build/images/users/avatar-4.jpg')); ?>" alt=""
                                             class="avatar-xs rounded-3 me-2 material-shadow">
                                         <div>
                                             <h5 class="fs-13 mb-0">William Pinto</h5>
@@ -922,7 +922,7 @@ function moveToApproved(icon) {
                                 </tr><!-- end tr -->
                                 <tr>
                                     <td class="d-flex">
-                                        <img src="{{ URL::asset('build/images/users/avatar-6.jpg') }}" alt=""
+                                        <img src="<?php echo e(URL::asset('build/images/users/avatar-6.jpg')); ?>" alt=""
                                             class="avatar-xs rounded-3 me-2 material-shadow">
                                         <div>
                                             <h5 class="fs-13 mb-0">Garry Fournier</h5>
@@ -942,7 +942,7 @@ function moveToApproved(icon) {
                                 </tr><!-- end tr -->
                                 <tr>
                                     <td class="d-flex">
-                                        <img src="{{ URL::asset('build/images/users/avatar-5.jpg') }}" alt=""
+                                        <img src="<?php echo e(URL::asset('build/images/users/avatar-5.jpg')); ?>" alt=""
                                             class="avatar-xs rounded-3 me-2 material-shadow">
                                         <div>
                                             <h5 class="fs-13 mb-0">Susan Denton</h5>
@@ -963,7 +963,7 @@ function moveToApproved(icon) {
                                 </tr><!-- end tr -->
                                 <tr>
                                     <td class="d-flex">
-                                        <img src="{{ URL::asset('build/images/users/avatar-3.jpg') }}" alt=""
+                                        <img src="<?php echo e(URL::asset('build/images/users/avatar-3.jpg')); ?>" alt=""
                                             class="avatar-xs rounded-3 me-2 material-shadow">
                                         <div>
                                             <h5 class="fs-13 mb-0">Joseph Jackson</h5>
@@ -1020,7 +1020,7 @@ function moveToApproved(icon) {
                                 <li class="chat-list left">
                                     <div class="conversation-list">
                                         <div class="chat-avatar">
-                                            <img src="{{ URL::asset('build/images/users/avatar-2.jpg') }}" alt=""
+                                            <img src="<?php echo e(URL::asset('build/images/users/avatar-2.jpg')); ?>" alt=""
                                                 class="material-shadow">
                                         </div>
                                         <div class="user-chat-content">
@@ -1095,7 +1095,7 @@ function moveToApproved(icon) {
                                 <li class="chat-list left">
                                     <div class="conversation-list">
                                         <div class="chat-avatar">
-                                            <img src="{{ URL::asset('build/images/users/avatar-2.jpg') }}" alt=""
+                                            <img src="<?php echo e(URL::asset('build/images/users/avatar-2.jpg')); ?>" alt=""
                                                 class="material-shadow">
                                         </div>
                                         <div class="user-chat-content">
@@ -1196,7 +1196,7 @@ function moveToApproved(icon) {
                                 <li class="chat-list left">
                                     <div class="conversation-list">
                                         <div class="chat-avatar">
-                                            <img src="{{ URL::asset('build/images/users/avatar-2.jpg') }}" alt=""
+                                            <img src="<?php echo e(URL::asset('build/images/users/avatar-2.jpg')); ?>" alt=""
                                                 class="material-shadow">
                                         </div>
                                         <div class="user-chat-content">
@@ -1205,8 +1205,8 @@ function moveToApproved(icon) {
                                                     <div class="message-img-list">
                                                         <div>
                                                             <a class="popup-img d-inline-block"
-                                                                href="{{ URL::asset('build/images/small/img-1.jpg') }}">
-                                                                <img src="{{ URL::asset('build/images/small/img-1.jpg') }}" alt=""
+                                                                href="<?php echo e(URL::asset('build/images/small/img-1.jpg')); ?>">
+                                                                <img src="<?php echo e(URL::asset('build/images/small/img-1.jpg')); ?>" alt=""
                                                                     class="rounded border">
                                                             </a>
                                                         </div>
@@ -1220,7 +1220,7 @@ function moveToApproved(icon) {
                                                                     </a>
                                                                     <div class="dropdown-menu">
                                                                         <a class="dropdown-item"
-                                                                            href="{{ URL::asset('build/images/small/img-1.jpg') }}"
+                                                                            href="<?php echo e(URL::asset('build/images/small/img-1.jpg')); ?>"
                                                                             download=""><i
                                                                                 class="ri-download-2-line me-2 text-muted align-bottom"></i>Download</a>
                                                                         <a class="dropdown-item" href="#"><i
@@ -1241,8 +1241,8 @@ function moveToApproved(icon) {
                                                     <div class="message-img-list">
                                                         <div>
                                                             <a class="popup-img d-inline-block"
-                                                                href="{{ URL::asset('build/images/small/img-2.jpg') }}">
-                                                                <img src="{{ URL::asset('build/images/small/img-2.jpg') }}" alt=""
+                                                                href="<?php echo e(URL::asset('build/images/small/img-2.jpg')); ?>">
+                                                                <img src="<?php echo e(URL::asset('build/images/small/img-2.jpg')); ?>" alt=""
                                                                     class="rounded border">
                                                             </a>
                                                         </div>
@@ -1256,7 +1256,7 @@ function moveToApproved(icon) {
                                                                     </a>
                                                                     <div class="dropdown-menu">
                                                                         <a class="dropdown-item"
-                                                                            href="{{ URL::asset('build/images/small/img-2.jpg') }}"
+                                                                            href="<?php echo e(URL::asset('build/images/small/img-2.jpg')); ?>"
                                                                             download=""><i
                                                                                 class="ri-download-2-line me-2 text-muted align-bottom"></i>Download</a>
                                                                         <a class="dropdown-item" href="#"><i
@@ -1381,11 +1381,13 @@ function moveToApproved(icon) {
             </div><!-- end card -->
         </div><!-- end col -->
     </div><!-- end row -->
-@endsection
-@section('script')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
     <!-- apexcharts -->
-    <script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
+    <script src="<?php echo e(URL::asset('build/libs/apexcharts/apexcharts.min.js')); ?>"></script>
 
-    <script src="{{ URL::asset('build/js/pages/dashboard-projects.init.js') }}"></script>
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
-@endsection
+    <script src="<?php echo e(URL::asset('build/js/pages/dashboard-projects.init.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\jorge\OneDrive\Documentos\GitHub\SIGAT\resources\views/dashboard-projects.blade.php ENDPATH**/ ?>
