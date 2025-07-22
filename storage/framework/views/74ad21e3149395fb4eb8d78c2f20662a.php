@@ -1,22 +1,22 @@
-@extends('layouts.master')
-@section('title')
+
+<?php $__env->startSection('title'); ?>
     Auxiliar de Area
-@endsection
-@section('css')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('css'); ?>
     <!--Swiper slider css-->
-    <link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="<?php echo e(URL::asset('build/libs/swiper/swiper-bundle.min.css')); ?>" rel="stylesheet" type="text/css" />
     <!-- jsvectormap css -->
-    <link href="{{ URL::asset('build/libs/jsvectormap/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />
-@endsection
-@section('content')
-    @component('components.breadcrumb')
-        @slot('li_1')
+    <link href="<?php echo e(URL::asset('build/libs/jsvectormap/jsvectormap.min.css')); ?>" rel="stylesheet" type="text/css" />
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <?php $__env->startComponent('components.breadcrumb'); ?>
+        <?php $__env->slot('li_1'); ?>
             Dashboard
-        @endslot
-        @slot('title')
+        <?php $__env->endSlot(); ?>
+        <?php $__env->slot('title'); ?>
             BIENVENIDO DARK 
-        @endslot
-    @endcomponent
+        <?php $__env->endSlot(); ?>
+    <?php echo $__env->renderComponent(); ?>
 
     <div class="row dash-nft">
         <div class="row mt-4">
@@ -111,7 +111,7 @@
                                     <a href="#!" class="btn btn-success">Create Your Own</a>
                                 </div>
                             </div>
-                            <img src="{{ URL::asset('build/images/bg-d.png') }}" alt="" class="img-fluid" />
+                            <img src="<?php echo e(URL::asset('build/images/bg-d.png')); ?>" alt="" class="img-fluid" />
                         </div>
                     </div>
                 </div><!--end col-->
@@ -370,7 +370,7 @@
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item list-group-item-action">
                                     <div class="d-flex align-items-center">
-                                        <img src="{{ URL::asset('build/images/users/avatar-10.jpg') }}" alt=""
+                                        <img src="<?php echo e(URL::asset('build/images/users/avatar-10.jpg')); ?>" alt=""
                                             class="avatar-xs object-fit-cover rounded-circle">
                                         <div class="ms-3 flex-grow-1">
                                             <a href="#!" class="stretched-link">
@@ -385,7 +385,7 @@
                                 </li>
                                 <li class="list-group-item list-group-item-action">
                                     <div class="d-flex align-items-center">
-                                        <img src="{{ URL::asset('build/images/nft/img-01.jpg') }}" alt=""
+                                        <img src="<?php echo e(URL::asset('build/images/nft/img-01.jpg')); ?>" alt=""
                                             class="avatar-xs object-fit-cover rounded-circle">
                                         <div class="ms-3 flex-grow-1">
                                             <a href="#!">
@@ -400,7 +400,7 @@
                                 </li>
                                 <li class="list-group-item list-group-item-action">
                                     <div class="d-flex align-items-center">
-                                        <img src="{{ URL::asset('build/images/nft/img-04.jpg') }}" alt=""
+                                        <img src="<?php echo e(URL::asset('build/images/nft/img-04.jpg')); ?>" alt=""
                                             class="avatar-xs object-fit-cover rounded-circle">
                                         <div class="ms-3 flex-grow-1">
                                             <a href="#!">
@@ -415,7 +415,7 @@
                                 </li>
                                 <li class="list-group-item list-group-item-action">
                                     <div class="d-flex align-items-center">
-                                        <img src="{{ URL::asset('build/images/nft/img-06.jpg') }}" alt=""
+                                        <img src="<?php echo e(URL::asset('build/images/nft/img-06.jpg')); ?>" alt=""
                                             class="avatar-xs object-fit-cover rounded-circle">
                                         <div class="ms-3 flex-grow-1">
                                             <a href="#!">
@@ -430,7 +430,7 @@
                                 </li>
                                 <li class="list-group-item list-group-item-action">
                                     <div class="d-flex align-items-center">
-                                        <img src="{{ URL::asset('build/images/users/avatar-8.jpg') }}" alt=""
+                                        <img src="<?php echo e(URL::asset('build/images/users/avatar-8.jpg')); ?>" alt=""
                                             class="avatar-xs object-fit-cover rounded-circle">
                                         <div class="ms-3 flex-grow-1">
                                             <a href="#!">
@@ -445,7 +445,7 @@
                                 </li>
                                 <li class="list-group-item list-group-item-action">
                                     <div class="d-flex align-items-center">
-                                        <img src="{{ URL::asset('build/images/nft/img-03.jpg') }}" alt=""
+                                        <img src="<?php echo e(URL::asset('build/images/nft/img-03.jpg')); ?>" alt=""
                                             class="avatar-xs object-fit-cover rounded-circle">
                                         <div class="ms-3 flex-grow-1">
                                             <a href="#!">
@@ -460,7 +460,7 @@
                                 </li>
                                 <li class="list-group-item list-group-item-action">
                                     <div class="d-flex align-items-center">
-                                        <img src="{{ URL::asset('build/images/nft/img-05.jpg') }}" alt=""
+                                        <img src="<?php echo e(URL::asset('build/images/nft/img-05.jpg')); ?>" alt=""
                                             class="avatar-xs object-fit-cover rounded-circle">
                                         <div class="ms-3 flex-grow-1">
                                             <a href="#!">
@@ -521,7 +521,7 @@
                     <div class="swiper-slide">
                         <div class="card explore-box card-animate rounded">
                             <div class="explore-place-bid-img">
-                                <img src="{{ URL::asset('build/images/nft/img-03.jpg') }}" alt=""
+                                <img src="<?php echo e(URL::asset('build/images/nft/img-03.jpg')); ?>" alt=""
                                     class="img-fluid card-img-top explore-img" />
                                 <div class="bg-overlay"></div>
                                 <div class="place-bid-btn">
@@ -627,7 +627,7 @@
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <img src="{{ URL::asset('build/images/nft/img-01.jpg') }}" alt=""
+                                                <img src="<?php echo e(URL::asset('build/images/nft/img-01.jpg')); ?>" alt=""
                                                     class="avatar-sm rounded-circle">
                                                 <div class="ms-3">
                                                     <a href="#!">
@@ -652,7 +652,7 @@
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <img src="{{ URL::asset('build/images/nft/img-02.jpg') }}" alt=""
+                                                <img src="<?php echo e(URL::asset('build/images/nft/img-02.jpg')); ?>" alt=""
                                                     class="avatar-sm rounded-circle">
                                                 <div class="ms-3">
                                                     <a href="#!">
@@ -677,7 +677,7 @@
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <img src="{{ URL::asset('build/images/nft/img-03.jpg') }}" alt=""
+                                                <img src="<?php echo e(URL::asset('build/images/nft/img-03.jpg')); ?>" alt=""
                                                     class="avatar-sm rounded-circle">
                                                 <div class="ms-3">
                                                     <a href="#!">
@@ -702,7 +702,7 @@
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <img src="{{ URL::asset('build/images/nft/img-04.jpg') }}" alt=""
+                                                <img src="<?php echo e(URL::asset('build/images/nft/img-04.jpg')); ?>" alt=""
                                                     class="avatar-sm rounded-circle">
                                                 <div class="ms-3">
                                                     <a href="#!">
@@ -727,7 +727,7 @@
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <img src="{{ URL::asset('build/images/nft/img-05.jpg') }}" alt=""
+                                                <img src="<?php echo e(URL::asset('build/images/nft/img-05.jpg')); ?>" alt=""
                                                     class="avatar-sm rounded-circle">
                                                 <div class="ms-3">
                                                     <a href="#!">
@@ -752,7 +752,7 @@
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <img src="{{ URL::asset('build/images/nft/img-06.jpg') }}" alt=""
+                                                <img src="<?php echo e(URL::asset('build/images/nft/img-06.jpg')); ?>" alt=""
                                                     class="avatar-sm rounded-circle">
                                                 <div class="ms-3">
                                                     <a href="#!">
@@ -776,7 +776,7 @@
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <img src="{{ URL::asset('build/images/nft/img-01.jpg') }}" alt=""
+                                                <img src="<?php echo e(URL::asset('build/images/nft/img-01.jpg')); ?>" alt=""
                                                     class="avatar-sm rounded-circle">
                                                 <div class="ms-3">
                                                     <a href="#!">
@@ -868,7 +868,7 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div class="me-2">
-                                                <img src="{{ URL::asset('build/images/nft/img-01.jpg') }}" alt=""
+                                                <img src="<?php echo e(URL::asset('build/images/nft/img-01.jpg')); ?>" alt=""
                                                     class="avatar-xs rounded-circle">
                                             </div>
                                             <div class="flex-grow-1">
@@ -878,7 +878,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td><img src="{{ URL::asset('build/images/svg/crypto-icons/btc.svg') }}"
+                                    <td><img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/btc.svg')); ?>"
                                             class="avatar-xxs me-2" alt="">48,568.025</td>
                                     <td>
                                         <span class="text-success mb-0"><i
@@ -903,7 +903,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td><img src="{{ URL::asset('build/images/svg/crypto-icons/ltc.svg') }}"
+                                    <td><img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/ltc.svg')); ?>"
                                             class="avatar-xxs me-2" alt="">87,142.027</td>
                                     <td>
                                         <span class="text-danger mb-0"><i
@@ -917,7 +917,7 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div class="me-2">
-                                                <img src="{{ URL::asset('build/images/nft/img-06.jpg') }}" alt=""
+                                                <img src="<?php echo e(URL::asset('build/images/nft/img-06.jpg')); ?>" alt=""
                                                     class="avatar-xs rounded-circle">
                                             </div>
                                             <div class="flex-grow-1">
@@ -927,7 +927,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td><img src="{{ URL::asset('build/images/svg/crypto-icons/etc.svg') }}"
+                                    <td><img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/etc.svg')); ?>"
                                             class="avatar-xxs me-2" alt="">33,847.961</td>
                                     <td>
                                         <span class="text-success mb-0"><i
@@ -941,7 +941,7 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div class="me-2">
-                                                <img src="{{ URL::asset('build/images/nft/img-04.jpg') }}" alt=""
+                                                <img src="<?php echo e(URL::asset('build/images/nft/img-04.jpg')); ?>" alt=""
                                                     class="avatar-xs rounded-circle">
                                             </div>
                                             <div class="flex-grow-1">
@@ -951,7 +951,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td><img src="{{ URL::asset('build/images/svg/crypto-icons/dash.svg') }}"
+                                    <td><img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/dash.svg')); ?>"
                                             class="avatar-xxs me-2" alt="">73,654.421</td>
                                     <td>
                                         <span class="text-success mb-0"><i
@@ -965,7 +965,7 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div class="me-2">
-                                                <img src="{{ URL::asset('build/images/nft/img-03.jpg') }}" alt=""
+                                                <img src="<?php echo e(URL::asset('build/images/nft/img-03.jpg')); ?>" alt=""
                                                     class="avatar-xs rounded-circle">
                                             </div>
                                             <div class="flex-grow-1">
@@ -976,7 +976,7 @@
                                             <div class="flex-grow-1"></div>
                                         </div>
                                     </td>
-                                    <td><img src="{{ URL::asset('build/images/svg/crypto-icons/bnb.svg') }}"
+                                    <td><img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/bnb.svg')); ?>"
                                             class="avatar-xxs me-2" alt="">66,742.077</td>
                                     <td>
                                         <span class="text-danger mb-0"><i
@@ -990,7 +990,7 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div class="me-2">
-                                                <img src="{{ URL::asset('build/images/nft/img-02.jpg') }}" alt=""
+                                                <img src="<?php echo e(URL::asset('build/images/nft/img-02.jpg')); ?>" alt=""
                                                     class="avatar-xs rounded-circle">
                                             </div>
                                             <div class="flex-grow-1">
@@ -999,7 +999,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td><img src="{{ URL::asset('build/images/svg/crypto-icons/usdt.svg') }}"
+                                    <td><img src="<?php echo e(URL::asset('build/images/svg/crypto-icons/usdt.svg')); ?>"
                                             class="avatar-xxs me-2" alt="">34,736.209</td>
                                     <td>
                                         <span class="text-success mb-0"><i
@@ -1035,15 +1035,15 @@
                         style="height: 265px" dir="ltr"></div>
 
                     <div class="mt-1">
-                        <p class="mb-1"><img src="{{ URL::asset('build/images/flags/us.svg') }}" alt=""
+                        <p class="mb-1"><img src="<?php echo e(URL::asset('build/images/flags/us.svg')); ?>" alt=""
                                 height="15" class="rounded me-2"> United States <span class="float-end">34%</span></p>
-                        <p class="mb-1"><img src="{{ URL::asset('build/images/flags/russia.svg') }}" alt=""
+                        <p class="mb-1"><img src="<?php echo e(URL::asset('build/images/flags/russia.svg')); ?>" alt=""
                                 height="15" class="rounded me-2"> Russia <span class="float-end">27%</span></p>
-                        <p class="mb-1"><img src="{{ URL::asset('build/images/flags/spain.svg') }}" alt=""
+                        <p class="mb-1"><img src="<?php echo e(URL::asset('build/images/flags/spain.svg')); ?>" alt=""
                                 height="15" class="rounded me-2"> Spain <span class="float-end">21%</span></p>
-                        <p class="mb-1"><img src="{{ URL::asset('build/images/flags/italy.svg') }}" alt=""
+                        <p class="mb-1"><img src="<?php echo e(URL::asset('build/images/flags/italy.svg')); ?>" alt=""
                                 height="15" class="rounded me-2"> Italy <span class="float-end">13%</span></p>
-                        <p class="mb-0"><img src="{{ URL::asset('build/images/flags/germany.svg') }}" alt=""
+                        <p class="mb-0"><img src="<?php echo e(URL::asset('build/images/flags/germany.svg')); ?>" alt=""
                                 height="15" class="rounded me-2"> Germany <span class="float-end">5%</span></p>
                     </div>
                 </div>
@@ -1065,7 +1065,7 @@
                         <div class="swiper-wrapper">
                             <div class="swiper-slide">
                                 <div class="dash-collection overflow-hidden rounded-top position-relative">
-                                    <img src="{{ URL::asset('build/images/nft/img-03.jpg') }}" alt=""
+                                    <img src="<?php echo e(URL::asset('build/images/nft/img-03.jpg')); ?>" alt=""
                                         height="220" class="object-fit-cover w-100" />
                                     <div
                                         class="content position-absolute bottom-0 m-2 p-2 start-0 end-0 rounded d-flex align-items-center">
@@ -1086,7 +1086,7 @@
                             </div>
                             <div class="swiper-slide">
                                 <div class="dash-collection overflow-hidden rounded-top position-relative">
-                                    <img src="{{ URL::asset('build/images/nft/img-04.jpg') }}" alt=""
+                                    <img src="<?php echo e(URL::asset('build/images/nft/img-04.jpg')); ?>" alt=""
                                         height="220" class="object-fit-cover w-100" />
                                     <div
                                         class="content position-absolute bottom-0 m-2 p-2 start-0 end-0 rounded d-flex align-items-center">
@@ -1128,7 +1128,7 @@
                             </div>
                             <div class="swiper-slide">
                                 <div class="dash-collection overflow-hidden rounded-top position-relative">
-                                    <img src="{{ URL::asset('build/images/nft/img-06.jpg') }}" alt=""
+                                    <img src="<?php echo e(URL::asset('build/images/nft/img-06.jpg')); ?>" alt=""
                                         height="220" class="object-fit-cover w-100" />
                                     <div
                                         class="content position-absolute bottom-0 m-2 p-2 start-0 end-0 rounded d-flex align-items-center">
@@ -1166,7 +1166,7 @@
                             <div class="swiper-slide">
                                 <div class="d-flex">
                                     <div class="flex-shink-0">
-                                        <img src="{{ URL::asset('build/images/nft/img-02.jpg') }}" alt=""
+                                        <img src="<?php echo e(URL::asset('build/images/nft/img-02.jpg')); ?>" alt=""
                                             class="avatar-sm object-fit-cover rounded">
                                     </div>
                                     <div class="ms-3 flex-grow-1">
@@ -1194,7 +1194,7 @@
                             <div class="swiper-slide">
                                 <div class="d-flex">
                                     <div class="flex-shink-0">
-                                        <img src="{{ URL::asset('build/images/nft/img-01.jpg') }}" alt=""
+                                        <img src="<?php echo e(URL::asset('build/images/nft/img-01.jpg')); ?>" alt=""
                                             class="avatar-sm object-fit-cover rounded">
                                     </div>
                                     <div class="ms-3 flex-grow-1">
@@ -1222,7 +1222,7 @@
                             <div class="swiper-slide">
                                 <div class="d-flex">
                                     <div class="flex-shink-0">
-                                        <img src="{{ URL::asset('build/images/nft/img-04.jpg') }}" alt=""
+                                        <img src="<?php echo e(URL::asset('build/images/nft/img-04.jpg')); ?>" alt=""
                                             class="avatar-sm object-fit-cover rounded">
                                     </div>
                                     <div class="ms-3 flex-grow-1">
@@ -1250,7 +1250,7 @@
                             <div class="swiper-slide">
                                 <div class="d-flex">
                                     <div class="flex-shink-0">
-                                        <img src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" alt=""
+                                        <img src="<?php echo e(URL::asset('build/images/users/avatar-1.jpg')); ?>" alt=""
                                             class="avatar-sm object-fit-cover rounded">
                                     </div>
                                     <div class="ms-3 flex-grow-1">
@@ -1282,23 +1282,25 @@
             </div>
         </div><!--end col-->
     </div><!--end row-->
-@endsection
-@section('script')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
     <!-- apexcharts -->
-    <script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
+    <script src="<?php echo e(URL::asset('build/libs/apexcharts/apexcharts.min.js')); ?>"></script>
 
     <!--Swiper slider js-->
-    <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
+    <script src="<?php echo e(URL::asset('build/libs/swiper/swiper-bundle.min.js')); ?>"></script>
 
     <!-- Vector map-->
-    <script src="{{ URL::asset('build/libs/jsvectormap/jsvectormap.min.js') }}"></script>
-    <script src="{{ URL::asset('build/libs/jsvectormap/maps/world-merc.js') }}"></script>
+    <script src="<?php echo e(URL::asset('build/libs/jsvectormap/jsvectormap.min.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('build/libs/jsvectormap/maps/world-merc.js')); ?>"></script>
 
     <!-- Countdown js -->
-    <script src="{{ URL::asset('build/js/pages/coming-soon.init.js') }}"></script>
+    <script src="<?php echo e(URL::asset('build/js/pages/coming-soon.init.js')); ?>"></script>
 
     <!-- Marketplace init -->
-    <script src="{{ URL::asset('build/js/pages/dashboard-nft.init.js') }}"></script>
+    <script src="<?php echo e(URL::asset('build/js/pages/dashboard-nft.init.js')); ?>"></script>
 
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
-@endsection
+    <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\DELL\Documents\GitHub\SIGAT\resources\views/dashboard-nft.blade.php ENDPATH**/ ?>
