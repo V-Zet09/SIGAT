@@ -1,10 +1,6 @@
 @extends('layouts.master')
 @section('title')
-<<<<<<< HEAD
-    Dashboard Director de area
-=======
     Auxiliar de Area
->>>>>>> 663ed09073ec6fb6df69c7eff6293cbdd01d8376
 @endsection
 @section('css')
     <!--Swiper slider css-->
@@ -18,11 +14,7 @@
             Dashboard
         @endslot
         @slot('title')
-<<<<<<< HEAD
-            BIENVENIDO DIRECTOR DARK
-=======
             BIENVENIDO DARK 
->>>>>>> 663ed09073ec6fb6df69c7eff6293cbdd01d8376
         @endslot
     @endcomponent
 
@@ -105,10 +97,6 @@
 </div>
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 663ed09073ec6fb6df69c7eff6293cbdd01d8376
         <div class="col-xxl-9">
             <div class="row">
                 <div class="col-xl-6">
