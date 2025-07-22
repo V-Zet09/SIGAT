@@ -24,15 +24,48 @@
 <!-- Theme Settings -->
 <div class="offcanvas offcanvas-end border-0" tabindex="-1" id="theme-settings-offcanvas">
     <div class="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
-        <h5 class="m-0 me-2 text-white">Theme Customizer</h5>
+        <h5 class="m-0 me-2 text-white">hola</h5>
 
         <button type="button" class="btn-close btn-close-white ms-auto" id="customizerclose-btn"
             data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
+
+    <div class="card shadow-lg border-0 mb-4" style="background: linear-gradient(135deg, #cde6f9, #e8f4fc);">
+    <div class="card-body d-flex align-items-center">
+        <div class="me-3">
+            <i class="ri-user-smile-line" style="font-size: 2rem; color: #007bff;"></i>
+        </div>
+        <div>
+            <h5 id="saludo-dinamico" class="fw-bold mb-1" style="color: #0056b3;">¡Hola!</h5>
+            <p class="mb-0 text-dark">
+                {{ Auth::user()->name }}, te deseamos un excelente día y mucho éxito en tus actividades laborales.
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const saludo = document.getElementById("saludo-dinamico");
+        const hora = new Date().getHours();
+        let mensaje = "";
+
+        if (hora >= 5 && hora < 12) {
+            mensaje = "¡Buenos días!";
+        } else if (hora >= 12 && hora < 18) {
+            mensaje = "¡Buenas tardes!";
+        } else {
+            mensaje = "¡Buenas noches!";
+        }
+
+        saludo.textContent = mensaje;
+    });
+</script>
+
     <div class="offcanvas-body p-0">
         <div data-simplebar class="h-100">
             <div class="p-4">
-                <h6 class="mb-0 fw-semibold text-uppercase">Layout</h6>
+                <h6 class="mb-0 fw-semibold text-uppercase">dark</h6>
                 <p class="text-muted">Choose your layout</p>
 
                 <div class="row gy-3">
@@ -665,7 +698,8 @@
                     </div>
                 </div>
                 <div id="sidebar-color">
-                    <h6 class="mt-4 mb-0 fw-semibold text-uppercase">Sidebar Color</h6>
+                    <h6 class="mt-4 mb-0 fw-semibold text-uppercase">la cochada q no puedo editar
+                    </h6>
                     <p class="text-muted">Choose a color of Sidebar.</p>
 
                     <div class="row">
@@ -839,7 +873,7 @@
                 </div>
 
                 <div id="sidebar-color">
-                    <h6 class="mt-4 mb-0 fw-semibold text-uppercase">Primary Color</h6>
+                    <h6 class="mt-4 mb-0 fw-semibold text-uppercase">dark fresco</h6>
                     <p class="text-muted">Choose a color of Primary.</p>
 
                     <div class="d-flex flex-wrap gap-2">

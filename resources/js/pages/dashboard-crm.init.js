@@ -47,14 +47,14 @@ function loadCharts() {
     if (areachartSalesColors) {
         var options = {
             series: [{
-                name: 'Goal',
-                data: [37]
+                name: 'Obras públicas',
+                data: [7]
             }, {
-                name: 'Pending Forcast',
-                data: [12]
+                name: 'Informática',
+                data: [2]
             }, {
-                name: 'Revenue',
-                data: [18]
+                name: 'DIF',
+                data: [10]
             }],
             chart: {
                 type: 'bar',

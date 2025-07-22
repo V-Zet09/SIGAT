@@ -5,7 +5,7 @@
         <!-- Dark Logo-->
         <a href="index" class="logo logo-dark">
             <span class="logo-sm">
-                <img src="{{ URL::asset('build/images/logo-sm.png') }}" alt="" height="22">
+                <img src="{{ URL::asset('build/images/LOGO_VENTANA_SF.PNG') }}" alt="" height="22">
             </span>
             <span class="logo-lg">
                 <img src="{{ URL::asset('build/images/logo-dark.png') }}" alt="" height="17">
@@ -14,7 +14,7 @@
         <!-- Light Logo-->
         <a href="index" class="logo logo-light">
             <span class="logo-sm">
-                <img src="{{ URL::asset('build/images/logo-sm.png') }}" alt="" height="22">
+                <img src="{{ URL::asset('build/images/LOGO_VENTANA_SF.PNG') }}" alt="" height="22">
             </span>
             <span class="logo-lg">
                 <img src="{{ URL::asset('build/images/logo-light.png') }}" alt="" height="17">
