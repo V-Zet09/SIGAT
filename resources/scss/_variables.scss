@@ -89,7 +89,7 @@ $pink:       #f672a7;
 $red:        #f06548;
 $orange:     #f1963b;
 $yellow:     #f7b84b;
-$green:      #0ab39c;
+$green:      #85a156;
 $teal:       #02a8b5;
 $cyan:       #299cdb;
 // scss-docs-end color-variables
@@ -343,9 +343,9 @@ $cyans: (
 // fusv-enable
 
 // scss-docs-start theme-color-variables
-$primary:       $indigo;
+$primary:       $green;
 $secondary:     $blue;
-$success:       $green;
+$success:       $indigo;
 $info:          $cyan;
 $warning:       $yellow;
 $danger:        $red;
