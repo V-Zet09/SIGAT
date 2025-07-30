@@ -24,7 +24,7 @@
 <!-- Theme Settings -->
 <div class="offcanvas offcanvas-end border-0" tabindex="-1" id="theme-settings-offcanvas">
     <div class="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
-        <h5 class="m-0 me-2 text-white">Theme Customizer</h5>
+        <h5 class="m-0 me-2 text-white">hola</h5>
 
         <button type="button" class="btn-close btn-close-white ms-auto" id="customizerclose-btn"
             data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -62,12 +62,10 @@
     });
 </script>
 
-
-
     <div class="offcanvas-body p-0">
         <div data-simplebar class="h-100">
             <div class="p-4">
-                <h6 class="mb-0 fw-semibold text-uppercase">Layout</h6>
+                <h6 class="mb-0 fw-semibold text-uppercase">dark</h6>
                 <p class="text-muted">Choose your layout</p>
 
                 <div class="row gy-3">
@@ -700,7 +698,8 @@
                     </div>
                 </div>
                 <div id="sidebar-color">
-                    <h6 class="mt-4 mb-0 fw-semibold text-uppercase">Sidebar Color</h6>
+                    <h6 class="mt-4 mb-0 fw-semibold text-uppercase">la cochada q no puedo editar
+                    </h6>
                     <p class="text-muted">Choose a color of Sidebar.</p>
 
                     <div class="row">
@@ -874,7 +873,7 @@
                 </div>
 
                 <div id="sidebar-color">
-                    <h6 class="mt-4 mb-0 fw-semibold text-uppercase">Primary Color</h6>
+                    <h6 class="mt-4 mb-0 fw-semibold text-uppercase">dark fresco</h6>
                     <p class="text-muted">Choose a color of Primary.</p>
 
                     <div class="d-flex flex-wrap gap-2">

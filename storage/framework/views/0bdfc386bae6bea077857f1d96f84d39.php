@@ -1,6 +1,6 @@
 
 <?php $__env->startSection('title'); ?>
-    Dashboard Director de area
+    Auxiliar de Area
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('css'); ?>
     <!--Swiper slider css-->
@@ -14,7 +14,7 @@
             Dashboard
         <?php $__env->endSlot(); ?>
         <?php $__env->slot('title'); ?>
-            BIENVENIDO DIRECTOR DARK
+            BIENVENIDO DARK 
         <?php $__env->endSlot(); ?>
     <?php echo $__env->renderComponent(); ?>
 
@@ -97,7 +97,6 @@
 </div>
 
 
-
         <div class="col-xxl-9">
             <div class="row">
                 <div class="col-xl-6">
@@ -127,7 +126,7 @@
                                                 class="mdi mdi-dots-vertical align-middle"></i></span>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-end">
-                                        <a class="dropdown-item" href="#">Today</a>
+                                        <a class="dropdown-item" href="#">DARWIN</a>
                                         <a class="dropdown-item" href="#">Last Week</a>
                                         <a class="dropdown-item" href="#">Last Month</a>
                                         <a class="dropdown-item" href="#">Current Year</a>
@@ -303,7 +302,7 @@
                                             </div>
 
                                             <h3 class="ff-secondary fw-bold mt-4 cfs-22"><i
-                                                    class="mdi mdi-ethereum text-primary"></i> 346.12 ETH</h3>
+                                                    class="mdi mdi-ethereum text-primary"></i> 0 </h3>
                                             <p class="text-success mb-3">+586.85 (40.6%)</p>
 
                                             <p class="text-muted">NFT art is a digital asset that is collectable, unique,
@@ -360,7 +359,7 @@
 
             <div class="card">
                 <div class="card-header d-flex align-items-center">
-                    <h6 class="card-title mb-0 flex-grow-1">History of Bids</h6>
+                    <h6 class="card-title mb-0 flex-grow-1">holaaaa</h6>
                     <a class="text-muted" href="apps-nft-item-details">
                         See All <i class="ri-arrow-right-line align-bottom"></i>
                     </a>
@@ -375,12 +374,12 @@
                                             class="avatar-xs object-fit-cover rounded-circle">
                                         <div class="ms-3 flex-grow-1">
                                             <a href="#!" class="stretched-link">
-                                                <h6 class="fs-14 mb-1">Herbert Stokes</h6>
+                                                <h6 class="fs-14 mb-1">Maico Zaet Perez</h6>
                                             </a>
-                                            <p class="mb-0 text-muted">@herbert10</p>
+                                            <p class="mb-0 text-muted">@TheMaikZ</p>
                                         </div>
                                         <div>
-                                            <h6>174.36 ETH</h6>
+                                            <h6>767 ETH</h6>
                                         </div>
                                     </div>
                                 </li>
@@ -488,7 +487,7 @@
         <div class="col-xxl-8">
             <div class="swiper marketplace-swiper rounded gallery-light">
                 <div class="d-flex pt-2 pb-4">
-                    <h5 class="card-title fs-18 mb-1">Featured NFTs Artworks</h5>
+                    <h5 class="card-title fs-18 mb-1">Actividades Realizadas</h5>
                 </div>
                 <div class="swiper-wrapper">
                     <div class="swiper-slide">
