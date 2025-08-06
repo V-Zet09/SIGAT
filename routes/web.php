@@ -2,28 +2,31 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DashboardPresidentController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
 */
 
+// ✅ Registro de rutas de autenticación (login, logout, etc.)
 Auth::routes();
-//Language Translation
 
-Route::get('index/{locale}', [App\Http\Controllers\HomeController::class, 'lang']);
+// ✅ Redirige raíz al dashboard si está autenticado, si no al login
+Route::get('/', function () {
+    return Auth::check()
+        ? redirect('/dashboard-administrador')
+        : view('auth.login'); // Usa la vista de login directamente
+})->name('root');
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'root'])->name('root');
+// ✅ Cambio de idioma
+Route::get('index/{locale}', [HomeController::class, 'lang']);
 
-//Update User Details
-Route::post('/update-profile/{id}', [App\Http\Controllers\HomeController::class, 'updateProfile'])->name('updateProfile');
-Route::post('/update-password/{id}', [App\Http\Controllers\HomeController::class, 'updatePassword'])->name('updatePassword');
+// ✅ Actualización de perfil y contraseña
+Route::post('/update-profile/{id}', [HomeController::class, 'updateProfile'])->name('updateProfile');
+Route::post('/update-password/{id}', [HomeController::class, 'updatePassword'])->name('updatePassword');
 
-Route::get('{any}', [App\Http\Controllers\HomeController::class, 'index'])->name('index');
-Route::get('/presidente', [DashboardPresidentController::class, 'index']);
+// ✅ Todas las demás vistas dinámicas protegidas
+Route::get('{any}', [HomeController::class, 'index'])->where('any', '.*')->middleware('auth')->name('index');

@@ -36,16 +36,11 @@ $vertical-menu-title-color-gradient:              rgba($white, .5);
 $vertical-menu-box-shadow-gradient:               0 2px 4px rgba(15,34,58,0.12);
 $vertical-menu-dropdown-box-shadow-gradient:      0 2px 4px rgba(15,34,58,0.12);
 
-//gradient one
-$vertical-menu-bg-gradient:                       linear-gradient(to right, var(--#{$prefix}primary), var(--#{$prefix}success));
-//gradient-2
-$vertical-menu-bg-gradient-2:                     linear-gradient(to right, var(--#{$prefix}info), var(--#{$prefix}secondary));
-
-//gradient-3
-$vertical-menu-bg-gradient-3:                     linear-gradient(to right, var(--#{$prefix}info), var(--#{$prefix}success));
-
-//gradient-4
-$vertical-menu-bg-gradient-4:                     linear-gradient(to right, #85a156, var(--#{$prefix}primary));
+// Gradientes personalizados (Succulents palette)
+$vertical-menu-bg-gradient:                       linear-gradient(to right, #27768A, #748D44);
+$vertical-menu-bg-gradient-2:                     linear-gradient(to right, #589DA4, #85A156);
+$vertical-menu-bg-gradient-3:                     linear-gradient(to right, #85A156, #748D44);
+$vertical-menu-bg-gradient-4:                     linear-gradient(to right, #27768A, #748D44); // Usado por default en tu layout
 
 // Horizontal Menu
 $horizontal-menu-box-shadow:                      0 2px 4px rgba(15,34,58,0.12);

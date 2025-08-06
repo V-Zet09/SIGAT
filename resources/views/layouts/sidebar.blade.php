@@ -1,30 +1,33 @@
 <!-- ========== App Menu ========== -->
 <div class="app-menu navbar-menu">
     <!-- LOGO -->
-    <div class="navbar-brand-box">
-        <!-- Dark Logo-->
-        <a href="index" class="logo logo-dark">
-            <span class="logo-sm">
-                <img src="{{ URL::asset('build/images/LOGO_VENTANA_SF.PNG') }}" alt="" height="22">
-            </span>
-            <span class="logo-lg">
-                <img src="{{ URL::asset('build/images/logo-dark.png') }}" alt="" height="17">
-            </span>
-        </a>
-        <!-- Light Logo-->
-        <a href="index" class="logo logo-light">
-            <span class="logo-sm">
-                <img src="{{ URL::asset('build/images/LOGO_VENTANA_SF.PNG') }}" alt="" height="22">
-            </span>
-            <span class="logo-lg">
-                <img src="{{ URL::asset('build/images/logo-light.png') }}" alt="" height="17">
-            </span>
-        </a>
-        <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
-            id="vertical-hover">
-            <i class="ri-record-circle-line"></i>
-        </button>
-    </div>
+<!-- LOGO -->
+<div class="navbar-brand-box">
+    <!-- Dark Logo-->
+    <a href="dashboard-administrador" class="logo logo-dark">
+        <span class="logo-sm">
+            <img src="{{ URL::asset('images/SIGAT.jpeg') }}" alt="SIGAT Logo" height="22">
+        </span>
+        <span class="logo-lg">
+            <img src="{{ URL::asset('images/SIGAT.jpeg') }}" alt="SIGAT Logo" height="40">
+        </span>
+    </a>
+
+    <!-- Light Logo-->
+    <a href="dashboard-administrador"  class="logo logo-light">
+        <span class="logo-sm">
+            <img src="{{ URL::asset('images/SIGAT.jpeg') }}" alt="SIGAT Logo" height="22">
+        </span>
+        <span class="logo-lg">
+            <img src="{{ URL::asset('images/SIGAT.jpeg') }}" alt="SIGAT Logo" height="40">
+        </span>
+    </a>
+
+    <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
+        id="vertical-hover">
+        <i class="ri-record-circle-line"></i>
+    </button>
+</div>
 
     <div class="dropdown sidebar-user m-1 rounded">
         <button type="button" class="btn material-shadow-none" id="page-header-user-dropdown" data-bs-toggle="dropdown"
@@ -93,22 +96,22 @@
                     <div class="collapse menu-dropdown" id="sidebarDashboards">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="dashboard-analytics" class="nav-link">@lang('Administrador')</a>
+                                <a href="/dashboard-administrador" class="nav-link">@lang('Administrador')</a>
                             </li>
                             <li class="nav-item">
-                                <a href="dashboard-crm" class="nav-link">@lang('Presidente Municipal')</a>
+                                <a href="dashboard-presidente-municipal" class="nav-link">@lang('Presidente Municipal')</a>
                             </li>
                             <li class="nav-item">
-                                <a href="index" class="nav-link">@lang('Síndico Procurador')</a>
+                                <a href="dashboard-sindico-procurador" class="nav-link">@lang('Síndico Procurador')</a>
                             </li>
                             <li class="nav-item">
-                                <a href="dashboard-crypto" class="nav-link">@lang('Regidor')</a>
+                                <a href="dashboard-regidor" class="nav-link">@lang('Regidor')</a>
                             </li>
                             <li class="nav-item">
-                                <a href="dashboard-projects" class="nav-link">@lang('Director de Área')</a>
+                                <a href="dashboard-director-de-area" class="nav-link">@lang('Director de Área')</a>
                             </li>
                             <li class="nav-item">
-                                <a href="dashboard-nft" class="nav-link"> @lang('Auxiliar de Área')</a>
+                                <a href="dashboard-auxiliar-area" class="nav-link"> @lang('Auxiliar de Área')</a>
                             </li>
                             <li class="nav-item">
                                 <a href="dashboard-job" class="nav-link">@lang('translation.job')</a>
@@ -125,29 +128,12 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarApps">
-                        <i class="ri-apps-2-line"></i> <span>@lang('translation.apps')</span>
+                        <i class="ri-apps-2-line"></i> <span>Informe</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarApps">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="#sidebarCalendar" class="nav-link" data-bs-toggle="collapse" role="button"
-                                    aria-expanded="false" aria-controls="sidebarCalendar">
-                                    @lang('translation.calendar')
-                                </a>
-                                <div class="collapse menu-dropdown" id="sidebarCalendar">
-                                    <ul class="nav nav-sm flex-column">
-                                        <li class="nav-item">
-                                            <a href="apps-calendar" class="nav-link"> @lang('translation.main-calender') </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="apps-calendar-month-grid" class="nav-link"> @lang('translation.month-grid')
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <a href="apps-chat" class="nav-link">@lang('translation.chat')</a>
+                                <a href="dashboard-generar-informe" class="nav-link">@lang('Generar Informe')</a>
                             </li>
                             <li class="nav-item">
                                 <a href="#sidebarEmail" class="nav-link" data-bs-toggle="collapse" role="button"

@@ -141,13 +141,13 @@
         @if(Session::get('lang') == 'en')
             <img src="{{ asset('build/images/flags/us.svg') }}" alt="English" height="20">
         @else
-            <img src="{{ asset('build/images/flags/mexico.svg') }}" alt="Español" height="20">
+            <img src="{{ asset('images/mex.jpg') }}" alt="Español" height="20">
         @endif
     </button>
     <div class="dropdown-menu dropdown-menu-end">
         <!-- Español -->
         <a href="{{ url('index/sp') }}" class="dropdown-item notify-item language py-2" data-lang="sp" title="Español">
-            <img src="{{ asset('build/images/flags/mexico.svg') }}" alt="Español" class="me-2" height="20">
+            <img src="{{ asset('images/mex.jpg') }}" alt="Español" class="me-2" height="20">
             <span class="align-middle">Español</span>
         </a>
 
