@@ -1,4 +1,4 @@
-@php
+<?php
     // Simulación de datos para el dashboard del presidente
     $totalActividades = 120;
     $actividadesSemana = 14;
@@ -24,18 +24,18 @@
         'Sábado' => ['aprobadas' => 4, 'revision' => 6],
         'Domingo' => ['aprobadas' => 9, 'revision' => 0],
     ];
-@endphp
+?>
 
 
 
-@extends('layouts.master')
-@section('title', 'Presidente Municipal')
-@section('content')
 
-    @component('components.breadcrumb')
-        @slot('li_1') Dashboards @endslot
-        @slot('title') BIENVENIDO PRESIDENTE @endslot
-    @endcomponent
+<?php $__env->startSection('title', 'Presidente Municipal'); ?>
+<?php $__env->startSection('content'); ?>
+
+    <?php $__env->startComponent('components.breadcrumb'); ?>
+        <?php $__env->slot('li_1'); ?> Dashboards <?php $__env->endSlot(); ?>
+        <?php $__env->slot('title'); ?> BIENVENIDO PRESIDENTE <?php $__env->endSlot(); ?>
+    <?php echo $__env->renderComponent(); ?>
     <div class="row">
         <div class="col-xl-12">
             <div class="card crm-widget">
@@ -48,7 +48,7 @@
                                 <h5 class="text-muted text-uppercase fs-13">Total de Actividades</h5>
                                 <div class="d-flex align-items-center">
                                     <i class="ri-file-list-3-line display-6 text-muted"></i>
-                                    <h2 class="mb-0 ms-3">{{ $totalActividades }}</h2>
+                                    <h2 class="mb-0 ms-3"><?php echo e($totalActividades); ?></h2>
                                 </div>
                             </div>
                         </div>
@@ -59,7 +59,7 @@
                                 <h5 class="text-muted text-uppercase fs-13">Esta Semana</h5>
                                 <div class="d-flex align-items-center">
                                     <i class="ri-calendar-check-line display-6 text-muted"></i>
-                                    <h2 class="mb-0 ms-3">{{ $actividadesSemana }}</h2>
+                                    <h2 class="mb-0 ms-3"><?php echo e($actividadesSemana); ?></h2>
                                 </div>
                             </div>
                         </div>
@@ -70,7 +70,7 @@
                                 <h5 class="text-muted text-uppercase fs-13">Aprobadas</h5>
                                 <div class="d-flex align-items-center">
                                     <i class="ri-checkbox-circle-line display-6 text-muted"></i>
-                                    <h2 class="mb-0 ms-3">{{ $aprobadas }}</h2>
+                                    <h2 class="mb-0 ms-3"><?php echo e($aprobadas); ?></h2>
                                 </div>
                             </div>
                         </div>
@@ -81,7 +81,7 @@
                                 <h5 class="text-muted text-uppercase fs-13">En Revisión</h5>
                                 <div class="d-flex align-items-center">
                                     <i class="ri-loader-line display-6 text-muted"></i>
-                                    <h2 class="mb-0 ms-3">{{ $revision }}</h2>
+                                    <h2 class="mb-0 ms-3"><?php echo e($revision); ?></h2>
                                 </div>
                             </div>
                         </div>
@@ -92,7 +92,7 @@
                                 <h5 class="text-muted text-uppercase fs-13">Deptos. sin Actividad</h5>
                                 <div class="d-flex align-items-center">
                                     <i class="ri-alert-line display-6 text-muted"></i>
-                                    <h2 class="mb-0 ms-3">{{ $departamentosSinActividad }}</h2>
+                                    <h2 class="mb-0 ms-3"><?php echo e($departamentosSinActividad); ?></h2>
                                 </div>
                             </div>
                         </div>
@@ -164,7 +164,7 @@
                                 <tr>
                                     <td>Tesorería</td>
                                     <td>Sep 20, 2024</td>
-                                    <td><img src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" alt="" class="avatar-xs rounded-circle me-2 material-shadow">
+                                    <td><img src="<?php echo e(URL::asset('build/images/users/avatar-1.jpg')); ?>" alt="" class="avatar-xs rounded-circle me-2 material-shadow">
                                         <a href="#javascript: void(0);" class="text-body fw-medium">Donald Risher</a>
                                     </td>
                                     <td><span class="badge bg-success-subtle text-success p-2">Deal Won</span></td>
@@ -173,7 +173,7 @@
                                 <tr>
                                     <td>Oficialía Mayor</td>
                                     <td>Ene 23, 2025</td>
-                                    <td><img src="{{ URL::asset('build/images/users/avatar-2.jpg') }}" alt="" class="avatar-xs rounded-circle me-2 material-shadow">
+                                    <td><img src="<?php echo e(URL::asset('build/images/users/avatar-2.jpg')); ?>" alt="" class="avatar-xs rounded-circle me-2 material-shadow">
                                         <a href="#javascript: void(0);" class="text-body fw-medium">Sofia Cunha</a>
                                     </td>
                                     <td><span class="badge bg-warning-subtle text-warning p-2">Intro Call</span></td>
@@ -182,7 +182,7 @@
                                 <tr>
                                     <td>Registro Civil</td>
                                     <td>Feb 27, 2025</td>
-                                    <td><img src="{{ URL::asset('build/images/users/avatar-3.jpg') }}" alt="" class="avatar-xs rounded-circle me-2 material-shadow">
+                                    <td><img src="<?php echo e(URL::asset('build/images/users/avatar-3.jpg')); ?>" alt="" class="avatar-xs rounded-circle me-2 material-shadow">
                                         <a href="#javascript: void(0);" class="text-body fw-medium">Luis Rocha</a>
                                     </td>
                                     <td><span class="badge bg-danger-subtle text-danger p-2">Stuck</span></td>
@@ -191,7 +191,7 @@
                                 <tr>
                                     <td>Desarrollo económico</td>
                                     <td>May 30, 2025</td>
-                                    <td><img src="{{ URL::asset('build/images/users/avatar-4.jpg') }}" alt="" class="avatar-xs rounded-circle me-2 material-shadow">
+                                    <td><img src="<?php echo e(URL::asset('build/images/users/avatar-4.jpg')); ?>" alt="" class="avatar-xs rounded-circle me-2 material-shadow">
                                         <a href="#javascript: void(0);" class="text-body fw-medium">Vitoria Rodrigues</a>
                                     </td>
                                     <td><span class="badge bg-success-subtle text-success p-2">Deal Won</span></td>
@@ -200,7 +200,7 @@
                                 <tr>
                                     <td>Contraloría</td>
                                     <td>Abr 30, 2025</td>
-                                    <td><img src="{{ URL::asset('build/images/users/avatar-6.jpg') }}" alt="" class="avatar-xs rounded-circle me-2 material-shadow">
+                                    <td><img src="<?php echo e(URL::asset('build/images/users/avatar-6.jpg')); ?>" alt="" class="avatar-xs rounded-circle me-2 material-shadow">
                                         <a href="#javascript: void(0);" class="text-body fw-medium">Vitoria Rodrigues</a>
                                     </td>
                                     <td><span class="badge bg-info-subtle text-info p-2">New Lead</span></td>
@@ -213,10 +213,10 @@
             </div><!-- end card -->
         </div><!-- end col -->
 
-@endsection
-@section('script')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
     <!-- apexcharts -->
-    <script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
+    <script src="<?php echo e(URL::asset('build/libs/apexcharts/apexcharts.min.js')); ?>"></script>
     <script>
     document.addEventListener("DOMContentLoaded", function () {
         const options = {
@@ -240,7 +240,7 @@
 </script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const actividades = @json($actividadesPorDia);
+        const actividades = <?php echo json_encode($actividadesPorDia, 15, 512) ?>;
 
         const dias = Object.keys(actividades);
         const aprobadas = dias.map(dia => actividades[dia].aprobadas);
@@ -291,8 +291,10 @@
     });
 </script>
 
-    <script src="{{ URL::asset('build/js/pages/dashboard-crm.init.js') }}"></script>
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
+    <script src="<?php echo e(URL::asset('build/js/pages/dashboard-crm.init.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
 
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\jorge\OneDrive\Documentos\GitHub\SIGAT\resources\views/dashboard-crm.blade.php ENDPATH**/ ?>
