@@ -1,6 +1,7 @@
 <!doctype html>
-<html lang="<?php echo e(str_replace('_', '-', app()->getLocale())); ?>" data-layout="horizontal" data-layout-style=""
-    data-layout-position="fixed" data-topbar="light">
+<html lang="<?php echo e(str_replace('_', '-', app()->getLocale())); ?>" data-layout="vertical" data-topbar="light" data-sidebar="dark"
+    data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-theme="default"
+    data-theme-colors="default">
 
 <head>
     <meta charset="utf-8" />
@@ -14,7 +15,6 @@
 </head>
 
 <body>
-
     <!-- Begin page -->
     <div id="layout-wrapper">
         <?php echo $__env->make('layouts.topbar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
@@ -24,25 +24,23 @@
         <!-- ============================================================== -->
         <div class="main-content">
             <div class="page-content">
-                <!-- Start content -->
                 <div class="container-fluid">
                     <?php echo $__env->yieldContent('content'); ?>
-                </div> <!-- content -->
+                </div>
+                <!-- container-fluid -->
             </div>
+            <!-- End Page-content -->
             <?php echo $__env->make('layouts.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
         </div>
-        <!-- ============================================================== -->
-        <!-- End Right content here -->
-        <!-- ============================================================== -->
+        <!-- end main content-->
     </div>
-    <!-- END wrapper -->
+    <!-- END layout-wrapper -->
 
-    <!-- Right Sidebar -->
-    <?php echo $__env->make('layouts.customizer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-    <!-- END Right Sidebar -->
 
+
+    <!-- JAVASCRIPT -->
     <?php echo $__env->make('layouts.vendor-scripts', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 </body>
 
 </html>
-<?php /**PATH C:\Users\jorge\OneDrive\Documentos\GitHub\SIGAT\resources\views/layouts/layouts-horizontal.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\Users\Maria\Documents\GitHub\SIGAT\resources\views/layouts/master.blade.php ENDPATH**/ ?>

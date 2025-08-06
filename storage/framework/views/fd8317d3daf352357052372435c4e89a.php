@@ -5,19 +5,19 @@
         <!-- Dark Logo-->
         <a href="index" class="logo logo-dark">
             <span class="logo-sm">
-                <img src="{{ URL::asset('build/images/LOGO_VENTANA_SF.PNG') }}" alt="" height="22">
+                <img src="<?php echo e(URL::asset('build/images/LOGO_VENTANA_SF.PNG')); ?>" alt="" height="22">
             </span>
             <span class="logo-lg">
-                <img src="{{ URL::asset('build/images/logo-dark.png') }}" alt="" height="17">
+                <img src="<?php echo e(URL::asset('build/images/logo-dark.png')); ?>" alt="" height="17">
             </span>
         </a>
         <!-- Light Logo-->
         <a href="index" class="logo logo-light">
             <span class="logo-sm">
-                <img src="{{ URL::asset('build/images/LOGO_VENTANA_SF.PNG') }}" alt="" height="22">
+                <img src="<?php echo e(URL::asset('build/images/LOGO_VENTANA_SF.PNG')); ?>" alt="" height="22">
             </span>
             <span class="logo-lg">
-                <img src="{{ URL::asset('build/images/logo-light.png') }}" alt="" height="17">
+                <img src="<?php echo e(URL::asset('build/images/logo-light.png')); ?>" alt="" height="17">
             </span>
         </a>
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
@@ -31,10 +31,10 @@
             aria-haspopup="true" aria-expanded="false">
             <span class="d-flex align-items-center gap-2">
                 <img class="rounded header-profile-user"
-                    src="@if (Auth::user()->avatar != '') {{ URL::asset('images/' . Auth::user()->avatar) }}@else{{ URL::asset('build/images/users/avatar-1.jpg') }} @endif"
+                    src="<?php if(Auth::user()->avatar != ''): ?> <?php echo e(URL::asset('images/' . Auth::user()->avatar)); ?><?php else: ?><?php echo e(URL::asset('build/images/users/avatar-1.jpg')); ?> <?php endif; ?>"
                     alt="Header Avatar">
                 <span class="text-start">
-                    <span class="d-block fw-medium sidebar-user-name-text">{{ Auth::user()->name }}</span>
+                    <span class="d-block fw-medium sidebar-user-name-text"><?php echo e(Auth::user()->name); ?></span>
                     <span class="d-block fs-14 sidebar-user-name-sub-text"><i
                             class="ri ri-circle-fill fs-10 text-success align-baseline"></i> <span
                             class="align-middle">Online</span></span>
@@ -43,7 +43,7 @@
         </button>
         <div class="dropdown-menu dropdown-menu-end">
             <!-- item-->
-            <h6 class="dropdown-header">Welcome {{ Auth::user()->name }}!</h6>
+            <h6 class="dropdown-header">Welcome <?php echo e(Auth::user()->name); ?>!</h6>
             <a class="dropdown-item" href="pages-profile"><i
                     class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
                     class="align-middle">Profile</span></a>
@@ -71,9 +71,9 @@
             <a class="dropdown-item " href="javascript:void();"
                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
                     class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span
-                    key="t-logout">@lang('translation.logout')</span></a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                @csrf
+                    key="t-logout"><?php echo app('translator')->get('translation.logout'); ?></span></a>
+            <form id="logout-form" action="<?php echo e(route('logout')); ?>" method="POST" style="display: none;">
+                <?php echo csrf_field(); ?>
             </form>
         </div>
     </div>
@@ -84,31 +84,31 @@
             <div id="two-column-menu">
             </div>
             <ul class="navbar-nav" id="navbar-nav">
-                <li class="menu-title"><span>@lang('translation.menu')</span></li>
+                <li class="menu-title"><span><?php echo app('translator')->get('translation.menu'); ?></span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarDashboards">
-                        <i class="ri-home-gear-line"></i> <span>@lang('translation.dashboards')</span>
+                        <i class="ri-home-gear-line"></i> <span><?php echo app('translator')->get('translation.dashboards'); ?></span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarDashboards">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="dashboard-analytics" class="nav-link">@lang('Administrador')</a>
+                                <a href="dashboard-analytics" class="nav-link"><?php echo app('translator')->get('Administrador'); ?></a>
                             </li>
                             <li class="nav-item">
-                                <a href="dashboard-crm" class="nav-link">@lang('Presidente Municipal')</a>
+                                <a href="dashboard-crm" class="nav-link"><?php echo app('translator')->get('Presidente Municipal'); ?></a>
                             </li>
                             <li class="nav-item">
-                                <a href="index" class="nav-link">@lang('Síndico Procurador')</a>
+                                <a href="index" class="nav-link"><?php echo app('translator')->get('Síndico Procurador'); ?></a>
                             </li>
                             <li class="nav-item">
-                                <a href="dashboard-crypto" class="nav-link">@lang('Regidor')</a>
+                                <a href="dashboard-crypto" class="nav-link"><?php echo app('translator')->get('Regidor'); ?></a>
                             </li>
                             <li class="nav-item">
-                                <a href="dashboard-projects" class="nav-link">@lang('Director de Área')</a>
+                                <a href="dashboard-projects" class="nav-link"><?php echo app('translator')->get('Director de Área'); ?></a>
                             </li>
                             <li class="nav-item">
-                                <a href="dashboard-nft" class="nav-link"> @lang('Auxiliar de Área')</a>
+                                <a href="dashboard-nft" class="nav-link"> <?php echo app('translator')->get('Auxiliar de Área'); ?></a>
                             </li>
 
                         </ul>
@@ -124,23 +124,23 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarLayouts" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarLayouts">
-                        <i class="ri-layout-3-line"></i> <span>@lang('translation.layouts')</span><span
-                            class="badge badge-pill bg-danger">@lang('translation.hot')</span>
+                        <i class="ri-layout-3-line"></i> <span><?php echo app('translator')->get('translation.layouts'); ?></span><span
+                            class="badge badge-pill bg-danger"><?php echo app('translator')->get('translation.hot'); ?></span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarLayouts">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="layouts-horizontal" target="_blank" class="nav-link">@lang('translation.horizontal')</a>
+                                <a href="layouts-horizontal" target="_blank" class="nav-link"><?php echo app('translator')->get('translation.horizontal'); ?></a>
                             </li>
                             <li class="nav-item">
-                                <a href="layouts-detached" target="_blank" class="nav-link">@lang('translation.detached')</a>
+                                <a href="layouts-detached" target="_blank" class="nav-link"><?php echo app('translator')->get('translation.detached'); ?></a>
                             </li>
                             <li class="nav-item">
-                                <a href="layouts-two-column" target="_blank" class="nav-link">@lang('translation.two-column')</a>
+                                <a href="layouts-two-column" target="_blank" class="nav-link"><?php echo app('translator')->get('translation.two-column'); ?></a>
                             </li>
                             <li class="nav-item">
                                 <a href="layouts-vertical-hovered" target="_blank"
-                                    class="nav-link">@lang('translation.hovered')</a>
+                                    class="nav-link"><?php echo app('translator')->get('translation.hovered'); ?></a>
                             </li>
                         </ul>
                     </div>
@@ -155,3 +155,4 @@
 <!-- Left Sidebar End -->
 <!-- Vertical Overlay-->
 <div class="vertical-overlay"></div>
+<?php /**PATH C:\Users\Maria\Documents\GitHub\SIGAT\resources\views/layouts/sidebar.blade.php ENDPATH**/ ?>
