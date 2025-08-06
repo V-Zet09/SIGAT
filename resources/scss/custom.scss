@@ -1,9 +1,4 @@
-// ===============================
-// Estilos personalizados - Dashboard Generar Informe
-// ===============================
-/* ===============================
-   RESET GENERAL
-=============================== */
+
 * {
   box-sizing: border-box;
 }
@@ -15,18 +10,14 @@ body {
   background-color: #f9f9f9;
 }
 
-/* ===============================
-   CONTAINER
-=============================== */
+
 .container {
   max-width: 1600px;
   margin: 0 auto;
   padding: 0 40px; /* Solo padding lateral */
 }
 
-/* ===============================
-   HEADER
-=============================== */
+
 header {
   background-color: #0a6666;
   color: white;
@@ -62,9 +53,7 @@ header h1 {
   font-size: 13px;
 }
 
-/* ===============================
-   TABS
-=============================== */
+
 .tabs {
   margin: 0 auto;
   display: flex;
@@ -94,9 +83,7 @@ header h1 {
   border-bottom: 2px solid white;
 }
 
-/* ===============================
-   SECTIONS
-=============================== */
+
 .section {
   padding: 30px 0;
   margin: 0 auto 30px;
@@ -122,9 +109,7 @@ header h1 {
   border-top-right-radius: 0;
 }
 
-/* ===============================
-   FORM ELEMENTS
-=============================== */
+
 label {
   display: block;
   margin-bottom: 10px;
@@ -168,9 +153,7 @@ button {
   display: none;
 }
 
-/* ===============================
-   IMAGE PREVIEW
-=============================== */
+
 .imagen-preview {
   width: 10cm;
   height: 10cm;
@@ -190,9 +173,7 @@ button {
   margin-top: 12px;
 }
 
-/* ===============================
-   COMUNA COMPONENTS
-=============================== */
+
 .comuna-grid {
   display: flex;
   flex-wrap: wrap;
@@ -230,9 +211,7 @@ button {
   margin-bottom: 8px;
 }
 
-/* ===============================
-   FILTERS & CHECKBOXES
-=============================== */
+
 .subtitulo {
   font-weight: bold;
   margin: 1rem 0 0.5rem;
@@ -273,9 +252,7 @@ textarea#intro-actividades {
   margin-top: 0.5rem;
 }
 
-/* ===============================
-   EDITOR
-=============================== */
+
 .editor-toolbar {
   display: flex;
   flex-wrap: wrap;
@@ -318,9 +295,7 @@ textarea#intro-actividades {
   margin-top: 5px;
 }
 
-/* ===============================
-   UPLOAD BOX
-=============================== */
+
 .upload-box {
   border: 2px dashed #589DA4;
   border-radius: 8px;
@@ -357,9 +332,7 @@ textarea#intro-actividades {
   text-decoration: underline;
 }
 
-/* ===============================
-   PORTADA
-=============================== */
+
 .portada-grid {
   display: flex;
   flex-wrap: wrap;
@@ -385,9 +358,7 @@ textarea#intro-actividades {
   height: 50px;
   resize: none;
 }
-/* ===============================
-   TOASTS
-=============================== */
+
 .toast {
   visibility: hidden;
   min-width: 250px;
@@ -412,6 +383,3 @@ textarea#intro-actividades {
   top: 110px;
 }
 
-/* ===============================
-   DIVISION 
-=============================== */

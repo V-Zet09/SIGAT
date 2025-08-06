@@ -30,3 +30,4 @@ Route::post('/update-password/{id}', [HomeController::class, 'updatePassword'])-
 
 // ✅ Todas las demás vistas dinámicas protegidas
 Route::get('{any}', [HomeController::class, 'index'])->where('any', '.*')->middleware('auth')->name('index');
+
