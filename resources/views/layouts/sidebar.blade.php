@@ -2,72 +2,144 @@
 <div class="app-menu navbar-menu">
     <!-- LOGO -->
     <div class="navbar-brand-box">
-        <!-- Dark Logo-->
-        <a href="index" class="logo logo-dark">
+        <!-- Dark Logo -->
+        <a href="{{ route('dashboard-administrador') }}" class="logo logo-dark">
             <span class="logo-sm">
-                <img src="{{ URL::asset('build/images/LOGO_VENTANA_SF.PNG') }}" alt="" height="22">
+                <img src="{{ URL::asset('images/SIGAT.jpeg') }}" alt="SIGAT Logo" height="22">
             </span>
             <span class="logo-lg">
-                <img src="{{ URL::asset('build/images/logo-dark.png') }}" alt="" height="17">
+                <img src="{{ URL::asset('images/SIGAT.jpeg') }}" alt="SIGAT Logo" height="40">
             </span>
         </a>
-        <!-- Light Logo-->
-        <a href="index" class="logo logo-light">
+
+        <!-- Light Logo -->
+        <a href="{{ route('dashboard-administrador') }}" class="logo logo-light">
             <span class="logo-sm">
-                <img src="{{ URL::asset('build/images/LOGO_VENTANA_SF.PNG') }}" alt="" height="22">
+                <img src="{{ URL::asset('images/SIGAT.jpeg') }}" alt="SIGAT Logo" height="22">
             </span>
             <span class="logo-lg">
-                <img src="{{ URL::asset('build/images/logo-light.png') }}" alt="" height="17">
+                <img src="{{ URL::asset('images/SIGAT.jpeg') }}" alt="SIGAT Logo" height="40">
             </span>
         </a>
+
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
             id="vertical-hover">
             <i class="ri-record-circle-line"></i>
         </button>
     </div>
 
+    <!-- Usuario -->
+    <div class="dropdown sidebar-user m-1 rounded">
+        <button type="button" class="btn material-shadow-none" id="page-header-user-dropdown" data-bs-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <span class="d-flex align-items-center gap-2">
+                <img class="rounded header-profile-user"
+                    src="@if (Auth::user()->avatar != '') {{ URL::asset('images/' . Auth::user()->avatar) }} @else {{ URL::asset('build/images/users/avatar-1.jpg') }} @endif"
+                    alt="Header Avatar">
+                <span class="text-start">
+                    <span class="d-block fw-medium sidebar-user-name-text">{{ Auth::user()->name }}</span>
+                    <span class="d-block fs-14 sidebar-user-name-sub-text">
+                        <i class="ri ri-circle-fill fs-10 text-success align-baseline"></i>
+                        <span class="align-middle">Online</span>
+                    </span>
+                </span>
+            </span>
+        </button>
+        <div class="dropdown-menu dropdown-menu-end">
+            <h6 class="dropdown-header">Bienvenido {{ Auth::user()->name }}!</h6>
+            <a class="dropdown-item" href="{{ url('pages-profile') }}">
+                <i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> Perfil
+            </a>
+            <a class="dropdown-item" href="{{ url('apps-chat') }}">
+                <i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> Mensajes
+            </a>
+            <a class="dropdown-item" href="{{ url('apps-tasks-kanban') }}">
+                <i class="mdi mdi-calendar-check-outline text-muted fs-16 align-middle me-1"></i> Tareas
+            </a>
+            <a class="dropdown-item" href="{{ url('pages-faqs') }}">
+                <i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> Ayuda
+            </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{{ url('pages-profile') }}">
+                <i class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> Balance: <b>$5971.67</b>
+            </a>
+            <a class="dropdown-item" href="{{ url('pages-profile-settings') }}">
+                <span class="badge bg-success-subtle text-success mt-1 float-end">Nuevo</span>
+                <i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> Configuración
+            </a>
+            <a class="dropdown-item" href="{{ url('auth-lockscreen-basic') }}">
+                <i class="mdi mdi-lock text-muted fs-16 align-middle me-1"></i> Bloquear pantalla
+            </a>
+            <a class="dropdown-item" href="javascript:void();" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> Cerrar sesión
+            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
+        </div>
+    </div>
+
+    <!-- Menú principal -->
     <div id="scrollbar">
         <div class="container-fluid">
-
-            <div id="two-column-menu">
-            </div>
             <ul class="navbar-nav" id="navbar-nav">
-                <li class="menu-title"><span>@lang('translation.menu')</span></li>
+                <!-- Paneles -->
+                <li class="menu-title"><span>Paneles</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarDashboards">
-                        <i class="ri-dashboard-2-line"></i> <span>@lang('translation.dashboards')</span>
+                        <i class="ri-dashboard-2-line"></i> <span>Dashboards</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarDashboards">
+                        <ul class="nav flex-column">
+                            <li class="nav-item"><a href="{{ route('dashboard-administrador') }}" class="nav-link"><i class="fas fa-user-shield"></i> Administrador</a></li>
+                            <li class="nav-item"><a href="{{ route('dashboard-presidente-municipal') }}" class="nav-link"><i class="fas fa-user-tie"></i> Presidente Municipal</a></li>
+                            <li class="nav-item"><a href="{{ route('dashboard-sindico-procurador') }}" class="nav-link"><i class="fas fa-balance-scale"></i> Síndico Procurador</a></li>
+                            <li class="nav-item"><a href="{{ route('dashboard-regidor') }}" class="nav-link"><i class="fas fa-users"></i> Regidor</a></li>
+                            <li class="nav-item"><a href="{{ route('dashboard-director-de-area') }}" class="nav-link"><i class="fas fa-user-cog"></i> Director de Área</a></li>
+                            <li class="nav-item"><a href="{{ route('dashboard-auxiliar-area') }}" class="nav-link"><i class="fas fa-user-clock"></i> Auxiliar de Área</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- Informes -->
+                <li class="menu-title"><span>Informes</span></li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarApps">
+                        <i class="ri-apps-2-line"></i> <span>Informe</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarApps">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="dashboard-analytics" class="nav-link">@lang('Administrador')</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="dashboard-crm" class="nav-link">@lang('Presidente Municipal')</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="index" class="nav-link">@lang('Síndico Procurador')</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="dashboard-crypto" class="nav-link">@lang('Regidor')</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="dashboard-projects" class="nav-link">@lang('Director de Área')</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="dashboard-nft" class="nav-link"> @lang('Auxiliar de Área')</a>
+                                <a href="{{ url('dashboard-generar-informe') }}" class="nav-link">Generar Informe</a>
                             </li>
                         </ul>
                     </div>
-                </li> <!-- end Dashboard Menu -->
+                </li>
 
+                <!-- Diseños -->
+                <li class="menu-title"><span>Diseños</span></li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarLayouts" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarLayouts">
+                        <i class="ri-layout-3-line"></i> <span>Layouts</span>
+                        <span class="badge badge-pill bg-danger">Hot</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarLayouts">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item"><a href="{{ url('layouts-horizontal') }}" target="_blank" class="nav-link">Horizontal</a></li>
+                            <li class="nav-item"><a href="{{ url('layouts-detached') }}" target="_blank" class="nav-link">Detached</a></li>
+                            <li class="nav-item"><a href="{{ url('layouts-two-column') }}" target="_blank" class="nav-link">Two Column</a></li>
+                            <li class="nav-item"><a href="{{ url('layouts-vertical-hovered') }}" target="_blank" class="nav-link">Hovered</a></li>
+                        </ul>
+                    </div>
+                </li>
             </ul>
         </div>
-        <!-- Sidebar -->
     </div>
+
     <div class="sidebar-background"></div>
 </div>
 <!-- Left Sidebar End -->
-<!-- Vertical Overlay-->
 <div class="vertical-overlay"></div>

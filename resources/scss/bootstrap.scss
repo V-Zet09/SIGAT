@@ -1,18 +1,13 @@
-/*
-Template Name: Velzon - Admin & Dashboard Template
-Author: Themesbrand
-Version: 4.3.0
-Website: https://themesbrand.com/
-Contact: Themesbrand@gmail.com
-File: Custom Bootstrap Css File
-*/
-
-
-//Core files
+// Core de funciones de Bootstrap
 @import "node_modules/bootstrap/scss/functions";
-@import "node_modules/bootstrap/scss/variables";
-@import "variables";
-@import "variables-dark";
-@import "components/utilities";
-@import "node_modules/bootstrap/scss/bootstrap";
 
+// 👉 Tus variables primero: definidas en custom.scss
+@import "custom"; // Este debe contener $primary, $navbar-bg, etc.
+
+@import "node_modules/bootstrap/scss/variables"; // Bootstrap base
+@import "variables"; // Puede contener sobrescrituras adicionales
+@import "variables-dark"; // Si usas tema oscuro
+@import "components/utilities"; // Clases y funciones extra
+
+// Core de Bootstrap completo
+@import "node_modules/bootstrap/scss/bootstrap";
