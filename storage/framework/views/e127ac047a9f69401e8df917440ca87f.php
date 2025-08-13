@@ -1,16 +1,16 @@
-@extends('layouts.master')
-@section('title', 'Regidor')
-@section('css')
 
-    <link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
+<?php $__env->startSection('title', 'Regidor'); ?>
+<?php $__env->startSection('css'); ?>
 
-@endsection
-@section('content')
+    <link href="<?php echo e(URL::asset('build/libs/swiper/swiper-bundle.min.css')); ?>" rel="stylesheet">
 
-    @component('components.breadcrumb')
-    @slot('li_1') Panel de Control @endslot
-    @slot('title') Bienvenido Síndico Procurador @endslot
-@endcomponent
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+
+    <?php $__env->startComponent('components.breadcrumb'); ?>
+    <?php $__env->slot('li_1'); ?> Panel de Control <?php $__env->endSlot(); ?>
+    <?php $__env->slot('title'); ?> Bienvenido Síndico Procurador <?php $__env->endSlot(); ?>
+<?php echo $__env->renderComponent(); ?>
 
 <div class="row g-3 mb-3">
     <!-- Total Actividades -->
@@ -19,7 +19,7 @@
             <div class="card-body text-center text-white">
                 <i class="ri-file-list-3-line fs-2 mb-2"></i>
                 <h6>Total de Actividades</h6>
-                <h3>{{ $totalActividades }}</h3>
+                <h3><?php echo e($totalActividades); ?></h3>
             </div>
         </div>
     </div>
@@ -30,7 +30,7 @@
             <div class="card-body text-center text-white">
                 <i class="ri-calendar-check-line fs-2 mb-2"></i>
                 <h6>Esta Semana</h6>
-                <h3>{{ $actividadesSemana }}</h3>
+                <h3><?php echo e($actividadesSemana); ?></h3>
             </div>
         </div>
     </div>
@@ -41,7 +41,7 @@
             <div class="card-body text-center text-white">
                 <i class="ri-checkbox-circle-line fs-2 mb-2"></i>
                 <h6>Aprobadas</h6>
-                <h3>{{ $aprobadas }}</h3>
+                <h3><?php echo e($aprobadas); ?></h3>
             </div>
         </div>
     </div>
@@ -52,7 +52,7 @@
             <div class="card-body text-center text-white">
                 <i class="ri-loader-line fs-2 mb-2"></i>
                 <h6>En Revisión</h6>
-                <h3>{{ $revision }}</h3>
+                <h3><?php echo e($revision); ?></h3>
             </div>
         </div>
     </div>
@@ -63,7 +63,7 @@
             <div class="card-body text-center text-white">
                 <i class="ri-alert-line fs-2 mb-2"></i>
                 <h6>Sin Actividad</h6>
-                <h3>{{ $departamentosSinActividad }}</h3>
+                <h3><?php echo e($departamentosSinActividad); ?></h3>
             </div>
         </div>
     </div>
@@ -107,32 +107,32 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ([
+                    <?php $__currentLoopData = [
                         ['Tesorería', 'Sep 20, 2024', 'avatar-1.jpg', 'Donald Risher', 'Deal Won', 'success'],
                         ['Oficialía Mayor', 'Ene 23, 2025', 'avatar-2.jpg', 'Sofia Cunha', 'Intro Call', 'warning'],
                         ['Registro Civil', 'Feb 27, 2025', 'avatar-3.jpg', 'Luis Rocha', 'Stuck', 'danger'],
                         ['Desarrollo Económico', 'May 30, 2025', 'avatar-4.jpg', 'Vitoria Rodrigues', 'Deal Won', 'success'],
                         ['Contraloría', 'Abr 30, 2025', 'avatar-6.jpg', 'Vitoria Rodrigues', 'New Lead', 'info']
-                    ] as $item)
+                    ]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <tr>
-                        <td>{{ $item[0] }}</td>
-                        <td>{{ $item[1] }}</td>
+                        <td><?php echo e($item[0]); ?></td>
+                        <td><?php echo e($item[1]); ?></td>
                         <td>
-                            <img src="{{ URL::asset('build/images/users/' . $item[2]) }}" alt="" class="avatar-xs rounded-circle me-2">
-                            <a href="#" class="text-body fw-medium">{{ $item[3] }}</a>
+                            <img src="<?php echo e(URL::asset('build/images/users/' . $item[2])); ?>" alt="" class="avatar-xs rounded-circle me-2">
+                            <a href="#" class="text-body fw-medium"><?php echo e($item[3]); ?></a>
                         </td>
-                        <td><span class="badge bg-{{ $item[5] }}-subtle text-{{ $item[5] }} p-2">{{ $item[4] }}</span></td>
+                        <td><span class="badge bg-<?php echo e($item[5]); ?>-subtle text-<?php echo e($item[5]); ?> p-2"><?php echo e($item[4]); ?></span></td>
                     </tr>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('script')
-<script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
+<?php $__env->startSection('script'); ?>
+<script src="<?php echo e(URL::asset('build/libs/apexcharts/apexcharts.min.js')); ?>"></script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -150,7 +150,7 @@
     });
 
     document.addEventListener("DOMContentLoaded", function () {
-        const actividades = @json($actividadesPorDia);
+        const actividades = <?php echo json_encode($actividadesPorDia, 15, 512) ?>;
         const dias = Object.keys(actividades);
         const aprobadas = dias.map(d => actividades[d].aprobadas);
         const revision = dias.map(d => actividades[d].revision);
@@ -168,5 +168,7 @@
     });
 </script>
 
-<script src="{{ URL::asset('build/js/app.js') }}"></script>
-@endsection
+<script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\jorge\OneDrive\Documentos\GitHub\SIGAT\resources\views/dashboard-regidor.blade.php ENDPATH**/ ?>
