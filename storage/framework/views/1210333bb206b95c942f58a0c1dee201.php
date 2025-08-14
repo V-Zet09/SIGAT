@@ -186,4 +186,4 @@
 </div>
 <!-- Left Sidebar End -->
 <div class="vertical-overlay"></div>
-<?php /**PATH C:\Users\jorge\OneDrive\Documentos\GitHub\SIGAT\resources\views/layouts/sidebar.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\Users\zaet_\OneDrive\Escritorio\AYUNTAMIENTO\resources\views/layouts/sidebar.blade.php ENDPATH**/ ?>

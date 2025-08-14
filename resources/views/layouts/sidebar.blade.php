@@ -1,3 +1,21 @@
+<style>
+    /* Scroll solo en el área de ítems del menú */
+    #scrollbar {
+        max-height: calc(100vh - 160px); /* Ajusta según el alto del logo + usuario */
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    /* Scrollbar personalizado opcional */
+    #scrollbar::-webkit-scrollbar {
+        width: 6px;
+    }
+    #scrollbar::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 3px;
+    }
+</style>
+
 <!-- ========== App Menu ========== -->
 <div class="app-menu navbar-menu">
     <!-- LOGO -->
@@ -92,12 +110,12 @@
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarDashboards">
                         <ul class="nav flex-column">
-                            <li class="nav-item"><a href="{{ route('dashboard-administrador') }}" class="nav-link"><i class="fas fa-user-shield"></i> Administrador</a></li>
-                            <li class="nav-item"><a href="{{ route('dashboard-presidente-municipal') }}" class="nav-link"><i class="fas fa-user-tie"></i> Presidente Municipal</a></li>
-                            <li class="nav-item"><a href="{{ route('dashboard-sindico-procurador') }}" class="nav-link"><i class="fas fa-balance-scale"></i> Síndico Procurador</a></li>
-                            <li class="nav-item"><a href="{{ route('dashboard-regidor') }}" class="nav-link"><i class="fas fa-users"></i> Regidor</a></li>
-                            <li class="nav-item"><a href="{{ route('dashboard-director-de-area') }}" class="nav-link"><i class="fas fa-user-cog"></i> Director de Área</a></li>
-                            <li class="nav-item"><a href="{{ route('dashboard-auxiliar-area') }}" class="nav-link"><i class="fas fa-user-clock"></i> Auxiliar de Área</a></li>
+                            <li class="nav-item"><a href="{{ route('dashboard-administrador') }}" class="nav-link"><i class="fas fa-user-shield me-2"></i> Administrador</a></li>
+                            <li class="nav-item"><a href="{{ route('dashboard-presidente-municipal') }}" class="nav-link"><i class="fas fa-user-tie me-2"></i> Presidente Municipal</a></li>
+                            <li class="nav-item"><a href="{{ route('dashboard-sindico-procurador') }}" class="nav-link"><i class="fas fa-balance-scale me-2"></i> Síndico Procurador</a></li>
+                            <li class="nav-item"><a href="{{ route('dashboard-regidor') }}" class="nav-link"><i class="fas fa-users me-2"></i> Regidor</a></li>
+                            <li class="nav-item"><a href="{{ route('dashboard-director-de-area') }}" class="nav-link"><i class="fas fa-user-cog me-2"></i> Director de Área</a></li>
+                            <li class="nav-item"><a href="{{ route('dashboard-auxiliar-area') }}" class="nav-link"><i class="fas fa-user-clock me-2"></i> Auxiliar de Área</a></li>
                         </ul>
                     </div>
                 </li>
@@ -105,14 +123,39 @@
                 <!-- Informes -->
                 <li class="menu-title"><span>Informes</span></li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarApps">
+                    <a class="nav-link menu-link" href="#sidebarInforme" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarInforme">
                         <i class="ri-apps-2-line"></i> <span>Informe</span>
                     </a>
-                    <div class="collapse menu-dropdown" id="sidebarApps">
+                    <div class="collapse menu-dropdown" id="sidebarInforme">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{ url('dashboard-generar-informe') }}" class="nav-link">Generar Informe</a>
+                                <a href="{{ url('dashboard-generar-informe') }}" class="nav-link">
+                                    <i class="fas fa-file-upload me-2"></i> Generar Informe
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- Actividades -->
+                <li class="menu-title"><span>Actividades</span></li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarActividades" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarActividades">
+                        <i class="ri-apps-2-line"></i> <span>Actividades</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarActividades">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ url('dashboard-actividades') }}" class="nav-link">
+                                    <i class="fas fa-plus-circle me-2"></i> Generar Actividad
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('actividades.registradas') }}" class="nav-link">
+                                    <i class="fas fa-tasks me-2"></i> Actividades Registradas
+                                </a>
                             </li>
                         </ul>
                     </div>
