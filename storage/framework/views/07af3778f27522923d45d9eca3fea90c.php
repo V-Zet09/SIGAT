@@ -10,3 +10,4 @@
         </div>
     </div>
 </footer>
+<?php /**PATH C:\Users\DELL\Documents\GitHub\SIGAT\resources\views/layouts/footer.blade.php ENDPATH**/ ?>

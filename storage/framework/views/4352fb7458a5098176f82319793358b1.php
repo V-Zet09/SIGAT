@@ -1,15 +1,15 @@
-@extends('layouts.master')
 
-@section('title', 'Actividades')
 
-@section('css')
-<link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css') }}">
-@endsection
+<?php $__env->startSection('title', 'Actividades'); ?>
 
-@section('content')
-@php
+<?php $__env->startSection('css'); ?>
+<link rel="stylesheet" href="<?php echo e(URL::asset('build/libs/glightbox/css/glightbox.min.css')); ?>">
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
+<?php
     $hoy = date('Y-m-d');
-@endphp
+?>
 
 <div class="container-fluid">
     <div class="card">
@@ -17,13 +17,13 @@
             <h4>Registrar Nueva Actividad</h4>
         </div>
         <div class="card-body">
-            {{-- Alerta visual para fecha inválida --}}
+            
             <div id="alerta-fecha" class="alert alert-warning d-none" role="alert">
                 ⚠️ No puedes registrar una actividad con fecha futura.
             </div>
 
-            <form action="{{ route('actividades.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
+            <form action="<?php echo e(route('actividades.store')); ?>" method="POST" enctype="multipart/form-data">
+                <?php echo csrf_field(); ?>
 
                 <div class="mb-3">
                     <label for="titulo" class="form-label">Título</label>
@@ -37,7 +37,7 @@
 
                 <div class="mb-3">
                     <label for="fecha" class="form-label">Fecha</label>
-                    <input type="date" name="fecha" id="fecha" class="form-control" max="{{ $hoy }}" required>
+                    <input type="date" name="fecha" id="fecha" class="form-control" max="<?php echo e($hoy); ?>" required>
                 </div>
 
                 <div class="mb-3">
@@ -83,9 +83,9 @@
         </div>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('scripts')
+<?php $__env->startSection('scripts'); ?>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const fechaInput = document.getElementById('fecha');
@@ -108,4 +108,5 @@
         });
     });
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\DELL\Documents\GitHub\SIGAT\resources\views/dashboard-actividades.blade.php ENDPATH**/ ?>
