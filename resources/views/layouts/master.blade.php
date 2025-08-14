@@ -33,7 +33,7 @@
         <!-- ============================================================== -->
         <!-- Start right Content here -->
         <!-- ============================================================== -->
-        <div class="main-content"> {{-- El margen se aplicará desde custom.scss --}}
+        <div class="main-content" style="margin-left: 250px;">
             <div class="page-content">
                 <div class="container-fluid">
                     @yield('content')
