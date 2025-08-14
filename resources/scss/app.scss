@@ -42,3 +42,40 @@
 @import "pages/dashboard";
 @import "pages/errors";
 @import "pages/profile";
+
+body, html {
+    height: 100%;
+}
+
+.sidebar-background,
+.vertical-overlay {
+    flex-shrink: 0;
+}
+
+.app-menu.navbar-menu {
+    height: 100vh !important;
+    min-height: 100vh !important;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+    width: 250px; 
+}
+
+#scrollbar {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+#page-topbar {
+    position: fixed;
+    top: 0;
+    left: 250px; 
+    width: calc(100% - 250px); 
+    z-index: 1050;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
