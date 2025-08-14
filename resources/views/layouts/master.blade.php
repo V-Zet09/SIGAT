@@ -23,34 +23,31 @@
         'resources/js/app.js'
     ])
 </head>
-@yield('scripts')
 
 <body>
     <!-- Begin page -->
     <div id="layout-wrapper">
         @include('layouts.topbar')
         @include('layouts.sidebar')
+
         <!-- ============================================================== -->
         <!-- Start right Content here -->
         <!-- ============================================================== -->
-        <div class="main-content">
+        <div class="main-content"> {{-- El margen se aplicará desde custom.scss --}}
             <div class="page-content">
                 <div class="container-fluid">
                     @yield('content')
                 </div>
-                <!-- container-fluid -->
             </div>
-            <!-- End Page-content -->
             @include('layouts.footer')
         </div>
         <!-- end main content-->
     </div>
     <!-- END layout-wrapper -->
 
-
-
     <!-- JAVASCRIPT -->
     @include('layouts.vendor-scripts')
+    @yield('scripts')
 </body>
 
 </html>
