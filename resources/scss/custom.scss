@@ -1,7 +1,385 @@
-/*
-Template Name: Velzon - Admin & Dashboard Template
-Author: Themesbrand
-Website: https://themesbrand.com/
-Contact: support@themesbrand.com
-File: Custom Css File
-*/
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #f9f9f9;
+}
+
+
+.container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 40px; /* Solo padding lateral */
+}
+
+
+header {
+  background-color: #0a6666;
+  color: white;
+  padding: 12px 40px 0 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  box-shadow: none;
+}
+
+header h1 {
+  font-size: 22px;
+  margin: 0;
+  flex: none;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-icon {
+  width: 28px;
+  height: 28px;
+  background-color: white;
+  border-radius: 50%;
+}
+
+.user-info {
+  color: white;
+  font-size: 13px;
+}
+
+
+.tabs {
+  margin: 0 auto;
+  display: flex;
+  background-color: white; /* Unifica fondo con sección */
+  border-bottom: none; /* Elimina línea divisoria */
+}
+
+.tab {
+  padding: 12px 20px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #0a4040;
+  border-radius: 8px 8px 0 0;
+  border: 2px solid transparent;
+  border-bottom: none;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.tab:hover {
+  background-color: #cce6e6;
+}
+
+.tab.active {
+  background-color: white;
+  border-color: #0a6666;
+  color: #0a6666;
+  border-bottom: 2px solid white;
+}
+
+
+.section {
+  padding: 30px 0;
+  margin: 0 auto 30px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: none; /* Elimina sombra que parece línea */
+  display: none;
+}
+
+.section.active {
+  display: block;
+}
+
+.section h2 {
+  color: #0a4040;
+  margin-bottom: 20px;
+}
+
+.section:first-of-type {
+  margin-top: 0 !important;
+  padding-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+
+label {
+  display: block;
+  margin-bottom: 10px;
+  color: #0a4040;
+}
+
+textarea,
+input[type="text"],
+input[type="file"] {
+  width: 100%;
+  padding: 15px;
+  font-size: 15px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+button {
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.guardar-btn {
+  background-color: #0a6666;
+  margin-left: auto;
+}
+
+.eliminar-imagen-btn {
+  background-color: #c0392b;
+  display: none;
+}
+
+
+.imagen-preview {
+  width: 10cm;
+  height: 10cm;
+  object-fit: contain;
+  border-radius: 4px;
+  display: block;
+  margin: 10px auto;
+}
+
+.preview-container {
+  margin-top: 10px;
+}
+
+#preview-comuna img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+
+.comuna-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.comuna-column {
+  flex: 1;
+  min-width: 250px;
+  padding: 1rem;
+  background-color: #f0f5e2;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.comuna-column h3 {
+  margin-top: 0;
+  color: #27768A;
+}
+
+.comuna-column p {
+  margin: 0.5rem 0 0;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.comuna-column ul {
+  padding-left: 20px;
+  margin-top: 10px;
+}
+
+.comuna-column ul li {
+  margin-bottom: 8px;
+}
+
+
+.subtitulo {
+  font-weight: bold;
+  margin: 1rem 0 0.5rem;
+  display: block;
+}
+
+.checkbox-inline-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.checkbox-inline-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.filter-periodo {
+  margin-bottom: 1.5rem;
+}
+
+.filter-periodo select {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-top: 0.5rem;
+}
+
+textarea#intro-actividades {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  resize: vertical;
+  margin-top: 0.5rem;
+}
+
+
+.editor-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px 5px 0 0;
+  background-color: #f9f9f9;
+}
+
+.editor-toolbar select,
+.editor-toolbar button {
+  padding: 5px 8px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: white;
+  color: black;
+  cursor: pointer;
+}
+
+.editor-toolbar button:hover {
+  background-color: #e0e0e0;
+}
+
+.editor-content {
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  padding: 10px;
+  min-height: 150px;
+  font-family: 'Arial', sans-serif;
+  background-color: #fff;
+  outline: none;
+}
+
+.word-count {
+  font-size: 12px;
+  color: #666;
+  margin-top: 5px;
+}
+
+
+.upload-box {
+  border: 2px dashed #589DA4;
+  border-radius: 8px;
+  padding: 30px;
+  text-align: center;
+  color: #27768A;
+  font-family: Arial, sans-serif;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  max-width: 400px;
+  margin: 20px auto;
+  position: relative;
+}
+
+.upload-box:hover {
+  background-color: #eaf6f8;
+}
+
+.upload-box.dragover {
+  background-color: #d1e9f0;
+  border-color: #748D44;
+}
+
+.upload-box img.icon {
+  width: 50px;
+  opacity: 0.6;
+  margin-bottom: 12px;
+}
+
+.upload-box a.browse-link {
+  color: #27768A;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+
+.portada-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.titulo-comuna,
+.resumen-comuna {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding: 1rem;
+  font-size: 1rem;
+  font-family: inherit;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  resize: none;
+}
+
+.Periodo-comuna {
+  flex: 1;
+  height: 50px;
+  resize: none;
+}
+
+.toast {
+  visibility: hidden;
+  min-width: 250px;
+  background-color: #4CAF50;
+  color: white;
+  text-align: center;
+  border-radius: 8px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1000;
+  top: 100px;
+  right: 20px;
+  font-size: 14px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transition: opacity 0.5s, top 0.5s;
+}
+
+.toast.show {
+  visibility: visible;
+  opacity: 1;
+  top: 110px;
+}
+

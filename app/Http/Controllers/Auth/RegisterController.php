@@ -54,6 +54,7 @@ class RegisterController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'avatar' => ['required', 'image' ,'mimes:jpg,jpeg,png','max:1024'],
+            'cargo' => ['required', 'string', 'in:Administrador,Presidente,Sindico,Regidor,Director,Auxiliar'],
         ]);
     }
 
@@ -77,7 +78,8 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'avatar' =>  $avatarName,
+            'avatar' => $avatarName,
+            'cargo' => $data['cargo'], // Nuevo campo
         ]);
     }
 }

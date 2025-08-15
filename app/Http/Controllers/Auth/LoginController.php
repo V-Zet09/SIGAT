@@ -26,7 +26,18 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected function redirectTo()
+{
+    return match (auth()->user()->cargo) {
+        'Administrador' => '/dashboard-administrador',
+        'Presidente' => '/dashboard-presidente-municipal',
+        'Sindico' => '/dashboard-sindico-procurador',
+        'Regidor' => '/dashboard-regidor',
+        'Director' => '/dashboard-director-de-area',
+        'Auxiliar' => '/dashboard-auxiliar-area',
+        default => '/home',
+    };
+}
 
     /**
      * Create a new controller instance.
