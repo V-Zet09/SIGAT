@@ -8,11 +8,15 @@ class DatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
+        // Si quieres usar factories, puedes descomentarlo:
         // \App\Models\User::factory(10)->create();
+
+        // Aquí registras tu seeder personalizado
+        $this->call([
+            ActividadSeeder::class,
+        ]);
     }
 }

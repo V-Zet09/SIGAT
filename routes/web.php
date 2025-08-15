@@ -2,58 +2,59 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\AdministradorController;
-use App\Http\Controllers\DashboardPresidentController;
-use App\Http\Controllers\JobCategoryController;
-use App\Http\Controllers\SidebarLayoutController;
+use App\Http\Controllers\{
+    HomeController,
+    AdministradorController,
+    DashboardPresidentController,
+    JobCategoryController,
+    SidebarLayoutController,
+    PresidenteMunicipalController,
+    SindicoProcuradorController,
+    RegidorController,
+    DirectorDeAreaController,
+    AuxiliarDeAreaController,
+    GenerarInformeController,
+    ActividadController,
+    UserController,
+};
 
-// Nuevos controladores
-use App\Http\Controllers\PresidenteMunicipalController;
-use App\Http\Controllers\SindicoProcuradorController;
-use App\Http\Controllers\RegidorController;
-use App\Http\Controllers\DirectorDeAreaController;
-use App\Http\Controllers\AuxiliarDeAreaController;
-use App\Http\Controllers\GenerarInformeController;
-use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
 */
 
-// ✅ Rutas de autenticación
+// ✅ Autenticación
 Auth::routes();
 
-// ✅ Redirige raíz al dashboard si está autenticado
+// ✅ Redirección raíz
 Route::get('/', function () {
     return Auth::check()
         ? redirect('/dashboard-administrador')
         : view('auth.login');
 })->name('root');
 
-// ✅ Cambio de idioma
+// ✅ Idioma
 Route::get('index/{locale}', [HomeController::class, 'lang']);
 
-// ✅ Actualización de perfil y contraseña
+// ✅ Perfil
 Route::post('/update-profile/{id}', [HomeController::class, 'updateProfile'])->name('updateProfile');
 Route::post('/update-password/{id}', [HomeController::class, 'updatePassword'])->name('updatePassword');
 
 // ✅ Dashboards por rol
-Route::get('/dashboard-administrador', [AdministradorController::class, 'index'])->middleware('auth')->name('dashboard-administrador');
-Route::get('/dashboard-presidente-municipal', [PresidenteMunicipalController::class, 'index'])->middleware('auth')->name('dashboard-presidente-municipal');
-Route::get('/dashboard-sindico-procurador', [SindicoProcuradorController::class, 'index'])->middleware('auth')->name('dashboard-sindico-procurador');
-Route::get('/dashboard-regidor', [RegidorController::class, 'index'])->middleware('auth')->name('dashboard-regidor');
-Route::get('/dashboard-director-de-area', [DirectorDeAreaController::class, 'index'])->middleware('auth')->name('dashboard-director-de-area');
-Route::get('/dashboard-auxiliar-area', [AuxiliarDeAreaController::class, 'index'])->middleware('auth')->name('dashboard-auxiliar-area');
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard-administrador', [AdministradorController::class, 'index'])->name('dashboard-administrador');
+    Route::get('/dashboard-presidente-municipal', [PresidenteMunicipalController::class, 'index'])->name('dashboard-presidente-municipal');
+    Route::get('/dashboard-sindico-procurador', [SindicoProcuradorController::class, 'index'])->name('dashboard-sindico-procurador');
+    Route::get('/dashboard-regidor', [RegidorController::class, 'index'])->name('dashboard-regidor');
+    Route::get('/dashboard-director-de-area', [DirectorDeAreaController::class, 'index'])->name('dashboard-director-de-area');
+    Route::get('/dashboard-auxiliar-area', [AuxiliarDeAreaController::class, 'index'])->name('dashboard-auxiliar-area');
 
-// ✅ Secciones específicas del dashboard
-Route::get('/dashboard-presidentes', [DashboardPresidentController::class, 'index'])->middleware('auth')->name('dashboard-presidentes');
-Route::get('/job-categories', [JobCategoryController::class, 'index'])->middleware('auth')->name('job-categories');
-Route::get('/sidebar-layouts', [SidebarLayoutController::class, 'index'])->middleware('auth')->name('sidebar-layouts');
+    // ✅ Secciones específicas
 
-Route::get('dashboard-generar-informe', [GenerarInformeController::class, 'index'])->name('informes.index');
-Route::post('dashboard-generar-informe', [GenerarInformeController::class, 'store'])->name('informes.store');
+    Route::get('/dashboard-president', [PresidenteMunicipalController::class, 'index'])->name('dashboard-president');
+    //Route::get('/job-categories', [JobCategoryController::class, 'index'])->name('job-categories');
+    //Route::get('/sidebar-layouts', [SidebarLayoutController::class, 'index'])->name('sidebar-layouts');
 
 // ✅ Ruta dinámica para todo lo demás
 Route::get('{any}', [HomeController::class, 'index'])->where('any', '.*')->middleware('auth')->name('index');
@@ -72,3 +73,17 @@ Route::put('/usuarios/{id}', [UserController::class, 'update'])->name('usuarios.
 Route::delete('/usuarios/{id}', [UserController::class, 'destroy'])->name('usuarios.destroy'); // Eliminar
 Route::get('/usuarios/{id}', [UserController::class, 'show'])->name('vista-ver-usuarios');
 Route::get('/usuarios/{id}/editar', [UserController::class, 'edit'])->name('vista-editar-usuario');
+    // ✅ Informes
+    Route::get('dashboard-generar-informe', [GenerarInformeController::class, 'index'])->name('informes.index');
+    Route::post('dashboard-generar-informe', [GenerarInformeController::class, 'store'])->name('informes.store');
+
+    // ✅ Actividades
+    Route::get('/dashboard-actividades', [ActividadController::class, 'create'])->name('actividades.create');
+    Route::post('/dashboard-actividades', [ActividadController::class, 'store'])->name('actividades.store');
+    Route::get('/dashboard-actividades-registradas', [ActividadController::class, 'showRegistradas'])->name('actividades.registradas');
+    Route::get('/actividades/{id}/edit', [ActividadController::class, 'edit'])->name('actividades.edit');
+    Route::get('/actividades/{id}/show', [ActividadController::class, 'show'])->name('actividades.show');
+    Route::put('/actividades/{id}', [ActividadController::class, 'update'])->name('actividades.update');
+    Route::delete('/actividades/{id}', [ActividadController::class, 'destroy'])->name('actividades.destroy');
+
+});

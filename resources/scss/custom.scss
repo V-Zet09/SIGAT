@@ -383,3 +383,37 @@ textarea#intro-actividades {
   top: 110px;
 }
 
+
+/* Sidebar fijo */
+#layout-wrapper .vertical-menu {
+    width: 250px !important;
+    min-width: 250px !important;
+    max-width: 250px !important;
+    transition: none !important;
+}
+
+/* Contenido con margen izquierdo */
+.main-content {
+    margin-left: 250px;
+    transition: none !important;
+}
+
+/* Responsivo para móviles */
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+    }
+}
+/* Estilo uniforme para todos los campos */
+textarea.form-control,
+select.form-select,
+input[type="file"].form-control,
+input[type="number"].form-control {
+    border: 1px solid #ced4da !important;
+    background-color: #fff !important;
+    color: #212529 !important;
+    padding: 0.5rem 0.75rem !important;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+}
+

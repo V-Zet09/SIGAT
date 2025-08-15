@@ -10,6 +10,7 @@
     <meta content="Themesbrand" name="author" />
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ URL::asset('images/LOGO_VENTANA_SF.png') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     @include('layouts.head-css')
 
@@ -28,27 +29,25 @@
     <div id="layout-wrapper">
         @include('layouts.topbar')
         @include('layouts.sidebar')
+
         <!-- ============================================================== -->
         <!-- Start right Content here -->
         <!-- ============================================================== -->
-        <div class="main-content">
+        <div class="main-content" style="margin-left: 250px;">
             <div class="page-content">
                 <div class="container-fluid">
                     @yield('content')
                 </div>
-                <!-- container-fluid -->
             </div>
-            <!-- End Page-content -->
             @include('layouts.footer')
         </div>
         <!-- end main content-->
     </div>
     <!-- END layout-wrapper -->
 
-
-
     <!-- JAVASCRIPT -->
     @include('layouts.vendor-scripts')
+    @yield('scripts')
 </body>
 
 </html>
