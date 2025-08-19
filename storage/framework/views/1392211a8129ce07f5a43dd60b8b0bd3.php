@@ -286,8 +286,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
 
 <script>
 // Navegación entre pestañas
@@ -559,32 +558,32 @@ document.addEventListener('DOMContentLoaded', function() {
     // Configurar editor de texto enriquecido
     setupEditor();
     
-    // Configurar flatpickr
-    flatpickr("#periodo", {
-    dateFormat: "d-m-Y",              // Formato interno
-    altInput: true,                   // Muestra formato alternativo
-    altFormat: "d F Y",               // Formato visual
-    locale: {
-        weekdays: {
-            shorthand: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
-            longhand: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado']
-        },
-        months: {
-            shorthand: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
-            longhand: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
+    // Configurar flatpickr - CORRECCIÓN PRINCIPAL
+    // Esperar a que el input exista en el DOM
+    setTimeout(function() {
+        const periodoInput = document.getElementById("periodo");
+        if (periodoInput) {
+            flatpickr(periodoInput, {
+                locale: "es",
+                dateFormat: "d-m-Y",
+                altInput: true,
+                altFormat: "j F Y",
+                maxDate: "today",
+                defaultDate: "today",
+                static: true
+            });
+        } else {
+            console.error("No se encontró el elemento con ID 'periodo'");
         }
-    },
-    maxDate: "today",                 // No permite fechas futuras
-    defaultDate: "today",            // Selecciona hoy por defecto
-    static: true                     // Posiciona el calendario fijo
-});
-
+    }, 100);
 
     // Validación del formulario al enviar
     document.getElementById('informeForm').addEventListener('submit', function(e) {
         // Asegurarse de que el contenido del editor se guarde
-        document.getElementById('introduccion-content').value = 
-            document.getElementById('introduccion-editor').innerHTML;
+        const editorContent = document.getElementById('introduccion-editor');
+        if (editorContent) {
+            document.getElementById('introduccion-content').value = editorContent.innerHTML;
+        }
         
         if (!validateCurrentTab()) {
             e.preventDefault();

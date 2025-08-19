@@ -97,116 +97,127 @@
         </div>
     </div>
 
-    <!-- Menú principal -->
-    <div id="scrollbar">
-        <div class="container-fluid">
-            <ul class="navbar-nav" id="navbar-nav">
-                <!-- Paneles -->
-                <li class="menu-title"><span>Paneles</span></li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarDashboards">
-                        <i class="ri-dashboard-2-line"></i> <span>Dashboards</span>
-                    </a>
-                    <div class="collapse menu-dropdown" id="sidebarDashboards">
-                        <ul class="nav flex-column">
-                            <li class="nav-item"><a href="{{ route('dashboard-administrador') }}" class="nav-link"><i class="fas fa-user-shield me-2"></i> Administrador</a></li>
-                            <li class="nav-item"><a href="{{ route('dashboard-presidente-municipal') }}" class="nav-link"><i class="fas fa-user-tie me-2"></i> Presidente Municipal</a></li>
-                            <li class="nav-item"><a href="{{ route('dashboard-sindico-procurador') }}" class="nav-link"><i class="fas fa-balance-scale me-2"></i> Síndico Procurador</a></li>
-                            <li class="nav-item"><a href="{{ route('dashboard-regidor') }}" class="nav-link"><i class="fas fa-users me-2"></i> Regidor</a></li>
-                            <li class="nav-item"><a href="{{ route('dashboard-director-de-area') }}" class="nav-link"><i class="fas fa-user-cog me-2"></i> Director de Área</a></li>
-                            <li class="nav-item"><a href="{{ route('dashboard-auxiliar-area') }}" class="nav-link"><i class="fas fa-user-clock me-2"></i> Auxiliar de Área</a></li>
-                        </ul>
-                    </div>
-                </li>
+   <!-- Menú principal -->
+<div id="scrollbar">
+    <div class="container-fluid">
+        <ul class="navbar-nav" id="navbar-nav">
 
-                <!-- Informes -->
-                <li class="menu-title"><span>Informes</span></li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarInforme" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarInforme">
-                        <i class="ri-apps-2-line"></i> <span>Informe</span>
-                    </a>
-                    <div class="collapse menu-dropdown" id="sidebarInforme">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a href="{{ url('generar-informe') }}" class="nav-link">
-                                    <i class="fas fa-file-upload me-2"></i> Generar Informe
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
+            <!-- Paneles -->
+            <li class="menu-title"><span>Paneles</span></li>
+            <li class="nav-item">
+                <a class="nav-link menu-link collapsed" href="#sidebarDashboards" data-bs-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="sidebarDashboards">
+                    <i class="ri-dashboard-2-line"></i>
+                    <span>Dashboards</span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse menu-dropdown" id="sidebarDashboards">
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a href="{{ route('dashboard-administrador') }}" class="nav-link"><i class="fas fa-user-shield me-2"></i> Administrador</a></li>
+                        <li class="nav-item"><a href="{{ route('dashboard-presidente-municipal') }}" class="nav-link"><i class="fas fa-user-tie me-2"></i> Presidente Municipal</a></li>
+                        <li class="nav-item"><a href="{{ route('dashboard-sindico-procurador') }}" class="nav-link"><i class="fas fa-balance-scale me-2"></i> Síndico Procurador</a></li>
+                        <li class="nav-item"><a href="{{ route('dashboard-regidor') }}" class="nav-link"><i class="fas fa-users me-2"></i> Regidor</a></li>
+                        <li class="nav-item"><a href="{{ route('dashboard-director-de-area') }}" class="nav-link"><i class="fas fa-user-cog me-2"></i> Director de Área</a></li>
+                        <li class="nav-item"><a href="{{ route('dashboard-auxiliar-area') }}" class="nav-link"><i class="fas fa-user-clock me-2"></i> Auxiliar de Área</a></li>
+                    </ul>
+                </div>
+            </li>
 
-                <!-- Actividades -->
-                <li class="menu-title"><span>Actividades</span></li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarActividades" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarActividades">
-                        <i class="ri-apps-2-line"></i> <span>Actividades</span>
-                    </a>
-                    <div class="collapse menu-dropdown" id="sidebarActividades">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a href="{{ url('dashboard-actividades') }}" class="nav-link">
-                                    <i class="fas fa-plus-circle me-2"></i> Generar Actividad
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('actividades.registradas') }}" class="nav-link">
-                                    <i class="fas fa-tasks me-2"></i> Actividades Registradas
-                                </a>
-                            </li>
+            <!-- Informes -->
+            <li class="menu-title"><span>Informes</span></li>
+            <li class="nav-item">
+                <a class="nav-link menu-link collapsed" href="#sidebarInforme" data-bs-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="sidebarInforme">
+                    <i class="ri-apps-2-line"></i>
+                    <span>Informe</span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse menu-dropdown" id="sidebarInforme">
+                    <ul class="nav nav-sm flex-column">
+                        <li class="nav-item">
+                            <a href="{{ url('generar-informe') }}" class="nav-link">
+                                <i class="fas fa-file-upload me-2"></i> Generar Informe
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
 
-                        </ul>
-                    </div>
-                </li>
-                
-                <!-- Usuarios -->
-                <li class="menu-title"><span>Usuarios</span></li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarApps">
-                        <i class="ri-user-line"></i> <span>Usuarios</span>
-                    </a>
-                    <div class="collapse menu-dropdown" id="sidebarApps">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a href="{{ url('dashboard-users') }}" class="nav-link">CRUD</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="collapse menu-dropdown" id="sidebarApps">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a href="{{ url('dashboard-crear-usuario') }}" class="nav-link">Crear usuario</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
+            <!-- Actividades -->
+            <li class="menu-title"><span>Actividades</span></li>
+            <li class="nav-item">
+                <a class="nav-link menu-link collapsed" href="#sidebarActividades" data-bs-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="sidebarActividades">
+                    <i class="ri-apps-2-line"></i>
+                    <span>Actividades</span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse menu-dropdown" id="sidebarActividades">
+                    <ul class="nav nav-sm flex-column">
+                        <li class="nav-item">
+                            <a href="{{ url('dashboard-actividades') }}" class="nav-link">
+                                <i class="fas fa-plus-circle me-2"></i> Generar Actividad
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('actividades.registradas') }}" class="nav-link">
+                                <i class="fas fa-tasks me-2"></i> Actividades Registradas
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
 
-                <!-- Diseños -->
-                <li class="menu-title"><span>Diseños</span></li>  
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarLayouts" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarLayouts">
-                        <i class="ri-layout-3-line"></i> <span>Layouts</span>
-                        <span class="badge badge-pill bg-danger">Hot</span>
-                    </a>
-                    <div class="collapse menu-dropdown" id="sidebarLayouts">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item"><a href="{{ url('layouts-horizontal') }}" target="_blank" class="nav-link">Horizontal</a></li>
-                            <li class="nav-item"><a href="{{ url('layouts-detached') }}" target="_blank" class="nav-link">Detached</a></li>
-                            <li class="nav-item"><a href="{{ url('layouts-two-column') }}" target="_blank" class="nav-link">Two Column</a></li>
-                            <li class="nav-item"><a href="{{ url('layouts-vertical-hovered') }}" target="_blank" class="nav-link">Hovered</a></li>
-                        </ul>
-                    </div>
-                </li>
-            </ul>
-        </div>
+            <!-- Usuarios -->
+            <li class="menu-title"><span>Usuarios</span></li>
+            <li class="nav-item">
+                <a class="nav-link menu-link collapsed" href="#sidebarUsuarios" data-bs-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="sidebarUsuarios">
+                    <i class="ri-apps-2-line"></i>
+                    <span>Usuarios</span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse menu-dropdown" id="sidebarUsuarios">
+                    <ul class="nav nav-sm flex-column">
+                        <li class="nav-item">
+                            <a href="{{ url('dashboard-users') }}" class="nav-link">
+                                <i class="fas fa-plus-circle me-2"></i> CRUD
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard-crear-usuario') }}" class="nav-link">
+                                <i class="fas fa-user-plus me-2"></i> Crear Usuario
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- Diseños -->
+            <li class="menu-title"><span>Diseños</span></li>  
+            <li class="nav-item">
+                <a class="nav-link menu-link collapsed" href="#sidebarLayouts" data-bs-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="sidebarLayouts">
+                    <i class="ri-layout-3-line"></i>
+                    <span>Layouts</span>
+                    <span class="badge badge-pill bg-danger">Hot</span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse menu-dropdown" id="sidebarLayouts">
+                    <ul class="nav nav-sm flex-column">
+                        <li class="nav-item"><a href="{{ url('layouts-horizontal') }}" target="_blank" class="nav-link">Horizontal</a></li>
+                        <li class="nav-item"><a href="{{ url('layouts-detached') }}" target="_blank" class="nav-link">Detached</a></li>
+                        <li class="nav-item"><a href="{{ url('layouts-two-column') }}" target="_blank" class="nav-link">Two Column</a></li>
+                        <li class="nav-item"><a href="{{ url('layouts-vertical-hovered') }}" target="_blank" class="nav-link">Hovered</a></li>
+                    </ul>
+                </div>
+            </li>
+
+        </ul>
     </div>
+</div>
 
-    <div class="sidebar-background"></div>
+<div class="sidebar-background"></div>
 </div>
 <!-- Left Sidebar End -->
 <div class="vertical-overlay"></div>
