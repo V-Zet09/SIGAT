@@ -50,5 +50,4 @@
     <?php echo $__env->yieldContent('scripts'); ?>
 </body>
 
-</html>
-<?php /**PATH C:\Users\Maria\Documents\GitHub\SIGAT\resources\views/layouts/master.blade.php ENDPATH**/ ?>
+</html><?php /**PATH C:\Users\Maria\Documents\GitHub\SIGAT\resources\views/layouts/master.blade.php ENDPATH**/ ?>

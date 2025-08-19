@@ -57,7 +57,6 @@ Route::middleware('auth')->group(function () {
     //Route::get('/job-categories', [JobCategoryController::class, 'index'])->name('job-categories');
     //Route::get('/sidebar-layouts', [SidebarLayoutController::class, 'index'])->name('sidebar-layouts');
 
-<<<<<<< HEAD
 // ✅ Ruta dinámica para todo lo demás
 Route::get('{any}', [HomeController::class, 'index'])->where('any', '.*')->middleware('auth')->name('index');
 
@@ -79,8 +78,6 @@ Route::get('/usuarios/{id}/editar', [UserController::class, 'edit'])->name('vist
     Route::get('dashboard-generar-informe', [GenerarInformeController::class, 'index'])->name('informes.index');
     Route::post('dashboard-generar-informe', [GenerarInformeController::class, 'store'])->name('informes.store');
 
-=======
->>>>>>> 325efb20671cbf4025bfd6e2055ce6de71d45280
     // ✅ Actividades
     Route::get('/dashboard-actividades', [ActividadController::class, 'create'])->name('actividades.create');
     Route::post('/dashboard-actividades', [ActividadController::class, 'store'])->name('actividades.store');
