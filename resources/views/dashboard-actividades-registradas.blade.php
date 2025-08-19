@@ -32,17 +32,41 @@
             <input type="text" name="buscar" class="form-control" placeholder="Buscar actividad" value="{{ request('buscar') }}">
         </div>
         <div class="col-md-4">
-            <select name="area" class="form-select">
+            <select name="tipo_area" class="form-select">
                 <option value="">Filtrar por: Área</option>
-                @foreach(['Agua potable', 'Alumbrado público', 'Desarrollo rural', 'Bienestar animal'] as $opcion)
-                    <option value="{{ $opcion }}" {{ request('area') == $opcion ? 'selected' : '' }}>{{ $opcion }}</option>
+                @foreach([
+                    'Agua potable',
+                    'Bienestar Social y Desarrollo Rural',
+                    'Catastro',
+                    'Contraloria Interna',
+                    'Deportes',
+                    'DIF',
+                    'Informática',
+                    'Limpia',
+                    'Obras Publicas',
+                    'Oficialia Mayor',
+                    'Presidencia',
+                    'Recursos Humanos',
+                    'Registro Civil',
+                    'Regidores',
+                    'Reglamentos',
+                    'Secretaria General',
+                    'Seguridad Publica',
+                    'Sindicatura',
+                    'Tesoreria',
+                    'Transito'
+                ] as $opcion)
+                    <option value="{{ $opcion }}" {{ request('tipo_area') == $opcion ? 'selected' : '' }}>{{ $opcion }}</option>
                 @endforeach
             </select>
         </div>
         <div class="col-md-4 text-end">
-            <a href="{{ route('actividades.create') }}" class="btn btn-success">
-                Crear Actividad
-            </a>
+            <a href="{{ route('actividades.registradas') }}" class="btn btn-outline-light">
+        Limpiar filtros
+    </a>
+    <a href="{{ route('actividades.create') }}" class="btn btn-success">
+        Crear Actividad
+    </a>
         </div>
     </form>
 
@@ -56,7 +80,6 @@
                         <th>Autor</th>
                         <th>Fecha</th>
                         <th>Área</th>
-                        <th>Tipo de Actividad</th>
                         <th>Resumen</th>
                         <th>Contenido</th>
                         <th>Presupuesto</th>
@@ -71,8 +94,7 @@
                             <td>{{ $actividad->titulo }}</td>
                             <td>{{ $actividad->autor ?? 'Anónimo' }}</td>
                             <td>{{ \Carbon\Carbon::parse($actividad->fecha)->format('d/m/Y') }}</td>
-                            <td>{{ $actividad->area ?? 'Sin área' }}</td>
-                            <td>{{ $actividad->tipo_actividad ?? 'No especificado' }}</td>
+                            <td>{{ $actividad->tipo_area ?? 'Sin área' }}</td>
                             <td>
                                 {{ Str::limit($actividad->resumen, 80, '...') }}
                                 @if(strlen($actividad->resumen) > 80)
@@ -132,4 +154,28 @@
         </div>
     @endif
 </div>
+@section('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('form[action="{{ route('actividades.registradas') }}"]');
+        const buscarInput = form.querySelector('input[name="buscar"]');
+        const tipoAreaSelect = form.querySelector('select[name="tipo_area"]');
+
+        // Enviar automáticamente al cambiar el select
+        tipoAreaSelect.addEventListener('change', () => {
+            form.submit();
+        });
+
+        // Enviar automáticamente al escribir en el input (con retardo)
+        let timer;
+        buscarInput.addEventListener('input', () => {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                form.submit();
+            }, 600); // Espera 600ms después de dejar de escribir
+        });
+    });
+</script>
+@endsection
+
 @endsection

@@ -7,4 +7,4 @@
 <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
 <?php echo $__env->yieldContent('script'); ?>
 <?php echo $__env->yieldContent('script-bottom'); ?>
-<?php /**PATH C:\Users\Maria\Documents\GitHub\SIGAT\resources\views/layouts/vendor-scripts.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\Users\zaet_\OneDrive\Escritorio\AYUNTAMIENTO\resources\views/layouts/vendor-scripts.blade.php ENDPATH**/ ?>

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\InformeController;
 use App\Http\Controllers\{
     HomeController,
     AdministradorController,
@@ -56,6 +57,7 @@ Route::middleware('auth')->group(function () {
     //Route::get('/job-categories', [JobCategoryController::class, 'index'])->name('job-categories');
     //Route::get('/sidebar-layouts', [SidebarLayoutController::class, 'index'])->name('sidebar-layouts');
 
+<<<<<<< HEAD
 // ✅ Ruta dinámica para todo lo demás
 Route::get('{any}', [HomeController::class, 'index'])->where('any', '.*')->middleware('auth')->name('index');
 
@@ -77,6 +79,8 @@ Route::get('/usuarios/{id}/editar', [UserController::class, 'edit'])->name('vist
     Route::get('dashboard-generar-informe', [GenerarInformeController::class, 'index'])->name('informes.index');
     Route::post('dashboard-generar-informe', [GenerarInformeController::class, 'store'])->name('informes.store');
 
+=======
+>>>>>>> 325efb20671cbf4025bfd6e2055ce6de71d45280
     // ✅ Actividades
     Route::get('/dashboard-actividades', [ActividadController::class, 'create'])->name('actividades.create');
     Route::post('/dashboard-actividades', [ActividadController::class, 'store'])->name('actividades.store');
@@ -85,5 +89,11 @@ Route::get('/usuarios/{id}/editar', [UserController::class, 'edit'])->name('vist
     Route::get('/actividades/{id}/show', [ActividadController::class, 'show'])->name('actividades.show');
     Route::put('/actividades/{id}', [ActividadController::class, 'update'])->name('actividades.update');
     Route::delete('/actividades/{id}', [ActividadController::class, 'destroy'])->name('actividades.destroy');
+
+    Route::middleware(['auth'])->group(function () {
+    Route::get('/generar-informe', [InformeController::class, 'create'])->name('generar-informe');
+    Route::post('/generar-informe', [InformeController::class, 'store'])->name('informes.store');
+    Route::get('/informes/{slug}', [InformeController::class, 'show'])->name('informes.show');
+});
 
 });
