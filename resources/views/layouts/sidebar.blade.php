@@ -130,7 +130,7 @@
                     <div class="collapse menu-dropdown" id="sidebarInforme">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{ url('dashboard-generar-informe') }}" class="nav-link">
+                                <a href="{{ url('generar-informe') }}" class="nav-link">
                                     <i class="fas fa-file-upload me-2"></i> Generar Informe
                                 </a>
                             </li>

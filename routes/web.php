@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\InformeController;
 use App\Http\Controllers\{
     HomeController,
     AdministradorController,
@@ -56,10 +57,6 @@ Route::middleware('auth')->group(function () {
     //Route::get('/job-categories', [JobCategoryController::class, 'index'])->name('job-categories');
     //Route::get('/sidebar-layouts', [SidebarLayoutController::class, 'index'])->name('sidebar-layouts');
 
-    // ✅ Informes
-    Route::get('dashboard-generar-informe', [GenerarInformeController::class, 'index'])->name('informes.index');
-    Route::post('dashboard-generar-informe', [GenerarInformeController::class, 'store'])->name('informes.store');
-
     // ✅ Actividades
     Route::get('/dashboard-actividades', [ActividadController::class, 'create'])->name('actividades.create');
     Route::post('/dashboard-actividades', [ActividadController::class, 'store'])->name('actividades.store');
@@ -68,5 +65,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/actividades/{id}/show', [ActividadController::class, 'show'])->name('actividades.show');
     Route::put('/actividades/{id}', [ActividadController::class, 'update'])->name('actividades.update');
     Route::delete('/actividades/{id}', [ActividadController::class, 'destroy'])->name('actividades.destroy');
+
+    Route::middleware(['auth'])->group(function () {
+    Route::get('/generar-informe', [InformeController::class, 'create'])->name('generar-informe');
+    Route::post('/generar-informe', [InformeController::class, 'store'])->name('informes.store');
+    Route::get('/informes/{slug}', [InformeController::class, 'show'])->name('informes.show');
+});
 
 });

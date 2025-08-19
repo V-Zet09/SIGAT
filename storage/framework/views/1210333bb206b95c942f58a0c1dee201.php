@@ -130,7 +130,7 @@
                     <div class="collapse menu-dropdown" id="sidebarInforme">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="<?php echo e(url('dashboard-generar-informe')); ?>" class="nav-link">
+                                <a href="<?php echo e(url('generar-informe')); ?>" class="nav-link">
                                     <i class="fas fa-file-upload me-2"></i> Generar Informe
                                 </a>
                             </li>
@@ -185,5 +185,4 @@
     <div class="sidebar-background"></div>
 </div>
 <!-- Left Sidebar End -->
-<div class="vertical-overlay"></div>
-<?php /**PATH C:\Users\zaet_\OneDrive\Escritorio\AYUNTAMIENTO\resources\views/layouts/sidebar.blade.php ENDPATH**/ ?>
+<div class="vertical-overlay"></div><?php /**PATH C:\Users\zaet_\OneDrive\Escritorio\AYUNTAMIENTO\resources\views/layouts/sidebar.blade.php ENDPATH**/ ?>
