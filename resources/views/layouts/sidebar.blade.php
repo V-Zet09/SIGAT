@@ -157,12 +157,36 @@
                                     <i class="fas fa-tasks me-2"></i> Actividades Registradas
                                 </a>
                             </li>
+
+                        </ul>
+                    </div>
+                </li>
+                
+                <!-- Usuarios -->
+                <li class="menu-title"><span>Usuarios</span></li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarApps">
+                        <i class="ri-user-line"></i> <span>Usuarios</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarApps">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ url('dashboard-users') }}" class="nav-link">CRUD</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="collapse menu-dropdown" id="sidebarApps">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ url('dashboard-crear-usuario') }}" class="nav-link">Crear usuario</a>
+                            </li>
                         </ul>
                     </div>
                 </li>
 
                 <!-- Diseños -->
-                <li class="menu-title"><span>Diseños</span></li>
+                <li class="menu-title"><span>Diseños</span></li>  
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarLayouts" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarLayouts">
