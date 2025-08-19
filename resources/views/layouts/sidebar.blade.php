@@ -14,7 +14,30 @@
         background-color: rgba(0, 0, 0, 0.3);
         border-radius: 3px;
     }
+
+    /* Eliminar flecha automática generada por el template */
+    .menu-link::after {
+        content: none !important;
+    }
+
+    /* Estilos para las flechas del menú manuales */
+    .menu-arrow {
+        margin-left: auto;
+        transition: transform 0.3s ease;
+    }
+
+    /* Rotación de la flecha cuando el menú está expandido */
+    [aria-expanded="true"] .menu-arrow {
+        transform: rotate(90deg);
+    }
+
+    /* Estilo para el elemento activo */
+    .navbar-nav .nav-item .nav-link.active {
+        color: #0ab39c;
+        background-color: rgba(10, 179, 156, 0.1);
+    }
 </style>
+
 
 <!-- ========== App Menu ========== -->
 <div class="app-menu navbar-menu">
@@ -53,7 +76,7 @@
             <span class="d-flex align-items-center gap-2">
                 <img class="rounded header-profile-user"
                     src="@if (Auth::user()->avatar != '') {{ URL::asset('images/' . Auth::user()->avatar) }} @else {{ URL::asset('build/images/users/avatar-1.jpg') }} @endif"
-                    alt="Header Avatar">
+                    alt="Header Avatar">    
                 <span class="text-start">
                     <span class="d-block fw-medium sidebar-user-name-text">{{ Auth::user()->name }}</span>
                     <span class="d-block fs-14 sidebar-user-name-sub-text">
@@ -101,15 +124,14 @@
 <div id="scrollbar">
     <div class="container-fluid">
         <ul class="navbar-nav" id="navbar-nav">
-
             <!-- Paneles -->
             <li class="menu-title"><span>Paneles</span></li>
             <li class="nav-item">
-                <a class="nav-link menu-link collapsed" href="#sidebarDashboards" data-bs-toggle="collapse" role="button"
+                <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button"
                     aria-expanded="false" aria-controls="sidebarDashboards">
                     <i class="ri-dashboard-2-line"></i>
                     <span>Dashboards</span>
-                    <span class="menu-arrow"></span>
+                    <i class="ri-arrow-right-s-line menu-arrow"></i>
                 </a>
                 <div class="collapse menu-dropdown" id="sidebarDashboards">
                     <ul class="nav flex-column">
@@ -126,11 +148,11 @@
             <!-- Informes -->
             <li class="menu-title"><span>Informes</span></li>
             <li class="nav-item">
-                <a class="nav-link menu-link collapsed" href="#sidebarInforme" data-bs-toggle="collapse" role="button"
+                <a class="nav-link menu-link" href="#sidebarInforme" data-bs-toggle="collapse" role="button"
                     aria-expanded="false" aria-controls="sidebarInforme">
                     <i class="ri-apps-2-line"></i>
                     <span>Informe</span>
-                    <span class="menu-arrow"></span>
+                    <i class="ri-arrow-right-s-line menu-arrow"></i>
                 </a>
                 <div class="collapse menu-dropdown" id="sidebarInforme">
                     <ul class="nav nav-sm flex-column">
@@ -146,11 +168,11 @@
             <!-- Actividades -->
             <li class="menu-title"><span>Actividades</span></li>
             <li class="nav-item">
-                <a class="nav-link menu-link collapsed" href="#sidebarActividades" data-bs-toggle="collapse" role="button"
+                <a class="nav-link menu-link" href="#sidebarActividades" data-bs-toggle="collapse" role="button"
                     aria-expanded="false" aria-controls="sidebarActividades">
                     <i class="ri-apps-2-line"></i>
                     <span>Actividades</span>
-                    <span class="menu-arrow"></span>
+                    <i class="ri-arrow-right-s-line menu-arrow"></i>
                 </a>
                 <div class="collapse menu-dropdown" id="sidebarActividades">
                     <ul class="nav nav-sm flex-column">
@@ -171,11 +193,11 @@
             <!-- Usuarios -->
             <li class="menu-title"><span>Usuarios</span></li>
             <li class="nav-item">
-                <a class="nav-link menu-link collapsed" href="#sidebarUsuarios" data-bs-toggle="collapse" role="button"
+                <a class="nav-link menu-link" href="#sidebarUsuarios" data-bs-toggle="collapse" role="button"
                     aria-expanded="false" aria-controls="sidebarUsuarios">
                     <i class="ri-apps-2-line"></i>
                     <span>Usuarios</span>
-                    <span class="menu-arrow"></span>
+                    <i class="ri-arrow-right-s-line menu-arrow"></i>
                 </a>
                 <div class="collapse menu-dropdown" id="sidebarUsuarios">
                     <ul class="nav nav-sm flex-column">
@@ -196,12 +218,12 @@
             <!-- Diseños -->
             <li class="menu-title"><span>Diseños</span></li>  
             <li class="nav-item">
-                <a class="nav-link menu-link collapsed" href="#sidebarLayouts" data-bs-toggle="collapse" role="button"
+                <a class="nav-link menu-link" href="#sidebarLayouts" data-bs-toggle="collapse" role="button"
                     aria-expanded="false" aria-controls="sidebarLayouts">
                     <i class="ri-layout-3-line"></i>
                     <span>Layouts</span>
                     <span class="badge badge-pill bg-danger">Hot</span>
-                    <span class="menu-arrow"></span>
+                    <i class="ri-arrow-right-s-line menu-arrow"></i>
                 </a>
                 <div class="collapse menu-dropdown" id="sidebarLayouts">
                     <ul class="nav nav-sm flex-column">
@@ -221,3 +243,45 @@
 </div>
 <!-- Left Sidebar End -->
 <div class="vertical-overlay"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Manejar el estado activo de los elementos del menú
+    const menuLinks = document.querySelectorAll('.nav-link.menu-link');
+    
+    menuLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            // Cerrar otros menús abiertos (comportamiento de acordeón)
+            if (!this.classList.contains('collapsed')) {
+                menuLinks.forEach(otherLink => {
+                    if (otherLink !== this && !otherLink.classList.contains('collapsed')) {
+                        otherLink.classList.add('collapsed');
+                        const target = document.querySelector(otherLink.getAttribute('href'));
+                        if (target) {
+                            target.classList.remove('show');
+                        }
+                    }
+                });
+            }
+        });
+    });
+    
+    // Rotar flechas cuando se expande/contrae el menú
+    const collapseElements = document.querySelectorAll('.menu-dropdown');
+    collapseElements.forEach(element => {
+        element.addEventListener('show.bs.collapse', function() {
+            const trigger = document.querySelector('[href="#' + this.id + '"]');
+            if (trigger) {
+                trigger.setAttribute('aria-expanded', 'true');
+            }
+        });
+        
+        element.addEventListener('hide.bs.collapse', function() {
+            const trigger = document.querySelector('[href="#' + this.id + '"]');
+            if (trigger) {
+                trigger.setAttribute('aria-expanded', 'false');
+            }
+        });
+    });
+});
+</script>

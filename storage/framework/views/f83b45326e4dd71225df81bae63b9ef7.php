@@ -11,6 +11,7 @@
     <!-- App favicon -->
     <link rel="shortcut icon" href="<?php echo e(URL::asset('images/LOGO_VENTANA_SF.png')); ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="<?php echo e(asset('assets/css/app.min.css')); ?>" rel="stylesheet" />
 
     <?php echo $__env->make('layouts.head-css', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
