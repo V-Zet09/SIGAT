@@ -756,7 +756,6 @@ input[type="number"].form-control {
 }
 
 /* Imagen actividades */
-/* Añade esto a tu informe.css */
 .row-preview {
     display: flex;
     flex-wrap: wrap;
@@ -782,3 +781,19 @@ input[type="number"].form-control {
     cursor: pointer;
 }
 
+/* MENSAJE DE ERROR CAMPO REQUERIDO  */
+.error-message {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.upload-box.error {
+    border-color: #dc3545 !important;
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}

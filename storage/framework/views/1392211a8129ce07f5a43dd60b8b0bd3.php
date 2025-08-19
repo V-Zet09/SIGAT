@@ -32,90 +32,90 @@
         <?php echo csrf_field(); ?>
 
         <!-- Sección Inicio -->
-        <div class="section active" id="inicio">
-            <h2>Portada</h2>
+<div class="section active" id="inicio">
+    <h2>Portada</h2>
 
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label>Título del Informe</label>
-                    <input type="text" name="titulo" class="form-control" placeholder="Ingrese el título" required>
-                </div>
-                <div class="form-group col-md-6">
-                    <label>Período</label>
-                    <input type="text" id="periodo" name="periodo" 
-                        class="form-control flatpickr-input" 
-                        placeholder="Selecciona el período" required>
-                </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>Título del Informe</label>
+            <input type="text" name="titulo" class="form-control" placeholder="Ingrese el título" required>
+        </div>
+        <div class="form-group col-md-6">
+            <label>Período</label>
+            <input type="text" id="periodo" name="periodo" 
+                class="form-control flatpickr-input" 
+                placeholder="Selecciona el período" required>
+        </div>
+    </div>
+
+    <div class="comuna-section">
+        <h2>INFORMACIÓN DE LA COMUNA</h2>
+        
+        <div class="authorities-grid">
+            <div class="authority-card">
+                <h3>Presidencia</h3>
+                <p><strong>C. JOSÉ LUIS ANTÚNEZ GOICOCHEA</strong><br>Presidente Municipal Constitucional</p>
             </div>
-
-            <div class="comuna-section">
-    <h2>INFORMACIÓN DE LA COMUNA</h2>
-    
-    <div class="authorities-grid">
-        <div class="authority-card">
-            <h3>Presidencia</h3>
-            <p><strong>C. JOSÉ LUIS ANTÚNEZ GOICOCHEA</strong><br>Presidente Municipal Constitucional</p>
-        </div>
-        <div class="authority-card">
-            <h3>Sindicato</h3>
-            <p><strong>Profa. Maricela Cruz Cedillo</strong><br>Síndica Procuradora Municipal</p>
-        </div>
-        <div class="authority-card">
-            <h3>Secretaría</h3>
-            <p><strong>C. Profr. Mario Alberto Lagunas Salgado</strong><br>Secretario General del H. Ayuntamiento Municipal Constitucional</p>
-        </div>
-    </div>
-
-    <h3>Regidores</h3>
-    <div class="regidores-grid">
-        <div class="regidor-column">
-            <ul>
-                <li><strong>C. Zenón Huerta Arellano</strong>Desarrollo Urbano, Medio Ambiente y Obras Públicas</li>
-                <li><strong>C. Ma. del Carmen Barrera Galarza</strong>Educación, Cultura, Recreación, Espectáculos y Juventud</li>
-                <li><strong>C. Arturo León Juan</strong>Salud y Asistencia Social</li>
-            </ul>
-        </div>
-        <div class="regidor-column">
-            <ul>
-                <li><strong>C. Ma. Isabel Quintana Gómez</strong>Equidad y Género, Derecho de las Niñas y Adolescentes</li>
-                <li><strong>C. Jesús Javier Cruz</strong>Desarrollo Rural, Participación Social de Migrantes</li>
-                <li><strong>C. Edith Aguirre Flores</strong>Comercio, Abasto Popular, Atención y Fomento al Empleo</li>
-            </ul>
-        </div>
-    </div>
-</div>
-
-            <div class="upload-container">
-    <div class="upload-box" id="upload-box">
-        <i class="fas fa-cloud-upload-alt upload-icon"></i>
-        <div class="upload-text">
-            Arrastra tu imagen aquí o 
-            <span class="browse-link">selecciona desde tu dispositivo</span>
-        </div>
-        <input type="file" id="imagen-comuna" name="imagen_comuna" style="display:none" accept="image/*">
-    </div>
-    <div id="upload-preview" class="preview-container"></div>
-</div>
-
-
-            <div class="form-actions">
-                <button type="button" class="btn btn-secondary" onclick="nextTab('informacion')">
-                    Siguiente <i class="fas fa-arrow-right ml-2"></i>
+            <div class="authority-card">
+                <h3>Sindicato</h3>
+                <p><strong>Profa. Maricela Cruz Cedillo</strong><br>Síndica Procuradora Municipal</p>
+            </div>
+            <div class="authority-card">
+                <h3>Secretaría</h3>
+                <p><strong>C. Profr. Mario Alberto Lagunas Salgado</strong><br>Secretario General del H. Ayuntamiento Municipal Constitucional</p>
             </div>
         </div>
 
-        <!-- Sección Información Municipio -->
+        <h3>Regidores</h3>
+        <div class="regidores-grid">
+            <div class="regidor-column">
+                <ul>
+                    <li><strong>C. Zenón Huerta Arellano</strong>Desarrollo Urbano, Medio Ambiente y Obras Públicas</li>
+                    <li><strong>C. Ma. del Carmen Barrera Galarza</strong>Educación, Cultura, Recreación, Espectáculos y Juventud</li>
+                    <li><strong>C. Arturo León Juan</strong>Salud y Asistencia Social</li>
+                </ul>
+            </div>
+            <div class="regidor-column">
+                <ul>
+                    <li><strong>C. Ma. Isabel Quintana Gómez</strong>Equidad y Género, Derecho de las Niñas y Adolescentes</li>
+                    <li><strong>C. Jesús Javier Cruz</strong>Desarrollo Rural, Participación Social de Migrantes</li>
+                    <li><strong>C. Edith Aguirre Flores</strong>Comercio, Abasto Popular, Atención y Fomento al Empleo</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="upload-container">
+        <div class="upload-box" id="upload-box">
+            <i class="fas fa-cloud-upload-alt upload-icon"></i>
+            <div class="upload-text">
+                Arrastra tu imagen aquí o 
+                <span class="browse-link">selecciona desde tu dispositivo</span>
+            </div>
+            <input type="file" id="imagen-comuna" name="imagen_comuna" style="display:none" accept="image/*" required>
+        </div>
+        <div id="upload-preview" class="preview-container"></div>
+    </div>
+
+    <div class="form-actions">
+        <button type="button" class="btn btn-secondary" onclick="nextTab('informacion')">
+            Siguiente <i class="fas fa-arrow-right ml-2"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Sección Información Municipio -->
 <div class="section" id="informacion">
     <h2>Información del Municipio</h2>
     
     <div class="form-group">
         <label>Nombre del Municipio</label>
-        <input type="text" name="municipio_nombre" class="form-control" placeholder="Nombre oficial del municipio">
+        <input type="text" name="municipio_nombre" class="form-control" placeholder="Nombre oficial del municipio" required>
     </div>
     
     <div class="form-group">
         <label>Descripción del Municipio</label>
-        <textarea name="municipio_descripcion" class="form-control" rows="5" placeholder="Descripción detallada del municipio"></textarea>
+        <textarea name="municipio_descripcion" class="form-control" rows="5" placeholder="Descripción detallada del municipio" required></textarea>
     </div>
     
     <div class="form-group">
@@ -127,7 +127,7 @@
                     Arrastra tu imagen aquí o 
                     <span class="browse-link">selecciona desde tu dispositivo</span>
                 </div>
-                <input type="file" id="informacion-file" name="informacion-file" style="display:none" accept="image/*">
+                <input type="file" id="imagen-comuna" name="imagen_comuna" style="display:none" accept="image/*" required>
             </div>
             <div id="informacion-preview" class="preview-container"></div>
         </div>
@@ -158,7 +158,7 @@
             </select>
         </div>
         <div id="introduccion-editor" class="editor-content" contenteditable="true"></div>
-        <input type="hidden" name="introduccion" id="introduccion-content">
+        <input type="hidden" name="introduccion" id="introduccion-content" required>
         <div class="word-count" id="wordCount">0 / 800 palabras</div>
     </div>
     
@@ -171,7 +171,7 @@
                     Arrastra tu imagen aquí o 
                     <span class="browse-link">selecciona desde tu dispositivo</span>
                 </div>
-                <input type="file" id="introduccion-file" name="introduccion-file" style="display:none" accept="image/*">
+                <input type="file" id="imagen-comuna" name="imagen_comuna" style="display:none" accept="image/*" required>
             </div>
             <div id="introduccion-preview" class="preview-container"></div>
         </div>
@@ -189,7 +189,7 @@
     
     <div class="form-group">
         <label>Contenido de la introducción del gobierno</label>
-        <textarea name="gobierno_introduccion" class="form-control" rows="8" placeholder="Describa la introducción al gobierno municipal"></textarea>
+        <textarea name="gobierno_introduccion" class="form-control" rows="8" placeholder="Describa la introducción al gobierno municipal" required></textarea>
     </div>
     
     <div class="form-group">
@@ -201,7 +201,7 @@
                     Arrastra tu imagen aquí o 
                     <span class="browse-link">selecciona desde tu dispositivo</span>
                 </div>
-                <input type="file" id="gobierno-file" name="gobierno-file" style="display:none" accept="image/*">
+                <input type="file" id="imagen-comuna" name="imagen_comuna" style="display:none" accept="image/*" required>
             </div>
             <div id="gobierno-preview" class="preview-container"></div>
         </div>
@@ -220,7 +220,7 @@
     <div class="form-row">
         <div class="form-group col-md-6">
             <label>Seleccione el período:</label>
-            <select name="actividades_periodo" class="form-control">
+            <select name="actividades_periodo" class="form-control" required>
                 <option value="Enero - Marzo">Enero - Marzo</option>
                 <option value="Abril - Junio">Abril - Junio</option>
                 <option value="Julio - Septiembre">Julio - Septiembre</option>
@@ -256,25 +256,24 @@
     
     <div class="form-group">
         <label>Descripción de las actividades</label>
-        <textarea name="actividades_descripcion" class="form-control" rows="8" placeholder="Describa las actividades realizadas"></textarea>
+        <textarea name="actividades_descripcion" class="form-control" rows="8" placeholder="Describa las actividades realizadas" required></textarea>
     </div>
     
     <div class="form-group">
-    <label>Imágenes de Actividades (Maximo 5)</label>
-    <div class="upload-container">
-        <div class="upload-box" id="actividades-upload">
-            <i class="fas fa-cloud-upload-alt upload-icon"></i>
-            <div class="upload-text">
-                Arrastra tus imágenes aquí o 
-                <span class="browse-link">selecciona desde tu dispositivo</span>
+        <label>Imágenes de Actividades (Máximo 5)</label>
+        <div class="upload-container">
+            <div class="upload-box" id="actividades-upload">
+                <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                <div class="upload-text">
+                    Arrastra tus imágenes aquí o 
+                    <span class="browse-link">selecciona desde tu dispositivo</span>
+                </div>
+                <input type="file" id="imagen-comuna" name="imagen_comuna" style="display:none" accept="image/*" required>
             </div>
-            <input type="file" id="actividades-file" name="actividades-file[]" style="display:none" accept="image/*" multiple>
+            <div id="actividades-preview" class="preview-container row-preview"></div>
         </div>
-        <div id="actividades-preview" class="preview-container row-preview"></div>
     </div>
-</div>
-
-
+    
     <div class="form-actions">
         <button type="button" class="btn btn-secondary" onclick="prevTab('gobierno')"><i class="fas fa-arrow-left mr-2"></i> Anterior</button>
         <button type="submit" class="btn btn-success"><i class="fas fa-save mr-2"></i> Generar Informe</button>
@@ -323,15 +322,44 @@ function prevTab(prevId) {
 function validateCurrentTab() {
     const currentTab = document.querySelector('.section.active');
     const requiredInputs = currentTab.querySelectorAll('[required]');
+    const imageInputs = currentTab.querySelectorAll('input[type="file"][required]');
     
     let isValid = true;
     
+    // Validar campos de texto
     requiredInputs.forEach(input => {
-        if (!input.value.trim()) {
+        if (input.type !== 'file' && !input.value.trim()) {
             input.classList.add('is-invalid');
             isValid = false;
         } else {
             input.classList.remove('is-invalid');
+        }
+    });
+    
+    // Validar campos de imagen
+    imageInputs.forEach(input => {
+        const uploadBox = input.closest('.upload-container').querySelector('.upload-box');
+        
+        if (!input.files || input.files.length === 0) {
+            // Resaltar el área de carga con borde rojo
+            uploadBox.classList.add('error');
+            
+            // Agregar mensaje de error si no existe
+            if (!uploadBox.nextElementSibling || !uploadBox.nextElementSibling.classList.contains('error-message')) {
+                const errorMsg = document.createElement('div');
+                errorMsg.className = 'error-message text-danger mt-2';
+                errorMsg.innerHTML = '<i class="fas fa-exclamation-circle"></i> Debe seleccionar una imagen';
+                uploadBox.parentNode.insertBefore(errorMsg, uploadBox.nextElementSibling);
+            }
+            
+            isValid = false;
+        } else {
+            uploadBox.classList.remove('error');
+            // Eliminar mensaje de error si existe
+            const errorMsg = uploadBox.nextElementSibling;
+            if (errorMsg && errorMsg.classList.contains('error-message')) {
+                errorMsg.remove();
+            }
         }
     });
     
