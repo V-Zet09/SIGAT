@@ -43,11 +43,10 @@
         <div class="form-group col-md-6">
             <label>Período</label>
             <input type="text" id="periodo" name="periodo" 
-                class="form-control flatpickr-input" 
+                class="form-control" 
                 placeholder="Selecciona el período" required>
         </div>
     </div>
-
     <div class="comuna-section">
         <h2>INFORMACIÓN DE LA COMUNA</h2>
         
@@ -287,6 +286,9 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 <script>
 // Navegación entre pestañas
 function showTab(tabId) {
@@ -559,22 +561,24 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Configurar flatpickr
     flatpickr("#periodo", {
-        dateFormat: "d-m-Y",
-        altFormat: "d F Y",
-        locale: {
-            months: {
-                shorthand: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
-                longhand: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
-            },
-            weekdays: {
-                shorthand: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
-                longhand: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado']
-            }
+    dateFormat: "d-m-Y",              // Formato interno
+    altInput: true,                   // Muestra formato alternativo
+    altFormat: "d F Y",               // Formato visual
+    locale: {
+        weekdays: {
+            shorthand: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+            longhand: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado']
         },
-        maxDate: "today",
-        defaultDate: "today",
-        static: true
-    });
+        months: {
+            shorthand: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+            longhand: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
+        }
+    },
+    maxDate: "today",                 // No permite fechas futuras
+    defaultDate: "today",            // Selecciona hoy por defecto
+    static: true                     // Posiciona el calendario fijo
+});
+
 
     // Validación del formulario al enviar
     document.getElementById('informeForm').addEventListener('submit', function(e) {
