@@ -57,23 +57,23 @@ Route::middleware('auth')->group(function () {
     //Route::get('/job-categories', [JobCategoryController::class, 'index'])->name('job-categories');
     //Route::get('/sidebar-layouts', [SidebarLayoutController::class, 'index'])->name('sidebar-layouts');
 
-// ✅ Ruta dinámica para todo lo demás
-Route::get('{any}', [HomeController::class, 'index'])->where('any', '.*')->middleware('auth')->name('index');
+    // ✅ Ruta dinámica para todo lo demás
+    Route::get('{any}', [HomeController::class, 'index'])->where('any', '.*')->middleware('auth')->name('index');
 
 
-// Ver lista de usuarios
-Route::get('/dashboard-users', [UserController::class, 'index'])->name('usuarios.index');
+    // Ver lista de usuarios
+    Route::get('/dashboard-users', [UserController::class, 'index'])->name('usuarios.index');
 
-// Mostrar formulario de creación
-Route::get('/dashboard-crear-usuario', [UserController::class, 'create'])->name('usuarios.create');
+    // Mostrar formulario de creación
+    Route::get('/dashboard-crear-usuario', [UserController::class, 'create'])->name('usuarios.create');
 
-// Guardar usuario
-Route::post('/usuarios', [UserController::class, 'store'])->name('usuarios.store');
-Route::get('/usuarios/{id}', [UserController::class, 'show'])->name('usuarios.show'); // Ver (JSON)
-Route::put('/usuarios/{id}', [UserController::class, 'update'])->name('usuarios.update'); // Editar
-Route::delete('/usuarios/{id}', [UserController::class, 'destroy'])->name('usuarios.destroy'); // Eliminar
-Route::get('/usuarios/{id}', [UserController::class, 'show'])->name('vista-ver-usuarios');
-Route::get('/usuarios/{id}/editar', [UserController::class, 'edit'])->name('vista-editar-usuario');
+    // Guardar usuario
+    Route::post('/usuarios', [UserController::class, 'store'])->name('usuarios.store');
+    Route::get('/usuarios/{id}', [UserController::class, 'show'])->name('usuarios.show'); // Ver (JSON)
+    Route::put('/usuarios/{id}', [UserController::class, 'update'])->name('usuarios.update'); // Editar
+    Route::delete('/usuarios/{id}', [UserController::class, 'destroy'])->name('usuarios.destroy'); // Eliminar
+    Route::get('/usuarios/{id}', [UserController::class, 'show'])->name('vista-ver-usuarios');
+    Route::get('/usuarios/{id}/editar', [UserController::class, 'edit'])->name('vista-editar-usuario');
     // ✅ Informes
     Route::get('dashboard-generar-informe', [GenerarInformeController::class, 'index'])->name('informes.index');
     Route::post('dashboard-generar-informe', [GenerarInformeController::class, 'store'])->name('informes.store');
