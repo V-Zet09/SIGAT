@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Actividad extends Model
 {
-    protected $table = 'actividades'; // Asegura que use la tabla correcta
+    protected $table = 'actividades'; 
 
     protected $fillable = [
         'titulo',
