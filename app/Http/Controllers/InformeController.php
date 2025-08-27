@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Informe;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+
 
 class InformeController extends Controller
 {
@@ -37,7 +39,7 @@ class InformeController extends Controller
 
         // Crear el informe en la base de datos
         $informe = Informe::create([
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'titulo' => $request->titulo,
             'periodo' => $request->periodo,
             'portada_path' => $portadaPath,

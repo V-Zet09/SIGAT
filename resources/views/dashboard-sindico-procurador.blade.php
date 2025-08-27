@@ -7,6 +7,7 @@
     <link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 @section('content')
+<<<<<<< HEAD
     <div class="row">
         <div class="col">
 
@@ -1455,3 +1456,6 @@
     <script src="{{ URL::asset('build/js/pages/dashboard-ecommerce.init.js') }}"></script>
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
 @endsection
+=======
+   
+>>>>>>> a50cd93 (Prueba 1)

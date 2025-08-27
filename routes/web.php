@@ -52,31 +52,23 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard-auxiliar-area', [AuxiliarDeAreaController::class, 'index'])->name('dashboard-auxiliar-area');
 
     // ✅ Secciones específicas
-
     Route::get('/dashboard-president', [PresidenteMunicipalController::class, 'index'])->name('dashboard-president');
-    //Route::get('/job-categories', [JobCategoryController::class, 'index'])->name('job-categories');
-    //Route::get('/sidebar-layouts', [SidebarLayoutController::class, 'index'])->name('sidebar-layouts');
 
-    // ✅ Ruta dinámica para todo lo demás
-    Route::get('{any}', [HomeController::class, 'index'])->where('any', '.*')->middleware('auth')->name('index');
-
-
-    // Ver lista de usuarios
+    // ✅ Usuarios
     Route::get('/dashboard-users', [UserController::class, 'index'])->name('usuarios.index');
-
-    // Mostrar formulario de creación
-    Route::get('/dashboard-crear-usuario', [UserController::class, 'create'])->name('usuarios.create');
-
-    // Guardar usuario
+    Route::get('/dashboard-crear-usuario', [UserController::class, 'create'])->name('dashboard-crear-usuario'); // ← corregido
     Route::post('/usuarios', [UserController::class, 'store'])->name('usuarios.store');
-    Route::get('/usuarios/{id}', [UserController::class, 'show'])->name('usuarios.show'); // Ver (JSON)
-    Route::put('/usuarios/{id}', [UserController::class, 'update'])->name('usuarios.update'); // Editar
-    Route::delete('/usuarios/{id}', [UserController::class, 'destroy'])->name('usuarios.destroy'); // Eliminar
+    Route::get('/usuarios/{id}', [UserController::class, 'show'])->name('usuarios.show');
+    Route::put('/usuarios/{id}', [UserController::class, 'update'])->name('usuarios.update');
+    Route::delete('/usuarios/{id}', [UserController::class, 'destroy'])->name('usuarios.destroy');
     Route::get('/usuarios/{id}', [UserController::class, 'show'])->name('vista-ver-usuarios');
     Route::get('/usuarios/{id}/editar', [UserController::class, 'edit'])->name('vista-editar-usuario');
+
     // ✅ Informes
-    Route::get('dashboard-generar-informe', [GenerarInformeController::class, 'index'])->name('informes.index');
-    Route::post('dashboard-generar-informe', [GenerarInformeController::class, 'store'])->name('informes.store');
+    
+    Route::get('/generar-informe', [InformeController::class, 'create'])->name('generar-informe');
+    Route::post('/generar-informe', [InformeController::class, 'store'])->name('informes.store');
+    Route::get('/informes/{slug}', [InformeController::class, 'show'])->name('informes.show');
 
     // ✅ Actividades
     Route::get('/dashboard-actividades', [ActividadController::class, 'create'])->name('actividades.create');
@@ -87,10 +79,6 @@ Route::middleware('auth')->group(function () {
     Route::put('/actividades/{id}', [ActividadController::class, 'update'])->name('actividades.update');
     Route::delete('/actividades/{id}', [ActividadController::class, 'destroy'])->name('actividades.destroy');
 
-    Route::middleware(['auth'])->group(function () {
-    Route::get('/generar-informe', [InformeController::class, 'create'])->name('generar-informe');
-    Route::post('/generar-informe', [InformeController::class, 'store'])->name('informes.store');
-    Route::get('/informes/{slug}', [InformeController::class, 'show'])->name('informes.show');
-});
-
+    // ✅ Ruta catch-all para SPA o dashboard dinámico
+    Route::get('{any}', [HomeController::class, 'index'])->where('any', '.*')->name('index');
 });

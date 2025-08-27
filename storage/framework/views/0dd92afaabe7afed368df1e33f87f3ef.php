@@ -1,43 +1,3 @@
-<style>
-    /* Scroll solo en el área de ítems del menú */
-    #scrollbar {
-        max-height: calc(100vh - 160px); /* Ajusta según el alto del logo + usuario */
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
-
-    /* Scrollbar personalizado opcional */
-    #scrollbar::-webkit-scrollbar {
-        width: 6px;
-    }
-    #scrollbar::-webkit-scrollbar-thumb {
-        background-color: rgba(0, 0, 0, 0.3);
-        border-radius: 3px;
-    }
-
-    /* Eliminar flecha automática generada por el template */
-    .menu-link::after {
-        content: none !important;
-    }
-
-    /* Estilos para las flechas del menú manuales */
-    .menu-arrow {
-        margin-left: auto;
-        transition: transform 0.3s ease;
-    }
-
-    /* Rotación de la flecha cuando el menú está expandido */
-    [aria-expanded="true"] .menu-arrow {
-        transform: rotate(90deg);
-    }
-
-    /* Estilo para el elemento activo */
-    .navbar-nav .nav-item .nav-link.active {
-        color: #0ab39c;
-        background-color: rgba(10, 179, 156, 0.1);
-    }
-</style>
-
 
 <!-- ========== App Menu ========== -->
 <div class="app-menu navbar-menu">
@@ -161,6 +121,10 @@
                                 <i class="fas fa-file-upload me-2"></i> Generar Informe
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="<?php echo e(route('informes-registrados')); ?>" class="nav-link">
+                                <i class="fas fa-file-alt me-2"></i> Informes Generados
+                            </a>
                     </ul>
                 </div>
             </li>
@@ -284,4 +248,4 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-</script><?php /**PATH C:\Users\zaet_\OneDrive\Escritorio\AYUNTAMIENTO\resources\views/layouts/sidebar.blade.php ENDPATH**/ ?>
+</script><?php /**PATH C:\Ayuntamiento\SIGAT-main\resources\views/layouts/sidebar.blade.php ENDPATH**/ ?>
