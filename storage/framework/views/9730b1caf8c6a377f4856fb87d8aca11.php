@@ -1,1 +1,0 @@
-<?php /**PATH C:\Users\zaet_\OneDrive\Escritorio\AYUNTAMIENTO\resources\views/dashboard-generar-informe.blade.php ENDPATH**/ ?>

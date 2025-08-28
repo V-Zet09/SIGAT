@@ -161,13 +161,10 @@
                                 <i class="fas fa-file-upload me-2"></i> Generar Informe
                             </a>
                         </li>
-<<<<<<< HEAD
-=======
                         <li class="nav-item">
                             <a href="{{ route('informes-registrados') }}" class="nav-link">
                                 <i class="fas fa-file-alt me-2"></i> Informes Generados
                             </a>
->>>>>>> a50cd93 (Prueba 1)
                     </ul>
                 </div>
             </li>

@@ -3,14 +3,8 @@
 @section('title', 'Generar Informe')
 
 @section('css')
-<<<<<<< HEAD
-<link rel="stylesheet" href="{{ asset('css/informe.css') }}">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-=======
 <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
->>>>>>> a50cd93 (Prueba 1)
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
 
@@ -47,13 +41,7 @@
         </div>
         <div class="form-group col-md-6">
             <label>Período</label>
-<<<<<<< HEAD
-            <input type="text" id="periodo" name="periodo" 
-                class="form-control" 
-                placeholder="Selecciona el período" required>
-=======
             <input type="text" id="periodo" name="periodo" class="form-control" placeholder="Selecciona el período" required>
->>>>>>> a50cd93 (Prueba 1)
         </div>
     </div>
     <div class="comuna-section">
@@ -100,11 +88,7 @@
                 Arrastra tu imagen aquí o 
                 <span class="browse-link">selecciona desde tu dispositivo</span>
             </div>
-<<<<<<< HEAD
-            <input type="file" id="imagen-comuna" name="imagen_comuna" style="display:none" accept="image/*" required>
-=======
            <input type="file" id="imagen-comuna-inicio" name="imagen_comuna" style="display:none" accept="image/*" required>
->>>>>>> a50cd93 (Prueba 1)
         </div>
         <div id="upload-preview" class="preview-container"></div>
     </div>
@@ -139,11 +123,7 @@
                     Arrastra tu imagen aquí o 
                     <span class="browse-link">selecciona desde tu dispositivo</span>
                 </div>
-<<<<<<< HEAD
-                <input type="file" id="imagen-comuna" name="imagen_comuna" style="display:none" accept="image/*" required>
-=======
                 <input type="file" id="imagen-comuna-informacion" name="imagen_comuna_informacion" style="display:none" accept="image/*" required>
->>>>>>> a50cd93 (Prueba 1)
             </div>
             <div id="informacion-preview" class="preview-container"></div>
         </div>
@@ -159,26 +139,6 @@
 <div class="section" id="introduccion">
     <h2>Introducción</h2>
     
-<<<<<<< HEAD
-    <div class="form-group">
-        <label>Contenido de la introducción (máximo 800 palabras)</label>
-        <div class="editor-toolbar">
-            <button type="button" data-command="bold" title="Negrita"><i class="fas fa-bold"></i></button>
-            <button type="button" data-command="italic" title="Cursiva"><i class="fas fa-italic"></i></button>
-            <button type="button" data-command="underline" title="Subrayado"><i class="fas fa-underline"></i></button>
-            <select data-command="formatBlock" title="Estilo de párrafo">
-                <option value="" selected>Estilo</option>
-                <option value="h1">Título 1</option>
-                <option value="h2">Título 2</option>
-                <option value="h3">Título 3</option>
-                <option value="p">Párrafo</option>
-            </select>
-        </div>
-        <div id="introduccion-editor" class="editor-content" contenteditable="true"></div>
-        <input type="hidden" name="introduccion" id="introduccion-content" required>
-        <div class="word-count" id="wordCount">0 / 800 palabras</div>
-    </div>
-=======
    <div class="form-group">
     <label>Contenido de la introducción (máximo 800 palabras)</label>
     <div class="editor-toolbar">
@@ -203,7 +163,6 @@
     <div class="word-count" id="wordCount">0 / 800 palabras</div>
 </div>
 
->>>>>>> a50cd93 (Prueba 1)
     
     <div class="form-group">
         <label>Imagen para Introducción</label>
@@ -214,24 +173,13 @@
                     Arrastra tu imagen aquí o 
                     <span class="browse-link">selecciona desde tu dispositivo</span>
                 </div>
-<<<<<<< HEAD
-                <input type="file" id="imagen-comuna" name="imagen_comuna" style="display:none" accept="image/*" required>
-=======
                 <input type="file" id="imagen-comuna-introduccion" name="imagen_comuna_introduccion" style="display:none" accept="image/*" required>
->>>>>>> a50cd93 (Prueba 1)
             </div>
             <div id="introduccion-preview" class="preview-container"></div>
         </div>
     </div>
 
     <div class="form-actions">
-<<<<<<< HEAD
-        <button type="button" class="btn btn-secondary" onclick="prevTab('informacion')"><i class="fas fa-arrow-left mr-2"></i> Anterior</button>
-        <button type="button" class="btn btn-primary" onclick="nextTab('gobierno')">Siguiente <i class="fas fa-arrow-right ml-2"></i></button>
-    </div>
-</div>
-
-=======
         <button type="button" class="btn btn-secondary" onclick="prevTab('informacion')">
             <i class="fas fa-arrow-left mr-2"></i> Anterior
         </button>
@@ -242,7 +190,6 @@
 </div>
 
 
->>>>>>> a50cd93 (Prueba 1)
 <!-- Sección Introducción Gobierno -->
 <div class="section" id="gobierno">
     <h2>Introducción del Gobierno</h2>
@@ -261,11 +208,7 @@
                     Arrastra tu imagen aquí o 
                     <span class="browse-link">selecciona desde tu dispositivo</span>
                 </div>
-<<<<<<< HEAD
-                <input type="file" id="imagen-comuna" name="imagen_comuna" style="display:none" accept="image/*" required>
-=======
                 <input type="file" id="imagen-comuna-gobierno" name="imagen_comuna_gobierno" style="display:none" accept="image/*" required>
->>>>>>> a50cd93 (Prueba 1)
             </div>
             <div id="gobierno-preview" class="preview-container"></div>
         </div>
@@ -332,11 +275,7 @@
                     Arrastra tus imágenes aquí o 
                     <span class="browse-link">selecciona desde tu dispositivo</span>
                 </div>
-<<<<<<< HEAD
-                <input type="file" id="imagen-comuna" name="imagen_comuna" style="display:none" accept="image/*" required>
-=======
                 <input type="file" id="imagen-comuna-actividades" name="imagen_comuna_actividades" style="display:none" accept="image/*" multiple required>
->>>>>>> a50cd93 (Prueba 1)
             </div>
             <div id="actividades-preview" class="preview-container row-preview"></div>
         </div>
@@ -358,58 +297,21 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
 
 <script>
-<<<<<<< HEAD
-// Navegación entre pestañas
-function showTab(tabId) {
-    // Ocultar todas las secciones
-    document.querySelectorAll('.section').forEach(section => {
-        section.classList.remove('active');
-    });
-    
-    // Desactivar todas las pestañas
-    document.querySelectorAll('.tab').forEach(tab => {
-        tab.classList.remove('active');
-    });
-    
-    // Mostrar la sección seleccionada
-    document.getElementById(tabId).classList.add('active');
-    
-    // Activar la pestaña correspondiente
-=======
 function showTab(tabId) {
     document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
     document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
     document.getElementById(tabId).classList.add('active');
->>>>>>> a50cd93 (Prueba 1)
     document.querySelector(`.tab[data-tab="${tabId}"]`).classList.add('active');
 }
 
 function nextTab(nextId) {
-<<<<<<< HEAD
-    // Validar formulario antes de avanzar
-    if (validateCurrentTab()) {
-        showTab(nextId);
-    }
-=======
     if (validateCurrentTab()) showTab(nextId);
->>>>>>> a50cd93 (Prueba 1)
 }
 
 function prevTab(prevId) {
     showTab(prevId);
 }
 
-<<<<<<< HEAD
-// Validación del formulario
-function validateCurrentTab() {
-    const currentTab = document.querySelector('.section.active');
-    const requiredInputs = currentTab.querySelectorAll('[required]');
-    const imageInputs = currentTab.querySelectorAll('input[type="file"][required]');
-    
-    let isValid = true;
-    
-    // Validar campos de texto
-=======
 function validateCurrentTab() {
     const currentTab = document.querySelector('.section.active');
     const requiredInputs = currentTab.querySelectorAll('[required]');
@@ -419,7 +321,6 @@ function validateCurrentTab() {
     let isValid = true;
 
     // Validar campos normales
->>>>>>> a50cd93 (Prueba 1)
     requiredInputs.forEach(input => {
         if (input.type !== 'file' && !input.value.trim()) {
             input.classList.add('is-invalid');
@@ -428,18 +329,6 @@ function validateCurrentTab() {
             input.classList.remove('is-invalid');
         }
     });
-<<<<<<< HEAD
-    
-    // Validar campos de imagen
-    imageInputs.forEach(input => {
-        const uploadBox = input.closest('.upload-container').querySelector('.upload-box');
-        
-        if (!input.files || input.files.length === 0) {
-            // Resaltar el área de carga con borde rojo
-            uploadBox.classList.add('error');
-            
-            // Agregar mensaje de error si no existe
-=======
 
     // Validar editor de texto
    if (editor) {
@@ -469,27 +358,12 @@ function validateCurrentTab() {
         const uploadBox = input.closest('.upload-container').querySelector('.upload-box');
         if (!input.files || input.files.length === 0) {
             uploadBox.classList.add('error');
->>>>>>> a50cd93 (Prueba 1)
             if (!uploadBox.nextElementSibling || !uploadBox.nextElementSibling.classList.contains('error-message')) {
                 const errorMsg = document.createElement('div');
                 errorMsg.className = 'error-message text-danger mt-2';
                 errorMsg.innerHTML = '<i class="fas fa-exclamation-circle"></i> Debe seleccionar una imagen';
                 uploadBox.parentNode.insertBefore(errorMsg, uploadBox.nextElementSibling);
             }
-<<<<<<< HEAD
-            
-            isValid = false;
-        } else {
-            uploadBox.classList.remove('error');
-            // Eliminar mensaje de error si existe
-            const errorMsg = uploadBox.nextElementSibling;
-            if (errorMsg && errorMsg.classList.contains('error-message')) {
-                errorMsg.remove();
-            }
-        }
-    });
-    
-=======
             isValid = false;
         } else {
             uploadBox.classList.remove('error');
@@ -498,7 +372,6 @@ function validateCurrentTab() {
         }
     });
 
->>>>>>> a50cd93 (Prueba 1)
     if (!isValid) {
         Swal.fire({
             icon: 'error',
@@ -506,57 +379,13 @@ function validateCurrentTab() {
             text: 'Por favor complete todos los campos obligatorios',
         });
     }
-<<<<<<< HEAD
-    
     return isValid;
 }
 
-// Configuración común para todos los upload boxes
-=======
-    return isValid;
-}
-
->>>>>>> a50cd93 (Prueba 1)
 function setupFileUpload(uploadBoxId, fileInputId, previewId, multiple = false) {
     const uploadBox = document.getElementById(uploadBoxId);
     const fileInput = document.getElementById(fileInputId);
     const previewContainer = document.getElementById(previewId);
-<<<<<<< HEAD
-    
-    // Click en el área de upload
-    uploadBox.addEventListener('click', () => fileInput.click());
-    
-    // Cambio en el input file
-    fileInput.addEventListener('change', (e) => {
-        if (e.target.files.length > 0) {
-            handleFiles(e.target.files, previewContainer, uploadBox, fileInput);
-            if (!multiple) {
-                uploadBox.style.display = 'none';
-            }
-        }
-    });
-    
-    // Drag and drop
-    uploadBox.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        uploadBox.classList.add('dragover');
-    });
-    
-    uploadBox.addEventListener('dragleave', () => {
-        uploadBox.classList.remove('dragover');
-    });
-    
-    uploadBox.addEventListener('drop', (e) => {
-        e.preventDefault();
-        uploadBox.classList.remove('dragover');
-        
-        if (e.dataTransfer.files.length > 0) {
-            fileInput.files = e.dataTransfer.files;
-            handleFiles(e.dataTransfer.files, previewContainer, uploadBox, fileInput);
-            if (!multiple) {
-                uploadBox.style.display = 'none';
-            }
-=======
 
     uploadBox.addEventListener('click', () => fileInput.click());
 
@@ -576,58 +405,14 @@ function setupFileUpload(uploadBoxId, fileInputId, previewId, multiple = false) 
             fileInput.files = e.dataTransfer.files;
             handleFiles(e.dataTransfer.files, previewContainer, uploadBox, fileInput);
             if (!multiple) uploadBox.style.display = 'none';
->>>>>>> a50cd93 (Prueba 1)
         }
     });
 }
 
-<<<<<<< HEAD
-// Manejar archivos subidos
-=======
->>>>>>> a50cd93 (Prueba 1)
 function handleFiles(files, previewContainer, uploadBox, fileInput) {
     const maxFiles = 5;
     const currentCount = previewContainer.children.length;
     const remainingSlots = maxFiles - currentCount;
-<<<<<<< HEAD
-
-    if (remainingSlots <= 0) {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Límite alcanzado',
-            text: `Solo puedes subir hasta ${maxFiles} imágenes.`,
-        });
-        return;
-    }
-
-    const filesToAdd = Array.from(files).slice(0, remainingSlots);
-
-    filesToAdd.forEach((file, index) => {
-        if (file.type.match('image.*')) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                createImagePreview(e.target.result, previewContainer, uploadBox, fileInput);
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
-    if (previewContainer.children.length + filesToAdd.length >= maxFiles) {
-        uploadBox.style.display = 'none';
-    }
-}
-
-
-// Crear vista previa de imagen con botón de eliminar
-function createImagePreview(imageSrc, previewContainer, uploadBox, fileInput, index = null) {
-    const container = document.createElement('div');
-    container.className = 'preview-image-container';
-    
-    const img = document.createElement('img');
-    img.src = imageSrc;
-    img.className = previewContainer.classList.contains('grid-preview') ? 'preview-thumbnail' : 'preview-image';
-    
-=======
     if (remainingSlots <= 0) {
         Swal.fire({ icon: 'warning', title: 'Límite alcanzado', text: `Solo puedes subir hasta ${maxFiles} imágenes.` });
         return;
@@ -650,34 +435,10 @@ function createImagePreview(imageSrc, previewContainer, uploadBox, fileInput, in
     img.src = imageSrc;
     img.className = previewContainer.classList.contains('grid-preview') ? 'preview-thumbnail' : 'preview-image';
 
->>>>>>> a50cd93 (Prueba 1)
     const removeBtn = document.createElement('button');
     removeBtn.className = 'remove-image-btn';
     removeBtn.innerHTML = '×';
     removeBtn.title = 'Eliminar imagen';
-<<<<<<< HEAD
-    
-    removeBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        container.remove();
-        
-        // Si no quedan imágenes, mostrar el upload box nuevamente
-        if (previewContainer.children.length === 0) {
-            uploadBox.style.display = 'block';
-            
-            // Resetear el input file si no es múltiple
-            if (!fileInput.multiple) {
-                fileInput.value = '';
-            }
-        }
-        
-        // Si es múltiple, actualizar los archivos seleccionados
-        if (fileInput.multiple && index !== null) {
-            updateFileInput(fileInput, index);
-        }
-    });
-    
-=======
     removeBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         container.remove();
@@ -688,26 +449,11 @@ function createImagePreview(imageSrc, previewContainer, uploadBox, fileInput, in
         if (fileInput.multiple && index !== null) updateFileInput(fileInput, index);
     });
 
->>>>>>> a50cd93 (Prueba 1)
     container.appendChild(img);
     container.appendChild(removeBtn);
     previewContainer.appendChild(container);
 }
 
-<<<<<<< HEAD
-// Actualizar input file cuando se elimina una imagen en modo múltiple
-function updateFileInput(fileInput, indexToRemove) {
-    const files = Array.from(fileInput.files);
-    files.splice(indexToRemove, 1);
-    
-    const newFileList = new DataTransfer();
-    files.forEach(file => newFileList.items.add(file));
-    
-    fileInput.files = newFileList.files;
-}
-
-// Editor de texto enriquecido
-=======
 function updateFileInput(fileInput, indexToRemove) {
     const files = Array.from(fileInput.files);
     files.splice(indexToRemove, 1);
@@ -716,24 +462,10 @@ function updateFileInput(fileInput, indexToRemove) {
     fileInput.files = newFileList.files;
 }
 
->>>>>>> a50cd93 (Prueba 1)
 function setupEditor() {
     const editor = document.getElementById('introduccion-editor');
     const wordCount = document.getElementById('wordCount');
     const hiddenInput = document.getElementById('introduccion-content');
-<<<<<<< HEAD
-    
-    // Botones de la barra de herramientas
-    document.querySelectorAll('.editor-toolbar [data-command]').forEach(button => {
-        button.addEventListener('click', () => {
-            const command = button.getAttribute('data-command');
-            document.execCommand(command, false, null);
-            editor.focus();
-        });
-    });
-    
-    // Selector de formato
-=======
 
     document.querySelectorAll('.editor-toolbar [data-command]').forEach(button => {
         button.addEventListener('click', () => {
@@ -742,7 +474,6 @@ function setupEditor() {
         });
     });
 
->>>>>>> a50cd93 (Prueba 1)
     document.querySelector('.editor-toolbar select').addEventListener('change', function() {
         if (this.value) {
             document.execCommand('formatBlock', false, this.value);
@@ -750,85 +481,16 @@ function setupEditor() {
             editor.focus();
         }
     });
-<<<<<<< HEAD
-    
-    // Contador de palabras
-    editor.addEventListener('input', () => {
-        const text = editor.innerText || '';
-        const words = text.trim() ? text.trim().split(/\s+/) : [];
-        const count = words.length;
-        
-        wordCount.textContent = `${count} / 800 palabras`;
-        wordCount.style.color = count > 800 ? 'red' : '#666';
-        
-        // Actualizar el input hidden con el HTML del editor
-=======
 
     editor.addEventListener('input', () => {
         const text = editor.innerText || '';
         const count = text.trim() ? text.trim().split(/\s+/).length : 0;
         wordCount.textContent = `${count} / 800 palabras`;
         wordCount.style.color = count > 800 ? 'red' : '#666';
->>>>>>> a50cd93 (Prueba 1)
         hiddenInput.value = editor.innerHTML;
     });
 }
 
-<<<<<<< HEAD
-// Inicialización cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', function() {
-    // Configurar navegación por pestañas
-    document.querySelectorAll('.tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-            showTab(tab.getAttribute('data-tab'));
-        });
-    });
-    
-    // Configurar subida de archivos para cada sección
-    setupFileUpload('upload-box', 'imagen-comuna', 'upload-preview');
-    setupFileUpload('informacion-upload', 'informacion-file', 'informacion-preview');
-    setupFileUpload('introduccion-upload', 'introduccion-file', 'introduccion-preview');
-    setupFileUpload('gobierno-upload', 'gobierno-file', 'gobierno-preview');
-    setupFileUpload('actividades-upload', 'actividades-file', 'actividades-preview', true);
-    
-    // Configurar editor de texto enriquecido
-    setupEditor();
-    
-    // Configurar flatpickr - CORRECCIÓN PRINCIPAL
-    // Esperar a que el input exista en el DOM
-    setTimeout(function() {
-        const periodoInput = document.getElementById("periodo");
-        if (periodoInput) {
-            flatpickr(periodoInput, {
-                locale: "es",
-                dateFormat: "d-m-Y",
-                altInput: true,
-                altFormat: "j F Y",
-                maxDate: "today",
-                defaultDate: "today",
-                static: true
-            });
-        } else {
-            console.error("No se encontró el elemento con ID 'periodo'");
-        }
-    }, 100);
-
-    // Validación del formulario al enviar
-    document.getElementById('informeForm').addEventListener('submit', function(e) {
-        // Asegurarse de que el contenido del editor se guarde
-        const editorContent = document.getElementById('introduccion-editor');
-        if (editorContent) {
-            document.getElementById('introduccion-content').value = editorContent.innerHTML;
-        }
-        
-        if (!validateCurrentTab()) {
-            e.preventDefault();
-        }
-    });
-});
-</script>
-@endsection
-=======
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.tab').forEach(tab => {
         tab.addEventListener('click', () => showTab(tab.getAttribute('data-tab')));
@@ -860,4 +522,3 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 @endsection
->>>>>>> a50cd93 (Prueba 1)
