@@ -27,6 +27,7 @@ Route::get('index/{locale}', [HomeController::class, 'lang']);
 Route::post('/update-profile/{id}', [HomeController::class, 'updateProfile'])->name('updateProfile');
 Route::post('/update-password/{id}', [HomeController::class, 'updatePassword'])->name('updatePassword');
 
+
 // ✅ Cargar módulos
 require __DIR__.'/dashboards.php';
 require __DIR__.'/users.php';
