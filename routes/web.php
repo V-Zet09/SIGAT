@@ -2,22 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\InformeController;
-use App\Http\Controllers\{
-    HomeController,
-    AdministradorController,
-    DashboardPresidentController,
-    JobCategoryController,
-    SidebarLayoutController,
-    PresidenteMunicipalController,
-    SindicoProcuradorController,
-    RegidorController,
-    DirectorDeAreaController,
-    AuxiliarDeAreaController,
-    GenerarInformeController,
-    ActividadController,
-    UserController,
-};
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,44 +27,8 @@ Route::get('index/{locale}', [HomeController::class, 'lang']);
 Route::post('/update-profile/{id}', [HomeController::class, 'updateProfile'])->name('updateProfile');
 Route::post('/update-password/{id}', [HomeController::class, 'updatePassword'])->name('updatePassword');
 
-// ✅ Dashboards por rol
-Route::middleware('auth')->group(function () {
-    Route::get('/dashboard-administrador', [AdministradorController::class, 'index'])->name('dashboard-administrador');
-    Route::get('/dashboard-presidente-municipal', [PresidenteMunicipalController::class, 'index'])->name('dashboard-presidente-municipal');
-    Route::get('/dashboard-sindico-procurador', [SindicoProcuradorController::class, 'index'])->name('dashboard-sindico-procurador');
-    Route::get('/dashboard-regidor', [RegidorController::class, 'index'])->name('dashboard-regidor');
-    Route::get('/dashboard-director-de-area', [DirectorDeAreaController::class, 'index'])->name('dashboard-director-de-area');
-    Route::get('/dashboard-auxiliar-area', [AuxiliarDeAreaController::class, 'index'])->name('dashboard-auxiliar-area');
-
-    // ✅ Secciones específicas
-    Route::get('/dashboard-president', [PresidenteMunicipalController::class, 'index'])->name('dashboard-president');
-
-    // ✅ Usuarios
-    Route::get('/dashboard-users', [UserController::class, 'index'])->name('usuarios.index');
-    Route::get('/dashboard-crear-usuario', [UserController::class, 'create'])->name('dashboard-crear-usuario'); // ← corregido
-    Route::post('/usuarios', [UserController::class, 'store'])->name('usuarios.store');
-    Route::get('/usuarios/{id}', [UserController::class, 'show'])->name('usuarios.show');
-    Route::put('/usuarios/{id}', [UserController::class, 'update'])->name('usuarios.update');
-    Route::delete('/usuarios/{id}', [UserController::class, 'destroy'])->name('usuarios.destroy');
-    Route::get('/usuarios/{id}', [UserController::class, 'show'])->name('vista-ver-usuarios');
-    Route::get('/usuarios/{id}/editar', [UserController::class, 'edit'])->name('vista-editar-usuario');
-
-    // ✅ Informes
-    Route::get('/informes-registrados', [ActividadController::class, 'showRegistradas'])
-    ->name('informes-registrados');
-    Route::get('/generar-informe', [InformeController::class, 'create'])->name('generar-informe');
-    Route::post('/generar-informe', [InformeController::class, 'store'])->name('informes.store');
-    Route::get('/informes/{slug}', [InformeController::class, 'show'])->name('informes.show');
-
-    // ✅ Actividades
-    Route::get('/dashboard-actividades', [ActividadController::class, 'create'])->name('actividades.create');
-    Route::post('/dashboard-actividades', [ActividadController::class, 'store'])->name('actividades.store');
-    Route::get('/dashboard-actividades-registradas', [ActividadController::class, 'showRegistradas'])->name('actividades.registradas');
-    Route::get('/actividades/{id}/edit', [ActividadController::class, 'edit'])->name('actividades.edit');
-    Route::get('/actividades/{id}/show', [ActividadController::class, 'show'])->name('actividades.show');
-    Route::put('/actividades/{id}', [ActividadController::class, 'update'])->name('actividades.update');
-    Route::delete('/actividades/{id}', [ActividadController::class, 'destroy'])->name('actividades.destroy');
-
-    // ✅ Ruta catch-all para SPA o dashboard dinámico
-    Route::get('{any}', [HomeController::class, 'index'])->where('any', '.*')->name('index');
-});
+// ✅ Cargar módulos
+require __DIR__.'/dashboards.php';
+require __DIR__.'/users.php';
+require __DIR__.'/informes.php';
+require __DIR__.'/actividades.php';
