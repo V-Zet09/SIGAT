@@ -147,6 +147,10 @@
              class="block px-3 py-2 rounded-lg transition hover:bg-green-700 hover:text-white">
             Crear Usuario
           </a>
+          <a href="{{ route('roles') }}" 
+             class="block px-3 py-2 rounded-lg transition hover:bg-green-700 hover:text-white">
+            Roles
+          </a>
         </div>
       </div>
     </nav>
