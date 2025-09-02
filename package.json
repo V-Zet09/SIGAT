@@ -18,7 +18,7 @@
         "laravel-vite-plugin": "^1.0.1",
         "lodash": "^4.17.19",
         "popper.js": "^1.12",
-        "postcss": "^8.3.5",
+        "postcss": "^8.5.6",
         "postcss-import": "^14.0.1",
         "resolve-url-loader": "^5.0.0",
         "rimraf": "^5.0.1",
@@ -30,8 +30,10 @@
         "@ckeditor/ckeditor5-build-classic": "^40.1.0",
         "@simonwep/pickr": "^1.9.0",
         "@tarekraafat/autocomplete.js": "^10.2.7",
+        "alpinejs": "^3.14.9",
         "aos": "^2.3.4",
         "apexcharts": "^3.54.0",
+        "autoprefixer": "^10.4.21",
         "bootstrap": "^5.3.3",
         "card": "^2.5.4",
         "chart.js": "4.4.4",
@@ -72,6 +74,7 @@
         "sortablejs": "^1.15.3",
         "sweetalert2": "^11.14.1",
         "swiper": "^11.1.14",
+        "tailwindcss": "^3.4.17",
         "toastify-js": "^1.12.0",
         "wnumb": "^1.2.0"
     }
