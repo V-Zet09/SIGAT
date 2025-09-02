@@ -1,20 +1,17 @@
 <!-- AlpineJS -->
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
-<div class="flex" x-data="{ openSidebar: true, openMenu: null }">
-  <!-- Overlay móvil -->
-  <div x-show="openSidebar" 
-       class="fixed inset-0 bg-black/40 z-40 lg:hidden"
-       @click="openSidebar = false"></div>
+<!-- Contenedor con Alpine -->
+<div x-data="{ openSidebar: true, openMenu: null }">
 
   <!-- Sidebar -->
-  <div :class="openSidebar ? 'translate-x-0' : '-translate-x-full'"
-       class="fixed inset-y-0 left-0 w-64 bg-green-800/95 backdrop-blur-md text-white 
+  <div class="sidebar fixed inset-y-0 left-0 w-64 bg-green-800/95 backdrop-blur-md text-white 
               transform transition-transform duration-300 ease-in-out z-50 lg:translate-x-0
-              rounded-r-3xl shadow-xl shadow-black/30 flex flex-col">
+              rounded-r-3xl shadow-xl shadow-black/30 flex flex-col overflow-y-auto"
+       :class="openSidebar ? 'translate-x-0' : '-translate-x-full'">
 
     <!-- Usuario -->
-    <div class="px-6 py-8 text-center border-b border-white/20">
+    <div class="px-6 py-8 text-center border-b border-white/20 relative">
       <div class="w-20 h-20 mx-auto rounded-full bg-white/20 flex items-center justify-center">
         <i class="ri-user-3-line text-3xl"></i>
       </div>
@@ -26,12 +23,11 @@
     </div>
 
     <!-- Menú -->
-    <nav class="flex-1 overflow-y-auto px-4 py-6 space-y-6">
-      
+    <nav class="flex-1 px-4 py-6 space-y-6">
       <!-- PANEL -->
       <div>
         <p class="text-xs uppercase font-semibold text-white/60 mb-2">Paneles</p>
-        <button @click="openMenu === 'dashboards' ? openMenu=null : openMenu='dashboards'"
+        <button @click="openMenu = (openMenu === 'dashboards' ? null : 'dashboards')"
                 class="w-full flex items-center justify-between px-3 py-2 rounded-xl 
                        bg-white/10 hover:bg-green-600/60 transition">
           <span class="flex items-center gap-2">
@@ -75,7 +71,7 @@
       <!-- INFORMES -->
       <div>
         <p class="text-xs uppercase font-semibold text-white/60 mb-2">Informes</p>
-        <button @click="openMenu === 'informes' ? openMenu=null : openMenu='informes'"
+        <button @click="openMenu = (openMenu === 'informes' ? null : 'informes')"
                 class="w-full flex items-center justify-between px-3 py-2 rounded-xl 
                        bg-white/10 hover:bg-green-600/60 transition">
           <span class="flex items-center gap-2">
@@ -101,7 +97,7 @@
       <!-- ACTIVIDADES -->
       <div>
         <p class="text-xs uppercase font-semibold text-white/60 mb-2">Actividades</p>
-        <button @click="openMenu === 'actividades' ? openMenu=null : openMenu='actividades'"
+        <button @click="openMenu = (openMenu === 'actividades' ? null : 'actividades')"
                 class="w-full flex items-center justify-between px-3 py-2 rounded-xl 
                        bg-white/10 hover:bg-green-600/60 transition">
           <span class="flex items-center gap-2">
@@ -127,7 +123,7 @@
       <!-- USUARIOS -->
       <div>
         <p class="text-xs uppercase font-semibold text-white/60 mb-2">Usuarios</p>
-        <button @click="openMenu === 'usuarios' ? openMenu=null : openMenu='usuarios'"
+        <button @click="openMenu = (openMenu === 'usuarios' ? null : 'usuarios')"
                 class="w-full flex items-center justify-between px-3 py-2 rounded-xl 
                        bg-white/10 hover:bg-green-600/60 transition">
           <span class="flex items-center gap-2">
@@ -166,14 +162,5 @@
       </form>
     </div>
   </div>
-
-  <!-- Contenido -->
-  <div class="flex-1 lg:ml-64 transition-all duration-300">
-    <button @click="openSidebar = true" class="p-2 lg:hidden">
-      ☰
-    </button>
-    <div class="p-6">
-      @yield('content')
-    </div>
-  </div>
 </div>
+
