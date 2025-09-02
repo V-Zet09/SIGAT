@@ -1,291 +1,175 @@
-<style>
-    /* Scroll solo en el área de ítems del menú */
-    #scrollbar {
-        max-height: calc(100vh - 160px); /* Ajusta según el alto del logo + usuario */
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
+<!-- AlpineJS -->
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
-    /* Scrollbar personalizado opcional */
-    #scrollbar::-webkit-scrollbar {
-        width: 6px;
-    }
-    #scrollbar::-webkit-scrollbar-thumb {
-        background-color: rgba(0, 0, 0, 0.3);
-        border-radius: 3px;
-    }
+<div class="flex" x-data="{ openSidebar: true, openMenu: null }">
+  <!-- Overlay móvil -->
+  <div x-show="openSidebar" 
+       class="fixed inset-0 bg-black/40 z-40 lg:hidden"
+       @click="openSidebar = false"></div>
 
-    /* Eliminar flecha automática generada por el template */
-    .menu-link::after {
-        content: none !important;
-    }
-
-    /* Estilos para las flechas del menú manuales */
-    .menu-arrow {
-        margin-left: auto;
-        transition: transform 0.3s ease;
-    }
-
-    /* Rotación de la flecha cuando el menú está expandido */
-    [aria-expanded="true"] .menu-arrow {
-        transform: rotate(90deg);
-    }
-
-    /* Estilo para el elemento activo */
-    .navbar-nav .nav-item .nav-link.active {
-        color: #0ab39c;
-        background-color: rgba(10, 179, 156, 0.1);
-    }
-</style>
-
-
-<!-- ========== App Menu ========== -->
-<div class="app-menu navbar-menu">
-    <!-- LOGO -->
-    <div class="navbar-brand-box">
-        <!-- Dark Logo -->
-        <a href="{{ route('dashboard-administrador') }}" class="logo logo-dark">
-            <span class="logo-sm">
-                <img src="{{ URL::asset('images/SIGAT.jpeg') }}" alt="SIGAT Logo" height="22">
-            </span>
-            <span class="logo-lg">
-                <img src="{{ URL::asset('images/SIGAT.jpeg') }}" alt="SIGAT Logo" height="40">
-            </span>
-        </a>
-
-        <!-- Light Logo -->
-        <a href="{{ route('dashboard-administrador') }}" class="logo logo-light">
-            <span class="logo-sm">
-                <img src="{{ URL::asset('images/SIGAT.jpeg') }}" alt="SIGAT Logo" height="22">
-            </span>
-            <span class="logo-lg">
-                <img src="{{ URL::asset('images/SIGAT.jpeg') }}" alt="SIGAT Logo" height="40">
-            </span>
-        </a>
-
-        <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
-            id="vertical-hover">
-            <i class="ri-record-circle-line"></i>
-        </button>
-    </div>
+  <!-- Sidebar -->
+  <div :class="openSidebar ? 'translate-x-0' : '-translate-x-full'"
+       class="fixed inset-y-0 left-0 w-64 bg-green-800/95 backdrop-blur-md text-white 
+              transform transition-transform duration-300 ease-in-out z-50 lg:translate-x-0
+              rounded-r-3xl shadow-xl shadow-black/30 flex flex-col">
 
     <!-- Usuario -->
-    <div class="dropdown sidebar-user m-1 rounded">
-        <button type="button" class="btn material-shadow-none" id="page-header-user-dropdown" data-bs-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            <span class="d-flex align-items-center gap-2">
-                <img class="rounded header-profile-user"
-                    src="@if (Auth::user()->avatar != '') {{ URL::asset('images/' . Auth::user()->avatar) }} @else {{ URL::asset('build/images/users/avatar-1.jpg') }} @endif"
-                    alt="Header Avatar">    
-                <span class="text-start">
-                    <span class="d-block fw-medium sidebar-user-name-text">{{ Auth::user()->name }}</span>
-                    <span class="d-block fs-14 sidebar-user-name-sub-text">
-                        <i class="ri ri-circle-fill fs-10 text-success align-baseline"></i>
-                        <span class="align-middle">Online</span>
-                    </span>
-                </span>
-            </span>
+    <div class="px-6 py-8 text-center border-b border-white/20">
+      <div class="w-20 h-20 mx-auto rounded-full bg-white/20 flex items-center justify-center">
+        <i class="ri-user-3-line text-3xl"></i>
+      </div>
+      <h2 class="mt-3 font-semibold">Usuario</h2>
+      <p class="text-xs text-white/70">Administrador</p>
+      <!-- Botón cerrar móvil -->
+      <button @click="openSidebar = false" 
+              class="lg:hidden absolute top-4 right-4 text-white/70 hover:text-white">✕</button>
+    </div>
+
+    <!-- Menú -->
+    <nav class="flex-1 overflow-y-auto px-4 py-6 space-y-6">
+      
+      <!-- PANEL -->
+      <div>
+        <p class="text-xs uppercase font-semibold text-white/60 mb-2">Paneles</p>
+        <button @click="openMenu === 'dashboards' ? openMenu=null : openMenu='dashboards'"
+                class="w-full flex items-center justify-between px-3 py-2 rounded-xl 
+                       bg-white/10 hover:bg-green-600/60 transition">
+          <span class="flex items-center gap-2">
+            <i class="ri-dashboard-2-line"></i> Dashboards
+          </span>
+          <i class="ri-arrow-right-s-line transition-transform"
+             :class="openMenu === 'dashboards' ? 'rotate-90 text-green-400' : ''"></i>
         </button>
-        <div class="dropdown-menu dropdown-menu-end">
-            <h6 class="dropdown-header">Bienvenido {{ Auth::user()->name }}!</h6>
-            <a class="dropdown-item" href="{{ url('pages-profile') }}">
-                <i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> Perfil
-            </a>
-            <a class="dropdown-item" href="{{ url('apps-chat') }}">
-                <i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> Mensajes
-            </a>
-            <a class="dropdown-item" href="{{ url('apps-tasks-kanban') }}">
-                <i class="mdi mdi-calendar-check-outline text-muted fs-16 align-middle me-1"></i> Tareas
-            </a>
-            <a class="dropdown-item" href="{{ url('pages-faqs') }}">
-                <i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> Ayuda
-            </a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="{{ url('pages-profile') }}">
-                <i class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> Balance: <b>$5971.67</b>
-            </a>
-            <a class="dropdown-item" href="{{ url('pages-profile-settings') }}">
-                <span class="badge bg-success-subtle text-success mt-1 float-end">Nuevo</span>
-                <i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> Configuración
-            </a>
-            <a class="dropdown-item" href="{{ url('auth-lockscreen-basic') }}">
-                <i class="mdi mdi-lock text-muted fs-16 align-middle me-1"></i> Bloquear pantalla
-            </a>
-            <a class="dropdown-item" href="javascript:void();" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                <i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> Cerrar sesión
-            </a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                @csrf
-            </form>
+
+        <div x-show="openMenu === 'dashboards'" x-collapse 
+             class="pl-8 mt-2 space-y-1 transition-all duration-300">
+          <a href="{{ route('dashboard-administrador') }}" 
+             class="block px-3 py-2 rounded-lg transition 
+                    hover:bg-green-700 hover:text-white 
+                    {{ request()->routeIs('dashboard-administrador') ? 'bg-green-600 text-white font-semibold shadow-md' : 'text-white/80' }}">
+            Administrador
+          </a>
+          <a href="{{ route('dashboard-presidente-municipal') }}" 
+             class="block px-3 py-2 rounded-lg transition hover:bg-green-700 hover:text-white">
+            Presidente Municipal
+          </a>
+          <a href="{{ route('dashboard-sindico-procurador') }}" 
+             class="block px-3 py-2 rounded-lg transition hover:bg-green-700 hover:text-white">
+            Síndico Procurador
+          </a>
+          <a href="{{ route('dashboard-regidor') }}" 
+             class="block px-3 py-2 rounded-lg transition hover:bg-green-700 hover:text-white">
+            Regidor
+          </a>
+          <a href="{{ route('dashboard-director-de-area') }}" 
+             class="block px-3 py-2 rounded-lg transition hover:bg-green-700 hover:text-white">
+            Director de Área
+          </a>
+          <a href="{{ route('dashboard-auxiliar-area') }}" 
+             class="block px-3 py-2 rounded-lg transition hover:bg-green-700 hover:text-white">
+            Auxiliar de Área
+          </a>
         </div>
+      </div>
+
+      <!-- INFORMES -->
+      <div>
+        <p class="text-xs uppercase font-semibold text-white/60 mb-2">Informes</p>
+        <button @click="openMenu === 'informes' ? openMenu=null : openMenu='informes'"
+                class="w-full flex items-center justify-between px-3 py-2 rounded-xl 
+                       bg-white/10 hover:bg-green-600/60 transition">
+          <span class="flex items-center gap-2">
+            <i class="ri-file-list-line"></i> Informe
+          </span>
+          <i class="ri-arrow-right-s-line transition-transform"
+             :class="openMenu === 'informes' ? 'rotate-90 text-green-400' : ''"></i>
+        </button>
+
+        <div x-show="openMenu === 'informes'" x-collapse 
+             class="pl-8 mt-2 space-y-1 transition-all duration-300">
+          <a href="{{ url('generar-informe') }}" 
+             class="block px-3 py-2 rounded-lg transition hover:bg-green-700 hover:text-white">
+            Generar Informe
+          </a>
+          <a href="{{ route('informes-registrados') }}" 
+             class="block px-3 py-2 rounded-lg transition hover:bg-green-700 hover:text-white">
+            Informes Generados
+          </a>
+        </div>
+      </div>
+
+      <!-- ACTIVIDADES -->
+      <div>
+        <p class="text-xs uppercase font-semibold text-white/60 mb-2">Actividades</p>
+        <button @click="openMenu === 'actividades' ? openMenu=null : openMenu='actividades'"
+                class="w-full flex items-center justify-between px-3 py-2 rounded-xl 
+                       bg-white/10 hover:bg-green-600/60 transition">
+          <span class="flex items-center gap-2">
+            <i class="ri-calendar-check-line"></i> Actividades
+          </span>
+          <i class="ri-arrow-right-s-line transition-transform"
+             :class="openMenu === 'actividades' ? 'rotate-90 text-green-400' : ''"></i>
+        </button>
+
+        <div x-show="openMenu === 'actividades'" x-collapse 
+             class="pl-8 mt-2 space-y-1 transition-all duration-300">
+          <a href="{{ url('dashboard-actividades') }}" 
+             class="block px-3 py-2 rounded-lg transition hover:bg-green-700 hover:text-white">
+            Generar Actividad
+          </a>
+          <a href="{{ route('actividades.registradas') }}" 
+             class="block px-3 py-2 rounded-lg transition hover:bg-green-700 hover:text-white">
+            Actividades Registradas
+          </a>
+        </div>
+      </div>
+
+      <!-- USUARIOS -->
+      <div>
+        <p class="text-xs uppercase font-semibold text-white/60 mb-2">Usuarios</p>
+        <button @click="openMenu === 'usuarios' ? openMenu=null : openMenu='usuarios'"
+                class="w-full flex items-center justify-between px-3 py-2 rounded-xl 
+                       bg-white/10 hover:bg-green-600/60 transition">
+          <span class="flex items-center gap-2">
+            <i class="ri-team-line"></i> Usuarios
+          </span>
+          <i class="ri-arrow-right-s-line transition-transform"
+             :class="openMenu === 'usuarios' ? 'rotate-90 text-green-400' : ''"></i>
+        </button>
+
+        <div x-show="openMenu === 'usuarios'" x-collapse 
+             class="pl-8 mt-2 space-y-1 transition-all duration-300">
+          <a href="{{ url('dashboard-users') }}" 
+             class="block px-3 py-2 rounded-lg transition hover:bg-green-700 hover:text-white">
+            CRUD
+          </a>
+          <a href="{{ route('dashboard-crear-usuario') }}" 
+             class="block px-3 py-2 rounded-lg transition hover:bg-green-700 hover:text-white">
+            Crear Usuario
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Logout abajo -->
+    <div class="px-6 py-6 border-t border-white/20">
+      <form method="POST" action="{{ route('logout') }}">
+        @csrf
+        <button type="submit" 
+                class="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-red-600 hover:bg-red-700 transition">
+          <i class="ri-logout-box-r-line"></i> Logout
+        </button>
+      </form>
     </div>
+  </div>
 
-   <!-- Menú principal -->
-<div id="scrollbar">
-    <div class="container-fluid">
-        <ul class="navbar-nav" id="navbar-nav">
-            <!-- Paneles -->
-            <li class="menu-title"><span>Paneles</span></li>
-            <li class="nav-item">
-                <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button"
-                    aria-expanded="false" aria-controls="sidebarDashboards">
-                    <i class="ri-dashboard-2-line"></i>
-                    <span>Dashboards</span>
-                    <i class="ri-arrow-right-s-line menu-arrow"></i>
-                </a>
-                <div class="collapse menu-dropdown" id="sidebarDashboards">
-                    <ul class="nav flex-column">
-                        <li class="nav-item"><a href="{{ route('dashboard-administrador') }}" class="nav-link"><i class="fas fa-user-shield me-2"></i> Administrador</a></li>
-                        <li class="nav-item"><a href="{{ route('dashboard-presidente-municipal') }}" class="nav-link"><i class="fas fa-user-tie me-2"></i> Presidente Municipal</a></li>
-                        <li class="nav-item"><a href="{{ route('dashboard-sindico-procurador') }}" class="nav-link"><i class="fas fa-balance-scale me-2"></i> Síndico Procurador</a></li>
-                        <li class="nav-item"><a href="{{ route('dashboard-regidor') }}" class="nav-link"><i class="fas fa-users me-2"></i> Regidor</a></li>
-                        <li class="nav-item"><a href="{{ route('dashboard-director-de-area') }}" class="nav-link"><i class="fas fa-user-cog me-2"></i> Director de Área</a></li>
-                        <li class="nav-item"><a href="{{ route('dashboard-auxiliar-area') }}" class="nav-link"><i class="fas fa-user-clock me-2"></i> Auxiliar de Área</a></li>
-                    </ul>
-                </div>
-            </li>
-
-            <!-- Informes -->
-            <li class="menu-title"><span>Informes</span></li>
-            <li class="nav-item">
-                <a class="nav-link menu-link" href="#sidebarInforme" data-bs-toggle="collapse" role="button"
-                    aria-expanded="false" aria-controls="sidebarInforme">
-                    <i class="ri-apps-2-line"></i>
-                    <span>Informe</span>
-                    <i class="ri-arrow-right-s-line menu-arrow"></i>
-                </a>
-                <div class="collapse menu-dropdown" id="sidebarInforme">
-                    <ul class="nav nav-sm flex-column">
-                        <li class="nav-item">
-                            <a href="{{ url('generar-informe') }}" class="nav-link">
-                                <i class="fas fa-file-upload me-2"></i> Generar Informe
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('informes-registrados') }}" class="nav-link">
-                                <i class="fas fa-file-alt me-2"></i> Informes Generados
-                            </a>
-                    </ul>
-                </div>
-            </li>
-
-            <!-- Actividades -->
-            <li class="menu-title"><span>Actividades</span></li>
-            <li class="nav-item">
-                <a class="nav-link menu-link" href="#sidebarActividades" data-bs-toggle="collapse" role="button"
-                    aria-expanded="false" aria-controls="sidebarActividades">
-                    <i class="ri-apps-2-line"></i>
-                    <span>Actividades</span>
-                    <i class="ri-arrow-right-s-line menu-arrow"></i>
-                </a>
-                <div class="collapse menu-dropdown" id="sidebarActividades">
-                    <ul class="nav nav-sm flex-column">
-                        <li class="nav-item">
-                            <a href="{{ url('dashboard-actividades') }}" class="nav-link">
-                                <i class="fas fa-plus-circle me-2"></i> Generar Actividad
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('actividades.registradas') }}" class="nav-link">
-                                <i class="fas fa-tasks me-2"></i> Actividades Registradas
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-
-            <!-- Usuarios -->
-            <li class="menu-title"><span>Usuarios</span></li>
-            <li class="nav-item">
-                <a class="nav-link menu-link" href="#sidebarUsuarios" data-bs-toggle="collapse" role="button"
-                    aria-expanded="false" aria-controls="sidebarUsuarios">
-                    <i class="ri-apps-2-line"></i>
-                    <span>Usuarios</span>
-                    <i class="ri-arrow-right-s-line menu-arrow"></i>
-                </a>
-                <div class="collapse menu-dropdown" id="sidebarUsuarios">
-                    <ul class="nav nav-sm flex-column">
-                        <li class="nav-item">
-                            <a href="{{ url('dashboard-users') }}" class="nav-link">
-                                <i class="fas fa-plus-circle me-2"></i> CRUD
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('dashboard-crear-usuario') }}" class="nav-link">
-                                <i class="fas fa-user-plus me-2"></i> Crear Usuario
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-
-            <!-- Diseños -->
-            <li class="menu-title"><span>Diseños</span></li>  
-            <li class="nav-item">
-                <a class="nav-link menu-link" href="#sidebarLayouts" data-bs-toggle="collapse" role="button"
-                    aria-expanded="false" aria-controls="sidebarLayouts">
-                    <i class="ri-layout-3-line"></i>
-                    <span>Layouts</span>
-                    <span class="badge badge-pill bg-danger">Hot</span>
-                    <i class="ri-arrow-right-s-line menu-arrow"></i>
-                </a>
-                <div class="collapse menu-dropdown" id="sidebarLayouts">
-                    <ul class="nav nav-sm flex-column">
-                        <li class="nav-item"><a href="{{ url('layouts-horizontal') }}" target="_blank" class="nav-link">Horizontal</a></li>
-                        <li class="nav-item"><a href="{{ url('layouts-detached') }}" target="_blank" class="nav-link">Detached</a></li>
-                        <li class="nav-item"><a href="{{ url('layouts-two-column') }}" target="_blank" class="nav-link">Two Column</a></li>
-                        <li class="nav-item"><a href="{{ url('layouts-vertical-hovered') }}" target="_blank" class="nav-link">Hovered</a></li>
-                    </ul>
-                </div>
-            </li>
-
-        </ul>
+  <!-- Contenido -->
+  <div class="flex-1 lg:ml-64 transition-all duration-300">
+    <button @click="openSidebar = true" class="p-2 lg:hidden">
+      ☰
+    </button>
+    <div class="p-6">
+      @yield('content')
     </div>
+  </div>
 </div>
-
-<div class="sidebar-background"></div>
-</div>
-<!-- Left Sidebar End -->
-<div class="vertical-overlay"></div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Manejar el estado activo de los elementos del menú
-    const menuLinks = document.querySelectorAll('.nav-link.menu-link');
-    
-    menuLinks.forEach(link => {
-        link.addEventListener('click', function() {
-            // Cerrar otros menús abiertos (comportamiento de acordeón)
-            if (!this.classList.contains('collapsed')) {
-                menuLinks.forEach(otherLink => {
-                    if (otherLink !== this && !otherLink.classList.contains('collapsed')) {
-                        otherLink.classList.add('collapsed');
-                        const target = document.querySelector(otherLink.getAttribute('href'));
-                        if (target) {
-                            target.classList.remove('show');
-                        }
-                    }
-                });
-            }
-        });
-    });
-    
-    // Rotar flechas cuando se expande/contrae el menú
-    const collapseElements = document.querySelectorAll('.menu-dropdown');
-    collapseElements.forEach(element => {
-        element.addEventListener('show.bs.collapse', function() {
-            const trigger = document.querySelector('[href="#' + this.id + '"]');
-            if (trigger) {
-                trigger.setAttribute('aria-expanded', 'true');
-            }
-        });
-        
-        element.addEventListener('hide.bs.collapse', function() {
-            const trigger = document.querySelector('[href="#' + this.id + '"]');
-            if (trigger) {
-                trigger.setAttribute('aria-expanded', 'false');
-            }
-        });
-    });
-});
-</script>
