@@ -1,6 +1,5 @@
 import 'alpinejs'
 
-
 (function () {
     ("use strict");
 

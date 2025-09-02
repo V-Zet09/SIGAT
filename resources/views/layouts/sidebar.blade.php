@@ -183,4 +183,14 @@
       </form>
     </div>
   </div>
+
+  <!-- Contenido -->
+  <div class="flex-1 lg:ml-64 transition-all duration-300">
+    <button @click="openSidebar = true" class="p-2 lg:hidden">
+      ☰
+    </button>
+    <div class="p-6">
+      @yield('content')
+    </div>
+  </div>
 </div>

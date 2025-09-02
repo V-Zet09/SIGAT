@@ -1,7 +1,11 @@
 @extends('layouts.master')
 @section('title', 'Gestión de Roles')
 
+<<<<<<< HEAD
 {{-- Tailwind y Alpine por CDN solo para esta vista (sin Vite) --}}
+=======
+{{-- Incluimos Tailwind y Alpine por CDN solo para esta vista (sin Vite) --}}
+>>>>>>> b665b31 (Mis cambios antes de cambiar a main)
 @section('css')
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -436,4 +440,7 @@
         }
     </script>
 @endsection
+<<<<<<< HEAD
 
+=======
+>>>>>>> b665b31 (Mis cambios antes de cambiar a main)
