@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 export default {
   content: [
     "./resources/**/*.blade.php",
@@ -56,14 +55,3 @@ export default {
   },
   plugins: [],
 }
-=======
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: [],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-}
-
->>>>>>> b665b31 (Mis cambios antes de cambiar a main)

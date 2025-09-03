@@ -1,11 +1,7 @@
 @extends('layouts.master')
 @section('title', 'Gestión de Roles')
 
-<<<<<<< HEAD
 {{-- Tailwind y Alpine por CDN solo para esta vista (sin Vite) --}}
-=======
-{{-- Incluimos Tailwind y Alpine por CDN solo para esta vista (sin Vite) --}}
->>>>>>> b665b31 (Mis cambios antes de cambiar a main)
 @section('css')
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -37,11 +33,14 @@
 @php
     // Datos ficticios SOLO para diseño
     $roles = [
-        ['id'=>1, 'nombre'=>'Administrador', 'descripcion'=>'Acceso total al sistema', 'usuarios'=>3, 'estado'=>'activo', 'color'=>'bg-ayu-green'],
-        ['id'=>2, 'nombre'=>'Presidente',    'descripcion'=>'Gestiona actividades y reportes', 'usuarios'=>1, 'estado'=>'activo', 'color'=>'bg-ayu-green2'],
-        ['id'=>3, 'nombre'=>'Síndico',       'descripcion'=>'Supervisa áreas jurídicas', 'usuarios'=>2, 'estado'=>'activo', 'color'=>'bg-ayu-green'],
-        ['id'=>4, 'nombre'=>'Regidor',       'descripcion'=>'Acceso limitado a su área', 'usuarios'=>5, 'estado'=>'inactivo', 'color'=>'bg-gray-400'],
-    ];
+    ['id'=>1, 'nombre'=>'Administrador', 'descripcion'=>'Acceso total al sistema', 'usuarios'=>3, 'estado'=>'activo'],
+    ['id'=>2, 'nombre'=>'Presidente',    'descripcion'=>'Gestiona actividades y reportes', 'usuarios'=>1, 'estado'=>'activo'],
+    ['id'=>3, 'nombre'=>'Síndico',       'descripcion'=>'Supervisa áreas jurídicas', 'usuarios'=>2, 'estado'=>'activo'],
+    ['id'=>4, 'nombre'=>'Regidor',       'descripcion'=>'Acceso limitado a su área', 'usuarios'=>5, 'estado'=>'activo'],
+    ['id'=>5, 'nombre'=>'Director',      'descripcion'=>'Supervisa departamentos', 'usuarios'=>2, 'estado'=>'activo'],
+    ['id'=>6, 'nombre'=>'Auxiliar',      'descripcion'=>'Apoyo administrativo', 'usuarios'=>4, 'estado'=>'activo'],
+];
+
 
     $permisos = [
         'Usuarios'       => ['Ver usuarios','Crear usuario','Editar usuario','Eliminar usuario','Asignar roles'],
@@ -73,10 +72,6 @@
             <p class="text-gray-500">Administra los roles del sistema, sus permisos y miembros asignados.</p>
         </div>
         <div class="flex items-center gap-2">
-            <button @click="openImport = true"
-                    class="px-3 py-2 text-sm rounded-lg border border-gray-300 bg-white hover:bg-gray-50">
-                Importar
-            </button>
             <button @click="exportar()"
                     class="px-3 py-2 text-sm rounded-lg border border-gray-300 bg-white hover:bg-gray-50">
                 Exportar
@@ -113,16 +108,32 @@
     </div>
 
     {{-- Filtros y búsqueda --}}
-    <div class="px-6 mt-6 bg-white rounded-xl2 shadow-soft border border-gray-100">
-        <div class="p-4 flex flex-col lg:flex-row gap-3 lg:items-center lg:justify-between">
-            <div class="flex-1 flex items-center gap-3">
-                <div class="relative w-full lg:w-80">
-                    <input x-model="query" type="text" placeholder="Buscar por nombre o descripción..."
-                           class="w-full pl-10 pr-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-ayu-green" />
-                    <svg class="w-5 h-5 absolute left-3 top-2.5 text-gray-400" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M21 20l-4.35-4.35a7.5 7.5 0 10-1.41 1.41L20 21l1-1zM4.5 10a5.5 5.5 0 1111 0 5.5 5.5 0 01-11 0z"/>
-                    </svg>
-                </div>
+    <div class="px-6 mt-6 bg-white rounded-2xl shadow-md border border-gray-100">
+  <div class="p-4 flex flex-col lg:flex-row gap-3 lg:items-center lg:justify-between">
+    <div class="flex-1 flex items-center gap-3">
+      <!-- Contenedor del input con icono -->
+      <div class="relative w-full max-w-md h-10"> 
+        <input
+          type="text"
+          placeholder="Buscar por nombre o descripción"
+          class="w-full h-full pl-4 pr-10 text-sm text-gray-700 rounded-lg border border-gray-300 shadow-sm 
+                 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600 transition"
+        />
+
+        <!-- Ícono funcional -->
+        <button
+          type="button"
+          class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-green-600 transition"
+        >
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M21 20l-4.35-4.35a7.5 7.5 0 10-1.41 1.41L20 21l1-1zM4.5 10a5.5 5.5 0 1111 0 5.5 5.5 0 01-11 0z"
+            />
+          </svg>
+        </button>
+      </div>
+
+
                 <select x-model="filtroEstado"
                         class="px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-ayu-green">
                     <option value="">Todos</option>
@@ -164,7 +175,7 @@
                             <td class="px-4 py-3">{{ $rol['id'] }}</td>
                             <td class="px-4 py-3">
                                 <div class="flex items-center gap-2">
-                                    <span class="inline-block w-2 h-2 rounded-full {{ $rol['color'] }}"></span>
+                                    <span class="inline-block w-2 h-2 rounded-full bg-ayu-green"></span>
                                     <span class="font-medium text-gray-800">{{ $rol['nombre'] }}</span>
                                 </div>
                             </td>
@@ -440,7 +451,3 @@
         }
     </script>
 @endsection
-<<<<<<< HEAD
-
-=======
->>>>>>> b665b31 (Mis cambios antes de cambiar a main)
