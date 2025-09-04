@@ -33,14 +33,13 @@
 @php
     // Datos ficticios SOLO para diseño
     $roles = [
-    ['id'=>1, 'nombre'=>'Administrador', 'descripcion'=>'Acceso total al sistema', 'usuarios'=>3, 'estado'=>'activo'],
-    ['id'=>2, 'nombre'=>'Presidente',    'descripcion'=>'Gestiona actividades y reportes', 'usuarios'=>1, 'estado'=>'activo'],
-    ['id'=>3, 'nombre'=>'Síndico',       'descripcion'=>'Supervisa áreas jurídicas', 'usuarios'=>2, 'estado'=>'activo'],
-    ['id'=>4, 'nombre'=>'Regidor',       'descripcion'=>'Acceso limitado a su área', 'usuarios'=>5, 'estado'=>'activo'],
-    ['id'=>5, 'nombre'=>'Director',      'descripcion'=>'Supervisa departamentos', 'usuarios'=>2, 'estado'=>'activo'],
-    ['id'=>6, 'nombre'=>'Auxiliar',      'descripcion'=>'Apoyo administrativo', 'usuarios'=>4, 'estado'=>'activo'],
-];
-
+        ['id'=>1, 'nombre'=>'Administrador', 'descripcion'=>'Acceso total al sistema', 'usuarios'=>3, 'estado'=>'activo', 'color'=>'bg-ayu-green'],
+        ['id'=>2, 'nombre'=>'Presidente',    'descripcion'=>'Gestiona actividades y reportes', 'usuarios'=>1, 'estado'=>'activo', 'color'=>'bg-ayu-green2'],
+        ['id'=>3, 'nombre'=>'Síndico',       'descripcion'=>'Supervisa áreas jurídicas', 'usuarios'=>2, 'estado'=>'activo', 'color'=>'bg-ayu-green'],
+        ['id'=>4, 'nombre'=>'Regidor',       'descripcion'=>'Acceso limitado a su área', 'usuarios'=>5, 'estado'=>'inactivo', 'color'=>'bg-gray-400'],
+        ['id'=>5, 'nombre'=>'Director',      'descripcion'=>'Supervisa departamentos', 'usuarios'=>2, 'estado'=>'activo', 'color'=>'bg-ayu-green2'],
+        ['id'=>6, 'nombre'=>'Auxiliar',      'descripcion'=>'Apoyo administrativo', 'usuarios'=>4, 'estado'=>'activo', 'color'=>'bg-gray-400'],
+    ];
 
     $permisos = [
         'Usuarios'       => ['Ver usuarios','Crear usuario','Editar usuario','Eliminar usuario','Asignar roles'],

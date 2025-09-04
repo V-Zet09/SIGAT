@@ -10,6 +10,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/usuarios/{id}', [UserController::class, 'show'])->name('usuarios.show');
     Route::put('/usuarios/{id}', [UserController::class, 'update'])->name('usuarios.update');
     Route::delete('/usuarios/{id}', [UserController::class, 'destroy'])->name('usuarios.destroy');
+    Route::get('/usuarios/{id}', [UserController::class, 'show'])->name('vista-ver-usuarios');
     Route::get('/usuarios/{id}/editar', [UserController::class, 'edit'])->name('vista-editar-usuario');
     Route::get('/roles', [UserController::class, 'roles'])->name('roles');
 });
