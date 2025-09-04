@@ -20,5 +20,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard-auxiliar-area', [AuxiliarDeAreaController::class, 'index'])->name('dashboard-auxiliar-area');
 
     // Ruta catch-all
-    Route::get('{any}', [HomeController::class, 'index'])->where('any', '.*')->name('index');
+    
 });
