@@ -154,6 +154,7 @@
         </div>
     @endif
 </div>
+
 @section('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {

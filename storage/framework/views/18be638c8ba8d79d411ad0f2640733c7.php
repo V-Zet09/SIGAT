@@ -32,17 +32,41 @@
             <input type="text" name="buscar" class="form-control" placeholder="Buscar actividad" value="<?php echo e(request('buscar')); ?>">
         </div>
         <div class="col-md-4">
-            <select name="area" class="form-select">
+            <select name="tipo_area" class="form-select">
                 <option value="">Filtrar por: Área</option>
-                <?php $__currentLoopData = ['Agua potable', 'Alumbrado público', 'Desarrollo rural', 'Bienestar animal']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $opcion): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <option value="<?php echo e($opcion); ?>" <?php echo e(request('area') == $opcion ? 'selected' : ''); ?>><?php echo e($opcion); ?></option>
+                <?php $__currentLoopData = [
+                    'Agua potable',
+                    'Bienestar Social y Desarrollo Rural',
+                    'Catastro',
+                    'Contraloria Interna',
+                    'Deportes',
+                    'DIF',
+                    'Informática',
+                    'Limpia',
+                    'Obras Publicas',
+                    'Oficialia Mayor',
+                    'Presidencia',
+                    'Recursos Humanos',
+                    'Registro Civil',
+                    'Regidores',
+                    'Reglamentos',
+                    'Secretaria General',
+                    'Seguridad Publica',
+                    'Sindicatura',
+                    'Tesoreria',
+                    'Transito'
+                ]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $opcion): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <option value="<?php echo e($opcion); ?>" <?php echo e(request('tipo_area') == $opcion ? 'selected' : ''); ?>><?php echo e($opcion); ?></option>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </select>
         </div>
         <div class="col-md-4 text-end">
-            <a href="<?php echo e(route('actividades.create')); ?>" class="btn btn-success">
-                Crear Actividad
-            </a>
+            <a href="<?php echo e(route('actividades.registradas')); ?>" class="btn btn-outline-light">
+        Limpiar filtros
+    </a>
+    <a href="<?php echo e(route('actividades.create')); ?>" class="btn btn-success">
+        Crear Actividad
+    </a>
         </div>
     </form>
 
@@ -56,7 +80,6 @@
                         <th>Autor</th>
                         <th>Fecha</th>
                         <th>Área</th>
-                        <th>Tipo de Actividad</th>
                         <th>Resumen</th>
                         <th>Contenido</th>
                         <th>Presupuesto</th>
@@ -71,8 +94,7 @@
                             <td><?php echo e($actividad->titulo); ?></td>
                             <td><?php echo e($actividad->autor ?? 'Anónimo'); ?></td>
                             <td><?php echo e(\Carbon\Carbon::parse($actividad->fecha)->format('d/m/Y')); ?></td>
-                            <td><?php echo e($actividad->area ?? 'Sin área'); ?></td>
-                            <td><?php echo e($actividad->tipo_actividad ?? 'No especificado'); ?></td>
+                            <td><?php echo e($actividad->tipo_area ?? 'Sin área'); ?></td>
                             <td>
                                 <?php echo e(Str::limit($actividad->resumen, 80, '...')); ?>
 
@@ -135,6 +157,31 @@
         </div>
     <?php endif; ?>
 </div>
+
+<?php $__env->startSection('scripts'); ?>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('form[action="<?php echo e(route('actividades.registradas')); ?>"]');
+        const buscarInput = form.querySelector('input[name="buscar"]');
+        const tipoAreaSelect = form.querySelector('select[name="tipo_area"]');
+
+        // Enviar automáticamente al cambiar el select
+        tipoAreaSelect.addEventListener('change', () => {
+            form.submit();
+        });
+
+        // Enviar automáticamente al escribir en el input (con retardo)
+        let timer;
+        buscarInput.addEventListener('input', () => {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                form.submit();
+            }, 600); // Espera 600ms después de dejar de escribir
+        });
+    });
+</script>
+<?php $__env->stopSection(); ?>
+
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\DELL\Documents\GitHub\SIGAT\resources\views/dashboard-actividades-registradas.blade.php ENDPATH**/ ?>

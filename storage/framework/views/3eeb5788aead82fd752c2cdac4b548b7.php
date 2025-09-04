@@ -14,7 +14,7 @@
             CRM
         <?php $__env->endSlot(); ?>
         <?php $__env->slot('title'); ?>
-            Leads
+            Usuarios
         <?php $__env->endSlot(); ?>
     <?php echo $__env->renderComponent(); ?>
 
@@ -27,7 +27,7 @@
                         <div class="col-sm-3">
                             <div class="search-box">
                                 <input type="text" class="form-control search"
-                                    placeholder="Search for...">
+                                    placeholder="Buscar por...">
                                 <i class="ri-search-line search-icon"></i>
                             </div>
                         </div>
@@ -36,26 +36,17 @@
                                 <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
                                 <button type="button" class="btn btn-info" data-bs-toggle="offcanvas"
                                     href="#offcanvasExample"><i
-                                        class="ri-filter-3-line align-bottom me-1"></i> Fliters</button>
+                                        class="ri-filter-3-line align-bottom me-1"></i> Flitro</button>
                                 <button type="button" class="btn btn-success add-btn"
                                     data-bs-toggle="modal" id="create-btn"
                                     data-bs-target="#showModal"><i
-                                        class="ri-add-line align-bottom me-1"></i> Add Leads</button>
+                                        class="ri-add-line align-bottom me-1"></i> Agregar Usuario</button>
                                 <span class="dropdown">
                                     <button class="btn btn-soft-info btn-icon fs-14" type="button"
                                         id="dropdownMenuButton1" data-bs-toggle="dropdown"
                                         aria-expanded="false">
                                         <i class="ri-settings-4-line"></i>
                                     </button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                        <li><a class="dropdown-item" href="#">Copy</a></li>
-                                        <li><a class="dropdown-item" href="#">Move to pipline</a></li>
-                                        <li><a class="dropdown-item" href="#">Add to exceptions</a></li>
-                                        <li><a class="dropdown-item" href="#">Switch to common form
-                                                view</a></li>
-                                        <li><a class="dropdown-item" href="#">Reset form view to
-                                                default</a></li>
-                                    </ul>
                                 </span>
                             </div>
                         </div>
@@ -74,89 +65,71 @@
                                             </div>
                                         </th>
 
-                                        <th class="sort" data-sort="name">Name</th>
-                                        <th class="sort" data-sort="company_name">Company</th>
-                                        <th class="sort" data-sort="leads_score">Leads Score</th>
-                                        <th class="sort" data-sort="phone">Phone</th>
-                                        <th class="sort" data-sort="location">Location</th>
-                                        <th class="sort" data-sort="tags">Tags</th>
-                                        <th class="sort" data-sort="date">Create Date</th>
-                                        <th class="sort" data-sort="action">Action</th>
+                                        <th class="sort" data-sort="name">Nombre</th>
+                                        <th class="sort" data-sort="sexo">Sexo</th>
+                                        <th class="sort" data-sort="cargo">Cargo</th>
+                                        <th class="sort" data-sort="area">Área</th>
+                                        <th class="sort" data-sort="email">Correo electrónico</th>
+                                        <th class="sort" data-sort="action">Acciones</th>
                                     </tr>
                                 </thead>
+<?php
+    if (!isset($usuarios)) {
+        $usuarios = \App\Models\User::all();
+    }
+?>
+
                                 <tbody class="list form-check-all">
-                                    <tr>
-                                        <th scope="row">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                    name="chk_child" value="option1">
-                                            </div>
-                                        </th>
-                                        <td class="id" style="display:none;"><a
-                                                href="javascript:void(0);"
-                                                class="fw-medium link-primary">#VZ2101</a></td>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-shrink-0">
-                                                    <img src="<?php echo e(URL::asset('build/images/users/avatar-10.jpg')); ?>"
-                                                        alt="" class="avatar-xxs rounded-circle image_src object-fit-cover" >
+                                    <?php $__empty_1 = true; $__currentLoopData = $usuarios; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $usuario): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                        <tr>
+                                            <th scope="row">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="chk_child" value="<?php echo e($usuario->id); ?>">
                                                 </div>
-                                                <div class="flex-grow-1 ms-2 name">Tonya Noble</div>
-                                            </div>
-                                        </td>
-                                        <td class="company_name">Force Medicines</td>
-                                        <td class="leads_score">147</td>
-                                        <td class="phone">580-464-4694</td>
-                                        <td class="location">Los Angeles, USA</td>
-                                        <td class="tags">
-                                            <span class="badge bg-primary-subtle text-primary">Lead</span>
-                                            <span class="badge bg-primary-subtle text-primary">Partner</span>
-                                        </td>
-                                        <td class="date">07 Apr, 2021</td>
-                                        <td>
-                                            <ul class="list-inline hstack gap-2 mb-0">
-                                                <li class="list-inline-item edit"
-                                                    data-bs-toggle="tooltip" data-bs-trigger="hover"
-                                                    data-bs-placement="top" title="Call">
-                                                    <a href="javascript:void(0);"
-                                                        class="text-muted d-inline-block">
-                                                        <i class="ri-phone-line fs-16"></i>
-                                                    </a>
-                                                </li>
-                                                <li class="list-inline-item edit"
-                                                    data-bs-toggle="tooltip" data-bs-trigger="hover"
-                                                    data-bs-placement="top" title="Message">
-                                                    <a href="javascript:void(0);"
-                                                        class="text-muted d-inline-block">
-                                                        <i class="ri-question-answer-line fs-16"></i>
-                                                    </a>
-                                                </li>
-                                                <li class="list-inline-item" data-bs-toggle="tooltip"
-                                                    data-bs-trigger="hover" data-bs-placement="top"
-                                                    title="View">
-                                                    <a href="javascript:void(0);"><i
-                                                            class="ri-eye-fill align-bottom text-muted"></i></a>
-                                                </li>
-                                                <li class="list-inline-item" data-bs-toggle="tooltip"
-                                                    data-bs-trigger="hover" data-bs-placement="top"
-                                                    title="Edit">
-                                                    <a class="edit-item-btn" href="#showModal"
-                                                        data-bs-toggle="modal"><i
-                                                            class="ri-pencil-fill align-bottom text-muted"></i></a>
-                                                </li>
-                                                <li class="list-inline-item" data-bs-toggle="tooltip"
-                                                    data-bs-trigger="hover" data-bs-placement="top"
-                                                    title="Delete">
-                                                    <a class="remove-item-btn" data-bs-toggle="modal"
-                                                        href="#deleteRecordModal">
-                                                        <i
-                                                            class="ri-delete-bin-fill align-bottom text-muted"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
+                                            </th>
+
+                                            <td class="name"><?php echo e($usuario->name); ?></td>
+                                            <td class="sexo"><?php echo e($usuario->sexo); ?></td>
+                                            <td class="cargo"><?php echo e($usuario->cargo); ?></td>
+                                            <td class="area"><?php echo e($usuario->area); ?></td>
+                                            <td class="email"><?php echo e($usuario->email); ?></td>
+                                            
+                                            <td>
+                                                <ul class="list-inline hstack gap-2 mb-0">
+                                                    <!-- Ver -->
+                                                    <li class="list-inline-item" title="Ver">
+                                                        <a href="<?php echo e(route('vista-ver-usuarios', $usuario->id)); ?>" class="btn btn-sm btn-info">
+                                                            <i class="ri-eye-fill"></i>
+                                                        </a>
+                                                    </li>
+                                                    <!-- Editar -->
+                                                    <li class="list-inline-item" title="Editar">
+                                                        <a href="<?php echo e(route('vista-editar-usuario', $usuario->id)); ?>" class="btn btn-sm btn-warning">
+                                                            <i class="ri-pencil-fill"></i>
+                                                        </a>
+                                                    </li>
+
+                                                    <!-- Eliminar -->
+                                                    <li class="list-inline-item" title="Eliminar">
+                                                        <form action="<?php echo e(route('usuarios.destroy', $usuario->id)); ?>" method="POST" onsubmit="return confirm('¿Seguro que quieres eliminar este usuario?')">
+                                                            <?php echo csrf_field(); ?>
+                                                            <?php echo method_field('DELETE'); ?>
+                                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                                <i class="ri-delete-bin-fill"></i>
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                </ul>
+                                            </td>
+
+                                        </tr>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                        <tr>
+                                            <td colspan="7" class="text-center">No hay usuarios registrados</td>
+                                        </tr>
+                                    <?php endif; ?>
                                 </tbody>
+
                             </table>
                             <div class="noresult" style="display: none">
                                 <div class="text-center">
@@ -174,11 +147,11 @@
                         <div class="d-flex justify-content-end mt-3">
                             <div class="pagination-wrap hstack gap-2">
                                 <a class="page-item pagination-prev disabled" href="#">
-                                    Previous
+                                    Anterior
                                 </a>
                                 <ul class="pagination listjs-pagination mb-0"></ul>
                                 <a class="page-item pagination-next" href="#">
-                                    Next
+                                    Siguiente
                                 </a>
                             </div>
                         </div>
@@ -217,11 +190,11 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <h5 class="fs-13 mt-3">Lead Image</h5>
+                                                    <h5 class="fs-13 mt-3">Cargar imagen</h5>
                                                 </div>
                                                 <div>
                                                     <label for="leadname-field"
-                                                        class="form-label">Name</label>
+                                                        class="form-label">Nombre completo</label>
                                                     <input type="text" id="leadname-field"
                                                         class="form-control" placeholder="Enter Name"
                                                         required />
@@ -231,74 +204,80 @@
                                             <div class="col-lg-12">
                                                 <div>
                                                     <label for="company_name-field"
-                                                        class="form-label">Company Name</label>
+                                                        class="form-label">Cargo</label>
                                                     <input type="text" id="company_name-field"
                                                         class="form-control"
                                                         placeholder="Enter company name" required />
                                                 </div>
                                             </div>
                                             <!--end col-->
-                                            <div class="col-lg-6">
+                                            <div class="col-lg-12">
                                                 <div>
-                                                    <label for="leads_score-field"
-                                                        class="form-label">Leads Score</label>
+                                                    <label for="leads_score-field" class="form-label">Área</label>
                                                     <input type="text" id="leads_score-field"
                                                         class="form-control"
-                                                        placeholder="Enter lead score" required />
+                                                        placeholder="Enter company name" required />
                                                 </div>
                                             </div>
-                                            <!--end col-->
+                                            <!--end col-->                                           
                                             <div class="col-lg-6">
                                                 <div>
                                                     <label for="phone-field"
-                                                        class="form-label">Phone</label>
+                                                        class="form-label">Teléfono</label>
                                                     <input type="text" id="phone-field"
                                                         class="form-control"
                                                         placeholder="Enter phone no" required />
                                                 </div>
                                             </div>
                                             <!--end col-->
-                                            <div class="col-lg-12">
+                                            <div class="col-lg-6">
                                                 <div>
-                                                    <label for="location-field"
-                                                        class="form-label">Location</label>
-                                                    <input type="text" id="location-field"
+                                                    <label for="gender-field"
+                                                        class="form-label">Sexo</label>
+                                                    <input type="text" id="gender-field"
                                                         class="form-control"
-                                                        placeholder="Enter location" required />
+                                                        placeholder="Escriba su sexo" required />
                                                 </div>
                                             </div>
                                             <!--end col-->
                                             <div class="col-lg-12">
                                                 <div>
-                                                    <label for="taginput-choices" class="form-label">Tags</label>
-                                                    <select class="form-control" name="taginput-choices"
-                                                        id="taginput-choices"  multiple>
-                                                        <option value="Lead">Lead</option>
-                                                        <option value="Partner">Partner</option>
-                                                        <option value="Exiting">Exiting</option>
-                                                        <option value="Long-term">Long-term</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <div>
-                                                    <label for="date-field" class="form-label">Created
-                                                        Date</label>
-                                                    <input type="date" id="date-field"
-                                                        class="form-control" data-provider="flatpickr" data-date-format="d M, Y"
-                                                        placeholder="Select Date" required />
+                                                    <label for="email_id-field"
+                                                        class="form-label">Correo electrónico</label>
+                                                    <input type="text" id="email_id-field"
+                                                        class="form-control"
+                                                        placeholder="Escriba su correo" required />
                                                 </div>
                                             </div>
                                             <!--end col-->
+                                            <div class="col-lg-6">
+                                                <div>
+                                                    <label for="password-field"
+                                                        class="form-label">Contraseña</label>
+                                                    <input type="text" id="password-field"
+                                                        class="form-control"
+                                                        placeholder="Escriba su contraseña" required />
+                                                </div>
+                                            </div>
+                                            <!--end col-->
+                                            <div class="col-lg-6">
+                                                <div>
+                                                    <label for="password-field"
+                                                        class="form-label">Confirmar contraseña</label>
+                                                    <input type="text" id="password-field"
+                                                        class="form-control"
+                                                        placeholder="Escriba su contraseña nuevamente" required />
+                                                </div>
+                                            </div>
                                         </div>
                                         <!--end row-->
                                     </div>
                                     <div class="modal-footer">
                                         <div class="hstack gap-2 justify-content-end">
                                             <button type="button" class="btn btn-light"
-                                                data-bs-dismiss="modal">Close</button>
+                                                data-bs-dismiss="modal">Cancelar</button>
                                             <button type="submit" class="btn btn-success"
-                                                id="add-btn">Add leads</button>
+                                                id="add-btn">Agregar usuario</button>
                                             
                                         </div>
                                     </div>
@@ -322,17 +301,15 @@
                                         trigger="loop" colors="primary:#405189,secondary:#f06548"
                                         style="width:90px;height:90px"></lord-icon>
                                     <div class="mt-4 text-center">
-                                        <h4 class="fs-semibold">You are about to delete a lead ?</h4>
-                                        <p class="text-muted fs-14 mb-4 pt-1">Deleting your lead will
-                                            remove all of your information from our database.</p>
+                                        <h4 class="fs-semibold">¿Desea eliminar el usuario seleccionado?</h4>
+                                        <p class="text-muted fs-14 mb-4 pt-1">Al eliminar el usuario, se borrará su información registrada en la base de datos.</p>
                                         <div class="hstack gap-2 justify-content-center remove">
                                             <button
                                                 class="btn btn-link link-success fw-medium text-decoration-none material-shadow-none"
                                                 data-bs-dismiss="modal" id="deleteRecord-close"><i
                                                     class="ri-close-line me-1 align-middle"></i>
-                                                Close</button>
-                                            <button class="btn btn-danger" id="delete-record">Yes,
-                                                Delete It!!</button>
+                                                Cancelar</button>
+                                            <button class="btn btn-danger" id="delete-record">Eliminar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -565,4 +542,4 @@
     <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('layouts.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\Maria\Documents\GitHub\SIGAT\resources\views/apps-crm-leads.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\DELL\Documents\GitHub\SIGAT\resources\views/dashboard-users.blade.php ENDPATH**/ ?>

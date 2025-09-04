@@ -116,4 +116,4 @@ function togglePassword(inputId, icon) {
 </script>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('layouts.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\Maria\Documents\GitHub\SIGAT\resources\views/dashboard-crear-usuario.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\DELL\Documents\GitHub\SIGAT\resources\views/dashboard-crear-usuario.blade.php ENDPATH**/ ?>
