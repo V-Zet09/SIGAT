@@ -71,7 +71,7 @@
     </form>
 
     {{-- 📋 Tabla de actividades --}}
-    @if($actividades->count())
+    @if(isset($actividades) && $actividades->count())
         <div class="table-responsive">
             <table class="table table-bordered align-middle">
                 <thead class="table-light">

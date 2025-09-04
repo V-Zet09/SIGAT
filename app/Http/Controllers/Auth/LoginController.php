@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -22,27 +23,23 @@ class LoginController extends Controller
     use AuthenticatesUsers;
 
     /**
-     * Where to redirect users after login.
-     *
-     * @var string
+     * Redirection after login depending on user role (cargo).
      */
-    protected function redirectTo()
-{
-    return match (auth()->user()->cargo) {
-        'Administrador' => '/dashboard-administrador',
-        'Presidente' => '/dashboard-presidente-municipal',
-        'Sindico' => '/dashboard-sindico-procurador',
-        'Regidor' => '/dashboard-regidor',
-        'Director' => '/dashboard-director-de-area',
-        'Auxiliar' => '/dashboard-auxiliar-area',
-        default => '/home',
-    };
-}
+    protected function authenticated(Request $request, $user)
+    {
+        return match ($user->cargo) {
+            'Administrador' => redirect('/dashboard-administrador'),
+            'Presidente'   => redirect('/dashboard-presidente-municipal'),
+            'Sindico'      => redirect('/dashboard-sindico-procurador'),
+            'Regidor'      => redirect('/dashboard-regidor'),
+            'Director'     => redirect('/dashboard-director-de-area'),
+            'Auxiliar'     => redirect('/dashboard-auxiliar-area'),
+            default        => redirect('/home'),
+        };
+    }
 
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct()
     {
