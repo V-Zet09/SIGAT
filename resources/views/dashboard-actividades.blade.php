@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="tipo_area" class="form-label">Tipo de área</label>
+                    <label for="tipo_area" class="form-label">Área</label>
                     <select name="tipo_area" id="tipo_area" class="form-select">
                         <option value="Agua potable">Agua potable</option>
                         <option value="Bienestar Social y Desarrollo Rural">Bienestar Social y Desarrollo Rural</option>
