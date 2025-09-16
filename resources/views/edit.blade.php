@@ -35,11 +35,6 @@
             </div>
 
         <div class="mb-3">
-            <label for="tipo_actividad" class="form-label">Tipo de Actividad</label>
-            <input type="text" name="tipo_actividad" class="form-control" value="{{ old('tipo_actividad', $actividad->tipo_actividad) }}">
-        </div>
-
-        <div class="mb-3">
             <label for="resumen" class="form-label">Resumen</label>
             <textarea name="resumen" class="form-control" rows="3">{{ old('resumen', $actividad->resumen) }}</textarea>
         </div>
@@ -61,6 +56,10 @@
                         <option value="Estatal">Estatal</option>
                         <option value="Federal">Federal</option>
             </select>
+        </div>
+        <div class="mb-3">
+            <label for="foto" class="form-label">Foto</label>
+            <input type="file" name="foto" id="foto" class="form-control">
         </div>
 
         <button type="submit" class="btn btn-primary">Actualizar</button>
