@@ -5,133 +5,91 @@
 @endsection
 
 @section('content')
+<div class="relative h-screen flex items-start justify-center overflow-hidden">
 
-<style>
-    :root {
-        --primary-blue: #2776BA;
-        --secondary-blue: #5490AA;
-        --light-blue: #7480AA;
-        --accent-wine: #854256;
-        --card-bg: rgba(255, 255, 255, 0.95);
-    }
-    
-    .bg-persianas-gruesas {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: 
-            linear-gradient(
-                90deg,
-                rgba(255,255,255,0.15) 0%,
-                rgba(255,255,255,0) 10%,
-                rgba(255,255,255,0) 90%,
-                rgba(255,255,255,0.15) 100%
-            ),
-            url('{{ asset('images/fondo.jpeg') }}');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        z-index: -1;
-        opacity: 0.9;
-        mask-image: repeating-linear-gradient(
-            90deg,
-            transparent 0px,
-            transparent 15px,       <!-- Espacio transparente reducido -->
-            rgba(0,0,0,0.8) 15px,  <!-- Persianas más gruesas -->
-            rgba(0,0,0,0.8) 60px   <!-- Ancho aumentado -->
-        );
-        -webkit-mask-image: repeating-linear-gradient(
-            90deg,
-            transparent 0px,
-            transparent 15px,
-            rgba(0,0,0,0.8) 15px,
-            rgba(0,0,0,0.8) 60px
-        );
-    }
-    
-    .compact-card {
-        max-width: 480px;
-        padding: 1.75rem;
-        border-radius: 12px;
-        backdrop-filter: blur(6px);
-        background-color: var(--card-bg);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.35);
-    }
-</style>
+    <!-- Imagen de fondo -->
+    <img src="{{ asset('images/trampasdeluz.jpeg') }}" 
+         alt="Fondo"
+         class="absolute inset-0 w-full h-full object-cover">
 
-<div class="auth-page-wrapper pt-4 position-relative" style="min-height: 100vh;">
-    
-    <!-- Fondo con persianas gruesas -->
-    <div class="bg-persianas-gruesas"></div>
-    
-    <!-- Contenido compacto -->
-    <div class="container d-flex justify-content-center align-items-center min-vh-100">
-        <div class="compact-card shadow-sm">
-            <div class="text-center">
-                <h4 class="text-primary fw-bold mb-2">¿Olvidaste tu contraseña?</h4>
-                <p class="mb-3" style="color: var(--secondary-blue);">Solicita el restablecimiento de tu acceso al sistema SIGAT</p>
-                <lord-icon src="https://cdn.lordicon.com/rhvddzym.json" trigger="loop" colors="primary:#2776BA" style="width:80px;height:80px;"></lord-icon>
-            </div>
+    <!-- Capa oscura -->
+    <div class="absolute inset-0 bg-black/50"></div>
 
-            <div class="alert alert-warning text-start py-2 mb-3">
-                <i class="fas fa-info-circle me-2"></i> Ingresa tu correo electrónico registrado y sigue las instrucciones enviadas.
-            </div>
-
-            @if (session('status'))
-                <div class="alert alert-success text-center py-2 mb-3">
-                    <i class="fas fa-check-circle me-2"></i> {{ session('status') }}
-                </div>
-            @endif
-
-            <form method="POST" action="{{ route('password.email') }}">
-                @csrf
-                <div class="mb-3">
-                    <label for="email" class="form-label" style="color: var(--secondary-blue); font-weight: 500;">Correo electrónico</label>
-                    <input type="email" name="email" id="email" class="form-control py-2 @error('email') is-invalid @enderror" placeholder="Ingresa tu correo electrónico" value="{{ old('email') }}" required>
-                    @error('email')
-                        <div class="invalid-feedback">
-                            <i class="fas fa-exclamation-circle me-1"></i> {{ $message }}
-                        </div>
-                    @enderror
-                </div>
-
-                <div class="d-grid mb-3">
-                    <button type="submit" class="btn btn-primary py-2">
-                        <i class="fas fa-paper-plane me-2"></i> Enviar enlace de recuperación
-                    </button>
-                </div>
-            </form>
-
-            <div class="text-center mt-3">
-                <a href="{{ route('login') }}" style="color: var(--light-blue);">
-                    <i class="fas fa-sign-in-alt me-1"></i> ¿Ya recuerdas tu contraseña? Inicia sesión aquí
-                </a>
-            </div>
-
-            <hr class="my-3" style="border-top: 1px solid rgba(116, 128, 170, 0.2);">
-
-            <footer class="text-center" style="color: var(--secondary-blue); font-size: 0.9rem;">
-                <div class="mb-1">
-                    &copy; <script>document.write(new Date().getFullYear())</script> <strong>SIGAT</strong>
-                </div>
-                <div class="mb-1">
-                    Desarrollado por estudiantes de Educación Dual:
-                </div>
-                <div class="mb-1">
-                    <strong>Maico Zaet</strong>, <strong>Mariana Lilibeth</strong>, <strong>Jorge</strong>, <strong>José Ángel</strong>
-                </div>
-                <div class="mb-1">
-                    Carrera: <strong>Ingeniería Informática</strong>
-                </div>
-                <div>
-                    Contacto: <a href="mailto:educaciondualsigat@gmail.com" style="color: var(--light-blue);">educaciondualsigat@gmail.com</a>
-                </div>
-            </footer>
+    <!-- Tarjeta compacta -->
+    <div class="relative w-full max-w-sm bg-white/30 backdrop-blur-md rounded-2xl shadow-xl p-6 z-10 border border-white/40 mt-20 md:mt-28">
+        
+        <!-- Imagen superior -->
+        <div class="flex justify-center mb-4">
+            <img src="{{ asset('images/carrusel2.jpeg') }}" 
+                 alt="Decoración" 
+                 class="w-20 h-20 rounded-full object-cover shadow-lg border-4 border-white/60">
         </div>
+
+        <!-- Encabezado -->
+        <div class="text-center mb-3">
+            <h2 class="text-xl font-bold text-white">¿Olvidaste tu contraseña?</h2>
+            <p class="text-gray-200 text-xs">
+                Restablece tu acceso al sistema SIGAT
+            </p>
+        </div>
+
+        <!-- Alerta -->
+        <div class="bg-yellow-200/80 border-l-4 border-yellow-500 text-yellow-900 p-2 rounded mb-3 text-xs">
+            <i class="fas fa-info-circle mr-1"></i> 
+            Ingresa tu correo electrónico para recibir instrucciones.
+        </div>
+
+        <!-- Mensaje de éxito -->
+        @if (session('status'))
+            <div class="bg-green-200/80 border-l-4 border-green-600 text-green-900 p-2 rounded mb-3 text-xs text-center">
+                <i class="fas fa-check-circle mr-1"></i> {{ session('status') }}
+            </div>
+        @endif
+
+        <!-- Formulario -->
+        <form method="POST" action="{{ route('password.email') }}" class="space-y-3">
+            @csrf
+            <div>
+                <label for="email" class="block text-xs font-medium text-white">Correo electrónico</label>
+                <input type="email" id="email" name="email" 
+                       class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-400 focus:border-blue-400 text-sm p-2
+                       @error('email') border-red-500 @enderror"
+                       placeholder="tu@correo.com" value="{{ old('email') }}" required>
+                @error('email')
+                    <p class="text-red-300 text-xs mt-1"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
+                @enderror
+            </div>
+
+            <button type="submit" 
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg text-sm transition">
+                <i class="fas fa-paper-plane mr-1"></i> Enviar enlace
+            </button>
+        </form>
+
+        <!-- Enlace login -->
+        <div class="text-center mt-3">
+            <a href="{{ route('login') }}" class="text-xs text-blue-200 hover:underline">
+                <i class="fas fa-sign-in-alt mr-1"></i> ¿Ya recuerdas tu contraseña? Inicia sesión aquí
+            </a>
+        </div>
+
+        <!-- Footer compacto -->
+        <hr class="my-3 border-white/40">
+        <footer class="text-center text-[10px] text-gray-200 leading-4">
+            <p>
+                &copy; <script>document.write(new Date().getFullYear())</script> <strong>SIGAT</strong><br>
+                Desarrollado por Estudiantes de Educación Dual:<br>
+                <strong>Maico Zaet</strong>, <strong>Mariana Lilibeth</strong>, 
+                <strong>Jorge</strong>, <strong>José Ángel</strong><br>
+                Carrera: <strong>Ingeniería Informática</strong><br>
+                Contacto: 
+                <a href="mailto:educaciondualsigat@gmail.com" class="hover:underline text-blue-300">educaciondualsigat@gmail.com</a>
+            </p>
+        </footer>
     </div>
 </div>
+@endsection
 
+@section('script')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.5.1/flowbite.min.js"></script>
 @endsection
