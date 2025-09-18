@@ -28,6 +28,8 @@ Route::post('/update-profile/{id}', [HomeController::class, 'updateProfile'])->n
 Route::post('/update-password/{id}', [HomeController::class, 'updatePassword'])->name('updatePassword');
 
 
+
+
 // ✅ Cargar módulos
 require __DIR__.'/dashboards.php';
 require __DIR__.'/users.php';
