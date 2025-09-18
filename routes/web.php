@@ -33,3 +33,8 @@ require __DIR__.'/dashboards.php';
 require __DIR__.'/users.php';
 require __DIR__.'/informes.php';
 require __DIR__.'/actividades.php';
+
+use App\Http\Controllers\UserController;
+
+// Ruta para Roles simple
+Route::get('/roles-simple', [UserController::class, 'rolesSimple'])->name('roles-simple');

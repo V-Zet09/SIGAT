@@ -55,3 +55,16 @@ export default {
   },
   plugins: [],
 }
+
+module.exports = {
+  darkMode: 'class', // ✅ importante
+  content: [
+    './resources/**/*.blade.php',
+    './resources/**/*.js',
+    './resources/**/*.vue',
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};

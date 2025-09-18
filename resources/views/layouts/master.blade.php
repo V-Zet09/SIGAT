@@ -40,6 +40,28 @@
     @yield('css')
 </head>
 
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const html = document.documentElement;
+
+    // Cargar preferencia previa
+    if (localStorage.getItem('theme') === 'dark') {
+        html.classList.add('dark');
+    }
+
+    const darkToggle = document.getElementById('dark-toggle');
+    if (darkToggle) {
+        darkToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+        });
+    }
+});
+</script>
+
+
+
+
 <body>
     <!-- Begin page -->
     <div id="layout-wrapper">
@@ -67,3 +89,4 @@
 </body>
 
 </html>
+
