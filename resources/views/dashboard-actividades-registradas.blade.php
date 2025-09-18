@@ -20,7 +20,14 @@
 
 @section('content')
 <div class="container">
-    <h2 class="mb-4">Actividades Registradas</h2>
+        {{-- Header Usuarios --}}
+     <div class="px-6 mt-3 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        <div>
+            <h1 class="text-2xl md:text-3xl font-semibold text-gray-800 tracking-tight">Registro General de Actividades</h1>
+            <p class="text-gray-500">Actividades registradas en el sistema</p>
+        </div>
+    </div>
+        {{-- Fin Header --}}
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
