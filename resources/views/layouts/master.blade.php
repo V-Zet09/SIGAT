@@ -14,8 +14,8 @@
     <meta charset="utf-8" />
     <title>@yield('title') | SIGAT</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
-    <meta content="Themesbrand" name="author" />
+    <meta content="SIGAT Dashboard" name="description" />
+    <meta content="SIGAT" name="author" />
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{ URL::asset('images/LOGO_VENTANA_SF.png') }}">
@@ -27,16 +27,19 @@
           crossorigin="anonymous"
           referrerpolicy="no-referrer" />
 
-    {{-- Vite: Carga de estilos y scripts principales --}}
+    <!-- RemixIcon -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+
+    {{-- Vite: Estilos y JS principales --}}
     @vite([
-        'resources/scss/bootstrap.scss',
+        'resources/scss/bootstrap.scss',    
         'resources/scss/icons.scss',
         'resources/scss/app.scss',
         'resources/scss/custom.scss',
         'resources/js/app.js'
     ])
 
-    {{-- CSS o JS adicionales de cada vista --}}
+    {{-- CSS adicional por vista --}}
     @yield('css')
 </head>
 
@@ -44,26 +47,44 @@
     <!-- Begin page -->
     <div id="layout-wrapper">
         
-        @include('layouts.sidebar')
+        {{-- Sidebar opcional --}}
+        @hasSection('sidebar')
+            @yield('sidebar')
+        @else
+            @include('layouts.sidebar')
+        @endif
 
         <!-- ============================================================== -->
-        <!-- Start right Content here -->
+        <!-- Start main content -->
         <!-- ============================================================== -->
         <div class="main-content" style="margin-left: 250px;">
+            
+            {{-- Navbar opcional --}}
+            @hasSection('navbar')
+                @yield('navbar')
+            @endif
+
             <div class="page-content">
                 <div class="container-fluid">
                     @yield('content')
                 </div>
             </div>
+
+            {{-- Footer --}}
             @include('layouts.footer')
+
         </div>
         <!-- end main content-->
     </div>
     <!-- END layout-wrapper -->
 
-    <!-- JAVASCRIPT -->
+    {{-- Vendor scripts --}}
     @include('layouts.vendor-scripts')
-    @yield('scripts')
-</body>
 
+    {{-- Scripts por vista --}}
+    @yield('scripts')
+
+    <!-- Flowbite -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.5.1/flowbite.min.js"></script>
+</body>
 </html>

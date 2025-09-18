@@ -19,4 +19,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard-director-de-area', [DirectorDeAreaController::class, 'index'])->name('dashboard-director-de-area');
     Route::get('/dashboard-auxiliar-area', [AuxiliarDeAreaController::class, 'index'])->name('dashboard-auxiliar-area');
 
+    // Ruta catch-all
 });
