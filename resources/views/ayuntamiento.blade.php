@@ -4,9 +4,11 @@
 
 @section('content')
 <div class="max-w-full mx-auto py-12 px-4">
-    <h1 class="text-3xl font-bold text-[#00713D] mb-12 text-center">Organigrama del Ayuntamiento</h1>
+    <h1 class="text-3xl font-bold text-[#00713D] mb-12 text-center">
+        Organigrama del Ayuntamiento
+    </h1>
 
-@php
+   @php
 $equipo = [
     [
         'nombre' => 'Jose Luis Antunez Goicochea',
@@ -215,11 +217,10 @@ $equipo = [
                 ],
             ],
 
-        ] // fin hijos del presidente
+        ]
     ]
 ];
 @endphp
-
 
     <div class="flex justify-center overflow-x-auto">
         <ul class="relative pl-0">
@@ -229,8 +230,4 @@ $equipo = [
         </ul>
     </div>
 </div>
-
-
-
-<script src="//unpkg.com/alpinejs" defer></script>
 @endsection
