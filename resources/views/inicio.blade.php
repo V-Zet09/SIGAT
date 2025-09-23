@@ -8,33 +8,38 @@
 $dependencias = [
     [
         'nombre' => 'Obras Públicas',
-        'logo' => 'images/obraspublicas.png',
-        'descripcion' => 'Encargada de infraestructura y mantenimiento urbano.'
+        'logo' => asset('images/obraspublicas.png'),
+        'descripcion' => 'Encargada de infraestructura y mantenimiento urbano.',
+        'ruta' => route('dependencias.obras_publicas')
     ],
     [
         'nombre' => 'Educación',
-        'logo' => 'images/educacion.png',
-        'descripcion' => 'Promueve programas educativos y capacitación.'
+        'logo' => asset('images/educacion.png'),
+        'descripcion' => 'Promueve programas educativos y capacitación.',
+        'ruta' => route('dependencias.educacion')
     ],
     [
         'nombre' => 'Salud',
-        'logo' => 'images/salud.jpg',
-        'descripcion' => 'Servicios médicos y prevención comunitaria.'
+        'logo' => asset('images/salud.jpg'),
+        'descripcion' => 'Servicios médicos y prevención comunitaria.',
+        'ruta' => route('dependencias.salud')
     ],
     [
         'nombre' => 'Tesorería',
-        'logo' => 'images/tesoreria.png',
-        'descripcion' => 'Gestión de finanzas municipales.'
+        'logo' => asset('images/tesoreria.png'),
+        'descripcion' => 'Gestión de finanzas municipales.',
+        'ruta' => route('dependencias.tesoreria')
     ],
     [
         'nombre' => 'Cultura',
-        'logo' => 'images/cultura.png',
-        'descripcion' => 'Fomento de actividades culturales y artísticas.'
+        'logo' => asset('images/cultura.png'),
+        'descripcion' => 'Fomento de actividades culturales y artísticas.',
+        'ruta' => route('dependencias.cultura')
     ],
 ];
 @endphp
 
-<!-- Contenedor principal sin fondo verde -->
+<!-- Contenedor principal -->
 <div class="w-full shadow-inner">
     <div class="w-full max-w-7xl mx-auto py-12 px-4 sm:px-6 md:px-8 lg:px-0">
         <div class="w-full bg-white rounded-lg shadow-lg p-8 text-center">
@@ -43,28 +48,19 @@ $dependencias = [
             </h2>
 
             <select 
-                class="w-full p-3 rounded-lg border border-gray-300 shadow-sm
-                       focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600
-                       text-gray-600">
-                <option selected>¿Qué está buscando?</option>
-                <option>Centro de Atención al Emprendedor - SEDETI</option>
-                <option>Fortalecimiento a la micro y pequeña empresa</option>
-                <option>Aviso de Apertura Inmediata</option>
-                <option>Bolsa de Trabajo</option>
+              id="buscador-municipal"
+              class="w-full p-3 rounded-lg border border-gray-300 shadow-sm
+                    focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600
+                    text-gray-600">
+              <option value="" selected>¿Qué está buscando?</option>
+              <option value="{{ route('ayuntamiento') }}">Ayuntamiento</option>
+              <option value="{{ route('gobierno') }}">Gobierno</option>
+              <option value="{{ route('sala-de-prensa') }}">Sala de prensa</option>
+              <option value="{{ route('login') }}">Iniciar sesión</option>
             </select>
         </div>
     </div>
 </div>
-
-{{-- Noticia principal --}}
-@if($noticiaPrincipal)
-    <x-noticia-card 
-        :imagen="$noticiaPrincipal->imagen"
-        :fecha="$noticiaPrincipal->fecha"
-        :titulo="$noticiaPrincipal->titulo"
-        :url="route('noticias.show', $noticiaPrincipal->id)"
-    />
-@endif
 
 
 <div class="flex justify-center mt-8">
@@ -82,36 +78,7 @@ $dependencias = [
     </p>
 </div>
 
-<section class="py-12">
-  <div class="max-w-screen-xl mx-auto px-4">
-    <h2 class="text-3xl font-bold text-center text-[#00713D] mb-10">
-      Últimos Comunicados
-    </h2>
-
-    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-
-      {{-- Noticias secundarias --}}
-@foreach($noticiasSecundarias as $noticia)
-    <x-noticia-card 
-        :imagen="$noticia->imagen"
-        :fecha="$noticia->fecha"
-        :titulo="$noticia->titulo"
-        :url="route('noticias.show', $noticia->id)"
-    />
-@endforeach
-
-    </div>
-
-    <div class="mt-12 flex justify-center">
-      <a href="{{ route('noticias.todos') }}"
-         class="px-8 py-3 bg-[#00713D] hover:bg-[#005c30] text-white font-bold rounded-full shadow-md transition">
-        VER TODOS LOS COMUNICADOS
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- Institucionales - Carrusel -->
+<!-- Dependencias Institucionales -->
 <section class="max-w-screen-xl mx-auto px-4 py-8">
   <h3 class="text-2xl font-bold text-[#00713D] mb-6 text-center">
     Dependencias Institucionales
@@ -128,7 +95,7 @@ $dependencias = [
                loading="lazy" decoding="async">
           <h4 class="text-lg font-semibold text-gray-800">{{ $dep['nombre'] }}</h4>
           <p class="text-sm text-gray-500 text-center">{{ $dep['descripcion'] }}</p>
-          <a href="#" class="mt-3 inline-flex px-4 py-2 rounded-full font-semibold text-white bg-[#00713D] hover:bg-[#005c30] transition">
+          <a href="{{ $dep['ruta'] }}" class="mt-3 inline-flex px-4 py-2 rounded-full font-semibold text-white bg-[#00713D] hover:bg-[#005c30] transition">
             Ver dependencia
           </a>
         </div>
@@ -149,102 +116,37 @@ $dependencias = [
   </div>
 </section>
 
-<!-- Trámites -->
-<section class="max-w-screen-xl mx-auto px-4 py-12">
-  <h2 class="text-3xl font-bold text-center text-gray-800 mb-10">
-    Trámites en Línea
-  </h2>
-
-  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-    <!-- CURP -->
-    <div class="flex flex-col items-center bg-white rounded-xl shadow-md p-6 transition transform hover:scale-105">
-      <img src="images/curp.png" alt="Trámite CURP" class="w-16 h-16 mb-4 object-contain">
-      <h3 class="text-lg font-semibold text-gray-800 text-center mb-4">Trámite CURP</h3>
-      <a href="https://www.gob.mx/curp" class="mt-auto inline-block px-5 py-2 rounded-full bg-[#A7D7C5] hover:bg-[#8EC5B3] text-white font-semibold transition">
-        Iniciar trámite
-      </a>
-    </div>
-
-    <!-- Acta de nacimiento -->
-    <div class="flex flex-col items-center bg-white rounded-xl shadow-md p-6 transition transform hover:scale-105">
-      <img src="images/actadenacimiento.png" alt="Acta de nacimiento" class="w-16 h-16 mb-4 object-contain">
-      <h3 class="text-lg font-semibold text-gray-800 text-center mb-4">Acta de Nacimiento</h3>
-      <a href="https://www.miregistrocivil.gob.mx/" class="mt-auto inline-block px-5 py-2 rounded-full bg-[#A7D7C5] hover:bg-[#8EC5B3] text-white font-semibold transition">
-        Iniciar trámite
-      </a>
-    </div>
-
-    <!-- Pago de Agua -->
-    <div class="flex flex-col items-center bg-white rounded-xl shadow-md p-6 transition transform hover:scale-105">
-      <img src="images/pagodeagua.jpg" alt="Pago de Agua" class="w-16 h-16 mb-4 object-contain">
-      <h3 class="text-lg font-semibold text-gray-800 text-center mb-4">Pago de Agua</h3>
-      <a href="/tramites/agua" class="mt-auto inline-block px-5 py-2 rounded-full bg-[#A7D7C5] hover:bg-[#8EC5B3] text-white font-semibold transition">
-        Iniciar trámite
-      </a>
-    </div>
-
-    <!-- Pago de Luz -->
-    <div class="flex flex-col items-center bg-white rounded-xl shadow-md p-6 transition transform hover:scale-105">
-      <img src="images/pagodeluz.png" alt="Pago de Luz" class="w-16 h-16 mb-4 object-contain">
-      <h3 class="text-lg font-semibold text-gray-800 text-center mb-4">Pago de Luz</h3>
-      <a href="https://app.cfe.mx/Aplicaciones/CCFE/MiEspacio/login.aspx" class="mt-auto inline-block px-5 py-2 rounded-full bg-[#A7D7C5] hover:bg-[#8EC5B3] text-white font-semibold transition">
-        Iniciar trámite
-      </a>
-    </div>
-
-    <!-- Tránsito -->
-    <div class="flex flex-col items-center bg-white rounded-xl shadow-md p-6 transition transform hover:scale-105">
-      <img src="images/transito.jpg" alt="Tránsito" class="w-16 h-16 mb-4 object-contain">
-      <h3 class="text-lg font-semibold text-gray-800 text-center mb-4">Trámite de Tránsito</h3>
-      <a href="/tramites/transito" class="mt-auto inline-block px-5 py-2 rounded-full bg-[#A7D7C5] hover:bg-[#8EC5B3] text-white font-semibold transition">
-        Iniciar trámite
-      </a>
-    </div>
-
-    <!-- Reglas y Reglamentos -->
-    <div class="flex flex-col items-center bg-white rounded-xl shadow-md p-6 transition transform hover:scale-105">
-      <img src="images/reglamentos.png" alt="Reglamentos" class="w-16 h-16 mb-4 object-contain">
-      <h3 class="text-lg font-semibold text-gray-800 text-center mb-4">Reglamentos</h3>
-      <a href="/tramites/reglamentos" class="mt-auto inline-block px-5 py-2 rounded-full bg-[#A7D7C5] hover:bg-[#8EC5B3] text-white font-semibold transition">
-        Iniciar trámite
-      </a>
-    </div>
-
-    <!-- Otros trámites -->
-    <div class="flex flex-col items-center bg-white rounded-xl shadow-md p-6 transition transform hover:scale-105">
-      <img src="images/otros.png" alt="Otros trámites" class="w-16 h-16 mb-4 object-contain">
-      <h3 class="text-lg font-semibold text-gray-800 text-center mb-4">Otros trámites</h3>
-      <a href="/tramites/otros" class="mt-auto inline-block px-5 py-2 rounded-full bg-[#A7D7C5] hover:bg-[#8EC5B3] text-white font-semibold transition">
-        Iniciar trámite
-      </a>
-    </div>
-  </div>
-</section>
-
-
 <script>
     // Poner fecha de hoy
     const fecha = new Date();
     const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
     document.getElementById('fechaHoy').textContent = fecha.toLocaleDateString('es-MX', opciones);
 
- // Función scroll carrusel
-  function scrollCarousel(direction) {
-      const carousel = document.getElementById('carousel');
-      const cardWidth = carousel.querySelector('article').offsetWidth + 16; // ancho + gap
-      carousel.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
-  }
+    // Función scroll carrusel
+    function scrollCarousel(direction) {
+        const carousel = document.getElementById('carousel');
+        const cardWidth = carousel.querySelector('article').offsetWidth + 16; // ancho + gap
+        carousel.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
+    }
 
-  // Movimiento automático opcional
-  window.addEventListener('load', () => {
-      const carousel = document.getElementById('carousel');
-      let direction = 1;
-      setInterval(() => {
-          if (carousel.scrollLeft + carousel.clientWidth >= carousel.scrollWidth) direction = -1;
-          if (carousel.scrollLeft <= 0) direction = 1;
-          scrollCarousel(direction);
-      }, 3000);
-  });
+    // Movimiento automático opcional
+    window.addEventListener('load', () => {
+        const carousel = document.getElementById('carousel');
+        let direction = 1;
+        setInterval(() => {
+            if (carousel.scrollLeft + carousel.clientWidth >= carousel.scrollWidth) direction = -1;
+            if (carousel.scrollLeft <= 0) direction = 1;
+            scrollCarousel(direction);
+        }, 3000);
+    });
+
+    // Redirigir buscador
+    document.getElementById('buscador-municipal').addEventListener('change', function() {
+      const url = this.value;
+      if (url) {
+          window.location.href = url;
+      }
+    });
 </script>
 
 <style>
