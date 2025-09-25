@@ -3,522 +3,343 @@
 @section('title', 'Generar Informe')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+<link href="https://cdn.jsdelivr.net/npm/flowbite@1.8.1/dist/flowbite.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
-
-
-
+<link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+<style>
+  [x-cloak] { display: none !important; }
+  .preview-container { display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.5rem; }
+  .preview-image-container { position:relative; width:120px; height:80px; border:1px solid #e5e7eb; border-radius:.375rem; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+  .preview-image { width:100%; height:100%; object-fit:cover; }
+  .remove-image-btn { position:absolute; top:4px; right:4px; background:rgba(0,0,0,.6); color:white; border-radius:9999px; width:22px; height:22px; display:flex; align-items:center; justify-content:center; border:none; cursor:pointer; }
+  .upload-box { cursor:pointer; border:1px dashed #cbd5e1; padding:1rem; border-radius:.5rem; display:flex; align-items:center; justify-content:center; text-align:center; }
+  .upload-box.dragover { border-color:#22c55e; background:#f0fff4; }
+  .is-invalid { border-color: #ef4444 !important; }
+</style>
 @endsection
 
 @section('content')
-<div class="container-fluid informe-container">
-    <!-- Notificación Toast -->
-    <div id="toast" class="toast">Información guardada correctamente</div>
-    
-    <!-- Barra de pestañas -->
-    <div class="tabs">
-        <div class="tab active" data-tab="inicio">Inicio</div>
-        <div class="tab" data-tab="informacion">Información Municipio</div>
-        <div class="tab" data-tab="introduccion">Introducción</div>
-        <div class="tab" data-tab="gobierno">Introducción Gobierno</div>
-        <div class="tab" data-tab="actividades">Actividades</div>
+<div class="max-w-7xl mx-auto p-6 bg-white rounded-2xl shadow" x-data="{ current: 'inicio' }">
+
+    <!-- Toast -->
+    <div x-data="{show:false}" x-show="show" x-transition class="fixed top-6 right-6 bg-green-600 text-white px-4 py-2 rounded" x-cloak>
+        Información guardada correctamente
     </div>
 
-    <!-- Contenido de las pestañas -->
+    <!-- Tabs -->
+    <nav class="mb-6 border-b border-gray-200">
+        <ul class="flex gap-6 text-sm text-gray-600">
+            <li>
+                <button @click="current='inicio'" :class="current==='inicio' ? 'text-[#00713D] border-b-2 border-[#00713D] pb-2' : 'pb-2'" class="focus:outline-none">Inicio</button>
+            </li>
+            <li>
+                <button @click="current='informacion'" :class="current==='informacion' ? 'text-[#00713D] border-b-2 border-[#00713D] pb-2' : 'pb-2'" class="focus:outline-none">Información Municipio</button>
+            </li>
+            <li>
+                <button @click="current='introduccion'" :class="current==='introduccion' ? 'text-[#00713D] border-b-2 border-[#00713D] pb-2' : 'pb-2'" class="focus:outline-none">Introducción</button>
+            </li>
+            <li>
+                <button @click="current='gobierno'" :class="current==='gobierno' ? 'text-[#00713D] border-b-2 border-[#00713D] pb-2' : 'pb-2'" class="focus:outline-none">Introducción Gobierno</button>
+            </li>
+            <li>
+                <button @click="current='actividades'" :class="current==='actividades' ? 'text-[#00713D] border-b-2 border-[#00713D] pb-2' : 'pb-2'" class="focus:outline-none">Actividades</button>
+            </li>
+        </ul>
+    </nav>
+
     <form id="informeForm" method="POST" action="{{ route('informes.store') }}" enctype="multipart/form-data">
         @csrf
 
-        <!-- Sección Inicio -->
-<div class="section active" id="inicio">
-    <h2>Portada</h2>
-
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <label>Título del Informe</label>
-            <input type="text" name="titulo" class="form-control" placeholder="Ingrese el título" required>
-        </div>
-        <div class="form-group col-md-6">
-            <label>Período</label>
-            <input type="text" id="periodo" name="periodo" class="form-control" placeholder="Selecciona el período" required>
-        </div>
-    </div>
-    <div class="comuna-section">
-        <h2>INFORMACIÓN DE LA COMUNA</h2>
-        
-        <div class="authorities-grid">
-            <div class="authority-card">
-                <h3>Presidencia</h3>
-                <p><strong>C. JOSÉ LUIS ANTÚNEZ GOICOCHEA</strong><br>Presidente Municipal Constitucional</p>
-            </div>
-            <div class="authority-card">
-                <h3>Sindicato</h3>
-                <p><strong>Profa. Maricela Cruz Cedillo</strong><br>Síndica Procuradora Municipal</p>
-            </div>
-            <div class="authority-card">
-                <h3>Secretaría</h3>
-                <p><strong>C. Profr. Mario Alberto Lagunas Salgado</strong><br>Secretario General del H. Ayuntamiento Municipal Constitucional</p>
-            </div>
-        </div>
-
-        <h3>Regidores</h3>
-        <div class="regidores-grid">
-            <div class="regidor-column">
-                <ul>
-                    <li><strong>C. Zenón Huerta Arellano</strong>Desarrollo Urbano, Medio Ambiente y Obras Públicas</li>
-                    <li><strong>C. Ma. del Carmen Barrera Galarza</strong>Educación, Cultura, Recreación, Espectáculos y Juventud</li>
-                    <li><strong>C. Arturo León Juan</strong>Salud y Asistencia Social</li>
-                </ul>
-            </div>
-            <div class="regidor-column">
-                <ul>
-                    <li><strong>C. Ma. Isabel Quintana Gómez</strong>Equidad y Género, Derecho de las Niñas y Adolescentes</li>
-                    <li><strong>C. Jesús Javier Cruz</strong>Desarrollo Rural, Participación Social de Migrantes</li>
-                    <li><strong>C. Edith Aguirre Flores</strong>Comercio, Abasto Popular, Atención y Fomento al Empleo</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <div class="upload-container">
-        <div class="upload-box" id="upload-box">
-            <i class="fas fa-cloud-upload-alt upload-icon"></i>
-            <div class="upload-text">
-                Arrastra tu imagen aquí o 
-                <span class="browse-link">selecciona desde tu dispositivo</span>
-            </div>
-           <input type="file" id="imagen-comuna-inicio" name="imagen_comuna" style="display:none" accept="image/*" required>
-        </div>
-        <div id="upload-preview" class="preview-container"></div>
-    </div>
-
-    <div class="form-actions">
-        <button type="button" class="btn btn-secondary" onclick="nextTab('informacion')">
-            Siguiente <i class="fas fa-arrow-right ml-2"></i>
-        </button>
-    </div>
-</div>
-
-<!-- Sección Información Municipio -->
-<div class="section" id="informacion">
-    <h2>Información del Municipio</h2>
-    
-    <div class="form-group">
-        <label>Nombre del Municipio</label>
-        <input type="text" name="municipio_nombre" class="form-control" placeholder="Nombre oficial del municipio" required>
-    </div>
-    
-    <div class="form-group">
-        <label>Descripción del Municipio</label>
-        <textarea name="municipio_descripcion" class="form-control" rows="5" placeholder="Descripción detallada del municipio" required></textarea>
-    </div>
-    
-    <div class="form-group">
-        <label>Imagen del Municipio</label>
-        <div class="upload-container">
-            <div class="upload-box" id="informacion-upload">
-                <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                <div class="upload-text">
-                    Arrastra tu imagen aquí o 
-                    <span class="browse-link">selecciona desde tu dispositivo</span>
+        <!-- INICIO -->
+        <section x-show="current==='inicio'" x-cloak class="space-y-6">
+            <h2 class="text-2xl font-bold text-[#00713D]">Portada</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Título del Informe</label>
+                    <input type="text" name="titulo" class="w-full rounded-md border-gray-300 px-3 py-2" placeholder="Ingrese el título" required>
                 </div>
-                <input type="file" id="imagen-comuna-informacion" name="imagen_comuna_informacion" style="display:none" accept="image/*" required>
-            </div>
-            <div id="informacion-preview" class="preview-container"></div>
-        </div>
-    </div>
-
-    <div class="form-actions">
-        <button type="button" class="btn btn-secondary" onclick="prevTab('inicio')"><i class="fas fa-arrow-left mr-2"></i> Anterior</button>
-        <button type="button" class="btn btn-primary" onclick="nextTab('introduccion')">Siguiente <i class="fas fa-arrow-right ml-2"></i></button>
-    </div>
-</div>
-
-<!-- Sección Introducción -->
-<div class="section" id="introduccion">
-    <h2>Introducción</h2>
-    
-   <div class="form-group">
-    <label>Contenido de la introducción (máximo 800 palabras)</label>
-    <div class="editor-toolbar">
-        <button type="button" data-command="bold" title="Negrita"><i class="fas fa-bold"></i></button>
-        <button type="button" data-command="italic" title="Cursiva"><i class="fas fa-italic"></i></button>
-        <button type="button" data-command="underline" title="Subrayado"><i class="fas fa-underline"></i></button>
-        <select data-command="formatBlock" title="Estilo de párrafo">
-            <option value="" selected>Estilo</option>
-            <option value="h1">Título 1</option>
-            <option value="h2">Título 2</option>
-            <option value="h3">Título 3</option>
-            <option value="p">Párrafo</option>
-        </select>
-    </div>
-
-    <!-- Editor contenteditable -->
-    <div id="introduccion-editor" class="editor-content" contenteditable="true"></div>
-
-    <!-- Textarea oculto obligatorio -->
-    <textarea name="introduccion" id="introduccion-content" style="display:none;" required></textarea>
-
-    <div class="word-count" id="wordCount">0 / 800 palabras</div>
-</div>
-
-    
-    <div class="form-group">
-        <label>Imagen para Introducción</label>
-        <div class="upload-container">
-            <div class="upload-box" id="introduccion-upload">
-                <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                <div class="upload-text">
-                    Arrastra tu imagen aquí o 
-                    <span class="browse-link">selecciona desde tu dispositivo</span>
-                </div>
-                <input type="file" id="imagen-comuna-introduccion" name="imagen_comuna_introduccion" style="display:none" accept="image/*" required>
-            </div>
-            <div id="introduccion-preview" class="preview-container"></div>
-        </div>
-    </div>
-
-    <div class="form-actions">
-        <button type="button" class="btn btn-secondary" onclick="prevTab('informacion')">
-            <i class="fas fa-arrow-left mr-2"></i> Anterior
-        </button>
-        <button type="button" class="btn btn-primary" onclick="nextTab('gobierno')">
-            Siguiente <i class="fas fa-arrow-right ml-2"></i>
-        </button>
-    </div>
-</div>
-
-
-<!-- Sección Introducción Gobierno -->
-<div class="section" id="gobierno">
-    <h2>Introducción del Gobierno</h2>
-    
-    <div class="form-group">
-        <label>Contenido de la introducción del gobierno</label>
-        <textarea name="gobierno_introduccion" class="form-control" rows="8" placeholder="Describa la introducción al gobierno municipal" required></textarea>
-    </div>
-    
-    <div class="form-group">
-        <label>Imagen del Gobierno</label>
-        <div class="upload-container">
-            <div class="upload-box" id="gobierno-upload">
-                <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                <div class="upload-text">
-                    Arrastra tu imagen aquí o 
-                    <span class="browse-link">selecciona desde tu dispositivo</span>
-                </div>
-                <input type="file" id="imagen-comuna-gobierno" name="imagen_comuna_gobierno" style="display:none" accept="image/*" required>
-            </div>
-            <div id="gobierno-preview" class="preview-container"></div>
-        </div>
-    </div>
-
-    <div class="form-actions">
-        <button type="button" class="btn btn-secondary" onclick="prevTab('introduccion')"><i class="fas fa-arrow-left mr-2"></i> Anterior</button>
-        <button type="button" class="btn btn-primary" onclick="nextTab('actividades')">Siguiente <i class="fas fa-arrow-right ml-2"></i></button>
-    </div>
-</div>
-
-<!-- Sección Actividades -->
-<div class="section" id="actividades">
-    <h2>Actividades</h2>
-    
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <label>Seleccione el período:</label>
-            <select name="actividades_periodo" class="form-control" required>
-                <option value="Enero - Marzo">Enero - Marzo</option>
-                <option value="Abril - Junio">Abril - Junio</option>
-                <option value="Julio - Septiembre">Julio - Septiembre</option>
-                <option value="Octubre - Diciembre">Octubre - Diciembre</option>
-            </select>
-        </div>
-        <div class="form-group col-md-6">
-            <label>Áreas:</label>
-            <div class="checkbox-group">
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="areas[]" value="Cultura" id="area-cultura">
-                    <label class="form-check-label" for="area-cultura">Cultura</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="areas[]" value="Educación" id="area-educacion">
-                    <label class="form-check-label" for="area-educacion">Educación</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="areas[]" value="Salud" id="area-salud">
-                    <label class="form-check-label" for="area-salud">Salud</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="areas[]" value="Deportes" id="area-deportes">
-                    <label class="form-check-label" for="area-deportes">Deportes</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="areas[]" value="Seguridad" id="area-seguridad">
-                    <label class="form-check-label" for="area-seguridad">Seguridad</label>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Período</label>
+                    <input type="text" id="periodo" name="periodo" class="w-full rounded-md border-gray-300 px-3 py-2" placeholder="Selecciona el período" required>
                 </div>
             </div>
-        </div>
-    </div>
-    
-    <div class="form-group">
-        <label>Descripción de las actividades</label>
-        <textarea name="actividades_descripcion" class="form-control" rows="8" placeholder="Describa las actividades realizadas" required></textarea>
-    </div>
-    
-    <div class="form-group">
-        <label>Imágenes de Actividades (Máximo 5)</label>
-        <div class="upload-container">
-            <div class="upload-box" id="actividades-upload">
-                <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                <div class="upload-text">
-                    Arrastra tus imágenes aquí o 
-                    <span class="browse-link">selecciona desde tu dispositivo</span>
+
+            <!-- Información de la comuna -->
+            <div class="mt-6 bg-gray-50 p-4 rounded-md border">
+                <h3 class="text-lg font-semibold">INFORMACIÓN DE LA COMUNA</h3>
+                <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="p-3 bg-white rounded shadow-sm">
+                        <h4 class="font-semibold">Presidencia</h4>
+                        <p class="text-sm"><strong>C. JOSÉ LUIS ANTÚNEZ GOICOCHEA</strong><br>Presidente Municipal Constitucional</p>
+                    </div>
+                    <div class="p-3 bg-white rounded shadow-sm">
+                        <h4 class="font-semibold">Sindicato</h4>
+                        <p class="text-sm"><strong>Profa. Maricela Cruz Cedillo</strong><br>Síndica Procuradora Municipal</p>
+                    </div>
+                    <div class="p-3 bg-white rounded shadow-sm">
+                        <h4 class="font-semibold">Secretaría</h4>
+                        <p class="text-sm"><strong>C. Profr. Mario Alberto Lagunas Salgado</strong><br>Secretario General del H. Ayuntamiento Municipal Constitucional</p>
+                    </div>
                 </div>
-                <input type="file" id="imagen-comuna-actividades" name="imagen_comuna_actividades" style="display:none" accept="image/*" multiple required>
+
+                <h4 class="mt-4 font-semibold">Regidores</h4>
+                <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <ul class="list-disc pl-5 text-sm space-y-1">
+                            <li><strong>C. Zenón Huerta Arellano</strong> Desarrollo Urbano, Medio Ambiente y Obras Públicas</li>
+                            <li><strong>C. Ma. del Carmen Barrera Galarza</strong> Educación, Cultura, Recreación, Espectáculos y Juventud</li>
+                            <li><strong>C. Arturo León Juan</strong> Salud y Asistencia Social</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul class="list-disc pl-5 text-sm space-y-1">
+                            <li><strong>C. Ma. Isabel Quintana Gómez</strong> Equidad y Género, Derecho de las Niñas y Adolescentes</li>
+                            <li><strong>C. Jesús Javier Cruz</strong> Desarrollo Rural, Participación Social de Migrantes</li>
+                            <li><strong>C. Edith Aguirre Flores</strong> Comercio, Abasto Popular, Atención y Fomento al Empleo</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <div id="actividades-preview" class="preview-container row-preview"></div>
-        </div>
-    </div>
-    
-    <div class="form-actions">
-        <button type="button" class="btn btn-secondary" onclick="prevTab('gobierno')"><i class="fas fa-arrow-left mr-2"></i> Anterior</button>
-        <button type="submit" class="btn btn-success"><i class="fas fa-save mr-2"></i> Generar Informe</button>
-    </div>
-</div>
+
+            <div class="mt-4">
+                <div id="upload-box" class="upload-box" role="button">
+                    <div>
+                        <div class="text-xl">📁</div>
+                        <div class="text-sm">Arrastra tu imagen aquí o <span class="font-semibold">selecciona desde tu dispositivo</span></div>
+                    </div>
+                    <input type="file" id="imagen-comuna-inicio" name="imagen_comuna" class="hidden" accept="image/*" required>
+                </div>
+                <div id="upload-preview" class="preview-container"></div>
+            </div>
+
+            <div class="mt-6 flex justify-end">
+                <button type="button" @click="current='informacion'" class="px-4 py-2 rounded text-white !bg-[#00713D] hover:!bg-[#05924a] transition">Siguiente →</button>
+            </div>
+        </section>
+
+        <!-- INFORMACIÓN MUNICIPIO -->
+        <section x-show="current==='informacion'" x-cloak class="space-y-6">
+            <h2 class="text-2xl font-bold text-[#00713D]">Información del Municipio</h2>
+            <div>
+                <label class="block text-sm font-medium mb-1">Nombre del Municipio</label>
+                <input type="text" name="municipio_nombre" class="w-full rounded-md border-gray-300 px-3 py-2" placeholder="Nombre oficial del municipio" required>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1">Descripción del Municipio</label>
+                <textarea name="municipio_descripcion" class="w-full rounded-md border-gray-300 px-3 py-2" rows="5" placeholder="Descripción detallada del municipio" required></textarea>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1">Imagen del Municipio</label>
+                <div class="mt-2">
+                    <div id="informacion-upload" class="upload-box">
+                        <div>
+                            <div class="text-xl">📁</div>
+                            <div class="text-sm">Arrastra tu imagen aquí o <span class="font-semibold">selecciona desde tu dispositivo</span></div>
+                        </div>
+                        <input type="file" id="imagen-comuna-informacion" name="imagen_comuna_informacion" class="hidden" accept="image/*" required>
+                    </div>
+                    <div id="informacion-preview" class="preview-container"></div>
+                </div>
+            </div>
+            <div class="flex justify-between mt-4">
+                <button type="button" @click="current='inicio'" class="px-4 py-2 rounded !bg-gray-200 hover:!bg-gray-300 transition">← Anterior</button>
+                <button type="button" @click="current='introduccion'" class="px-4 py-2 rounded text-white !bg-[#00713D] hover:!bg-[#05924a] transition">Siguiente →</button>
+            </div>
+        </section>
+
+        <!-- INTRODUCCIÓN -->
+        <section x-show="current==='introduccion'" x-cloak class="space-y-6">
+            <h2 class="text-2xl font-bold text-[#00713D]">Introducción</h2>
+            <div>
+                <label class="block text-sm font-medium mb-1">Contenido de la introducción (máximo 800 palabras)</label>
+                <div class="border rounded-md bg-white">
+                    <div class="p-2 flex gap-2 border-b">
+                        <button type="button" data-command="bold" class="px-2 py-1 border rounded text-sm">B</button>
+                        <button type="button" data-command="italic" class="px-2 py-1 border rounded text-sm">I</button>
+                        <button type="button" data-command="underline" class="px-2 py-1 border rounded text-sm">U</button>
+                        <select data-command="formatBlock" class="ml-2 border rounded p-1 text-sm">
+                            <option value="" selected>Estilo</option>
+                            <option value="h1">Título 1</option>
+                            <option value="h2">Título 2</option>
+                            <option value="h3">Título 3</option>
+                            <option value="p">Párrafo</option>
+                        </select>
+                    </div>
+                    <div id="introduccion-editor" class="editor-content p-4 min-h-[150px]" contenteditable="true" style="outline:none;"></div>
+                </div>
+                <textarea name="introduccion" id="introduccion-content" class="hidden" required></textarea>
+                <div class="text-sm text-gray-600 mt-1" id="wordCount">0 / 800 palabras</div>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1">Imagen para Introducción</label>
+                <div id="introduccion-upload" class="upload-box">
+                    <div>
+                        <div class="text-xl">📁</div>
+                        <div class="text-sm">Arrastra tu imagen aquí o <span class="font-semibold">selecciona desde tu dispositivo</span></div>
+                    </div>
+                    <input type="file" id="imagen-comuna-introduccion" name="imagen_comuna_introduccion" class="hidden" accept="image/*" required>
+                </div>
+                <div id="introduccion-preview" class="preview-container"></div>
+            </div>
+            <div class="flex justify-between mt-4">
+                <button type="button" @click="current='informacion'" class="px-4 py-2 rounded !bg-gray-200 hover:!bg-gray-300 transition">← Anterior</button>
+                <button type="button" @click="current='gobierno'" class="px-4 py-2 rounded text-white !bg-[#00713D] hover:!bg-[#05924a] transition">Siguiente →</button>
+            </div>
+        </section>
+
+        <!-- GOBIERNO -->
+        <section x-show="current==='gobierno'" x-cloak class="space-y-6">
+            <h2 class="text-2xl font-bold text-[#00713D]">Introducción del Gobierno</h2>
+            <div>
+                <label class="block text-sm font-medium mb-1">Contenido de la introducción del gobierno</label>
+                <textarea name="gobierno_introduccion" class="w-full rounded-md border-gray-300 px-3 py-2" rows="8" placeholder="Describa la introducción al gobierno municipal" required></textarea>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1">Imagen del Gobierno</label>
+                <div id="gobierno-upload" class="upload-box">
+                    <div>
+                        <div class="text-xl">📁</div>
+                        <div class="text-sm">Arrastra tu imagen aquí o <span class="font-semibold">selecciona desde tu dispositivo</span></div>
+                    </div>
+                    <input type="file" id="imagen-comuna-gobierno" name="imagen_comuna_gobierno" class="hidden" accept="image/*" required>
+                </div>
+                <div id="gobierno-preview" class="preview-container"></div>
+            </div>
+            <div class="flex justify-between mt-4">
+                <button type="button" @click="current='introduccion'" class="px-4 py-2 rounded !bg-gray-200 hover:!bg-gray-300 transition">← Anterior</button>
+                <button type="button" @click="current='actividades'" class="px-4 py-2 rounded text-white !bg-[#00713D] hover:!bg-[#05924a] transition">Siguiente →</button>
+            </div>
+        </section>
+
+        <!-- ACTIVIDADES -->
+        <section x-show="current==='actividades'" x-cloak class="space-y-6">
+            <h2 class="text-2xl font-bold text-[#00713D]">Actividades</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Seleccione el período:</label>
+                    <select name="actividades_periodo" class="w-full rounded-md border-gray-300 px-3 py-2" required>
+                        <option value="Enero - Marzo">Enero - Marzo</option>
+                        <option value="Abril - Junio">Abril - Junio</option>
+                        <option value="Julio - Septiembre">Julio - Septiembre</option>
+                        <option value="Octubre - Diciembre">Octubre - Diciembre</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Áreas:</label>
+                    <div class="flex flex-wrap gap-3">
+                        <label class="inline-flex items-center"><input type="checkbox" name="areas[]" value="Cultura" class="mr-2">Cultura</label>
+                        <label class="inline-flex items-center"><input type="checkbox" name="areas[]" value="Educación" class="mr-2">Educación</label>
+                        <label class="inline-flex items-center"><input type="checkbox" name="areas[]" value="Salud" class="mr-2">Salud</label>
+                        <label class="inline-flex items-center"><input type="checkbox" name="areas[]" value="Deportes" class="mr-2">Deportes</label>
+                        <label class="inline-flex items-center"><input type="checkbox" name="areas[]" value="Seguridad" class="mr-2">Seguridad</label>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1">Descripción de las actividades</label>
+                <textarea name="actividades_descripcion" class="w-full rounded-md border-gray-300 px-3 py-2" rows="8" placeholder="Describa las actividades realizadas" required></textarea>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1">Imágenes de Actividades (Máximo 5)</label>
+                <div id="actividades-upload" class="upload-box">
+                    <div>
+                        <div class="text-xl">📁</div>
+                        <div class="text-sm">Arrastra tus imágenes aquí o <span class="font-semibold">selecciona desde tu dispositivo</span></div>
+                    </div>
+                    <input type="file" id="imagen-comuna-actividades" name="imagenes_actividades[]" class="hidden" accept="image/*" multiple required>
+                </div>
+                <div id="actividades-preview" class="preview-container"></div>
+            </div>
+            <div class="flex justify-between mt-4">
+                <button type="button" @click="current='gobierno'" class="px-4 py-2 rounded !bg-gray-200 hover:!bg-gray-300 transition">← Anterior</button>
+                <button type="submit" class="px-4 py-2 rounded text-white !bg-[#00713D] hover:!bg-[#05924a] transition">Guardar Informe</button>
+            </div>
+        </section>
+
     </form>
 </div>
-
 @endsection
-@section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@section('js')
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
-
 <script>
-function showTab(tabId) {
-    document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
-    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-    document.getElementById(tabId).classList.add('active');
-    document.querySelector(`.tab[data-tab="${tabId}"]`).classList.add('active');
-}
+document.addEventListener('alpine:init', () => {
+    Alpine.data('informeTabs', () => ({
+        current: 'inicio',
+        tabs: ['inicio','informacion','introduccion','gobierno','actividades'],
+        nextTab(tab){ this.current = tab },
+        prevTab(tab){ this.current = tab }
+    }))
+})
 
-function nextTab(nextId) {
-    if (validateCurrentTab()) showTab(nextId);
-}
-
-function prevTab(prevId) {
-    showTab(prevId);
-}
-
-function validateCurrentTab() {
-    const currentTab = document.querySelector('.section.active');
-    const requiredInputs = currentTab.querySelectorAll('[required]');
-    const editor = currentTab.querySelector('#introduccion-editor');
-    const imageInputs = currentTab.querySelectorAll('input[type="file"][required]');
-    
-    let isValid = true;
-
-    // Validar campos normales
-    requiredInputs.forEach(input => {
-        if (input.type !== 'file' && !input.value.trim()) {
-            input.classList.add('is-invalid');
-            isValid = false;
-        } else {
-            input.classList.remove('is-invalid');
-        }
-    });
-
-    // Validar editor de texto
-   if (editor) {
-    const content = editor.innerText.trim();
-    if (content === '') {
-        editor.classList.add('is-invalid');
-
-        // Agregar mensaje de error si no existe
-        if (!editor.nextElementSibling || !editor.nextElementSibling.classList.contains('error-message')) {
-            const errorMsg = document.createElement('div');
-            errorMsg.className = 'error-message text-danger mt-2';
-            errorMsg.innerHTML = '<i class="fas fa-exclamation-circle"></i> Este campo es obligatorio';
-            editor.parentNode.insertBefore(errorMsg, editor.nextElementSibling);
-        }
-
-        isValid = false;
-    } else {
-        editor.classList.remove('is-invalid');
-        const errorMsg = editor.nextElementSibling;
-        if (errorMsg && errorMsg.classList.contains('error-message')) errorMsg.remove();
-    }
-}
-
-
-    // Validar imágenes
-    imageInputs.forEach(input => {
-        const uploadBox = input.closest('.upload-container').querySelector('.upload-box');
-        if (!input.files || input.files.length === 0) {
-            uploadBox.classList.add('error');
-            if (!uploadBox.nextElementSibling || !uploadBox.nextElementSibling.classList.contains('error-message')) {
-                const errorMsg = document.createElement('div');
-                errorMsg.className = 'error-message text-danger mt-2';
-                errorMsg.innerHTML = '<i class="fas fa-exclamation-circle"></i> Debe seleccionar una imagen';
-                uploadBox.parentNode.insertBefore(errorMsg, uploadBox.nextElementSibling);
-            }
-            isValid = false;
-        } else {
-            uploadBox.classList.remove('error');
-            const errorMsg = uploadBox.nextElementSibling;
-            if (errorMsg && errorMsg.classList.contains('error-message')) errorMsg.remove();
-        }
-    });
-
-    if (!isValid) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Campos requeridos',
-            text: 'Por favor complete todos los campos obligatorios',
-        });
-    }
-    return isValid;
-}
-
-function setupFileUpload(uploadBoxId, fileInputId, previewId, multiple = false) {
-    const uploadBox = document.getElementById(uploadBoxId);
-    const fileInput = document.getElementById(fileInputId);
-    const previewContainer = document.getElementById(previewId);
-
-    uploadBox.addEventListener('click', () => fileInput.click());
-
-    fileInput.addEventListener('change', (e) => {
-        if (e.target.files.length > 0) {
-            handleFiles(e.target.files, previewContainer, uploadBox, fileInput);
-            if (!multiple) uploadBox.style.display = 'none';
-        }
-    });
-
-    uploadBox.addEventListener('dragover', (e) => { e.preventDefault(); uploadBox.classList.add('dragover'); });
-    uploadBox.addEventListener('dragleave', () => uploadBox.classList.remove('dragover'));
-    uploadBox.addEventListener('drop', (e) => {
-        e.preventDefault();
-        uploadBox.classList.remove('dragover');
-        if (e.dataTransfer.files.length > 0) {
-            fileInput.files = e.dataTransfer.files;
-            handleFiles(e.dataTransfer.files, previewContainer, uploadBox, fileInput);
-            if (!multiple) uploadBox.style.display = 'none';
-        }
-    });
-}
-
-function handleFiles(files, previewContainer, uploadBox, fileInput) {
-    const maxFiles = 5;
-    const currentCount = previewContainer.children.length;
-    const remainingSlots = maxFiles - currentCount;
-    if (remainingSlots <= 0) {
-        Swal.fire({ icon: 'warning', title: 'Límite alcanzado', text: `Solo puedes subir hasta ${maxFiles} imágenes.` });
-        return;
-    }
-    const filesToAdd = Array.from(files).slice(0, remainingSlots);
-    filesToAdd.forEach(file => {
-        if (file.type.match('image.*')) {
-            const reader = new FileReader();
-            reader.onload = (e) => createImagePreview(e.target.result, previewContainer, uploadBox, fileInput);
-            reader.readAsDataURL(file);
-        }
-    });
-    if (previewContainer.children.length + filesToAdd.length >= maxFiles) uploadBox.style.display = 'none';
-}
-
-function createImagePreview(imageSrc, previewContainer, uploadBox, fileInput, index = null) {
-    const container = document.createElement('div');
-    container.className = 'preview-image-container';
-    const img = document.createElement('img');
-    img.src = imageSrc;
-    img.className = previewContainer.classList.contains('grid-preview') ? 'preview-thumbnail' : 'preview-image';
-
-    const removeBtn = document.createElement('button');
-    removeBtn.className = 'remove-image-btn';
-    removeBtn.innerHTML = '×';
-    removeBtn.title = 'Eliminar imagen';
-    removeBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        container.remove();
-        if (previewContainer.children.length === 0) {
-            uploadBox.style.display = 'block';
-            if (!fileInput.multiple) fileInput.value = '';
-        }
-        if (fileInput.multiple && index !== null) updateFileInput(fileInput, index);
-    });
-
-    container.appendChild(img);
-    container.appendChild(removeBtn);
-    previewContainer.appendChild(container);
-}
-
-function updateFileInput(fileInput, indexToRemove) {
-    const files = Array.from(fileInput.files);
-    files.splice(indexToRemove, 1);
-    const newFileList = new DataTransfer();
-    files.forEach(file => newFileList.items.add(file));
-    fileInput.files = newFileList.files;
-}
-
-function setupEditor() {
-    const editor = document.getElementById('introduccion-editor');
-    const wordCount = document.getElementById('wordCount');
-    const hiddenInput = document.getElementById('introduccion-content');
-
-    document.querySelectorAll('.editor-toolbar [data-command]').forEach(button => {
-        button.addEventListener('click', () => {
-            document.execCommand(button.getAttribute('data-command'), false, null);
-            editor.focus();
-        });
-    });
-
-    document.querySelector('.editor-toolbar select').addEventListener('change', function() {
-        if (this.value) {
-            document.execCommand('formatBlock', false, this.value);
-            this.selectedIndex = 0;
-            editor.focus();
-        }
-    });
-
-    editor.addEventListener('input', () => {
-        const text = editor.innerText || '';
-        const count = text.trim() ? text.trim().split(/\s+/).length : 0;
-        wordCount.textContent = `${count} / 800 palabras`;
-        wordCount.style.color = count > 800 ? 'red' : '#666';
-        hiddenInput.value = editor.innerHTML;
-    });
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.tab').forEach(tab => {
-        tab.addEventListener('click', () => showTab(tab.getAttribute('data-tab')));
-    });
-
-    setupFileUpload('upload-box', 'imagen-comuna-inicio', 'upload-preview');
-    setupFileUpload('informacion-upload', 'imagen-comuna-informacion', 'informacion-preview');
-    setupFileUpload('introduccion-upload', 'imagen-comuna-introduccion', 'introduccion-preview');
-    setupFileUpload('gobierno-upload', 'imagen-comuna-gobierno', 'gobierno-preview');
-    setupFileUpload('actividades-upload', 'imagen-comuna-actividades', 'actividades-preview', true);
-
-    setupEditor();
-
-    function initFlatpickr() {
-        const periodoInput = document.getElementById("periodo");
-        if (periodoInput && typeof flatpickr !== "undefined") {
-            flatpickr(periodoInput, { locale: "es", dateFormat: "d-m-Y", maxDate: "today" });
-        } else if (typeof flatpickr === "undefined") {
-            setTimeout(initFlatpickr, 100);
-        }
-    }
-    setTimeout(initFlatpickr, 300);
-
-    document.getElementById('informeForm').addEventListener('submit', function(e) {
-        const editorContent = document.getElementById('introduccion-editor');
-        if (editorContent) document.getElementById('introduccion-content').value = editorContent.innerHTML;
-        if (!validateCurrentTab()) e.preventDefault();
-    });
+// Flatpickr
+flatpickr("#periodo", {
+    plugins: [
+        new monthSelectPlugin({
+            shorthand: true,
+            dateFormat: "F Y",
+            altFormat: "F Y"
+        })
+    ]
 });
+
+// Editor Introducción
+const editor = document.getElementById('introduccion-editor');
+const textarea = document.getElementById('introduccion-content');
+const wordCount = document.getElementById('wordCount');
+
+editor.addEventListener('input', function(){
+    textarea.value = editor.innerHTML;
+    let text = editor.innerText.trim();
+    let words = text.split(/\s+/).filter(Boolean);
+    wordCount.innerText = words.length + ' / 800 palabras';
+});
+document.querySelectorAll('#introduccion-editor + div [data-command]').forEach(btn=>{
+    btn.addEventListener('click', ()=> editor.execCommand(btn.dataset.command, false, null))
+});
+document.querySelectorAll('#introduccion-editor + div select[data-command]').forEach(sel=>{
+    sel.addEventListener('change', ()=> editor.execCommand(sel.dataset.command, false, sel.value))
+});
+
+// Upload previews
+function setupUpload(idInput, idPreview){
+    const input = document.getElementById(idInput);
+    const preview = document.getElementById(idPreview);
+    const box = document.getElementById(idInput.replace('imagen-comuna','upload'));
+    box.addEventListener('click', ()=> input.click());
+    box.addEventListener('dragover', e=> { e.preventDefault(); box.classList.add('dragover'); });
+    box.addEventListener('dragleave', e=> { e.preventDefault(); box.classList.remove('dragover'); });
+    box.addEventListener('drop', e=> { e.preventDefault(); box.classList.remove('dragover'); input.files = e.dataTransfer.files; showPreview(); });
+
+    input.addEventListener('change', showPreview);
+
+    function showPreview(){
+        preview.innerHTML = '';
+        Array.from(input.files).forEach(file=>{
+            const reader = new FileReader();
+            reader.onload = e=>{
+                const div = document.createElement('div');
+                div.classList.add('preview-image-container');
+                div.innerHTML = `<img src="${e.target.result}" class="preview-image"><button type="button" class="remove-image-btn">&times;</button>`;
+                div.querySelector('button').addEventListener('click', ()=>{
+                    input.value = '';
+                    div.remove();
+                });
+                preview.appendChild(div);
+            }
+            reader.readAsDataURL(file);
+        })
+    }
+}
+
+setupUpload('imagen-comuna-inicio','upload-preview');
+setupUpload('imagen-comuna-informacion','informacion-preview');
+setupUpload('imagen-comuna-introduccion','introduccion-preview');
+setupUpload('imagen-comuna-gobierno','gobierno-preview');
+setupUpload('imagen-comuna-actividades','actividades-preview');
 </script>
 @endsection
