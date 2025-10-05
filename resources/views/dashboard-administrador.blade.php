@@ -172,7 +172,6 @@
         <div class="col-xl-6">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title mb-4">Descripción reservada (Vocupado de Tutorios) 2024/2025</h4>
                     <div class="table-responsive">
                         <table class="table table-bordered mb-0">
                             <thead>
@@ -208,9 +207,6 @@
 
     <div class="row mt-4">
         <div class="col-12">
-            <div class="text-center text-muted">
-                © Derechos reservados Municipio de Tlapehuala 2024/2027
-            </div>
         </div>
     </div>
 @endsection

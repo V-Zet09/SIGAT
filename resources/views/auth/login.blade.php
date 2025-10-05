@@ -43,7 +43,7 @@
                     </div>
 
                     <!-- Formulario -->
-                    <form action="{{ route('login') }}" method="POST" class="space-y-5 flex-1 text-sm md:text-base">
+                    <form action="{{ url('/login') }}" method="POST" class="space-y-5 flex-1 text-sm md:text-base">
                         @csrf
                         
                         <!-- Usuario -->
@@ -63,7 +63,7 @@
                                 <label for="password-input" class="block mb-1 font-medium text-gray-700">
                                     Contraseña <span class="text-red-500">*</span>
                                 </label>
-                                <a href="{{ route('password.update') }}" class="text-green-600 hover:underline text-xs">
+                                <a href="{{ route('password.request') }}" class="text-green-600 hover:underline text-xs">
                                     ¿Olvidaste tu contraseña?
                                 </a>
                             </div>

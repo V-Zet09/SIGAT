@@ -16,6 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="SIGAT Dashboard" name="description" />
     <meta content="SIGAT" name="author" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{ URL::asset('images/LOGO_VENTANA_SF.png') }}">
@@ -64,7 +65,7 @@
                 @yield('navbar')
             @endif
 
-            <div class="page-content">
+            <div class="page-content" style="padding-top: 1rem;">
                 <div class="container-fluid">
                     @yield('content')
                 </div>

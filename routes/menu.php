@@ -10,6 +10,7 @@ Route::get('/ayuntamiento', [PaginaController::class, 'ayuntamiento'])->name('ay
 Route::get('/sala-de-prensa', [PaginaController::class, 'sala'])->name('sala-de-prensa');
 Route::get('/gobierno', [PaginaController::class, 'gobierno'])->name('gobierno');
 
+
 // DEPENDENCIAS MUNICIPALES (vistas estáticas)
 Route::view('/dependencias/obras_publicas', 'dependencias.obras_publicas')->name('dependencias.obras_publicas');
 Route::view('/dependencias/educacion', 'dependencias.educacion')->name('dependencias.educacion');
