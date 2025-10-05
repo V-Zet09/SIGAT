@@ -2,48 +2,94 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Informe extends Model
 {
-    use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'user_id',
         'titulo',
         'periodo',
+        'slug',
         'portada_path',
-        'comuna_path',
+        
+        // Comuna
+        'presidente_nombre',
+        'presidente_cargo',
+        'sindicato_nombre',
+        'sindicato_cargo',
+        'secretario_nombre',
+        'secretario_cargo',
+        'regidores',
+        
+        // Municipio
+        'municipio_nombre',
+        'municipio_descripcion',
+        'municipio_imagen_path',
+        
+        // Introducciones
         'introduccion',
-        'actividades',
-        'conclusion',
-        'actividades_imagen_path',
-        'slug'
+        'introduccion_imagen_path',
+        'gobierno_introduccion',
+        'gobierno_imagen_path',
+        
+        // Actividades (filtros)
+        'actividades_fecha_inicio',
+        'actividades_fecha_fin',
+        'dependencias_seleccionadas',
+        
+        // PDF
+        'pdf_path',
+        'descargas',
     ];
 
-    // Relación con el usuario
+    protected $casts = [
+        'regidores' => 'array',
+        'dependencias_seleccionadas' => 'array',
+        'actividades_fecha_inicio' => 'date',
+        'actividades_fecha_fin' => 'date',
+        'descargas' => 'integer',
+    ];
+
+    // Relaciones
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // Accesor para la URL de la portada
-    public function getPortadaUrlAttribute()
+    // Generar slug automáticamente
+    protected static function boot()
     {
-        return $this->portada_path ? Storage::url($this->portada_path) : null;
+        parent::boot();
+        
+        static::creating(function ($informe) {
+            if (empty($informe->slug)) {
+                $informe->slug = Str::slug($informe->titulo . '-' . $informe->periodo);
+            }
+        });
     }
 
-    // Accesor para la URL de la comuna
-    public function getComunaUrlAttribute()
+    // Método para obtener actividades filtradas
+    public function getActividadesFiltradas()
     {
-        return $this->comuna_path ? Storage::url($this->comuna_path) : null;
+        // Aquí conectarás con el modelo de tu compañero
+        // Por ahora retorno un ejemplo
+        return \App\Models\Actividad::whereBetween('fecha', [
+                $this->actividades_fecha_inicio,
+                $this->actividades_fecha_fin
+            ])
+            ->whereIn('dependencia', $this->dependencias_seleccionadas)
+            ->orderBy('fecha', 'desc')
+            ->get();
     }
-
-    // Accesor para la URL de actividades
-    public function getActividadesImagenUrlAttribute()
+    
+    // Incrementar contador de descargas
+    public function incrementarDescargas()
     {
-        return $this->actividades_imagen_path ? Storage::url($this->actividades_imagen_path) : null;
+        $this->increment('descargas');
     }
 }
