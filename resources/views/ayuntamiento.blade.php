@@ -57,6 +57,7 @@ $equipo = [
                 'nombre' => 'Mario Lagunas Salgado',
                 'cargo' => 'Secretario General',
                 'area' => 'Secretaría General',
+                'foto' => asset('images/organigrama/secretariogeneral.jpg'),
                 'hijos' => [
                     ['nombre' => 'Alberto Nova Arzate', 'cargo' => 'Asesor Jurídico', 'area' => 'Secretaría General'],
                     ['nombre' => 'Juan Mora De La Paz', 'cargo' => 'Asesor', 'area' => 'Secretaría General'],
@@ -138,23 +139,23 @@ $equipo = [
 
             // DIF Municipal
             [
-                'nombre' => 'Nadia Carolina Brito Gutierrez',
+                'nombre' => 'Sarahí Salvador Flores',
                 'cargo' => 'Presidenta del DIF Municipal',
                 'area' => 'DIF',
                 'hijos' => [
-                    ['nombre' => 'Marisol Zamora Carmona', 'cargo' => 'Secretaria', 'area' => 'DIF'],
-                    ['nombre' => 'Marina Espinoza Gomez', 'cargo' => 'Recepcionista', 'area' => 'DIF'],
+                    ['nombre' => 'Adriana Mariano Alonso', 'cargo' => 'Directora', 'area' => 'DIF'],
+                    ['nombre' => 'Osyris Flores Almontes', 'cargo' => 'Asistente', 'area' => 'DIF'],
+                    ['nombre' => 'Nélida Landín Pineda', 'cargo' => 'Recepcionista', 'area' => 'DIF'],
                     [
-                        'nombre' => 'Asistentes',
+                        'nombre' => 'Salud',
                         'cargo' => 'Equipo de Apoyo',
                         'area' => 'DIF',
+                        'foto' => asset('images/organigrama/logo gris.jpg'),
                         'hijos' => [
-                            ['nombre' => 'Pablo Valencia Salgado', 'cargo' => 'Asistente', 'area' => 'DIF'],
-                            ['nombre' => 'Mario Alberto Ramirez', 'cargo' => 'Asistente', 'area' => 'DIF'],
-                            ['nombre' => 'Andrea Martinez Torres', 'cargo' => 'Asistente', 'area' => 'DIF'],
-                            ['nombre' => 'Julio Cesar Rojas', 'cargo' => 'Asistente', 'area' => 'DIF'],
-                            ['nombre' => 'Yolanda Perez Gomez', 'cargo' => 'Asistente', 'area' => 'DIF'],
-                            ['nombre' => 'Javier Castro Morales', 'cargo' => 'Asistente', 'area' => 'DIF'],
+                            ['nombre' => 'Eréndira Garzon Aguilar', 'cargo' => 'Terapeuta', 'area' => 'DIF'],
+                            ['nombre' => 'Noemi Albarrán Suárez', 'cargo' => 'Enfermera', 'area' => 'DIF'],
+                            ['nombre' => 'Laura Karina Felipe Flores', 'cargo' => 'Nutrióloga', 'area' => 'DIF'],
+
                         ]
                     ],
                 ]
@@ -176,7 +177,7 @@ $equipo = [
 
             // --------- INFORMÁTICA AL FINAL ---------
             [
-                'nombre' => 'Miguel Angel Acuna Garcia',
+                'nombre' => 'Miguel Angel Acuña Garcia',
                 'cargo' => 'Director de Informática',
                 'area' => 'Informática',
                 'foto' => asset('images/organigrama/miguel.jpg'),
