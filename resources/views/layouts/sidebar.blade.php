@@ -32,7 +32,6 @@
 
       <!-- PANEL -->
       <div>
-        <p class="text-xs uppercase font-semibold text-white/80 mb-2 drop-shadow-md">Paneles</p>
         <button @click="openMenu = (openMenu === 'dashboards' ? null : 'dashboards')"
                 class="w-full flex items-center justify-between px-3 py-2 rounded-xl 
                        bg-white/10 hover:bg-green-600/60 transition drop-shadow-sm">
@@ -76,7 +75,6 @@
 
       <!-- INFORMES -->
       <div>
-        <p class="text-xs uppercase font-semibold text-white/80 mb-2 drop-shadow-md">Informes</p>
         <button @click="openMenu = (openMenu === 'informes' ? null : 'informes')"
                 class="w-full flex items-center justify-between px-3 py-2 rounded-xl 
                        bg-white/10 hover:bg-green-600/60 transition drop-shadow-sm">
@@ -102,7 +100,6 @@
 
       <!-- ACTIVIDADES -->
       <div>
-        <p class="text-xs uppercase font-semibold text-white/80 mb-2 drop-shadow-md">Actividades</p>
         <button @click="openMenu = (openMenu === 'actividades' ? null : 'actividades')"
                 class="w-full flex items-center justify-between px-3 py-2 rounded-xl 
                        bg-white/10 hover:bg-green-600/60 transition drop-shadow-sm">
@@ -115,10 +112,6 @@
 
         <div x-show="openMenu === 'actividades'" x-collapse 
              class="pl-8 mt-2 space-y-1 transition-all duration-300">
-          <a href="{{ url('dashboard-actividades') }}" 
-             class="block px-3 py-2 rounded-lg transition hover:bg-green-700 hover:text-white drop-shadow-sm">
-            Generar Actividad
-          </a>
           <a href="{{ route('actividades.registradas') }}" 
              class="block px-3 py-2 rounded-lg transition hover:bg-green-700 hover:text-white drop-shadow-sm">
             Actividades Registradas
@@ -128,7 +121,6 @@
 
       <!-- USUARIOS -->
       <div>
-        <p class="text-xs uppercase font-semibold text-white/80 mb-2 drop-shadow-md">Usuarios</p>
         <button @click="openMenu = (openMenu === 'usuarios' ? null : 'usuarios')"
                 class="w-full flex items-center justify-between px-3 py-2 rounded-xl 
                        bg-white/10 hover:bg-green-600/60 transition drop-shadow-sm">
@@ -143,11 +135,7 @@
              class="pl-8 mt-2 space-y-1 transition-all duration-300">
           <a href="{{ url('dashboard-users') }}" 
              class="block px-3 py-2 rounded-lg transition hover:bg-green-700 hover:text-white drop-shadow-sm">
-            CRUD
-          </a>
-          <a href="{{ route('dashboard-crear-usuario') }}" 
-             class="block px-3 py-2 rounded-lg transition hover:bg-green-700 hover:text-white drop-shadow-sm">
-            Crear Usuario
+            Registro 
           </a>
           <a href="{{ route('roles') }}" 
              class="block px-3 py-2 rounded-lg transition hover:bg-green-700 hover:text-white drop-shadow-sm">

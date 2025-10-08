@@ -124,7 +124,7 @@
                                                 <div class="relative inline-block text-left">
                                                     <!-- Botón del menú -->
                                                     <button type="button" 
-                                                        class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-3 py-1 bg-blue text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-blue-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600"
+                                                        class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-3 py-1 bg-blue text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-green-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600"
                                                         data-dropdown-button>
                                                         Opciones
                                                         <!-- Icono de flechita -->
@@ -141,12 +141,12 @@
                                                         <div class="py-1">
                                                             <!-- Ver -->
                                                             <a href="{{ route('vista-ver-usuarios', $usuario->id) }}" 
-                                                            class="block px-4 py-2 text-sm text-blue-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-blue-400">
+                                                            class="block px-4 py-2 text-sm text-green-800 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-green-800">
                                                             👁 Ver
                                                             </a>
                                                             <!-- Editar -->
                                                             <a href="{{ route('vista-editar-usuario', ['id' => $usuario->id]) }}" 
-                                                            class="block px-4 py-2 text-sm text-yellow-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-yellow-400">
+                                                            class="block px-4 py-2 text-sm text-yellow-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-yellow-700">
                                                             ✏️ Editar
                                                             </a>
                                                             <!-- Eliminar -->
@@ -154,7 +154,7 @@
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <button type="submit"
-                                                                    class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-red-400">
+                                                                    class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-red-700">
                                                                     🗑 Eliminar
                                                                 </button>
                                                             </form>
