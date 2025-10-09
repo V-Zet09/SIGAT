@@ -20,14 +20,21 @@
 
 @section('content')
 <div class="container">
-    <h2 class="mb-4">Actividades Registradas</h2>
+        {{-- Header Usuarios --}}
+     <div class="px-6 mt-3 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        <div>
+            <h1 class="text-2xl md:text-3xl font-semibold text-gray-800 tracking-tight">Registro General de Actividades</h1>
+            <p class="text-gray-500">Actividades registradas en el sistema</p>
+        </div>
+    </div>
+        {{-- Fin Header --}}
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
     {{-- 🔎 Buscador y filtro --}}
-    <form method="GET" action="{{ route('actividades.registradas') }}" class="row mb-4">
+    <form method="GET" action="{{ route('actividades.registradas') }}" class="row mb-2">
         <div class="col-md-4">
             <input type="text" name="buscar" class="form-control" placeholder="Buscar actividad" value="{{ request('buscar') }}">
         </div>
@@ -72,50 +79,26 @@
 
     {{-- 📋 Tabla de actividades --}}
     @if(isset($actividades) && $actividades->count())
-        <div class="table-responsive">
-            <table class="table table-bordered align-middle">
-                <thead class="table-light">
+        <div class="overflow-x-auto shadow-md sm:rounded-lg">
+            <table class="w-full text-sm text-left text-gray-600 dark:text-gray-600">
+                <thead class="text-xs text-gray-800 uppercase bg-gray-100 dark:bg-green-800 dark:text-gray-300">
                     <tr>
-                        <th>Título</th>
-                        <th>Autor</th>
-                        <th>Fecha</th>
-                        <th>Área</th>
-                        <th>Resumen</th>
-                        <th>Contenido</th>
-                        <th>Presupuesto</th>
-                        <th>Tipo de Presupuesto</th>
-                        <th>Archivo</th>
-                        <th>Acciones</th>
+                        <th scope="col" class="px-6 py-3">Título</th>
+                        <th scope="col" class="px-6 py-3">Autor</th>
+                        <th scope="col" class="px-6 py-3">Fecha</th>
+                        <th scope="col" class="px-6 py-3">Área</th>
+                        <th scope="col" class="px-6 py-3">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($actividades as $actividad)
-                        <tr>
+                        <tr class="bg-white border-b dark:bg-gray-600 dark:border-gray-400">
                             <td>{{ $actividad->titulo }}</td>
                             <td>{{ $actividad->autor ?? 'Anónimo' }}</td>
                             <td>{{ \Carbon\Carbon::parse($actividad->fecha)->format('d/m/Y') }}</td>
                             <td>{{ $actividad->tipo_area ?? 'Sin área' }}</td>
-                            <td>
-                                {{ Str::limit($actividad->resumen, 80, '...') }}
-                                @if(strlen($actividad->resumen) > 80)
-                                    <a href="{{ route('actividades.show', $actividad->id) }}" class="text-primary ms-1">Ver más</a>
-                                @endif
-                            </td>
-                            <td>
-                                {{ Str::limit($actividad->contenido, 80, '...') }}
-                                @if(strlen($actividad->contenido) > 80)
-                                    <a href="{{ route('actividades.show', $actividad->id) }}" class="text-primary ms-1">Ver más</a>
-                                @endif
-                            </td>
-                            <td>${{ number_format($actividad->presupuesto, 2) }}</td>
-                            <td>{{ $actividad->tipo_presupuesto ?? 'N/A' }}</td>
-                            <td>
-                                @if($actividad->foto)
-                                    <a href="{{ asset('storage/' . $actividad->foto) }}" target="_blank">Ver imagen</a>
-                                @else
-                                    No adjunto
-                                @endif
-                            </td>
+
+
                             <td class="text-center">
                                 <div class="d-flex justify-content-center gap-2">
                                     <a href="{{ route('actividades.show', $actividad->id) }}" class="btn btn-outline-primary btn-square" title="Ver">

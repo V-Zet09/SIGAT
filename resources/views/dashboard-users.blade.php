@@ -18,6 +18,17 @@
         @endslot
     @endcomponent
 
+
+<div class="row">
+<div class="col-lg-12">
+        {{-- Header Usuarios --}}
+     <div class="px-6 mt-3 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        <div>
+            <h1 class="text-2xl md:text-3xl font-semibold text-gray-800 tracking-tight">👤 Registro General de Usuarios</h1>
+            <p class="text-gray-500">Usuarios registrados en el sistema</p>
+        </div>
+    </div>
+        {{-- Fin Header --}}
     <div class="row">
         <div class="col-lg-12">
             <div class="card" id="leadsList">
@@ -34,43 +45,48 @@
                         <div class="col-sm-auto ms-auto">
                             <div class="hstack gap-2">
                                 <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
-                                <button type="button" class="btn btn-info" data-bs-toggle="offcanvas"
-                                    href="#offcanvasExample"><i
+                                <button type="button" class="btn btn-info" i
                                         class="ri-filter-3-line align-bottom me-1"></i> Flitro</button>
-                                <button type="button" class="btn btn-success add-btn"
-                                    data-bs-toggle="modal" id="create-btn"
-                                    data-bs-target="#showModal"><i
-                                        class="ri-add-line align-bottom me-1"></i> Agregar Usuario</button>
-                                <span class="dropdown">
-                                    <button class="btn btn-soft-info btn-icon fs-14" type="button"
-                                        id="dropdownMenuButton1" data-bs-toggle="dropdown"
-                                        aria-expanded="false">
-                                        <i class="ri-settings-4-line"></i>
-                                    </button>
-                                </span>
+
+                                    <a href="{{ route('dashboard-crear-usuario') }}" class="btn btn-success">
+                                        <i class="ri-add-line align-bottom me-1"></i> Agregar Usuario
+                                    </a>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
                     <div>
-                        <div class="table-responsive table-card">
-                            <table class="table align-middle" id="customerTable">
-                                <thead class="table-light">
+                        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-400 dark:text-gray-600" id="customerTable">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-green-800 dark:text-gray-400">
                                     <tr>
-                                        <th scope="col" style="width: 50px;">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                    id="checkAll" value="option">
-                                            </div>
+                                        <th scope="col" class="px-6 py-3 w-12">
+                                            <input id="checkAll" type="checkbox"
+                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded 
+                                                    focus:ring-blue-500 dark:focus:ring-blue-600 
+                                                    dark:ring-offset-gray-800 focus:ring-2 
+                                                    dark:bg-gray-700 dark:border-gray-600">
                                         </th>
 
-                                        <th class="sort" data-sort="name">Nombre</th>
-                                        <th class="sort" data-sort="sexo">Sexo</th>
-                                        <th class="sort" data-sort="cargo">Cargo</th>
-                                        <th class="sort" data-sort="area">Área</th>
-                                        <th class="sort" data-sort="email">Correo electrónico</th>
-                                        <th class="sort" data-sort="action">Acciones</th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Nombre
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Sexo
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Cargo
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Área
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Correo electrónico
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-center">
+                                            Acciones
+                                        </th>
                                     </tr>
                                 </thead>
 @php
@@ -79,48 +95,75 @@
     }
 @endphp
 
-                                <tbody class="list form-check-all">
+                                <tbody 
                                     @forelse ($usuarios as $usuario)
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" name="chk_child" value="{{ $usuario->id }}">
-                                                </div>
-                                            </th>
-
-                                            <td class="name">{{ $usuario->name }}</td>
-                                            <td class="sexo">{{ $usuario->sexo }}</td>
-                                            <td class="cargo">{{ $usuario->cargo }}</td>
-                                            <td class="area">{{ $usuario->area }}</td>
-                                            <td class="email">{{ $usuario->email }}</td>
-                                            
-                                            <td>
-                                                <ul class="list-inline hstack gap-2 mb-0">
-                                                    <!-- Ver -->
-                                                    <li class="list-inline-item" title="Ver">
-                                                        <a href="{{ route('vista-ver-usuarios', $usuario->id) }}" class="btn btn-sm btn-info">
-                                                            <i class="ri-eye-fill"></i>
-                                                        </a>
-                                                    </li>
-                                                    <!-- Editar -->
-                                                    <li class="list-inline-item" title="Editar">
-                                                        <a href="{{ route('vista-editar-usuario', $usuario->id) }}" class="btn btn-sm btn-warning">
-                                                            <i class="ri-pencil-fill"></i>
-                                                        </a>
-                                                    </li>
-
-                                                    <!-- Eliminar -->
-                                                    <li class="list-inline-item" title="Eliminar">
-                                                        <form action="{{ route('usuarios.destroy', $usuario->id) }}" method="POST" onsubmit="return confirm('¿Seguro que quieres eliminar este usuario?')">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-sm btn-danger">
-                                                                <i class="ri-delete-bin-fill"></i>
-                                                            </button>
-                                                        </form>
-                                                    </li>
-                                                </ul>
+                                        <tr class="bg-white border-b dark:bg-gray-600 dark:border-gray-400 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                            <td class="px-6 py-4">
+                                                <input type="checkbox" name="chk_child" value="{{ $usuario->id }}"
+                                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded 
+                                                        focus:ring-blue-500 dark:focus:ring-blue-600 
+                                                        dark:ring-offset-gray-800 focus:ring-2 
+                                                        dark:bg-gray-700 dark:border-gray-600">
                                             </td>
+                                            <td class="px-1 py-2">
+                                                {{ $usuario->name }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $usuario->sexo }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $usuario->cargo }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $usuario->area }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $usuario->email }}
+                                            </td>
+                                            <td class="px-6 py-4 text-center">
+                                                <div class="relative inline-block text-left">
+                                                    <!-- Botón del menú -->
+                                                    <button type="button" 
+                                                        class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-3 py-1 bg-blue text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-green-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600"
+                                                        data-dropdown-button>
+                                                        Opciones
+                                                        <!-- Icono de flechita -->
+                                                        <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" 
+                                                            viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                                d="M19 9l-7 7-7-7" />
+                                                        </svg>
+                                                    </button>
+
+                                                    <!-- Menú desplegable -->
+                                                    <div class="hidden origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 dark:bg-gray-700 z-10"
+                                                        data-dropdown-menu>
+                                                        <div class="py-1">
+                                                            <!-- Ver -->
+                                                            <a href="{{ route('vista-ver-usuarios', $usuario->id) }}" 
+                                                            class="block px-4 py-2 text-sm text-green-800 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-green-800">
+                                                            👁 Ver
+                                                            </a>
+                                                            <!-- Editar -->
+                                                            <a href="{{ route('vista-editar-usuario', ['id' => $usuario->id]) }}" 
+                                                            class="block px-4 py-2 text-sm text-yellow-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-yellow-700">
+                                                            ✏️ Editar
+                                                            </a>
+                                                            <!-- Eliminar -->
+                                                            <form action="{{ route('usuarios.destroy', $usuario->id) }}" method="POST" onsubmit="return confirm('¿Seguro que quieres eliminar este usuario?')">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit"
+                                                                    class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-red-700">
+                                                                    🗑 Eliminar
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+
+
 
                                         </tr>
                                     @empty
@@ -128,6 +171,26 @@
                                             <td colspan="7" class="text-center">No hay usuarios registrados</td>
                                         </tr>
                                     @endforelse
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', () => {
+                                            document.querySelectorAll('[data-dropdown-button]').forEach(button => {
+                                                button.addEventListener('click', () => {
+                                                    const menu = button.nextElementSibling;
+                                                    menu.classList.toggle('hidden');
+                                                });
+                                            });
+
+                                            // Cierra el menú si haces click fuera
+                                            window.addEventListener('click', (e) => {
+                                                document.querySelectorAll('[data-dropdown-menu]').forEach(menu => {
+                                                    if (!menu.previousElementSibling.contains(e.target) && !menu.contains(e.target)) {
+                                                        menu.classList.add('hidden');
+                                                    }
+                                                });
+                                            });
+                                        });
+                                    </script>
+
                                 </tbody>
 
                             </table>
@@ -318,214 +381,6 @@
                         </div>
                     </div>
                     <!--end modal -->
-
-
-                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample"
-                        aria-labelledby="offcanvasExampleLabel">
-                        <div class="offcanvas-header bg-light">
-                            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Leads Fliters</h5>
-                            <button type="button" class="btn-close text-reset"
-                                data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                        </div>
-                        <!--end offcanvas-header-->
-                        <form action="" class="d-flex flex-column justify-content-end h-100">
-                            <div class="offcanvas-body">
-                                <div class="mb-4">
-                                    <label for="datepicker-range"
-                                        class="form-label text-muted text-uppercase fw-semibold mb-3">Date</label>
-                                    <input type="date" class="form-control" id="datepicker-range"
-                                        data-provider="flatpickr" data-range="true"
-                                        placeholder="Select date">
-                                </div>
-                                <div class="mb-4">
-                                    <label for="country-select"
-                                        class="form-label text-muted text-uppercase fw-semibold mb-3">Country</label>
-                                    <select class="form-control" data-choices
-                                        data-choices-multiple-remove="true" name="country-select"
-                                        id="country-select" multiple>
-                                        <option value="">Select country</option>
-                                        <option value="Argentina">Argentina</option>
-                                        <option value="Belgium">Belgium</option>
-                                        <option value="Brazil" selected>Brazil</option>
-                                        <option value="Colombia">Colombia</option>
-                                        <option value="Denmark">Denmark</option>
-                                        <option value="France">France</option>
-                                        <option value="Germany">Germany</option>
-                                        <option value="Mexico">Mexico</option>
-                                        <option value="Russia">Russia</option>
-                                        <option value="Spain">Spain</option>
-                                        <option value="Syria">Syria</option>
-                                        <option value="United Kingdom" selected>United Kingdom</option>
-                                        <option value="United States of America">United States of
-                                            America</option>
-                                    </select>
-                                </div>
-                                <div class="mb-4">
-                                    <label for="status-select"
-                                        class="form-label text-muted text-uppercase fw-semibold mb-3">Status</label>
-                                    <div class="row g-2">
-                                        <div class="col-lg-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                    id="inlineCheckbox1" value="option1">
-                                                <label class="form-check-label"
-                                                    for="inlineCheckbox1">New Leads</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                    id="inlineCheckbox2" value="option2">
-                                                <label class="form-check-label"
-                                                    for="inlineCheckbox2">Old Leads</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                    id="inlineCheckbox3" value="option3">
-                                                <label class="form-check-label"
-                                                    for="inlineCheckbox3">Loss Leads</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                    id="inlineCheckbox4" value="option4">
-                                                <label class="form-check-label"
-                                                    for="inlineCheckbox4">Follow Up</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mb-4">
-                                    <label for="leadscore"
-                                        class="form-label text-muted text-uppercase fw-semibold mb-3">Lead
-                                        Score</label>
-                                    <div class="row g-2 align-items-center">
-                                        <div class="col-lg">
-                                            <input type="number" class="form-control" id="leadscore"
-                                                placeholder="0">
-                                        </div>
-                                        <div class="col-lg-auto">
-                                            To
-                                        </div>
-                                        <div class="col-lg">
-                                            <input type="number" class="form-control" id="leadscore"
-                                                placeholder="0">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label for="leads-tags"
-                                        class="form-label text-muted text-uppercase fw-semibold mb-3">Tags</label>
-                                    <div class="row g-3">
-                                        <div class="col-lg-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                    id="marketing" value="marketing">
-                                                <label class="form-check-label"
-                                                    for="marketing">Marketing</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                    id="management" value="management">
-                                                <label class="form-check-label"
-                                                    for="management">Management</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                    id="business" value="business">
-                                                <label class="form-check-label"
-                                                    for="business">Business</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                    id="investing" value="investing">
-                                                <label class="form-check-label"
-                                                    for="investing">Investing</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                    id="partner" value="partner">
-                                                <label class="form-check-label"
-                                                    for="partner">Partner</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                    id="lead" value="lead">
-                                                <label class="form-check-label" for="lead">Leads</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                    id="sale" value="sale">
-                                                <label class="form-check-label" for="sale">Sale</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                    id="owner" value="owner">
-                                                <label class="form-check-label"
-                                                    for="owner">Owner</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                    id="banking" value="banking">
-                                                <label class="form-check-label"
-                                                    for="banking">Banking</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                    id="banking" value="banking">
-                                                <label class="form-check-label"
-                                                    for="banking">Exiting</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                    id="banking" value="banking">
-                                                <label class="form-check-label"
-                                                    for="banking">Finance</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                    id="banking" value="banking">
-                                                <label class="form-check-label"
-                                                    for="banking">Fashion</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--end offcanvas-body-->
-                            <div class="offcanvas-footer border-top p-3 text-center hstack gap-2">
-                                <button class="btn btn-light w-100">Clear Filter</button>
-                                <button type="submit" class="btn btn-success w-100">Filters</button>
-                            </div>
-                            <!--end offcanvas-footer-->
-                        </form>
-                    </div>
-                    <!--end offcanvas-->
 
                 </div>
             </div>
