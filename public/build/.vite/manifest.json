@@ -1,0 +1,170 @@
+{
+  "resources/fonts/boxicons.eot": {
+    "file": "assets/boxicons.eot",
+    "src": "resources/fonts/boxicons.eot"
+  },
+  "resources/fonts/boxicons.svg": {
+    "file": "assets/boxicons.svg",
+    "src": "resources/fonts/boxicons.svg"
+  },
+  "resources/fonts/boxicons.ttf": {
+    "file": "assets/boxicons.ttf",
+    "src": "resources/fonts/boxicons.ttf"
+  },
+  "resources/fonts/boxicons.woff": {
+    "file": "assets/boxicons.woff",
+    "src": "resources/fonts/boxicons.woff"
+  },
+  "resources/fonts/boxicons.woff2": {
+    "file": "assets/boxicons.woff2",
+    "src": "resources/fonts/boxicons.woff2"
+  },
+  "resources/fonts/hkgrotesk-bold.woff": {
+    "file": "assets/hkgrotesk-bold.woff",
+    "src": "resources/fonts/hkgrotesk-bold.woff"
+  },
+  "resources/fonts/hkgrotesk-light.eot": {
+    "file": "assets/hkgrotesk-light.eot",
+    "src": "resources/fonts/hkgrotesk-light.eot"
+  },
+  "resources/fonts/hkgrotesk-light.woff": {
+    "file": "assets/hkgrotesk-light.woff",
+    "src": "resources/fonts/hkgrotesk-light.woff"
+  },
+  "resources/fonts/hkgrotesk-medium.eot": {
+    "file": "assets/hkgrotesk-medium.eot",
+    "src": "resources/fonts/hkgrotesk-medium.eot"
+  },
+  "resources/fonts/hkgrotesk-medium.woff": {
+    "file": "assets/hkgrotesk-medium.woff",
+    "src": "resources/fonts/hkgrotesk-medium.woff"
+  },
+  "resources/fonts/hkgrotesk-regular.eot": {
+    "file": "assets/hkgrotesk-regular.eot",
+    "src": "resources/fonts/hkgrotesk-regular.eot"
+  },
+  "resources/fonts/hkgrotesk-regular.woff": {
+    "file": "assets/hkgrotesk-regular.woff",
+    "src": "resources/fonts/hkgrotesk-regular.woff"
+  },
+  "resources/fonts/hkgrotesk-semibold.eot": {
+    "file": "assets/hkgrotesk-semibold.eot",
+    "src": "resources/fonts/hkgrotesk-semibold.eot"
+  },
+  "resources/fonts/hkgrotesk-semibold.woff": {
+    "file": "assets/hkgrotesk-semibold.woff",
+    "src": "resources/fonts/hkgrotesk-semibold.woff"
+  },
+  "resources/fonts/la-brands-400.eot": {
+    "file": "assets/la-brands-400.eot",
+    "src": "resources/fonts/la-brands-400.eot"
+  },
+  "resources/fonts/la-brands-400.svg": {
+    "file": "assets/la-brands-400.svg",
+    "src": "resources/fonts/la-brands-400.svg"
+  },
+  "resources/fonts/la-brands-400.ttf": {
+    "file": "assets/la-brands-400.ttf",
+    "src": "resources/fonts/la-brands-400.ttf"
+  },
+  "resources/fonts/la-brands-400.woff": {
+    "file": "assets/la-brands-400.woff",
+    "src": "resources/fonts/la-brands-400.woff"
+  },
+  "resources/fonts/la-brands-400.woff2": {
+    "file": "assets/la-brands-400.woff2",
+    "src": "resources/fonts/la-brands-400.woff2"
+  },
+  "resources/fonts/la-regular-400.eot": {
+    "file": "assets/la-regular-400.eot",
+    "src": "resources/fonts/la-regular-400.eot"
+  },
+  "resources/fonts/la-regular-400.svg": {
+    "file": "assets/la-regular-400.svg",
+    "src": "resources/fonts/la-regular-400.svg"
+  },
+  "resources/fonts/la-regular-400.ttf": {
+    "file": "assets/la-regular-400.ttf",
+    "src": "resources/fonts/la-regular-400.ttf"
+  },
+  "resources/fonts/la-regular-400.woff": {
+    "file": "assets/la-regular-400.woff",
+    "src": "resources/fonts/la-regular-400.woff"
+  },
+  "resources/fonts/la-regular-400.woff2": {
+    "file": "assets/la-regular-400.woff2",
+    "src": "resources/fonts/la-regular-400.woff2"
+  },
+  "resources/fonts/la-solid-900.eot": {
+    "file": "assets/la-solid-900.eot",
+    "src": "resources/fonts/la-solid-900.eot"
+  },
+  "resources/fonts/la-solid-900.svg": {
+    "file": "assets/la-solid-900.svg",
+    "src": "resources/fonts/la-solid-900.svg"
+  },
+  "resources/fonts/la-solid-900.ttf": {
+    "file": "assets/la-solid-900.ttf",
+    "src": "resources/fonts/la-solid-900.ttf"
+  },
+  "resources/fonts/la-solid-900.woff": {
+    "file": "assets/la-solid-900.woff",
+    "src": "resources/fonts/la-solid-900.woff"
+  },
+  "resources/fonts/la-solid-900.woff2": {
+    "file": "assets/la-solid-900.woff2",
+    "src": "resources/fonts/la-solid-900.woff2"
+  },
+  "resources/fonts/materialdesignicons-webfont.eot": {
+    "file": "assets/materialdesignicons-webfont.eot",
+    "src": "resources/fonts/materialdesignicons-webfont.eot"
+  },
+  "resources/fonts/materialdesignicons-webfont.ttf": {
+    "file": "assets/materialdesignicons-webfont.ttf",
+    "src": "resources/fonts/materialdesignicons-webfont.ttf"
+  },
+  "resources/fonts/materialdesignicons-webfont.woff": {
+    "file": "assets/materialdesignicons-webfont.woff",
+    "src": "resources/fonts/materialdesignicons-webfont.woff"
+  },
+  "resources/fonts/materialdesignicons-webfont.woff2": {
+    "file": "assets/materialdesignicons-webfont.woff2",
+    "src": "resources/fonts/materialdesignicons-webfont.woff2"
+  },
+  "resources/fonts/remixicon.eot": {
+    "file": "assets/remixicon.eot",
+    "src": "resources/fonts/remixicon.eot"
+  },
+  "resources/fonts/remixicon.svg": {
+    "file": "assets/remixicon.svg",
+    "src": "resources/fonts/remixicon.svg"
+  },
+  "resources/fonts/remixicon.ttf": {
+    "file": "assets/remixicon.ttf",
+    "src": "resources/fonts/remixicon.ttf"
+  },
+  "resources/fonts/remixicon.woff": {
+    "file": "assets/remixicon.woff",
+    "src": "resources/fonts/remixicon.woff"
+  },
+  "resources/fonts/remixicon.woff2": {
+    "file": "assets/remixicon.woff2",
+    "src": "resources/fonts/remixicon.woff2"
+  },
+  "resources/js/app.js": {
+    "file": "js/app2.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  },
+  "resources/scss/app.scss": {
+    "file": "css/app.min.css",
+    "src": "resources/scss/app.scss",
+    "isEntry": true
+  },
+  "resources/scss/icons.scss": {
+    "file": "css/icons.min.css",
+    "src": "resources/scss/icons.scss",
+    "isEntry": true
+  }
+}

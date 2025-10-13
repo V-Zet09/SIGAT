@@ -1,70 +1,39 @@
-export default {
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  darkMode: 'class',
+  
   content: [
     "./resources/**/*.blade.php",
     "./resources/**/*.js",
     "./resources/**/*.vue",
-    "./storage/framework/views/*.php", // Laravel compiled views
+    "./storage/framework/views/*.php",
   ],
-  safelist: [
-    // Collapse / Accordion
-    'collapse',
-    'collapsing',
-    'show',
-    'collapsed',
-
-    // Sidebar & nav
-    'active',
-    'nav-link',
-    'nav-item',
-    'navbar-nav',
-    'menu-link',
-    'menu-dropdown',
-    'menu-title',
-    'menu-arrow',
-    'sidebar',
-    'sidebar-user',
-    'sidebar-background',
-
-    // Dropdown
-    'dropdown',
-    'dropdown-menu',
-    'dropdown-item',
-    'dropdown-divider',
-
-    // Bootstrap badges
-    'badge',
-    'badge-pill',
-    'bg-danger',
-    'bg-success',
-    'bg-success-subtle',
-    'text-success',
-    'text-danger',
-
-    // Regex para cubrir variantes dinámicas
-    { pattern: /^bg-(primary|secondary|success|danger|warning|info|light|dark)$/ },
-    { pattern: /^text-(primary|secondary|success|danger|warning|info|light|dark)$/ },
-    { pattern: /^nav-.*/ },
-    { pattern: /^dropdown-.*/ },
-    { pattern: /^menu-.*/ },
-  ],
+  
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: {
+          50: '#f0fdf4',
+          100: '#dcfce7',
+          200: '#bbf7d0',
+          300: '#86efac',
+          400: '#4ade80',
+          500: '#22c55e',
+          600: '#16a34a',
+          700: '#15803d',
+          800: '#166534',
+          900: '#14532d',
+        },
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
+      // ⚡ Deshabilita transiciones en el cambio inicial
+      transitionProperty: {
+        'none': 'none',
+      },
+    },
   },
-  corePlugins: {
-    preflight: false, // evita conflictos con Bootstrap
-  },
-  plugins: [],
-}
-
-module.exports = {
-  darkMode: 'class', // ✅ importante
-  content: [
-    './resources/**/*.blade.php',
-    './resources/**/*.js',
-    './resources/**/*.vue',
-  ],
-  theme: {
-    extend: {},
-  },
+  
   plugins: [],
 };

@@ -35,6 +35,8 @@ require __DIR__.'/dashboards.php';
 require __DIR__.'/users.php';
 require __DIR__.'/informes.php';
 require __DIR__.'/actividades.php';
+require __DIR__.'/menu.php';
+require __DIR__.'/noticias.php';
 
 use App\Http\Controllers\UserController;
 

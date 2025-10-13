@@ -1,62 +1,28 @@
-
-/* Tailwind */
+/* ============================================
+   TAILWIND CSS - CONFIGURACIÓN LIMPIA
+============================================ */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Aquí puedes poner tus estilos personalizados */
-
+/* ============================================
+   IMPORTS ESENCIALES
+============================================ */
 @import "fonts/fonts";
-
-// Core
-@import "node_modules/bootstrap/scss/functions";
-@import "node_modules/bootstrap/scss/variables";
-@import "variables";
-@import "variables-custom";
-@import "node_modules/bootstrap/scss/mixins";
-
-// Tema en uso
-@import 'theme/default';
-
-// Estructura
-@import "structure/topbar";
-@import "structure/page-head";
-@import "structure/footer";
-@import "structure/vertical";
-@import "structure/layouts";
-
-// Componentes básicos
-@import "components/waves";
-@import "components/avatar";
-@import "components/accordion";
-@import "components/helper";
-@import "components/forms";
-@import "components/widgets";
-@import "components/scrollspy";
-@import "components/alerts";
-@import "components/buttons";
-@import "components/modal";
-@import "components/table";
-
-// Plugins esenciales (solo los más comunes)
 @import "plugins/sweetalert2";
-@import "plugins/select2";
-@import "plugins/datatables";
 
-// Páginas necesarias
-@import "pages/authentication";
-@import "pages/dashboard";
-@import "pages/errors";
-@import "pages/profile";
+/* ============================================
+   ESTILOS BASE PERSONALIZADOS
+============================================ */
 
 body, html {
-    height: 100%;
+    min-height: 100vh;
+    @apply antialiased;
 }
 
-.sidebar-background,
-.vertical-overlay {
-    flex-shrink: 0;
-}
+/* ============================================
+   SIDEBAR Y LAYOUT
+============================================ */
 
 .app-menu.navbar-menu {
     height: 100vh !important;
@@ -67,7 +33,7 @@ body, html {
     left: 0;
     top: 0;
     z-index: 1000;
-    width: 250px; 
+    width: 250px;
 }
 
 #scrollbar {
@@ -79,204 +45,415 @@ body, html {
 #page-topbar {
     position: fixed;
     top: 0;
-    left: 250px; 
-    width: calc(100% - 250px); 
+    left: 250px;
+    width: calc(100% - 250px);
     z-index: 1050;
-    background: #fff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
+    @apply bg-white dark:bg-gray-800 shadow-md;
+}
+
+/* ============================================
+   SCROLLBARS PERSONALIZADOS
+============================================ */
 
 .sidebar::-webkit-scrollbar {
-  width: 6px;
+    width: 6px;
 }
 
 .sidebar::-webkit-scrollbar-track {
-  background: transparent;
+    background: transparent;
 }
 
 .sidebar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
 }
 
 .sidebar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.4);
 }
 
-/* ===========================
-   Dark Mode Profesional
-=========================== */
-@layer components {
-
-  /* ======= Body y Fondo Principal ======= */
-  body {
-    @apply bg-gray-50 text-gray-900 transition-colors duration-150;
-  }
-  .dark body {
-    @apply bg-gray-900 text-gray-100;
-  }
-
-  .content-wrapper {
-    @apply bg-gray-50 transition-colors duration-150;
-  }
-  .dark .content-wrapper {
-    @apply bg-gray-900;
-  }
-
-  /* ======= Sidebar ======= */
-  .sidebar {
-    @apply bg-green-700 text-white transition-colors duration-150;
-  }
-  .dark .sidebar {
-    @apply bg-gray-900 text-gray-100;
-  }
-  .sidebar a {
-    @apply block px-3 py-2 rounded-lg transition-colors duration-150 hover:bg-green-800 hover:text-white;
-  }
-  .dark .sidebar a {
-    @apply hover:bg-gray-700 hover:text-gray-100;
-  }
-
-  /* ======= Cards ======= */
-  .card {
-    @apply bg-white text-gray-900 shadow rounded-xl p-4 transition-colors duration-150;
-  }
-  .dark .card {
-    @apply bg-gray-800 text-gray-100;
-  }
-
-  /* ======= Botones ======= */
-  .app-button {
-    @apply bg-green-700 text-white px-4 py-2 rounded shadow transition duration-150;
-  }
-  .app-button:hover {
-    @apply bg-green-800;
-  }
-  .dark .app-button {
-    @apply bg-green-600 text-gray-100;
-  }
-  .dark .app-button:hover {
-    @apply bg-green-500;
-  }
-
-  /* Botones secundarios (rojos o azules institucionales) */
-  .btn-red {
-    @apply bg-red-600 text-white px-4 py-2 rounded shadow transition duration-150;
-  }
-  .btn-red:hover {
-    @apply bg-red-700;
-  }
-  .dark .btn-red {
-    @apply bg-red-500 text-gray-100;
-  }
-  .dark .btn-red:hover {
-    @apply bg-red-600;
-  }
-
-  .btn-blue {
-    @apply bg-blue-600 text-white px-4 py-2 rounded shadow transition duration-150;
-  }
-  .btn-blue:hover {
-    @apply bg-blue-700;
-  }
-  .dark .btn-blue {
-    @apply bg-blue-500 text-gray-100;
-  }
-  .dark .btn-blue:hover {
-    @apply bg-blue-600;
-  }
-
-  /* ======= Tablas ======= */
-  .table {
-    @apply border border-gray-300 w-full text-left transition-colors duration-150;
-  }
-  .table th {
-    @apply bg-gray-200 text-gray-900 font-semibold p-2;
-  }
-  .table td {
-    @apply bg-white text-gray-900 p-2;
-  }
-  .dark .table {
-    @apply border-gray-700;
-  }
-  .dark .table th {
-    @apply bg-gray-700 text-gray-100;
-  }
-  .dark .table td {
-    @apply bg-gray-800 text-gray-100;
-  }
-
-  /* ======= Inputs, selects, textarea ======= */
-  input, select, textarea {
-    @apply bg-white text-gray-900 border border-gray-300 rounded px-3 py-2 transition-colors duration-150;
-  }
-  .dark input,
-  .dark select,
-  .dark textarea {
-    @apply bg-gray-700 text-gray-100 border-gray-600;
-  }
-
-  /* ======= Encabezados ======= */
-  h1, h2, h3, h4, h5, h6 {
-    @apply text-gray-900 transition-colors duration-150;
-  }
-  .dark h1,
-  .dark h2,
-  .dark h3,
-  .dark h4,
-  .dark h5,
-  .dark h6 {
-    @apply text-gray-100;
-  }
-
-  /* ======= Texto y párrafos ======= */
-  p, span, li {
-    @apply text-gray-900 transition-colors duration-150;
-  }
-  .dark p,
-  .dark span,
-  .dark li {
-    @apply text-gray-100;
-  }
-
-  /* ======= Scrollbar ======= */
-  ::-webkit-scrollbar {
+::-webkit-scrollbar {
     @apply w-2 h-2;
-  }
-  ::-webkit-scrollbar-thumb {
-    @apply bg-gray-400 rounded dark:bg-gray-600;
-  }
-}
-/* Body y transición */
-body {
-  @apply transition-colors duration-300;
 }
 
-/* Fondos y texto global */
-body {
-  @apply bg-gray-100 text-gray-900;
+::-webkit-scrollbar-track {
+    @apply bg-gray-100 dark:bg-gray-800;
 }
 
-.dark body {
-  @apply bg-gray-900 text-gray-100;
+::-webkit-scrollbar-thumb {
+    @apply bg-gray-400 dark:bg-gray-600 rounded;
 }
 
-/* Cards */
-.card {
-  @apply bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-200 rounded-lg shadow-md p-5 transition-colors duration-300;
+::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-500;
 }
 
-/* Inputs, selects, textarea y botones adaptativos */
-input, select, textarea, button {
-  @apply transition-colors duration-300;
+/* ============================================
+   COMPONENTES REUTILIZABLES CON TAILWIND
+   ⚡ SIN transition-colors para evitar parpadeo
+============================================ */
+
+@layer components {
+    
+    /* ===== CARDS ===== */
+    .card {
+        @apply bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6;
+    }
+    
+    .card-header {
+        @apply bg-gray-50 dark:bg-gray-700 px-6 py-4 border-b border-gray-200 dark:border-gray-600 
+               font-semibold text-gray-900 dark:text-white rounded-t-xl;
+    }
+    
+    .card-body {
+        @apply p-6 text-gray-700 dark:text-gray-300;
+    }
+    
+    .card-footer {
+        @apply bg-gray-50 dark:bg-gray-700 px-6 py-4 border-t border-gray-200 dark:border-gray-600 rounded-b-xl;
+    }
+    
+    /* ===== BOTONES ===== */
+    .btn {
+        @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 
+               focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+    
+    .btn-primary {
+        @apply bg-green-600 hover:bg-green-700 text-white 
+               dark:bg-green-500 dark:hover:bg-green-600 
+               focus:ring-green-500;
+    }
+    
+    .btn-secondary {
+        @apply bg-gray-600 hover:bg-gray-700 text-white 
+               dark:bg-gray-500 dark:hover:bg-gray-600 
+               focus:ring-gray-500;
+    }
+    
+    .btn-success {
+        @apply bg-green-600 hover:bg-green-700 text-white 
+               focus:ring-green-500;
+    }
+    
+    .btn-danger {
+        @apply bg-red-600 hover:bg-red-700 text-white 
+               dark:bg-red-500 dark:hover:bg-red-600 
+               focus:ring-red-500;
+    }
+    
+    .btn-warning {
+        @apply bg-yellow-500 hover:bg-yellow-600 text-white 
+               focus:ring-yellow-500;
+    }
+    
+    .btn-info {
+        @apply bg-blue-600 hover:bg-blue-700 text-white 
+               focus:ring-blue-500;
+    }
+    
+    .btn-light {
+        @apply bg-gray-100 hover:bg-gray-200 text-gray-900 
+               dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white 
+               focus:ring-gray-400;
+    }
+    
+    .btn-sm {
+        @apply px-3 py-1.5 text-sm;
+    }
+    
+    .btn-lg {
+        @apply px-6 py-3 text-lg;
+    }
+    
+    /* ===== INPUTS ===== */
+    .form-control {
+        @apply w-full px-3 py-2 border border-gray-300 dark:border-gray-600 
+               rounded-lg bg-white dark:bg-gray-700 
+               text-gray-900 dark:text-gray-100 
+               focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent 
+               placeholder:text-gray-400 dark:placeholder:text-gray-500;
+    }
+    
+    .form-select {
+        @apply form-control cursor-pointer;
+    }
+    
+    .form-label {
+        @apply block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2;
+    }
+    
+    .form-check-input {
+        @apply w-4 h-4 border-gray-300 dark:border-gray-600 
+               rounded focus:ring-green-500 
+               text-green-600 dark:bg-gray-700 
+               cursor-pointer;
+    }
+    
+    textarea.form-control {
+        @apply min-h-[100px] resize-y;
+    }
+    
+    /* ===== TABLAS ===== */
+    .table {
+        @apply w-full text-left border-collapse;
+    }
+    
+    .table thead {
+        @apply bg-gray-100 dark:bg-gray-700;
+    }
+    
+    .table thead th {
+        @apply px-4 py-3 text-xs font-semibold text-gray-700 dark:text-gray-200 
+               uppercase tracking-wider border-b-2 border-gray-300 dark:border-gray-600;
+    }
+    
+    .table tbody td {
+        @apply px-4 py-3 text-sm text-gray-900 dark:text-gray-100 
+               border-b border-gray-200 dark:border-gray-700;
+    }
+    
+    .table-striped tbody tr:nth-child(odd) {
+        @apply bg-gray-50 dark:bg-gray-800/50;
+    }
+    
+    .table-hover tbody tr {
+        @apply hover:bg-gray-100 dark:hover:bg-gray-700/50 cursor-pointer;
+    }
+    
+    /* ===== BADGES ===== */
+    .badge {
+        @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+    }
+    
+    .badge-primary {
+        @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200;
+    }
+    
+    .badge-success {
+        @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200;
+    }
+    
+    .badge-danger {
+        @apply bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200;
+    }
+    
+    .badge-warning {
+        @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200;
+    }
+    
+    .badge-info {
+        @apply bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200;
+    }
+    
+    .badge-secondary {
+        @apply bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200;
+    }
+    
+    /* ===== ALERTS ===== */
+    .alert {
+        @apply p-4 rounded-lg border;
+    }
+    
+    .alert-success {
+        @apply bg-green-50 border-green-200 text-green-800 
+               dark:bg-green-900/20 dark:border-green-700 dark:text-green-300;
+    }
+    
+    .alert-danger {
+        @apply bg-red-50 border-red-200 text-red-800 
+               dark:bg-red-900/20 dark:border-red-700 dark:text-red-300;
+    }
+    
+    .alert-warning {
+        @apply bg-yellow-50 border-yellow-200 text-yellow-800 
+               dark:bg-yellow-900/20 dark:border-yellow-700 dark:text-yellow-300;
+    }
+    
+    .alert-info {
+        @apply bg-blue-50 border-blue-200 text-blue-800 
+               dark:bg-blue-900/20 dark:border-blue-700 dark:text-blue-300;
+    }
+    
+    /* ===== MODALS ===== */
+    .modal-backdrop {
+        @apply fixed inset-0 bg-black/50 dark:bg-black/70 z-40;
+    }
+    
+    .modal {
+        @apply fixed inset-0 z-50 flex items-center justify-center p-4;
+    }
+    
+    .modal-content {
+        @apply bg-white dark:bg-gray-800 rounded-xl shadow-2xl 
+               max-w-lg w-full max-h-[90vh] overflow-y-auto;
+    }
+    
+    .modal-header {
+        @apply flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700;
+    }
+    
+    .modal-title {
+        @apply text-xl font-semibold text-gray-900 dark:text-white;
+    }
+    
+    .modal-body {
+        @apply p-6 text-gray-700 dark:text-gray-300;
+    }
+    
+    .modal-footer {
+        @apply flex items-center justify-end gap-3 p-6 border-t border-gray-200 dark:border-gray-700;
+    }
+    
+    /* ===== DROPDOWN ===== */
+    .dropdown-menu {
+        @apply absolute right-0 mt-2 w-56 rounded-lg shadow-lg 
+               bg-white dark:bg-gray-800 
+               border border-gray-200 dark:border-gray-700 
+               py-1 z-50;
+    }
+    
+    .dropdown-item {
+        @apply block w-full text-left px-4 py-2 text-sm 
+               text-gray-700 dark:text-gray-300 
+               hover:bg-gray-100 dark:hover:bg-gray-700;
+    }
+    
+    .dropdown-divider {
+        @apply my-1 border-t border-gray-200 dark:border-gray-700;
+    }
+    
+    /* ===== PAGINATION ===== */
+    .pagination {
+        @apply flex items-center gap-1;
+    }
+    
+    .page-item {
+        @apply inline-flex;
+    }
+    
+    .page-link {
+        @apply px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
+               bg-white dark:bg-gray-800 
+               text-gray-700 dark:text-gray-300 
+               hover:bg-gray-100 dark:hover:bg-gray-700;
+    }
+    
+    .page-item.active .page-link {
+        @apply bg-green-600 dark:bg-green-500 
+               border-green-600 dark:border-green-500 
+               text-white;
+    }
+    
+    .page-item.disabled .page-link {
+        @apply opacity-50 cursor-not-allowed;
+    }
+    
+    /* ===== BREADCRUMB ===== */
+    .breadcrumb {
+        @apply flex items-center gap-2 text-sm;
+    }
+    
+    .breadcrumb-item {
+        @apply text-gray-600 dark:text-gray-400 flex items-center gap-2;
+    }
+    
+    .breadcrumb-item.active {
+        @apply text-gray-900 dark:text-white font-medium;
+    }
+    
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: "/";
+        @apply text-gray-400 dark:text-gray-600;
+    }
+    
+    /* ===== PROGRESS BAR ===== */
+    .progress {
+        @apply w-full h-4 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden;
+    }
+    
+    .progress-bar {
+        @apply h-full bg-green-600 dark:bg-green-500 transition-all duration-300;
+    }
+    
+    /* ===== LIST GROUP ===== */
+    .list-group {
+        @apply space-y-1;
+    }
+    
+    .list-group-item {
+        @apply px-4 py-3 bg-white dark:bg-gray-800 
+               border border-gray-200 dark:border-gray-700 
+               text-gray-900 dark:text-gray-100 
+               hover:bg-gray-50 dark:hover:bg-gray-700/50 
+               first:rounded-t-lg last:rounded-b-lg;
+    }
+    
+    /* ===== TABS ===== */
+    .nav-tabs {
+        @apply flex border-b border-gray-200 dark:border-gray-700 gap-2;
+    }
+    
+    .nav-tabs .nav-link {
+        @apply px-4 py-2 text-gray-600 dark:text-gray-400 
+               hover:text-gray-900 dark:hover:text-white 
+               border-b-2 border-transparent;
+    }
+    
+    .nav-tabs .nav-link.active {
+        @apply text-green-600 dark:text-green-400 
+               border-green-600 dark:border-green-400 
+               font-medium;
+    }
+    
+    /* ===== ACCORDION ===== */
+    .accordion-item {
+        @apply border border-gray-200 dark:border-gray-700 
+               rounded-lg overflow-hidden mb-2;
+    }
+    
+    .accordion-button {
+        @apply w-full text-left px-4 py-3 
+               bg-gray-50 dark:bg-gray-700 
+               text-gray-900 dark:text-white 
+               hover:bg-gray-100 dark:hover:bg-gray-600 
+               font-medium;
+    }
+    
+    .accordion-body {
+        @apply p-4 bg-white dark:bg-gray-800 
+               text-gray-700 dark:text-gray-300;
+    }
 }
 
-/* Hover adaptativo */
-button:hover {
-  @apply bg-green-700 dark:bg-green-600 text-white;
-}
+/* ============================================
+   UTILITIES ADICIONALES
+============================================ */
 
-/* Sidebar, nav y footer */
-.sidebar, nav, header, footer {
-  @apply transition-colors duration-300;
+@layer utilities {
+    .line-clamp-1 {
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    
+    .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    
+    /* ⚡ Solo transiciones en hover/interacciones, NO en dark mode */
+    .transition-smooth {
+        transition: transform 0.2s, opacity 0.2s;
+    }
 }
