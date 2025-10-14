@@ -26,11 +26,9 @@
 </head>
 <body class="flex flex-col min-h-screen bg-[#E5E7EB]">
 
-
 <!-- Navbar -->
 <nav class="bg-[#4CAF50] border-b border-gray-200 shadow-md">
  <div class="flex flex-wrap items-center justify-between max-w-screen-xl mx-auto px-4 py-2 md:px-6 lg:px-8">
-
 
     <!-- Logos -->
     <div class="flex items-center space-x-3">
@@ -39,7 +37,7 @@
     </div>
 
     <!-- Botón hamburguesa móvil -->
-    <button data-collapse-toggle="mega-menu" type="button"
+    <button id="hamburger-button" type="button"
             class="inline-flex items-center p-2 w-10 h-10 justify-center text-white rounded-lg md:hidden hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300"
             aria-controls="mega-menu" aria-expanded="false">
       <span class="sr-only">Abrir menú</span>
@@ -59,9 +57,8 @@
         </li>
 
         <li>
-          <button id="mega-menu-dropdown-button" data-dropdown-toggle="mega-menu-dropdown" 
+          <button id="mega-menu-dropdown-button" type="button"
                   class="flex items-center justify-between w-full py-1.5 px-3 font-bold text-lg text-white bg-transparent md:w-auto hover:bg-green-600 md:hover:bg-transparent md:hover:text-gray-100 rounded transition-colors">
-
             Gobierno
             <svg class="w-2.5 h-2.5 ms-3" fill="none" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
@@ -112,67 +109,70 @@
   </div>
 </nav>
 
-<!-- Flowbite JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.5.1/flowbite.min.js"></script>
-
-
-  <!-- ============================= -->
   <!-- Contenido principal -->
-  <!-- ============================= -->
   <main class="flex-1 pt-0 pb-16 px-4 sm:px-6 md:px-10 lg:px-20">
     @yield('content')
   </main>
 
+  <!-- Footer institucional -->
+  <footer class="mt-auto border-t bg-white py-6">
+    <div class="max-w-screen-xl mx-auto flex justify-between items-center text-sm text-gray-500 px-4 md:px-0">
+      <!-- Texto del footer -->
+      <div>
+        © 2025 Municipio de Tlapehuala™. Todos los derechos reservados.
+      </div>
 
- <!-- Footer institucional -->
-<footer class="mt-auto border-t bg-white py-6">
-  <div class="max-w-screen-xl mx-auto flex justify-between items-center text-sm text-gray-500 px-4 md:px-0">
-    <!-- Texto del footer -->
-    <div>
-      © 2025 Municipio de Tlapehuala™. Todos los derechos reservados.
+      <!-- Íconos sociales -->
+      <div class="flex space-x-4">
+        <a href="https://github.com/V-Zet09" target="_blank" class="text-gray-400 hover:text-gray-700">
+          <i class="ri-github-fill text-3xl"></i>
+        </a>
+        <a href="https://www.instagram.com/tlapehualagob/" target="_blank" class="text-gray-400 hover:text-pink-500">
+          <i class="ri-instagram-fill text-3xl"></i>
+        </a>
+        <a href="https://www.facebook.com/tlapehualagob" target="_blank" class="text-gray-400 hover:text-blue-600">
+          <i class="ri-facebook-fill text-3xl"></i>
+        </a>
+      </div>
     </div>
+  </footer>
 
-    <!-- Íconos sociales -->
-    <div class="flex space-x-4">
-      <a href="https://github.com/V-Zet09" target="_blank" class="text-gray-400 hover:text-gray-700">
-        <i class="ri-github-fill text-3xl"></i>
-      </a>
-      <a href="https://www.instagram.com/tlapehualagob/" target="_blank" class="text-gray-400 hover:text-pink-500">
-        <i class="ri-instagram-fill text-3xl"></i>
-      </a>
-      <a href="https://www.facebook.com/tlapehualagob" target="_blank" class="text-gray-400 hover:text-blue-600">
-        <i class="ri-facebook-fill text-3xl"></i>
-      </a>
-    </div>
-  </div>
-</footer>
+  <!-- Flowbite JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.5.1/flowbite.min.js"></script>
 
   @yield('script')
 
-<script>
-const hamburgerBtn = document.getElementById('hamburgerBtn');
-const megaMenu = document.getElementById('mega-menu');
-const dropdownBtn = document.getElementById('mega-menu-dropdown-button');
-const dropdownMenu = document.getElementById('mega-menu-dropdown');
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Toggle menú hamburguesa
+    const hamburgerBtn = document.getElementById('hamburger-button');
+    const megaMenu = document.getElementById('mega-menu');
+    
+    if (hamburgerBtn && megaMenu) {
+      hamburgerBtn.addEventListener('click', function() {
+        megaMenu.classList.toggle('hidden');
+      });
+    }
 
-// Toggle menú hamburguesa
-hamburgerBtn.addEventListener('click', () => {
-  megaMenu.classList.toggle('hidden');
-});
+    // Toggle dropdown
+    const dropdownBtn = document.getElementById('mega-menu-dropdown-button');
+    const dropdownMenu = document.getElementById('mega-menu-dropdown');
+    
+    if (dropdownBtn && dropdownMenu) {
+      dropdownBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        dropdownMenu.classList.toggle('hidden');
+      });
 
-// Toggle dropdown
-dropdownBtn.addEventListener('click', () => {
-  dropdownMenu.classList.toggle('hidden');
-});
-
-// Cerrar dropdown si clic fuera
-document.addEventListener('click', (e) => {
-  if (!dropdownBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
-    dropdownMenu.classList.add('hidden');
-  }
-});
-
-
-</script>
+      // Cerrar dropdown si clic fuera
+      document.addEventListener('click', function(e) {
+        if (!dropdownBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+          dropdownMenu.classList.add('hidden');
+        }
+      });
+    }
+  });
+  </script>
 </body>
 </html>

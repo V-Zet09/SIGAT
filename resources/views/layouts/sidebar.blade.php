@@ -316,5 +316,4 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
        x-transition:leave-start="opacity-100"
        x-transition:leave-end="opacity-0">
   </div>
-
 </div>
