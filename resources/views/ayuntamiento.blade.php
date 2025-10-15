@@ -8,227 +8,198 @@
         Organigrama del Ayuntamiento
     </h1>
 
-   @php
-$equipo = [
-    [
-        'nombre' => 'Jose Luis Antunez Goicochea',
-        'cargo' => 'Presidente Municipal',
-        'area' => 'Presidencia',
-        'email' => 'presidente_tlapehuala@hotmail.com',
-        'telefono' => '747 47 5 12 34',
-        'foto' => asset('images/organigrama/presidente.jpg'),
-        'hijos' => [
-            // Presidencia
-            ['nombre' => 'Jesus Campos Casarrubias', 'cargo' => 'Secretario Particular', 'area' => 'Presidencia'],
-            ['nombre' => 'Edgardo Santamaria Rojas', 'cargo' => 'Secretario Técnico', 'area' => 'Presidencia'],
-            ['nombre' => 'Benito Mojica Wences', 'cargo' => 'Asesor Jurídico', 'area' => 'Presidencia'],
-            ['nombre' => 'Sergio Tapia Salgado', 'cargo' => 'Asesor Presidencia', 'area' => 'Presidencia'],
-            ['nombre' => 'Sofia Ines Najera Rivera', 'cargo' => 'Auxiliar Presidencia', 'area' => 'Presidencia'],
-            ['nombre' => 'Maria Perez Maya', 'cargo' => 'Auxiliar de Presidencia', 'area' => 'Presidencia'],
-            ['nombre' => 'Yoselin Carlos Bernabe', 'cargo' => 'Recepcionista', 'area' => 'Presidencia'],
-            ['nombre' => 'Barbarita Rodriguez Flores', 'cargo' => 'Recepcionista', 'area' => 'Presidencia'],
+    <!-- Alertas de éxito -->
+    @if(session('success'))
+    <div id="alert-success" class="mb-6 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative animate-fade-in">
+        <span class="block sm:inline">✅ {{ session('success') }}</span>
+        <span class="absolute top-0 bottom-0 right-0 px-4 py-3 cursor-pointer" onclick="this.parentElement.remove()">
+            <svg class="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/>
+            </svg>
+        </span>
+    </div>
+    @endif
 
-            // Sindicatura
-            [
-                'nombre' => 'Marisela Cruz Cedillo',
-                'cargo' => 'Síndico Procurador',
-                'area' => 'Sindicatura',
-                'hijos' => [
-                    ['nombre' => 'Armando Suarez Valerio', 'cargo' => 'Asesor de Sindicatura', 'area' => 'Sindicatura'],
-                    ['nombre' => 'Rosalia Ruiz Avila', 'cargo' => 'Secretaria', 'area' => 'Sindicatura'],
-                ]
-            ],
+    @if($presidente)
+        <div class="flex justify-center overflow-x-auto">
+            <ul class="relative pl-0">
+                <x-nodo-cargo :empleado="$presidente" />
+            </ul>
+        </div>
+    @else
+        <div class="text-center text-gray-500">
+            <p>No hay datos del organigrama disponibles.</p>
+        </div>
+    @endif
+</div>
 
-            // Regidores
-            [
-                'nombre' => 'Regidores',
-                'cargo' => 'Cuerpo Edilicio',
-                'area' => 'Cabildo',
-                'hijos' => [
-                    ['nombre' => 'Zenon Huerta Arellano', 'cargo' => 'Regidor', 'area' => 'Cabildo'],
-                    ['nombre' => 'Ma. Del Carmen Barrera Galarza', 'cargo' => 'Regidora', 'area' => 'Cabildo'],
-                    ['nombre' => 'Arturo Leon Juan', 'cargo' => 'Regidor', 'area' => 'Cabildo'],
-                    ['nombre' => 'Ma. Isabel Quintana Gomez', 'cargo' => 'Regidora', 'area' => 'Cabildo'],
-                    ['nombre' => 'Jesus Javier Gutierrez Cruz', 'cargo' => 'Regidor', 'area' => 'Cabildo'],
-                    ['nombre' => 'Ma. Edith Aguirre Flores', 'cargo' => 'Regidora', 'area' => 'Cabildo'],
-                ]
-            ],
+<!-- Modal de Edición -->
+<div id="modalEditar" class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden items-center justify-center z-50 overflow-y-auto">
+    <div class="bg-white rounded-lg shadow-2xl max-w-2xl w-full mx-4 my-8 transform transition-all">
+        <div class="bg-[#00713D] px-6 py-4 rounded-t-lg flex justify-between items-center">
+            <h3 class="text-xl font-bold text-yellow-300">✏️ Editar Cargo</h3>
+            <button onclick="cerrarModal()" class="text-white bg-black bg-opacity-25 hover:bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center text-3xl leading-none">&times;</button>
+        </div>
 
-            // Secretaría General
-            [
-                'nombre' => 'Mario Lagunas Salgado',
-                'cargo' => 'Secretario General',
-                'area' => 'Secretaría General',
-                'foto' => asset('images/organigrama/secretariogeneral.jpg'),
-                'hijos' => [
-                    ['nombre' => 'Alberto Nova Arzate', 'cargo' => 'Asesor Jurídico', 'area' => 'Secretaría General'],
-                    ['nombre' => 'Juan Mora De La Paz', 'cargo' => 'Asesor', 'area' => 'Secretaría General'],
-                    ['nombre' => 'Catalino Paredes Rosales', 'cargo' => 'Coordinador de Ayuntamiento', 'area' => 'Secretaría General'],
-                    ['nombre' => 'Alina Izamar Luciano Garcia', 'cargo' => 'Secretaria', 'area' => 'Secretaría General'],
-                ]
-            ],
+        
+        <form id="formEditar" method="POST" class="p-6">
+            @csrf
+            @method('PUT')
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Nombre Completo *</label>
+                    <input type="text" name="nombre" id="edit_nombre" required
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00713D]">
+                </div>
 
-            // Tesorería
-            [
-                'nombre' => 'Rodrigo Elexei Rodriguez Romero',
-                'cargo' => 'Tesorero',
-                'area' => 'Tesorería',
-                'hijos' => [
-                    ['nombre' => 'Trini Carlos Concha Delgado', 'cargo' => 'Contador', 'area' => 'Tesorería'],
-                    ['nombre' => 'Tomaza Duarte Munguia', 'cargo' => 'Auxiliar Contable', 'area' => 'Tesorería'],
-                    ['nombre' => 'Arturo Pedro Valencia', 'cargo' => 'Auxiliar Contable', 'area' => 'Tesorería'],
-                    ['nombre' => 'Damian Cortes Baltazar', 'cargo' => 'Auxiliar Contable', 'area' => 'Tesorería'],
-                    ['nombre' => 'Jesus Dominguez Vergara', 'cargo' => 'Auxiliar Contable', 'area' => 'Tesorería'],
-                    ['nombre' => 'Antonia Nayely Salas Carlos', 'cargo' => 'Cajera', 'area' => 'Tesorería'],
-                ]
-            ],
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Puesto *</label>
+                    <input type="text" name="puesto" id="edit_cargo" required
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00713D]">
+                </div>
 
-            // Alumbrado Público
-            [
-                'nombre' => 'Margarita Salmeron Veledias',
-                'cargo' => 'Directora de Alumbrado Público',
-                'area' => 'Alumbrado Público',
-                'hijos' => [
-                    ['nombre' => 'Jose Alberto Ochoa Mireles', 'cargo' => 'Electricista', 'area' => 'Alumbrado Público'],
-                    ['nombre' => 'Perfecto Claudio Alonso', 'cargo' => 'Electricista', 'area' => 'Alumbrado Público'],
-                ]
-            ],
+                <div class="md:col-span-2">
+                    <label class="block text-gray-700 font-semibold mb-2">Departamento</label>
+                    <input type="text" name="departamento" id="edit_departamento"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00713D]">
+                </div>
+            </div>
 
-            // Reglamentos
-            [
-                'nombre' => 'Victor de Jesus Blancas',
-                'cargo' => 'Director de Reglamentos',
-                'area' => 'Reglamentos',
-                'hijos' => [
-                    ['nombre' => 'Rafael Orozco Santos', 'cargo' => 'Sub-director', 'area' => 'Reglamentos'],
-                    ['nombre' => 'Angel de Jesus Torres Castro', 'cargo' => 'Asistente', 'area' => 'Reglamentos'],
-                    ['nombre' => 'Pedro Reano Rosas', 'cargo' => 'Cobrador', 'area' => 'Reglamentos'],
-                    ['nombre' => 'Felix Garcia Benitez', 'cargo' => 'Encargado de Marcado', 'area' => 'Reglamentos'],
-                    ['nombre' => 'Juan Manuel Blancas Torres', 'cargo' => 'Encargado de Rastro', 'area' => 'Reglamentos'],
-                    ['nombre' => 'Jazmin Miranda Avilez', 'cargo' => 'Limpia Rastro', 'area' => 'Reglamentos'],
-                    ['nombre' => 'Taide Segura Garcia', 'cargo' => 'Limpia Rastro', 'area' => 'Reglamentos'],
-                ]
-            ],
-
-            // Tránsito
-            [
-                'nombre' => 'Arnulfo Aviles Velazquez',
-                'cargo' => 'Director de Tránsito',
-                'area' => 'Tránsito',
-                'hijos' => [
-                    ['nombre' => 'J. Refugio Tapia Garcia', 'cargo' => 'Tránsito', 'area' => 'Tránsito'],
-                    ['nombre' => 'Bulmaro Rayo Valdez', 'cargo' => 'Tránsito', 'area' => 'Tránsito'],
-                    ['nombre' => 'Salome Romero Valencia', 'cargo' => 'Tránsito', 'area' => 'Tránsito'],
-                    ['nombre' => 'Juan Carlos Garcia Damian', 'cargo' => 'Tránsito', 'area' => 'Tránsito'],
-                    ['nombre' => 'Francisco Ramirez Verona', 'cargo' => 'Tránsito', 'area' => 'Tránsito'],
-                    ['nombre' => 'Ma. Concepcion Duarte Aviles', 'cargo' => 'Secretaria', 'area' => 'Tránsito'],
-                ]
-            ],
-
-            // Casa de la Cultura / Limpieza
-            [
-                'nombre' => 'Casa de la Cultura',
-                'cargo' => 'Área de Cultura y Servicios',
-                'area' => 'Casa de la Cultura',
-                'hijos' => [
-                    ['nombre' => 'Esperanza Rodriguez Espinoza', 'cargo' => 'Limpieza', 'area' => 'Casa de la Cultura'],
-                    ['nombre' => 'Ma. Luisa Santiago Baltazar', 'cargo' => 'Limpieza Ayuntamiento', 'area' => 'Servicios'],
-                    ['nombre' => 'Bernardo Isidro Luciano', 'cargo' => 'Limpieza Ayuntamiento', 'area' => 'Servicios'],
-                    ['nombre' => 'Jose de Jesus Perez Villa', 'cargo' => 'Carro de Basura', 'area' => 'Servicios'],
-                    ['nombre' => 'Gerardo Flores Quintana', 'cargo' => 'Carro de Basura', 'area' => 'Servicios'],
-                ]
-            ],
-
-            // DIF Municipal
-            [
-                'nombre' => 'Sarahí Salvador Flores',
-                'cargo' => 'Presidenta del DIF Municipal',
-                'area' => 'DIF',
-                'hijos' => [
-                    ['nombre' => 'Adriana Mariano Alonso', 'cargo' => 'Directora', 'area' => 'DIF'],
-                    ['nombre' => 'Osyris Flores Almontes', 'cargo' => 'Asistente', 'area' => 'DIF'],
-                    ['nombre' => 'Nélida Landín Pineda', 'cargo' => 'Recepcionista', 'area' => 'DIF'],
-                    [
-                        'nombre' => 'Salud',
-                        'cargo' => 'Equipo de Apoyo',
-                        'area' => 'DIF',
-                        'foto' => asset('images/organigrama/logo gris.jpg'),
-                        'hijos' => [
-                            ['nombre' => 'Eréndira Garzon Aguilar', 'cargo' => 'Terapeuta', 'area' => 'DIF'],
-                            ['nombre' => 'Noemi Albarrán Suárez', 'cargo' => 'Enfermera', 'area' => 'DIF'],
-                            ['nombre' => 'Laura Karina Felipe Flores', 'cargo' => 'Nutrióloga', 'area' => 'DIF'],
-
-                        ]
-                    ],
-                ]
-            ],
-
-            // Seguridad Pública
-            [
-                'nombre' => 'Fernando Guzman Castro',
-                'cargo' => 'Director de Seguridad Pública',
-                'area' => 'Seguridad Pública',
-                'hijos' => array_map(function($i){ return ['nombre'=>"Oficial $i",'cargo'=>'Policía Municipal','area'=>'Seguridad Pública']; }, range(1,10)),
-            ],
-
-            // Otros departamentos
-            ['nombre' => 'Silvano Corrales Cuicas', 'cargo' => 'Director de Desarrollo Económico', 'area' => 'Desarrollo Económico'],
-            ['nombre' => 'Jessica Gutierrez Castillo', 'cargo' => 'Directora de Prevención del Delito', 'area' => 'Prevención del Delito'],
-            ['nombre' => 'Ma. Julia Castro Ruiz', 'cargo' => 'Coordinadora de Trabajo Social', 'area' => 'Trabajo Social'],
-            ['nombre' => 'Miguel Angel Jaimes Aguilar', 'cargo' => 'Director de Salud', 'area' => 'Salud'],
-
-            // --------- INFORMÁTICA AL FINAL ---------
-            [
-                'nombre' => 'Miguel Angel Acuña Garcia',
-                'cargo' => 'Director de Informática',
-                'area' => 'Informática',
-                'foto' => asset('images/organigrama/miguel.jpg'),
-                'hijos' => [
-                    [
-                        'nombre' => 'Faustino Lopez Nunez',
-                        'cargo' => 'Asistente',
-                        'area' => 'Informática',
-                        'foto' => asset('images/organigrama/faustino.jpg'),
-                    ],
-                    [
-                        'nombre' => 'Maico Zaet Perez Valencia',
-                        'cargo' => 'Pasante Encargado Full Stack',
-                        'area' => 'Informática',
-                        'email' => 'zaet_maico@hotmail.com',
-                        'foto' => asset('images/organigrama/maicozaet.jpeg'),
-                    ],
-                    [
-                        'nombre' => 'Jorge Campos Alvarado',
-                        'cargo' => 'Encargado Front End',
-                        'area' => 'Informática',
-                        'foto' => asset('images/organigrama/jorge.jpg'),
-                    ],
-                    [
-                        'nombre' => 'Jose Angel Alonso Leon',
-                        'cargo' => 'SQL',
-                        'area' => 'Informática',
-                        'foto' => asset('images/organigrama/jose.jpg'),
-                    ],
-                    [
-                        'nombre' => 'Mariana Lilbeth Antunez Garcia',
-                        'cargo' => 'Front End',
-                        'area' => 'Informática',
-                        'foto' => asset('images/organigrama/mariana.jpeg'),
-                    ],
-                ],
-            ],
-
-        ]
-    ]
-];
-@endphp
-
-    <div class="flex justify-center overflow-x-auto">
-        <ul class="relative pl-0">
-            @foreach($equipo as $nodo)
-                <x-nodo :nodo="$nodo" />
-            @endforeach
-        </ul>
+            <div class="flex gap-3 mt-6">
+                <button type="button" onclick="cerrarModal()" 
+                        class="flex-1 px-6 py-3 bg-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-400 transition">
+                    Cancelar
+                </button>
+                <button type="submit" 
+                        class="flex-1 px-6 py-3 bg-[#00713D] text-white font-semibold rounded-lg hover:bg-[#005a2f] transition">
+                    💾 Guardar Cambios
+                </button>
+            </div>
+        </form>
     </div>
 </div>
+
+<!-- Modal de Confirmación de Eliminación -->
+<div id="modalEliminar" class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-2xl max-w-md w-full mx-4 transform transition-all">
+        <div class="p-6 text-center">
+            <div class="mb-4 text-red-500 text-6xl">⚠️</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-2">Confirmar Eliminación</h3>
+            <p class="text-gray-600 mb-6">¿Estás seguro de eliminar este cargo? La posición quedará vacante pero se mantendrá en el organigrama.</p>
+            
+            <div class="flex gap-3">
+                <button onclick="cerrarModalEliminar()" 
+                        class="flex-1 px-6 py-3 bg-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-400 transition">
+                    Cancelar
+                </button>
+                <button onclick="confirmarEliminar()" 
+                        class="flex-1 px-6 py-3 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition">
+                    Sí, Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Formulario oculto para eliminar -->
+<form id="formEliminar" method="POST" style="display: none;">
+    @csrf
+    @method('DELETE')
+</form>
+
+<style>
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fade-in 0.3s ease-out;
+}
+
+.cargo-vacio {
+    opacity: 0.6;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+    border: 2px dashed #cbd5e0 !important;
+}
+
+.cargo-vacio .avatar {
+    background: #e2e8f0 !important;
+}
+
+.cargo-vacio .iniciales {
+    color: #a0aec0 !important;
+}
+</style>
+
+<script>
+let cargoIdEliminar = null;
+
+function abrirModalEditar(id, nombre, puesto, departamento) {
+    const modal = document.getElementById('modalEditar');
+    const form = document.getElementById('formEditar');
+    
+    form.action = `/ayuntamiento/${id}`;
+    form.method = 'POST';
+    
+    document.getElementById('edit_nombre').value = nombre || '';
+    document.getElementById('edit_cargo').value = puesto || '';
+    document.getElementById('edit_departamento').value = departamento || '';
+    
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function cerrarModal() {
+    const modal = document.getElementById('modalEditar');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+function abrirModalEliminar(id) {
+    cargoIdEliminar = id;
+    const modal = document.getElementById('modalEliminar');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function cerrarModalEliminar() {
+    const modal = document.getElementById('modalEliminar');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    cargoIdEliminar = null;
+}
+
+function confirmarEliminar() {
+    if (cargoIdEliminar) {
+        const form = document.getElementById('formEliminar');
+        form.action = `/ayuntamiento/${cargoIdEliminar}`;
+        form.submit();
+    }
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        cerrarModal();
+        cerrarModalEliminar();
+    }
+});
+
+document.getElementById('modalEditar').addEventListener('click', function(e) {
+    if (e.target === this) cerrarModal();
+});
+
+document.getElementById('modalEliminar').addEventListener('click', function(e) {
+    if (e.target === this) cerrarModalEliminar();
+});
+
+setTimeout(() => {
+    const alert = document.getElementById('alert-success');
+    if (alert) {
+        alert.style.animation = 'fade-in 0.3s ease-out reverse';
+        setTimeout(() => alert.remove(), 300);
+    }
+}, 5000);
+</script>
 @endsection
