@@ -128,9 +128,10 @@
                 Mostrando {{ $actividades->firstItem() }} a {{ $actividades->lastItem() }} de {{ $actividades->total() }} actividades
             </div>
             <div>
-                {{ $actividades->appends(request()->query())->links() }}
+                {{ $actividades->appends(request()->query())->onEachSide(1)->links('pagination::simple-bootstrap-5') }}
             </div>
         </div>
+
     @else
         <div class="alert alert-info">
             No se encontraron actividades con los filtros aplicados.
