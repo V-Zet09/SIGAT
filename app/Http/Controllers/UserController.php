@@ -81,5 +81,8 @@ class UserController extends Controller
         $usuario = User::findOrFail($id);
         return view('vista-editar-usuario', compact('usuario'));
     }
-
+    public function rolesSimple()
+    {
+        return view('roles-simple'); 
+    }
 }
