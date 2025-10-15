@@ -14,106 +14,92 @@
             Dashboard
         @endslot
         @slot('title')
-            BIENVENIDO DARK 
+            BIENVENIDO AUXILIAR 
         @endslot
     @endcomponent
 
-    <div class="row dash-nft">
-        <div class="row mt-4">
-    <!-- Actividades registradas -->
-    <div class="col-md-6 mb-4">
-        <div class="card shadow-lg border-0 rounded-4">
-            <div class="card-header bg-secondary text-white text-center rounded-top-4">
-                <h5 class="mb-0">📌 Actividades Registradas</h5>
-            </div>
-            <div class="card-body bg-light rounded-bottom-4">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Actividad registrada 1
-                        <a href="apps-tasks-details" class="btn btn-sm btn-outline-primary rounded-pill">Ver detalles</a>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Actividad registrada 2
-                        <a href="apps-tasks-details" class="btn btn-sm btn-outline-primary rounded-pill">Ver detalles</a>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Actividad registrada 3
-                        <a href="apps-tasks-details" class="btn btn-sm btn-outline-primary rounded-pill">Ver detalles</a>
-                    </li>
-                </ul>
-            </div>
+<div class="p-6 space-y-6">
+
+    <!-- Actividades Registradas -->
+    <div class="bg-green-50 dark:bg-gray-800 border border-green-300 dark:border-gray-700 rounded-xl shadow-lg hover:shadow-xl transition">
+        <div class="bg-green-600 dark:bg-green-700 text-white text-center py-3 rounded-t-xl font-semibold text-lg">
+             Actividades Registradas 📌
         </div>
+        <ul class="divide-y divide-green-200 dark:divide-gray-700">
+            <li class="flex justify-between items-center py-3 px-5">
+                Actividad registrada 1
+                <button class="px-4 py-1 text-sm rounded-full border border-green-600 text-green-600 dark:text-green-300 hover:bg-green-600 hover:text-white transition">
+                    Ver detalles
+                </button>
+            </li>
+            <li class="flex justify-between items-center py-3 px-5">
+                Actividad registrada 2
+                <button class="px-4 py-1 text-sm rounded-full border border-green-600 text-green-600 dark:text-green-300 hover:bg-green-600 hover:text-white transition">
+                    Ver detalles
+                </button>
+            </li>
+            <li class="flex justify-between items-center py-3 px-5">
+                Actividad registrada 3
+                <button class="px-4 py-1 text-sm rounded-full border border-green-600 text-green-600 dark:text-green-300 hover:bg-green-600 hover:text-white transition">
+                    Ver detalles
+                </button>
+            </li>
+        </ul>
     </div>
 
-    <!-- Actividades en revisión -->
-    <div class="col-md-6 mb-4">
-        <div class="card shadow-lg border-0 rounded-4">
-            <div class="card-header bg-warning text-dark text-center rounded-top-4">
-                <h5 class="mb-0">🔍 Actividades en Revisión</h5>
-            </div>
-            <div class="card-body bg-light rounded-bottom-4">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Actividad en revisión 1
-                        <a href="apps-tasks-details" class="btn btn-sm btn-outline-warning rounded-pill text-dark">Ver detalles</a>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Actividad en revisión 2
-                        <a href="apps-tasks-details" class="btn btn-sm btn-outline-warning rounded-pill text-dark">Ver detalles</a>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Actividad en revisión 3
-                        <a href="apps-tasks-details" class="btn btn-sm btn-outline-warning rounded-pill text-dark">Ver detalles</a>
-                    </li>
-                </ul>
-            </div>
+    <!-- Actividades en Revisión -->
+    <div class="bg-yellow-50 dark:bg-gray-800 border border-yellow-300 dark:border-gray-700 rounded-xl shadow-lg hover:shadow-xl transition">
+        <div class="bg-yellow-600 dark:bg-yellow-700 text-white text-center py-3 rounded-t-xl font-semibold text-lg">
+             Actividades en Revisión 🔍
         </div>
+        <ul class="divide-y divide-yellow-200 dark:divide-gray-700">
+            <li class="flex justify-between items-center py-3 px-5">
+                Actividad en revisión 1
+                <button class="px-4 py-1 text-sm rounded-full border border-yellow-600 text-yellow-600 dark:text-yellow-300 hover:bg-yellow-600 hover:text-white transition">
+                    Ver detalles
+                </button>
+            </li>
+            <li class="flex justify-between items-center py-3 px-5">
+                Actividad en revisión 2
+                <button class="px-4 py-1 text-sm rounded-full border border-yellow-600 text-yellow-600 dark:text-yellow-300 hover:bg-yellow-600 hover:text-white transition">
+                    Ver detalles
+                </button>
+            </li>
+            <li class="flex justify-between items-center py-3 px-5">
+                Actividad en revisión 3
+                <button class="px-4 py-1 text-sm rounded-full border border-yellow-600 text-yellow-600 dark:text-yellow-300 hover:bg-yellow-600 hover:text-white transition">
+                    Ver detalles
+                </button>
+            </li>
+        </ul>
     </div>
 
-    <!-- Actividades aprobadas -->
-    <div class="col-md-12 mb-4">
-        <div class="card shadow-lg border-0 rounded-4">
-            <div class="card-header bg-success text-white text-center rounded-top-4">
-                <h5 class="mb-0">✅ Actividades Aprobadas</h5>
-            </div>
-            <div class="card-body bg-light rounded-bottom-4">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Actividad aprobada 1
-                        <a href="apps-tasks-details" class="btn btn-sm btn-outline-success rounded-pill">Ver detalles</a>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Actividad aprobada 2
-                        <a href="apps-tasks-details" class="btn btn-sm btn-outline-success rounded-pill">Ver detalles</a>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Actividad aprobada 3
-                        <a href="apps-tasks-details" class="btn btn-sm btn-outline-success rounded-pill">Ver detalles</a>
-                    </li>
-                </ul>
-            </div>
+    <!-- Actividades Aprobadas -->
+    <div class="bg-blue-50 dark:bg-gray-800 border border-blue-300 dark:border-gray-700 rounded-xl shadow-lg hover:shadow-xl transition">
+        <div class="bg-blue-600 dark:bg-blue-700 text-white text-center py-3 rounded-t-xl font-semibold text-lg">
+             Actividades Aprobadas ✅
         </div>
+        <ul class="divide-y divide-blue-200 dark:divide-gray-700">
+            <li class="flex justify-between items-center py-3 px-5">
+                Actividad aprobada 1
+                <button class="px-4 py-1 text-sm rounded-full border border-blue-600 text-blue-600 dark:text-blue-300 hover:bg-blue-600 hover:text-white transition">
+                    Ver detalles
+                </button>
+            </li>
+            <li class="flex justify-between items-center py-3 px-5">
+                Actividad aprobada 2
+                <button class="px-4 py-1 text-sm rounded-full border border-blue-600 text-blue-600 dark:text-blue-300 hover:bg-blue-600 hover:text-white transition">
+                    Ver detalles
+                </button>
+            </li>
+            <li class="flex justify-between items-center py-3 px-5">
+                Actividad aprobada 3
+                <button class="px-4 py-1 text-sm rounded-full border border-blue-600 text-blue-600 dark:text-blue-300 hover:bg-blue-600 hover:text-white transition">
+                    Ver detalles
+                </button>
+            </li>
+        </ul>
     </div>
+
 </div>
-
-
-@endsection
-@section('script')
-    <!-- apexcharts -->
-    <script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
-
-    <!--Swiper slider js-->
-    <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
-
-    <!-- Vector map-->
-    <script src="{{ URL::asset('build/libs/jsvectormap/jsvectormap.min.js') }}"></script>
-    <script src="{{ URL::asset('build/libs/jsvectormap/maps/world-merc.js') }}"></script>
-
-    <!-- Countdown js -->
-    <script src="{{ URL::asset('build/js/pages/coming-soon.init.js') }}"></script>
-
-    <!-- Marketplace init -->
-    <script src="{{ URL::asset('build/js/pages/dashboard-nft.init.js') }}"></script>
-
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
 @endsection

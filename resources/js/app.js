@@ -2,7 +2,6 @@ import 'alpinejs'
 import 'flowbite';
 
 
-
 (function () {
     ("use strict");
 

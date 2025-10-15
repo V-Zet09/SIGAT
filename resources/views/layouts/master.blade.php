@@ -1,73 +1,72 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}"
-      data-layout="vertical"
-      data-topbar="light"
-      data-sidebar="light"
-      data-sidebar-style="default"
-      data-sidebar-size="lg"
-      data-sidebar-image="none"
-      data-preloader="disable"
-      data-theme="default"
-      data-theme-colors="default">
-
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8" />
     <title>@yield('title') | SIGAT</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="SIGAT Dashboard" name="description" />
-    <meta content="SIGAT" name="author" />
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    
+    <!-- ⚡ CRÍTICO: Aplica dark mode ANTES de cargar CSS -->
+    <script>
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+    
     <link rel="shortcut icon" href="{{ URL::asset('images/LOGO_VENTANA_SF.png') }}">
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-          crossorigin="anonymous"
-          referrerpolicy="no-referrer" />
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+    
     @vite([
-        'resources/scss/bootstrap.scss',    
-        'resources/scss/icons.scss',
         'resources/scss/app.scss',
-        'resources/scss/custom.scss',
+        'resources/scss/icons.scss',
         'resources/js/app.js'
     ])
-
+    
     @yield('css')
+    
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.store('theme', {
+                darkMode: localStorage.getItem('theme') === 'dark',
+                
+                toggle() {
+                    this.darkMode = !this.darkMode;
+                    localStorage.setItem('theme', this.darkMode ? 'dark' : 'light');
+                    document.documentElement.classList.toggle('dark', this.darkMode);
+                }
+            });
+        });
+    </script>
 </head>
 
-<body class="bg-gray-50 text-gray-900 transition-colors duration-200">
-    <div id="layout-wrapper">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    
+    <div class="flex min-h-screen" x-data>
         
-        @hasSection('sidebar')
-            @yield('sidebar')
-        @else
-            @include('layouts.sidebar')
-        @endif
-
-        <div class="main-content lg:ml-64 bg-gray-50 transition-colors duration-200">
-            
+        {{-- Sidebar --}}
+        @include('layouts.sidebar')
+        
+        {{-- Main content --}}
+        <div class="flex-1 ml-64 transition-colors duration-300">
             @hasSection('navbar')
                 @yield('navbar')
             @endif
-
-            <div class="page-content" style="padding-top: 1rem;">
-                <div class="container-fluid">
-                    @yield('content')
-                </div>
-            </div>
-
+            
+            <main class="p-6 min-h-screen bg-gray-50 dark:bg-gray-900">
+                @yield('content')
+            </main>
+            
+            {{-- Footer --}}
             @include('layouts.footer')
-
         </div>
     </div>
-
+    
     @include('layouts.vendor-scripts')
     @yield('scripts')
-
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.5.1/flowbite.min.js"></script>
 </body>
 </html>
