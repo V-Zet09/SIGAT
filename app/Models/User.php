@@ -26,6 +26,9 @@ class User extends Authenticatable
         'email',
         'password',
         'avatar',
+        'telefono',
+        'jefe_id',
+        'orden',
     ];
 
     /**
@@ -46,4 +49,28 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Relación: Un usuario puede tener un jefe
+     */
+    public function jefe()
+    {
+        return $this->belongsTo(User::class, 'jefe_id');
+    }
+
+    /**
+     * Relación: Un usuario puede tener muchos subordinados
+     */
+    public function subordinados()
+    {
+        return $this->hasMany(User::class, 'jefe_id')->orderBy('orden');
+    }
+
+    /**
+     * Relación recursiva para obtener todos los subordinados anidados
+     */
+    public function subordinadosRecursivos()
+    {
+        return $this->subordinados()->with('subordinadosRecursivos');
+    }
 }

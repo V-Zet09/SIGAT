@@ -28,6 +28,11 @@ Route::post('/update-profile/{id}', [HomeController::class, 'updateProfile'])->n
 Route::post('/update-password/{id}', [HomeController::class, 'updatePassword'])->name('updatePassword');
 
 
+Route::get('/test-organigrama', function() {
+    return view('test-organigrama');
+});
+
+
 
 
 // ✅ Cargar módulos

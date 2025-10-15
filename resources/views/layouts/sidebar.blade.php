@@ -67,7 +67,7 @@ x-init="if(darkMode) document.documentElement.classList.add('dark')"
 
       <!-- PANEL -->
       <div>
-        <p class="text-[10px] uppercase font-bold text-slate-400 mb-3 px-3 tracking-wider">Paneles</p>
+
         <button @click="openMenu = (openMenu === 'dashboards' ? null : 'dashboards')"
                 class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg 
                        hover:bg-slate-800/50 transition group">
@@ -116,7 +116,6 @@ x-init="if(darkMode) document.documentElement.classList.add('dark')"
 
       <!-- INFORMES -->
       <div>
-        <p class="text-[10px] uppercase font-bold text-slate-400 mb-3 px-3 tracking-wider">Informes</p>
         <button @click="openMenu = (openMenu === 'informes' ? null : 'informes')"
                 class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg 
                        hover:bg-slate-800/50 transition group">
@@ -145,7 +144,7 @@ x-init="if(darkMode) document.documentElement.classList.add('dark')"
 
       <!-- ACTIVIDADES -->
       <div>
-        <p class="text-[10px] uppercase font-bold text-slate-400 mb-3 px-3 tracking-wider">Actividades</p>
+
         <button @click="openMenu = (openMenu === 'actividades' ? null : 'actividades')"
                 class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg 
                        hover:bg-slate-800/50 transition group">
@@ -174,7 +173,7 @@ x-init="if(darkMode) document.documentElement.classList.add('dark')"
 
       <!-- USUARIOS -->
       <div>
-        <p class="text-[10px] uppercase font-bold text-slate-400 mb-3 px-3 tracking-wider">Usuarios</p>
+
         <button @click="openMenu = (openMenu === 'usuarios' ? null : 'usuarios')"
                 class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg 
                        hover:bg-slate-800/50 transition group">
@@ -205,6 +204,20 @@ x-init="if(darkMode) document.documentElement.classList.add('dark')"
           </a>
         </div>
       </div>
+
+      <!-- 🌐 SITIO PÚBLICO (NUEVO) -->
+      <div>
+        <a href="{{ route('inicio') }}" target="_blank"
+           class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg 
+                  hover:bg-slate-800/50 transition group">
+          <span class="flex items-center gap-3 text-sm">
+            <i class="ri-global-line text-slate-400 group-hover:text-green-400 transition"></i>
+            <span class="text-slate-300 group-hover:text-white transition">Ver Sitio Público</span>
+          </span>
+          <i class="ri-external-link-line text-slate-400 group-hover:text-green-400 transition text-xs"></i>
+        </a>
+      </div>
+
     </nav>
 
     <!-- Footer fijo (siempre visible) -->
