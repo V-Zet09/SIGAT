@@ -163,20 +163,16 @@
                 </table>
             </div>
 
-            {{-- Paginación --}}
-            <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700/50 border-t border-gray-200 dark:border-gray-700">
-                <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
-                    <div class="text-sm text-gray-600 dark:text-gray-400">
-                        Mostrando <span class="font-medium">{{ $actividades->firstItem() }}</span> 
-                        a <span class="font-medium">{{ $actividades->lastItem() }}</span> 
-                        de <span class="font-medium">{{ $actividades->total() }}</span> actividades
-                    </div>
-                    <div>
-                        {{ $actividades->appends(request()->query())->onEachSide(1)->links('pagination::simple-bootstrap-5') }}
-                    </div>
-                </div>
+        {{-- 🔄 Paginación con filtros persistentes --}}
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <div>
+                Mostrando {{ $actividades->firstItem() }} a {{ $actividades->lastItem() }} de {{ $actividades->total() }} actividades
+            </div>
+            <div>
+                {{ $actividades->appends(request()->query())->links() }}
             </div>
         </div>
+
     @else
         <div class="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-200 rounded-lg p-6 text-center">
             <i class="fas fa-info-circle text-3xl mb-3"></i>
