@@ -24,8 +24,8 @@
 }
 
 .dark .ql-toolbar.ql-snow {
-    background: #374151;
-    border-color: #4b5563;
+    background: #1f2937;
+    border-color: #374151;
 }
 
 .ql-container.ql-snow {
@@ -33,38 +33,87 @@
     border-top: none;
     border-radius: 0 0 0.5rem 0.5rem;
     min-height: 150px;
+    background: #ffffff;
 }
 
 .dark .ql-container.ql-snow {
-    border-color: #4b5563;
-    background: #1f2937;
+    border-color: #374151;
+    background: #111827;
 }
 
 .ql-editor {
     min-height: 150px;
     padding: 15px;
+    color: #111827;
 }
 
 .dark .ql-editor {
-    color: #f3f4f6;
+    color: #e5e7eb;
 }
 
-.ql-toolbar button:hover { color: #2563eb !important; }
-.ql-toolbar button.ql-active { color: #2563eb !important; }
+.ql-toolbar button:hover .ql-stroke { 
+    stroke: #2563eb !important; 
+}
+.ql-toolbar button:hover .ql-fill { 
+    fill: #2563eb !important; 
+}
+.ql-toolbar button.ql-active .ql-stroke { 
+    stroke: #2563eb !important; 
+}
+.ql-toolbar button.ql-active .ql-fill { 
+    fill: #2563eb !important; 
+}
 
-.dark .ql-toolbar button,
-.dark .ql-toolbar .ql-picker-label,
+/* Estilos para modo oscuro */
 .dark .ql-toolbar .ql-stroke {
-    stroke: #d1d5db !important;
-}
-
-.dark .ql-toolbar button:hover,
-.dark .ql-toolbar button.ql-active {
-    color: #60a5fa !important;
+    stroke: #9ca3af;
 }
 
 .dark .ql-toolbar .ql-fill {
-    fill: #d1d5db !important;
+    fill: #9ca3af;
+}
+
+.dark .ql-toolbar .ql-picker-label {
+    color: #e5e7eb;
+}
+
+.dark .ql-toolbar button:hover .ql-stroke,
+.dark .ql-toolbar button.ql-active .ql-stroke {
+    stroke: #60a5fa !important;
+}
+
+.dark .ql-toolbar button:hover .ql-fill,
+.dark .ql-toolbar button.ql-active .ql-fill {
+    fill: #60a5fa !important;
+}
+
+.dark .ql-toolbar .ql-picker-label:hover,
+.dark .ql-toolbar .ql-picker-label.ql-active {
+    color: #60a5fa;
+}
+
+/* Picker (dropdowns) en modo oscuro */
+.dark .ql-toolbar .ql-picker-options {
+    background: #1f2937;
+    border-color: #374151;
+}
+
+.dark .ql-toolbar .ql-picker-item {
+    color: #e5e7eb;
+}
+
+.dark .ql-toolbar .ql-picker-item:hover {
+    color: #60a5fa;
+    background: #374151;
+}
+
+/* Placeholder */
+.ql-editor.ql-blank::before {
+    color: #9ca3af;
+}
+
+.dark .ql-editor.ql-blank::before {
+    color: #6b7280;
 }
 
 /* Nombres en selectores */
@@ -121,6 +170,37 @@
 .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="3"]::before {
     content: 'Título 3' !important;
 }
+
+/* Inputs en modo oscuro - FIX para color de texto */
+input[type="text"],
+input[type="date"],
+input[type="number"],
+select,
+textarea {
+    color-scheme: dark;
+}
+
+.dark input[type="text"],
+.dark input[type="date"],
+.dark input[type="number"],
+.dark select,
+.dark textarea {
+    color: #e5e7eb !important;
+}
+
+.dark input[type="text"]::placeholder,
+.dark textarea::placeholder {
+    color: #6b7280;
+}
+
+/* Fix específico para Chrome en modo oscuro */
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #e5e7eb !important;
+    -webkit-box-shadow: 0 0 0px 1000px #374151 inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
 </style>
 @endsection
 
@@ -143,32 +223,32 @@
 
             {{-- Título --}}
             <div>
-                <label for="titulo" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Título</label>
+                <label for="titulo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Título</label>
                 <input type="text" name="titulo" id="titulo"
-                       class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400"
+                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400"
                        required>
             </div>
 
             {{-- Autor + Fecha --}}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label for="autor" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Autor</label>
+                    <label for="autor" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Autor</label>
                     <input type="text" name="autor" id="autor"
-                           class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400">
+                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400">
                 </div>
                 <div>
-                    <label for="fecha" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Fecha</label>
+                    <label for="fecha" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Fecha</label>
                     <input type="date" name="fecha" id="fecha" max="{{ $hoy }}"
-                           class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400"
+                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400"
                            required>
                 </div>
             </div>
 
             {{-- Área --}}
             <div>
-                <label for="tipo_area" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Área</label>
+                <label for="tipo_area" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Área</label>
                 <select name="tipo_area" id="tipo_area"
-                        class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400">
+                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400">
                     <option value="">Seleccionar área</option>
                     <option value="Agua potable">Agua potable</option>
                     <option value="Bienestar Social y Desarrollo Rural">Bienestar Social y Desarrollo Rural</option>
@@ -203,14 +283,14 @@
             {{-- Presupuesto + Tipo Presupuesto --}}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label for="presupuesto" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Presupuesto</label>
+                    <label for="presupuesto" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Presupuesto</label>
                     <input type="number" name="presupuesto" id="presupuesto" step="0.01"
-                           class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400">
+                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400">
                 </div>
                 <div>
-                    <label for="tipo_presupuesto" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tipo de Presupuesto</label>
+                    <label for="tipo_presupuesto" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tipo de Presupuesto</label>
                     <select name="tipo_presupuesto" id="tipo_presupuesto"
-                            class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400">
+                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400">
                         <option value="">Seleccionar</option>
                         <option value="Municipal">Municipal</option>
                         <option value="Estatal">Estatal</option>
@@ -228,9 +308,9 @@
 
             {{-- Foto --}}
             <div>
-                <label for="foto" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Foto</label>
+                <label for="foto" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Foto</label>
                 <input type="file" name="foto" id="foto"
-                       class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-gray-600 dark:file:text-gray-200 dark:hover:file:bg-gray-500">
+                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-gray-600 dark:file:text-gray-200 dark:hover:file:bg-gray-500">
             </div>
 
             {{-- Botones --}}
