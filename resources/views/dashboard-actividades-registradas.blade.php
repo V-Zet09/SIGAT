@@ -16,6 +16,37 @@
         font-size: 1rem;
         border-radius: 0.375rem;
     }
+
+    /* Fix para inputs en modo oscuro */
+    input[type="text"],
+    input[type="date"],
+    input[type="number"],
+    select,
+    textarea {
+        color-scheme: dark;
+    }
+
+    .dark input[type="text"],
+    .dark input[type="date"],
+    .dark input[type="number"],
+    .dark select,
+    .dark textarea {
+        color: #e5e7eb !important;
+    }
+
+    .dark input[type="text"]::placeholder,
+    .dark textarea::placeholder {
+        color: #6b7280;
+    }
+
+    /* Fix específico para Chrome en modo oscuro */
+    .dark input:-webkit-autofill,
+    .dark input:-webkit-autofill:hover,
+    .dark input:-webkit-autofill:focus {
+        -webkit-text-fill-color: #e5e7eb !important;
+        -webkit-box-shadow: 0 0 0px 1000px #374151 inset !important;
+        transition: background-color 5000s ease-in-out 0s;
+    }
 </style>
 @endsection
 
@@ -163,16 +194,18 @@
                 </table>
             </div>
 
-        {{-- 🔄 Paginación con filtros persistentes --}}
-        <div class="d-flex justify-content-between align-items-center mt-3">
-            <div>
-                Mostrando {{ $actividades->firstItem() }} a {{ $actividades->lastItem() }} de {{ $actividades->total() }} actividades
-            </div>
-            <div>
-                {{ $actividades->appends(request()->query())->links() }}
+            {{-- Paginación --}}
+            <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <div class="text-sm text-gray-600 dark:text-gray-400">
+                        Mostrando {{ $actividades->firstItem() }} a {{ $actividades->lastItem() }} de {{ $actividades->total() }} actividades
+                    </div>
+                    <div>
+                        {{ $actividades->appends(request()->query())->links() }}
+                    </div>
+                </div>
             </div>
         </div>
-
     @else
         <div class="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-200 rounded-lg p-6 text-center">
             <i class="fas fa-info-circle text-3xl mb-3"></i>

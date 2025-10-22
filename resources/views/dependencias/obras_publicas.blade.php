@@ -13,7 +13,7 @@
         <h1 class="text-3xl md:text-4xl font-bold text-[#00713D]">Dirección de Obras Públicas</h1>
         <p class="text-gray-600 mt-4 text-lg max-w-3xl mx-auto">
             Encargada de la planeación, construcción y mantenimiento de la infraestructura municipal, 
-            buscando mejorar la calidad de vida de los ciudadanos.
+            buscando mejorar la calidad de vida de los ciudadanos. Dirección a cargo del Ing. José Alberto Mondragón Valentín
         </p>
     </div>
 
@@ -66,7 +66,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700">
             <p><span class="font-bold">📍 Dirección:</span> Palacio Municipal, 2° piso, Oficina de Obras Públicas</p>
             <p><span class="font-bold">📞 Teléfono:</span> 747-123-4567</p>
-            <p><span class="font-bold">✉️ Email:</span> obraspublicas@municipio.gob.mx</p>
+            <p><span class="font-bold">✉️ Email:</span> obraspublicas@tlapehuala2427.gob.mx</p>
             <p><span class="font-bold">🕘 Horario:</span> Lunes a Viernes, 9:00 AM - 3:00 PM</p>
         </div>
     </div>

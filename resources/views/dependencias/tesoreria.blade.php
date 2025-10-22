@@ -13,7 +13,7 @@
         <h1 class="text-3xl md:text-4xl font-bold text-[#00713D]">Dirección de Tesorería</h1>
         <p class="text-gray-600 mt-4 text-lg max-w-3xl mx-auto">
             Encargada de la administración de los recursos financieros del municipio, 
-            garantizando transparencia, eficiencia y correcto manejo del presupuesto público.
+            garantizando transparencia, eficiencia y correcto manejo del presupuesto público. Dirección a cargo de Rodrigo Alexei Rodríguez Romero.
         </p>
     </div>
 
@@ -66,7 +66,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700">
             <p><span class="font-bold">📍 Dirección:</span> Palacio Municipal, 1° piso, Oficina de Tesorería</p>
             <p><span class="font-bold">📞 Teléfono:</span> 747-456-7890</p>
-            <p><span class="font-bold">✉️ Email:</span> tesoreria@municipio.gob.mx</p>
+            <p><span class="font-bold">✉️ Email:</span> tesoreria@tlapehuala2427.gob.mx</p>
             <p><span class="font-bold">🕘 Horario:</span> Lunes a Viernes, 9:00 AM - 3:00 PM</p>
         </div>
     </div>

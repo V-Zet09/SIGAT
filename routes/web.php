@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -44,6 +45,7 @@ require __DIR__.'/menu.php';
 
 
 use App\Http\Controllers\UserController;
-
+use App\Http\Controllers\SalaPrensaController;
 // Ruta para Roles simple
 Route::get('/roles-simple', [UserController::class, 'rolesSimple'])->name('roles-simple');
+Route::get('/sala-prensa', [SalaPrensaController::class, 'index'])->name('sala-prensa');

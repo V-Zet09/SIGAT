@@ -13,7 +13,7 @@
         <h1 class="text-3xl md:text-4xl font-bold text-[#00713D]">Dirección de Educación</h1>
         <p class="text-gray-600 mt-4 text-lg max-w-3xl mx-auto">
             Fomenta la educación de calidad en todos los niveles, impulsando programas, capacitaciones
-            y actividades que fortalecen el aprendizaje y el desarrollo de la comunidad.
+            y actividades que fortalecen el aprendizaje y el desarrollo de la comunidad. Dirección a cargo del Lic. Oliver Gómez Salazar.
         </p>
     </div>
 
@@ -66,7 +66,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700">
             <p><span class="font-bold">📍 Dirección:</span> Palacio Municipal, 2° piso, Oficina de Educación</p>
             <p><span class="font-bold">📞 Teléfono:</span> 747-234-5678</p>
-            <p><span class="font-bold">✉️ Email:</span> educacion@municipio.gob.mx</p>
+            <p><span class="font-bold">✉️ Email:</span> educacion@tlapehuala2427.gob.mx</p>
             <p><span class="font-bold">🕘 Horario:</span> Lunes a Viernes, 9:00 AM - 3:00 PM</p>
         </div>
     </div>
