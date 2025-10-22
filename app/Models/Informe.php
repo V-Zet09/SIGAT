@@ -16,6 +16,7 @@ class Informe extends Model
         'periodo',
         'slug',
         'portada_path',
+        'plantilla_imagen_path',
         
         // Comuna
         'presidente_nombre',

@@ -177,8 +177,7 @@
 
     <form id="informeForm" method="POST" action="{{ route('informes.store') }}" enctype="multipart/form-data">
         @csrf
-
-        <!-- INICIO -->
+<!-- INICIO -->
         <section x-show="current==='inicio'" x-cloak class="space-y-6">
             <h2 class="text-2xl font-bold text-[#00713D] dark:text-green-400">Portada</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -201,6 +200,39 @@
                     <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Período</label>
                     <input type="text" id="periodo" name="periodo" class="w-full rounded-md border-gray-300 dark:border-gray-600 px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" placeholder="Selecciona el período" required>
                 </div>
+            </div>
+
+            <!-- NUEVA SECCIÓN: PLANTILLA DE GOBIERNO -->
+            <div class="bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-xl p-6 my-6">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="flex-shrink-0">
+                        <svg class="w-10 h-10 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-bold text-blue-900 dark:text-blue-300 mb-2">Plantilla del Gobierno</h3>
+                        <p class="text-sm text-blue-700 dark:text-blue-400">
+                            Sube la plantilla oficial que los encargados elaboraron en Word (convertida a imagen). 
+                            Esta se mostrará en el PDF generado.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-center w-full" id="upload-box-plantilla">
+                    <label for="plantilla-imagen" class="upload-box w-full border-blue-300 dark:border-blue-700">
+                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                            <svg class="w-12 h-12 mb-4 text-blue-500 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                            </svg>
+                            <p class="mb-2 text-base font-semibold text-blue-700 dark:text-blue-300">CARGAR PLANTILLA OFICIAL</p>
+                            <p class="text-sm text-blue-600 dark:text-blue-400">PNG, JPG o JPEG (Recomendado: Tamaño carta)</p>
+                            <p class="text-xs text-blue-500 dark:text-blue-500 mt-1">Arrastra o haz clic para seleccionar</p>
+                        </div>
+                        <input id="plantilla-imagen" name="plantilla_imagen" type="file" accept="image/png,image/jpeg,image/jpg" class="hidden" />
+                    </label>
+                </div>
+                <div id="plantilla-preview" class="preview-container"></div>
             </div>
 
             <!-- INFORMACIÓN DE LA COMUNA -->
@@ -295,7 +327,7 @@
                                    5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 
                                    5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
                         </svg>
-                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">CARGAR ARCHIVO</span> SUBIR IMAGEN</p>
+                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">CARGAR ARCHIVO</span> SUBIR IMAGEN PORTADA</p>
                         <p class="text-xs text-gray-500 dark:text-gray-500">SVG, PNG, JPG o GIF (MAX. 800x400px)</p>
                     </div>
                     <input id="imagen-comuna-inicio" name="portada" type="file" class="hidden" />
@@ -890,5 +922,6 @@ setupPreview('imagen-comuna-inicio', 'upload-preview', 'upload-box-inicio');
 setupPreview('imagen-comuna-informacion', 'informacion-preview', 'upload-box-informacion');
 setupPreview('imagen-introduccion', 'introduccion-preview', 'upload-box-introduccion');
 setupPreview('imagen-gobierno', 'gobierno-preview', 'upload-box-gobierno');
+setupPreview('plantilla-imagen', 'plantilla-preview', 'upload-box-plantilla');
 </script>
 @endsection
