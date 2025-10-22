@@ -6,15 +6,38 @@
     <title>{{ $informe->titulo }}</title>
     <style>
         @page {
-            margin: 2cm 2cm 3cm 2cm;
+            margin: 0;
         }
-        
+
         body {
+            margin: 2cm;
             font-family: 'DejaVu Sans', Arial, sans-serif;
             font-size: 11pt;
             line-height: 1.5;
             color: #333;
+            position: relative;
         }
+
+
+        /* ========== MARCA DE AGUA - PLANTILLA ========== */
+        /* La plantilla se verá en TODAS las páginas */
+        body.has-watermark::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            background-size: 100% 100%; /* Ocupa todo el espacio del papel */
+            background-position: center center;
+            background-repeat: no-repeat;
+            opacity: 1; /* Se ve igual que el ejemplo */
+            z-index: -1;
+            pointer-events: none;
+        }
+
 
         /* PORTADA */
         .portada {
@@ -214,8 +237,27 @@
             font-weight: bold;
         }
     </style>
+    
+    @php
+        // Generar estilo inline para marca de agua
+        $watermarkStyle = '';
+        if ($informe->plantilla_imagen_path && file_exists(storage_path('app/public/' . $informe->plantilla_imagen_path))) {
+            $imagePath = storage_path('app/public/' . $informe->plantilla_imagen_path);
+            $imageData = base64_encode(file_get_contents($imagePath));
+            $imageType = pathinfo($imagePath, PATHINFO_EXTENSION);
+            $watermarkStyle = 'background-image: url(data:image/' . $imageType . ';base64,' . $imageData . ');';
+        }
+    @endphp
+    
+    @if($watermarkStyle)
+    <style>
+        body.has-watermark::before {
+            {{ $watermarkStyle }}
+        }
+    </style>
+    @endif
 </head>
-<body>
+<body class="{{ $watermarkStyle ? 'has-watermark' : '' }}">
     <!-- PORTADA -->
     <div class="portada">
         @if($informe->portada_path && file_exists(storage_path('app/public/' . $informe->portada_path)))
@@ -225,7 +267,7 @@
                 $imageType = pathinfo($imagePath, PATHINFO_EXTENSION);
                 $imageSrc = 'data:image/' . $imageType . ';base64,' . $imageData;
             @endphp
-            <img src="{{ $imageSrc }}">
+            <img src="{{ $imageSrc }}" alt="Portada">
         @endif
         
         <h1>{{ $informe->titulo }}</h1>
@@ -233,7 +275,7 @@
         <p class="municipio">{{ $informe->municipio_nombre }}</p>
     </div>
 
-    <!-- ÍNDICE (opcional) -->
+    <!-- ÍNDICE -->
     <div class="indice">
         <h2>Índice</h2>
         <div class="indice-item">Información de la Comuna</div>
@@ -279,8 +321,8 @@
         <div class="regidores-grid">
             @php
                 $regidores = is_string($informe->regidores) 
-                    ? json_decode($informe->regidores, true) 
-                    : $informe->regidores;
+                    ? json_decode($informe->regidores, true) ?? []
+                    : ($informe->regidores ?? []);
                 $chunks = array_chunk($regidores, 2);
             @endphp
             
@@ -289,8 +331,8 @@
                 @foreach($chunk as $regidor)
                 <div class="regidor-cell">
                     <div class="autoridad-card">
-                        <div class="nombre">{{ $regidor['nombre'] }}</div>
-                        <div class="cargo">{{ $regidor['cargo'] }}</div>
+                        <div class="nombre">{{ $regidor['nombre'] ?? '' }}</div>
+                        <div class="cargo">{{ $regidor['cargo'] ?? '' }}</div>
                     </div>
                 </div>
                 @endforeach
@@ -310,10 +352,10 @@
                 $imageType = pathinfo($imagePath, PATHINFO_EXTENSION);
                 $imageSrc = 'data:image/' . $imageType . ';base64,' . $imageData;
             @endphp
-            <img src="{{ $imageSrc }}" style="max-height: 300px;">
+            <img src="{{ $imageSrc }}" style="max-height: 300px;" alt="Municipio">
         @endif
         
-        <div>{!! $informe->municipio_descripcion !!}</div>
+        <div>{!! $informe->municipio_descripcion ?? '' !!}</div>
     </div>
 
     <!-- INTRODUCCIÓN -->
@@ -327,10 +369,10 @@
                 $imageType = pathinfo($imagePath, PATHINFO_EXTENSION);
                 $imageSrc = 'data:image/' . $imageType . ';base64,' . $imageData;
             @endphp
-            <img src="{{ $imageSrc }}" style="max-height: 300px;">
+            <img src="{{ $imageSrc }}" style="max-height: 300px;" alt="Introducción">
         @endif
         
-        <div>{!! $informe->introduccion !!}</div>
+        <div>{!! $informe->introduccion ?? '' !!}</div>
     </div>
 
     <!-- GOBIERNO -->
@@ -344,10 +386,10 @@
                 $imageType = pathinfo($imagePath, PATHINFO_EXTENSION);
                 $imageSrc = 'data:image/' . $imageType . ';base64,' . $imageData;
             @endphp
-            <img src="{{ $imageSrc }}" style="max-height: 300px;">
+            <img src="{{ $imageSrc }}" style="max-height: 300px;" alt="Gobierno">
         @endif
         
-        <div>{!! $informe->gobierno_introduccion !!}</div>
+        <div>{!! $informe->gobierno_introduccion ?? '' !!}</div>
     </div>
 
     <!-- ACTIVIDADES -->
@@ -365,6 +407,7 @@
                 $actividades = $informe->getActividadesFiltradas();
                 $actividadesPorDependencia = $actividades->groupBy('dependencia');
             } catch (\Exception $e) {
+                \Log::error('Error al obtener actividades: ' . $e->getMessage());
                 $actividades = collect([]);
                 $actividadesPorDependencia = collect([]);
             }
@@ -384,7 +427,7 @@
                     {{ $actividad->descripcion }}
                 </div>
                 
-                @if($actividad->imagenes && count($actividad->imagenes) > 0)
+                @if(!empty($actividad->imagenes) && is_array($actividad->imagenes))
                 <div class="actividad-imagenes">
                     @foreach(array_slice($actividad->imagenes, 0, 4) as $imagen)
                         @if(file_exists(storage_path('app/public/' . $imagen)))
@@ -394,7 +437,7 @@
                                 $imgType = pathinfo($imgPath, PATHINFO_EXTENSION);
                                 $imgSrc = 'data:image/' . $imgType . ';base64,' . $imgData;
                             @endphp
-                            <img src="{{ $imgSrc }}">
+                            <img src="{{ $imgSrc }}" alt="Actividad">
                         @endif
                     @endforeach
                 </div>
