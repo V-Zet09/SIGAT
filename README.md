@@ -19,6 +19,15 @@ El sistema está construido bajo tecnologías modernas para garantizar eficienci
 - **José Ángel Alonso León**  
 
 ---
+## Para crear el proyecto Laravel
+- **composer create-project laravel/laravel nombre_del_proyecto**
+## Configura el entorno
+- **cp .env.example .env**
+## Generacion de la clave de aplicación:
+- php artisan key:generate
+
+
+
 
 ## Que hacer para clonar el proyecto
 
