@@ -99,6 +99,7 @@ use App\Http\Controllers\CarruselController;
 // Ruta para Roles simple
 Route::get('/roles-simple', [UserController::class, 'rolesSimple'])->name('roles-simple');
 Route::get('/sala-prensa', [SalaPrensaController::class, 'index'])->name('sala-prensa');
+//Ruta para carrusel de fotos de inicio
 Route::post('/carrusel/store', [CarruselController::class, 'store'])->name('carrusel.store')->middleware('auth');
 Route::delete('/carrusel/{id}', [CarruselController::class, 'destroy'])->name('carrusel.destroy')->middleware('auth');
 
