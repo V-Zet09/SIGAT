@@ -1,129 +1,185 @@
 @extends('layouts.master-without-nav')
-@section('title')
-    @lang('translation.password-reset')
-@endsection
+
+@section('title', 'Nueva Contraseña')
+
 @section('content')
-    <div class="auth-page-wrapper pt-5">
-        <!-- auth page bg -->
-        <div class="auth-one-bg-position auth-one-bg" id="auth-particles">
-            <div class="bg-overlay"></div>
+<div class="relative min-h-screen flex items-center justify-center p-4 overflow-hidden">
+    <!-- Fondo degradado animado -->
+    <div class="absolute inset-0 bg-gradient-to-br from-green-500 via-emerald-600 to-teal-700"></div>
+    
+    <!-- Círculos flotantes animados -->
+    <div class="absolute top-20 left-20 w-72 h-72 bg-white/20 rounded-full blur-3xl animate-blob"></div>
+    <div class="absolute top-40 right-20 w-72 h-72 bg-emerald-300/20 rounded-full blur-3xl animate-blob animation-delay-2000"></div>
+    <div class="absolute -bottom-20 left-40 w-72 h-72 bg-teal-300/20 rounded-full blur-3xl animate-blob animation-delay-4000"></div>
+    
+    <!-- Contenido -->
+    <div class="relative w-full max-w-md z-10">
+        
+        {{-- Tarjeta principal --}}
+        <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
+            
+            {{-- Header --}}
+            <div class="bg-gradient-to-r from-green-600 to-green-700 p-8 text-center">
+                <div class="w-24 h-24 bg-white rounded-full mx-auto mb-4 flex items-center justify-center">
+                    <i class="ri-key-2-line text-5xl text-green-600"></i>
+                </div>
+                <h1 class="text-2xl font-bold text-white mb-2">Crear Nueva Contraseña</h1>
+                <p class="text-green-100 text-sm">Elige una contraseña segura y fácil de recordar</p>
+            </div>
 
-            <div class="shape">
-                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink"
-                    viewBox="0 0 1440 120">
-                    <path d="M 0,36 C 144,53.6 432,123.2 720,124 C 1008,124.8 1296,56.8 1440,40L1440 140L0 140z"></path>
-                </svg>
+            {{-- Contenido --}}
+            <div class="p-8">
+                
+                {{-- Consejos --}}
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-6 rounded">
+                    <div class="flex items-start">
+                        <i class="ri-lightbulb-line text-2xl text-yellow-600 mr-3 mt-0.5"></i>
+                        <div>
+                            <p class="text-yellow-900 font-semibold mb-1">Consejos para tu contraseña:</p>
+                            <ul class="text-yellow-800 text-sm space-y-1">
+                                <li>✓ Mínimo 8 caracteres</li>
+                                <li>✓ Usa letras y números</li>
+                                <li>✓ Evita palabras comunes</li>
+                                <li>✓ No uses tu fecha de nacimiento</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Formulario --}}
+                <form method="POST" action="{{ route('password.update') }}" class="space-y-5">
+                    @csrf
+                    <input type="hidden" name="token" value="{{ $token }}">
+                    <input type="hidden" name="email" value="{{ $email ?? old('email') }}">
+
+                    {{-- Email (solo lectura) --}}
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2 text-lg">
+                            <i class="ri-mail-line mr-2"></i>Tu correo
+                        </label>
+                        <div class="px-4 py-4 bg-gray-100 text-gray-700 rounded-xl text-lg font-medium border-2 border-gray-200">
+                            {{ $email ?? old('email') }}
+                        </div>
+                    </div>
+
+                    {{-- Nueva contraseña --}}
+                    <div>
+                        <label for="password" class="block text-gray-700 font-semibold mb-2 text-lg">
+                            <i class="ri-lock-line mr-2"></i>Nueva contraseña
+                        </label>
+                        <div class="relative">
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password"
+                                class="w-full px-4 py-4 text-lg border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 transition pr-12
+                                       @error('password') border-red-500 @enderror"
+                                placeholder="Escribe tu nueva contraseña"
+                                required>
+                            <button 
+                                type="button" 
+                                onclick="togglePassword('password')"
+                                class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                                <i class="ri-eye-line text-xl" id="eye-password"></i>
+                            </button>
+                        </div>
+                        @error('password')
+                            <div class="mt-2 flex items-center text-red-600">
+                                <i class="ri-error-warning-line mr-2"></i>
+                                <span class="text-sm">{{ $message }}</span>
+                            </div>
+                        @enderror
+                    </div>
+
+                    {{-- Confirmar contraseña --}}
+                    <div>
+                        <label for="password_confirmation" class="block text-gray-700 font-semibold mb-2 text-lg">
+                            <i class="ri-lock-2-line mr-2"></i>Confirmar contraseña
+                        </label>
+                        <div class="relative">
+                            <input 
+                                type="password" 
+                                id="password_confirmation" 
+                                name="password_confirmation"
+                                class="w-full px-4 py-4 text-lg border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 transition pr-12"
+                                placeholder="Escribe nuevamente tu contraseña"
+                                required>
+                            <button 
+                                type="button" 
+                                onclick="togglePassword('password_confirmation')"
+                                class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                                <i class="ri-eye-line text-xl" id="eye-password_confirmation"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    {{-- Botón --}}
+                    <button 
+                        type="submit" 
+                        class="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-5 text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-2 mt-6">
+                        <i class="ri-check-line text-xl"></i>
+                        <span>Guardar nueva contraseña</span>
+                    </button>
+                </form>
+
+                {{-- Enlace para volver --}}
+                <div class="mt-6 pt-6 border-t border-gray-200 text-center">
+                    <a href="{{ route('login') }}" 
+                       class="inline-flex items-center text-gray-600 hover:text-green-600 font-medium transition">
+                        <i class="ri-arrow-left-line mr-2"></i>
+                        Volver al inicio de sesión
+                    </a>
+                </div>
             </div>
         </div>
 
-        <!-- auth page content -->
-        <div class="auth-page-content">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="text-center mt-sm-5 mb-4 text-white-50">
-                            <div>
-                                <a href="index" class="d-inline-block auth-logo">
-                                    <img src="{{ URL::asset('build/images/logo-light.png') }}" alt="" height="20">
-                                </a>
-                            </div>
-                            <p class="mt-3 fs-15 fw-medium">Premium Admin & Dashboard Template</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- end row -->
-
-                <div class="row justify-content-center">
-                    <div class="col-md-8 col-lg-6 col-xl-5">
-                        <div class="card mt-4">
-
-                            <div class="card-body p-4">
-                                <div class="text-center mt-2">
-                                    <h5 class="text-primary">Forgot Password?</h5>
-                                    <p class="text-muted">Reset password with velzon</p>
-
-                                    <lord-icon src="https://cdn.lordicon.com/rhvddzym.json" trigger="loop"
-                                        colors="primary:#0ab39c" class="avatar-xl">
-                                    </lord-icon>
-
-                                </div>
-
-                                <div class="alert border-0 alert-warning text-center mb-2 mx-2" role="alert">
-                                    Enter your email and instructions will be sent to you!
-                                </div>
-                                <div class="p-2">
-                                    <form class="form-horizontal" method="POST" action="{{ route('password.update') }}">
-                                        @csrf
-                                        <input type="hidden" name="token" value="{{ $token }}">
-                                        <div class="mb-3">
-                                            <label for="useremail" class="form-label">Email</label>
-                                            <input type="email" class="form-control @error('email') is-invalid @enderror" id="useremail" name="email" placeholder="Enter email" value="{{ $email ?? old('email') }}" id="email">
-                                            @error('email')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                            @enderror
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="userpassword">Password</label>
-                                            <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" id="userpassword" placeholder="Enter password">
-                                            @error('password')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                            @enderror
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="userpassword">Confirm Password</label>
-                                            <input id="password-confirm" type="password" name="password_confirmation" class="form-control" placeholder="Enter confirm password">
-                                        </div>
-
-                                        <div class="text-end">
-                                            <button class="btn btn-primary w-md waves-effect waves-light" type="submit">Reset</button>
-                                        </div>
-
-                                    </form><!-- end form -->
-                                </div>
-                            </div>
-                            <!-- end card body -->
-                        </div>
-                        <!-- end card -->
-
-                        <div class="mt-4 text-center">
-                            <p class="mb-0">Wait, I remember my password... <a href="auth-signin-basic"
-                                    class="fw-semibold text-primary text-decoration-underline"> Click here </a> </p>
-                        </div>
-
-                    </div>
-                </div>
-                <!-- end row -->
-            </div>
-            <!-- end container -->
+        {{-- Footer --}}
+        <div class="text-center mt-6 text-gray-400 text-sm">
+            <p>&copy; {{ date('Y') }} SIGAT - Sistema de Gestión del Ayuntamiento</p>
+            <p class="mt-1">
+                ¿Necesitas ayuda? Llama al: 
+                <a href="tel:+524771234567" class="text-green-400 hover:text-green-300 font-semibold">477 123 4567</a>
+            </p>
         </div>
-        <!-- end auth page content -->
-
-        <!-- footer -->
-        <footer class="footer">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="text-center">
-                            <script>
-                                document.write(new Date().getFullYear())
-                            </script> Velzon. Crafted with <i
-                                    class="mdi mdi-heart text-danger"></i> by Themesbrand</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </footer>
-        <!-- end Footer -->
     </div>
-    <!-- end auth-page-wrapper -->
+</div>
+
+<style>
+@keyframes blob {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -50px) scale(1.1); }
+    66% { transform: translate(-20px, 20px) scale(0.9); }
+}
+.animate-blob {
+    animation: blob 7s infinite;
+}
+.animation-delay-2000 {
+    animation-delay: 2s;
+}
+.animation-delay-4000 {
+    animation-delay: 4s;
+}
+</style>
+
+<script>
+function togglePassword(inputId) {
+    const input = document.getElementById(inputId);
+    const eye = document.getElementById('eye-' + inputId);
+    
+    if (input.type === 'password') {
+        input.type = 'text';
+        eye.classList.remove('ri-eye-line');
+        eye.classList.add('ri-eye-off-line');
+    } else {
+        input.type = 'password';
+        eye.classList.remove('ri-eye-off-line');
+        eye.classList.add('ri-eye-line');
+    }
+}
+</script>
 @endsection
+
 @section('script')
-    <script src="{{ URL::asset('build/libs/particles.js/particles.js') }}"></script>
-    <script src="{{ URL::asset('build/js/pages/particles.app.js') }}"></script>
+<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
 @endsection

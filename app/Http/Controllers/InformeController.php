@@ -10,9 +10,13 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Helpers\NotificationHelper;
 
 class InformeController extends Controller
 {
+    /**
+     * Mostrar lista de informes
+     */
     public function index(Request $request)
     {
         $query = Informe::query();
@@ -44,11 +48,17 @@ class InformeController extends Controller
         ));
     }
 
+    /**
+     * Mostrar formulario de creación
+     */
     public function create()
     {
         return view('generar-informe');
     }
 
+    /**
+     * Guardar nuevo informe
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -157,6 +167,26 @@ class InformeController extends Controller
             // Generar PDF automáticamente
             $this->generarPDFAutomatico($informe);
 
+            // ✅ NOTIFICACIONES: Nuevo informe generado
+            
+            // Notificar a roles que pueden ver informes
+            $roles = ['Administrador', 'Presidente Municipal', 'Síndico Procurador', 'Regidor', 'Director de Área'];
+            
+            foreach ($roles as $rol) {
+                NotificationHelper::sendToRole(
+                    $rol,
+                    'informe',
+                    'Nuevo informe generado',
+                    Auth::user()->name . ' ha generado el informe: ' . $informe->titulo . ' (' . $informe->periodo . ')',
+                    [
+                        'link' => route('informes-generados'),
+                        'icon' => 'ri-file-list-line',
+                        'color' => 'green',
+                        'data' => ['informe_id' => $informe->id]
+                    ]
+                );
+            }
+
             return redirect('/dashboard-informes-generados')
                 ->with('success', 'Informe creado exitosamente');
 
@@ -168,20 +198,40 @@ class InformeController extends Controller
         }
     }
 
+    /**
+     * Mostrar detalle de informe
+     */
     public function show($slug)
     {
         $informe = Informe::where('slug', $slug)->firstOrFail();
         return view('informes.show', compact('informe'));
     }
 
+    /**
+     * Mostrar formulario de edición
+     */
     public function edit($id)
     {
         $informe = Informe::findOrFail($id);
+        
+        // Solo el creador o administrador puede editar
+        if ($informe->user_id !== Auth::id() && !Auth::user()->hasRole('Administrador')) {
+            abort(403, 'No tienes permiso para editar este informe');
+        }
+        
         return view('informes.edit', compact('informe'));
     }
 
+    /**
+     * Actualizar informe
+     */
     public function update(Request $request, Informe $informe)
     {
+        // Verificar permisos
+        if ($informe->user_id !== Auth::id() && !Auth::user()->hasRole('Administrador')) {
+            abort(403, 'No tienes permiso para editar este informe');
+        }
+
         $validated = $request->validate([
             'titulo' => 'required|string|max:255',
             'periodo' => 'required|string|max:100',
@@ -213,6 +263,17 @@ class InformeController extends Controller
         ]);
 
         try {
+            // Detectar cambios importantes
+            $cambios = [];
+            
+            if ($informe->titulo !== $validated['titulo']) {
+                $cambios[] = 'Título modificado';
+            }
+            
+            if ($informe->periodo !== $validated['periodo']) {
+                $cambios[] = 'Periodo actualizado: ' . $validated['periodo'];
+            }
+
             // Actualizar imágenes si se subieron nuevas
             if($request->hasFile('portada')){
                 if($informe->portada_path) Storage::disk('public')->delete($informe->portada_path);
@@ -253,6 +314,38 @@ class InformeController extends Controller
             // Regenerar PDF
             $this->generarPDFAutomatico($informe);
 
+            // ✅ NOTIFICACIONES: Informe actualizado (solo si hay cambios importantes)
+            if (!empty($cambios)) {
+                
+                // Notificar a administradores y presidente
+                NotificationHelper::sendToRole(
+                    'Administrador',
+                    'informe',
+                    'Informe actualizado',
+                    Auth::user()->name . ' ha actualizado el informe: ' . $informe->titulo . 
+                    '. Cambios: ' . implode(', ', $cambios),
+                    [
+                        'link' => route('informes-generados'),
+                        'icon' => 'ri-edit-line',
+                        'color' => 'yellow',
+                        'data' => ['informe_id' => $informe->id]
+                    ]
+                );
+
+                NotificationHelper::sendToRole(
+                    'Presidente Municipal',
+                    'informe',
+                    'Informe actualizado',
+                    'El informe "' . $informe->titulo . '" ha sido actualizado',
+                    [
+                        'link' => route('informes-generados'),
+                        'icon' => 'ri-edit-line',
+                        'color' => 'yellow',
+                        'data' => ['informe_id' => $informe->id]
+                    ]
+                );
+            }
+
             return redirect('/dashboard-informes-generados')
                 ->with('success', 'Informe actualizado correctamente');
 
@@ -264,10 +357,20 @@ class InformeController extends Controller
         }
     }
 
+    /**
+     * Eliminar informe
+     */
     public function destroy($id)
     {
         try {
             $informe = Informe::findOrFail($id);
+            $tituloInforme = $informe->titulo;
+            $userId = $informe->user_id;
+
+            // Solo el creador o administrador puede eliminar
+            if ($informe->user_id !== Auth::id() && !Auth::user()->hasRole('Administrador')) {
+                abort(403, 'No tienes permiso para eliminar este informe');
+            }
 
             // Eliminar archivos
             if ($informe->portada_path) Storage::disk('public')->delete($informe->portada_path);
@@ -277,6 +380,34 @@ class InformeController extends Controller
             if ($informe->pdf_path) Storage::disk('public')->delete($informe->pdf_path);
 
             $informe->delete();
+
+            // ✅ NOTIFICACIONES: Informe eliminado
+            
+            // Notificar al creador (si no es quien eliminó)
+            if ($userId && $userId !== Auth::id()) {
+                NotificationHelper::send(
+                    $userId,
+                    'informe',
+                    'Tu informe fue eliminado',
+                    'Tu informe "' . $tituloInforme . '" ha sido eliminado del sistema por ' . Auth::user()->name,
+                    [
+                        'icon' => 'ri-delete-bin-line',
+                        'color' => 'red'
+                    ]
+                );
+            }
+
+            // Notificar a administradores
+            NotificationHelper::sendToRole(
+                'Administrador',
+                'informe',
+                'Informe eliminado',
+                Auth::user()->name . ' ha eliminado el informe: ' . $tituloInforme,
+                [
+                    'icon' => 'ri-delete-bin-line',
+                    'color' => 'red'
+                ]
+            );
 
             return redirect('/dashboard-informes-generados')
                 ->with('success', 'Informe eliminado correctamente');
@@ -288,6 +419,77 @@ class InformeController extends Controller
         }
     }
 
+    /**
+     * Descargar PDF por ID
+     */
+    public function downloadById($id)
+    {
+        try {
+            $informe = Informe::findOrFail($id);
+            
+            Log::info('Descargando PDF - ID: ' . $id);
+            Log::info('PDF Path: ' . ($informe->pdf_path ?? 'NULL'));
+            
+            if (empty($informe->pdf_path)) {
+                Log::error('pdf_path está vacío');
+                abort(404, 'PDF no encontrado - sin ruta');
+            }
+            
+            if (!Storage::disk('public')->exists($informe->pdf_path)) {
+                Log::error('Archivo no existe: ' . $informe->pdf_path);
+                abort(404, 'PDF no encontrado - archivo no existe');
+            }
+            
+            // Incrementar contador de descargas
+            $informe->increment('descargas');
+            
+            $filePath = storage_path('app/public/' . $informe->pdf_path);
+            $fileName = 'informe_' . $informe->id . '.pdf';
+            
+            Log::info('Descarga exitosa - Descargas totales: ' . $informe->descargas);
+            
+            return response()->download($filePath, $fileName);
+            
+        } catch (\Exception $e) {
+            Log::error('Error en downloadById: ' . $e->getMessage());
+            abort(500, 'Error al descargar: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Obtener contador de descargas
+     */
+    public function getDownloadCount($id)
+    {
+        try {
+            $informe = Informe::findOrFail($id);
+            return response()->json([
+                'success' => true,
+                'descargas' => $informe->descargas
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al obtener contador'
+            ], 404);
+        }
+    }
+
+    /**
+     * Obtener estadísticas
+     */
+    public function getStats()
+    {
+        $totalDescargas = Informe::sum('descargas');
+        return response()->json([
+            'success' => true,
+            'totalDescargas' => $totalDescargas
+        ]);
+    }
+
+    /**
+     * Generar PDF automático
+     */
     private function generarPDFAutomatico($informe)
     {
         try {
@@ -320,62 +522,4 @@ class InformeController extends Controller
             return false;
         }
     }
-
-    public function downloadById($id)
-    {
-        try {
-            $informe = Informe::findOrFail($id);
-            
-            Log::info('Descargando PDF - ID: ' . $id);
-            Log::info('PDF Path: ' . ($informe->pdf_path ?? 'NULL'));
-            
-            if (empty($informe->pdf_path)) {
-                Log::error('pdf_path está vacío');
-                abort(404, 'PDF no encontrado - sin ruta');
-            }
-            
-            if (!Storage::disk('public')->exists($informe->pdf_path)) {
-                Log::error('Archivo no existe: ' . $informe->pdf_path);
-                abort(404, 'PDF no encontrado - archivo no existe');
-            }
-            
-            // Incrementar contador de descargas - CORREGIDO
-            $informe->increment('descargas');
-            
-            $filePath = storage_path('app/public/' . $informe->pdf_path);
-            $fileName = 'informe_' . $informe->id . '.pdf';
-            
-            Log::info('Descarga exitosa - Descargas totales: ' . $informe->descargas);
-            
-            return response()->download($filePath, $fileName);
-            
-        } catch (\Exception $e) {
-            Log::error('Error en downloadById: ' . $e->getMessage());
-            abort(500, 'Error al descargar: ' . $e->getMessage());
-        }
-    }
-    public function getDownloadCount($id)
-{
-    try {
-        $informe = Informe::findOrFail($id);
-        return response()->json([
-            'success' => true,
-            'descargas' => $informe->descargas
-        ]);
-    } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Error al obtener contador'
-        ], 404);
-    }
-}
-
-public function getStats()
-{
-    $totalDescargas = Informe::sum('descargas');
-    return response()->json([
-        'success' => true,
-        'totalDescargas' => $totalDescargas
-    ]);
-}
 }
