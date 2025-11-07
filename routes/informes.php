@@ -3,40 +3,46 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InformeController;
 
+// ============================================
+// RUTAS DE INFORMES PROTEGIDAS POR PERMISOS
+// ============================================
+
 Route::middleware('auth')->group(function () {
-    // Dashboard de informes
+    
+    // ✅ VER/VISUALIZAR INFORMES (todos con permiso)
     Route::get('/dashboard-informes-generados', [InformeController::class, 'index'])
+        ->middleware('can:visualizar informes')
         ->name('informes-generados');
-
-    // Crear informe
+    
+    Route::get('/dashboard-informes-generados/stats', [InformeController::class, 'getStats'])
+        ->middleware('can:visualizar informes')
+        ->name('informes.stats');
+    
+    // ✅ GENERAR INFORMES (solo usuarios con permiso)
     Route::get('/generar-informe', [InformeController::class, 'create'])
-        ->name('generar-informe');
-        
+        ->middleware('can:generar informes')
+        ->name('informes.create');
+    
     Route::post('/generar-informe', [InformeController::class, 'store'])
+        ->middleware('can:generar informes')
         ->name('informes.store');
-
-    // IMPORTANTE: Esta ruta DEBE estar ANTES de la ruta {slug}
-    Route::get('/informes/{id}/descargar-pdf', [InformeController::class, 'downloadById'])
-        ->name('informes.download')
-        ->where('id', '[0-9]+'); // Solo acepta números
     
-    // Editar informe
+    // ✅ EDITAR INFORMES (solo usuarios con permiso)
     Route::get('/informes/{id}/editar', [InformeController::class, 'edit'])
-        ->name('informes.edit')
-        ->where('id', '[0-9]+');
-        
-    Route::put('/informes/{informe}', [InformeController::class, 'update'])
-        ->name('informes.update');
-        
-    // Eliminar informe
-    Route::delete('/informes/{id}', [InformeController::class, 'destroy'])
-        ->name('informes.destroy')
-        ->where('id', '[0-9]+');
+        ->middleware('can:editar informes')
+        ->name('informes.edit');
     
-    // Ver informe - ESTA DEBE SER LA ÚLTIMA
-    Route::get('/informes/{slug}', [InformeController::class, 'show'])
+    Route::put('/informes/{id}', [InformeController::class, 'update'])
+        ->middleware('can:editar informes')
+        ->name('informes.update');
+    
+    // ✅ ELIMINAR INFORMES (solo usuarios con permiso)
+    Route::delete('/informes/{id}', [InformeController::class, 'destroy'])
+        ->middleware('can:eliminar informes')
+        ->name('informes.destroy');
+    
+    // ✅ VER DETALLES DE UN INFORME (con permiso visualizar)
+    Route::get('/informes/{id}', [InformeController::class, 'show'])
+        ->middleware('can:visualizar informes')
         ->name('informes.show');
-        // Rutas para actualizar contadores en tiempo real
-    Route::get('/informe/{id}/download-count', [InformeController::class, 'getDownloadCount']);
-    Route::get('/dashboard-informes-generados/stats', [InformeController::class, 'getStats']);
 });
