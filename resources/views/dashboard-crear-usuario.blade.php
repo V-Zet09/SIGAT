@@ -1,5 +1,29 @@
 @extends('layouts.master')
-@section('title') Nuevo Usuario @endsection
+
+@section('title', 'Nuevo Usuario')
+
+@section('css')
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    // Configurar Tailwind para usar clase manual en lugar de media query
+    tailwind.config = {
+        darkMode: 'class',
+    }
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+<style>
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .animate-fade-in-up {
+        animation: fadeInUp 0.6s ease-out forwards;
+    }
+</style>
+@endsection
+
 @section('content')
 
 <div class="max-w-4xl mx-auto px-6 py-10">
@@ -22,7 +46,7 @@
             @csrf
 
             <!-- Nombre y Sexo -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
                 <div class="md:col-span-2">
                     <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                         Nombre completo <span class="text-red-500">*</span>
@@ -65,7 +89,7 @@
             </div>
 
             <!-- Cargo y Área -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                     <label for="cargo" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                         Cargo <span class="text-red-500">*</span>
@@ -130,7 +154,7 @@
             </div>
 
             <!-- Botones -->
-            <div class="flex justify-end gap-3 pt-4">
+            <div class="flex flex-col sm:flex-row justify-end gap-3 pt-6 border-t border-gray-200 dark:border-gray-700">
                 <a href="{{ route('usuarios.index') }}"
                    class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition">
                     Cancelar
@@ -146,10 +170,12 @@
 
 @endsection
 
-@section('script')
+@section('scripts')
 <script>
-function togglePassword(inputId, icon) {
+function togglePassword(inputId, button) {
     const input = document.getElementById(inputId);
+    const icon = button.querySelector('i');
+    
     if (input.type === "password") {
         input.type = "text";
         icon.classList.remove("bi-eye");
@@ -160,5 +186,29 @@ function togglePassword(inputId, icon) {
         icon.classList.add("bi-eye");
     }
 }
+
+// Validación en tiempo real de contraseñas
+document.addEventListener('DOMContentLoaded', function() {
+    const password = document.getElementById('password');
+    const passwordConfirm = document.getElementById('password_confirmation');
+    
+    if (password && passwordConfirm) {
+        passwordConfirm.addEventListener('input', function() {
+            if (password.value !== passwordConfirm.value) {
+                passwordConfirm.setCustomValidity('Las contraseñas no coinciden');
+            } else {
+                passwordConfirm.setCustomValidity('');
+            }
+        });
+        
+        password.addEventListener('input', function() {
+            if (passwordConfirm.value && password.value !== passwordConfirm.value) {
+                passwordConfirm.setCustomValidity('Las contraseñas no coinciden');
+            } else {
+                passwordConfirm.setCustomValidity('');
+            }
+        });
+    }
+});
 </script>
 @endsection

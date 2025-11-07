@@ -1,3 +1,91 @@
+@section('script')
+<script src="{{ URL::asset('build/libs/list.js/list.min.js') }}"></script>
+<script src="{{ URL::asset('build/libs/list.pagination.js/list.pagination.min.js') }}"></script>
+<script src="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
+<script src="{{ URL::asset('build/js/pages/crm-leads.init.js') }}"></script>
+<script src="{{ URL::asset('build/js/app.js') }}"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Manejo de dropdowns
+    document.querySelectorAll('[data-dropdown-button]').forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const menu = button.nextElementSibling;
+            
+            // Cerrar otros menús
+            document.querySelectorAll('[data-dropdown-menu]').forEach(m => {
+                if (m !== menu) m.classList.add('hidden');
+            });
+            
+            menu.classList.toggle('hidden');
+        });
+    });
+
+    // Cerrar menú al hacer click fuera
+    window.addEventListener('click', () => {
+        document.querySelectorAll('[data-dropdown-menu]').forEach(menu => {
+            menu.classList.add('hidden');
+        });
+    });
+
+    // Asegurar que el modal esté oculto al cargar
+    const modal = document.getElementById('deleteRecordModal');
+    if (modal) {
+        modal.style.display = 'none';
+        modal.classList.add('hidden');
+    }
+
+    // Eliminar backdrop si existe
+    const backdrop = document.querySelector('.modal-backdrop');
+    if (backdrop) {
+        backdrop.remove();
+    }
+    document.body.classList.remove('modal-open');
+    document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
+});
+
+// Funciones del modal
+function confirmarEliminacion(url, nombre) {
+    const form = document.getElementById('form-eliminar');
+    const modal = document.getElementById('deleteRecordModal');
+    const nombreElement = document.getElementById('usuario-nombre-eliminar');
+    
+    form.action = url;
+    nombreElement.textContent = nombre;
+    
+    modal.style.display = 'flex';
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    
+    document.getElementById('confirmar-eliminar').onclick = function() {
+        form.submit();
+    };
+}
+
+function cerrarModal() {
+    const modal = document.getElementById('deleteRecordModal');
+    modal.style.display = 'none';
+    modal.classList.add('hidden');
+    document.body.style.overflow = '';
+}
+
+// Cerrar modal con ESC
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        cerrarModal();
+    }
+});
+
+// Cerrar modal al hacer clic fuera
+document.getElementById('deleteRecordModal')?.addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) {
+        cerrarModal();
+    }
+});
+</script>
+@endsection
 @extends('layouts.master')
 @section('title', 'Usuarios')
 

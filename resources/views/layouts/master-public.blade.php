@@ -51,56 +51,35 @@
       <ul class="flex flex-col md:flex-row md:space-x-6 list-none">
         <li>
           <a href="{{ route('inicio') }}" 
-             class="block py-1.5 px-3 text-white hover:bg-green-600 md:hover:bg-transparent md:hover:text-gray-100 rounded transition-colors font-bold text-lg">
+            class="block py-1.5 px-3 text-white hover:bg-green-600 md:hover:bg-transparent md:hover:text-gray-100 rounded transition-colors font-bold text-lg">
             Inicio
           </a>
         </li>
 
         <li>
-          <button id="mega-menu-dropdown-button" type="button"
-                  class="flex items-center justify-between w-full py-1.5 px-3 font-bold text-lg text-white bg-transparent md:w-auto hover:bg-green-600 md:hover:bg-transparent md:hover:text-gray-100 rounded transition-colors">
+          <a href="{{ route('gobierno') }}" 
+            class="block py-1.5 px-3 text-white hover:bg-green-600 md:hover:bg-transparent md:hover:text-gray-100 rounded transition-colors font-bold text-lg">
             Gobierno
-            <svg class="w-2.5 h-2.5 ms-3" fill="none" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-            </svg>
-          </button>
-
-          <div id="mega-menu-dropdown" class="absolute z-10 hidden w-auto grid grid-cols-2 md:grid-cols-3 gap-4 text-lg bg-white border border-gray-100 rounded-lg shadow-md p-4">
-            <div class="space-y-2 text-gray-900">
-              <a href="#" class="block font-bold hover:text-[#4CAF50]">Alcaldía</a>
-              <a href="#" class="block font-bold hover:text-[#4CAF50]">Secretarías</a>
-              <a href="#" class="block font-bold hover:text-[#4CAF50]">Transparencia</a>
-            </div>
-            <div class="space-y-2 text-gray-900">
-              <a href="#" class="block font-bold hover:text-[#4CAF50]">Proyectos</a>
-              <a href="#" class="block font-bold hover:text-[#4CAF50]">Eventos</a>
-              <a href="#" class="block font-bold hover:text-[#4CAF50]">Trámites</a>
-            </div>
-            <div class="space-y-2 text-gray-900">
-              <a href="#" class="block font-bold hover:text-[#4CAF50]">Contacto</a>
-              <a href="#" class="block font-bold hover:text-[#4CAF50]">Soporte</a>
-              <a href="#" class="block font-bold hover:text-[#4CAF50]">Normativas</a>
-            </div>
-          </div>
+          </a>
         </li>
 
         <li>
           <a href="{{ route('ayuntamiento') }}" 
-             class="block py-1.5 px-3 text-white hover:bg-green-600 md:hover:bg-transparent md:hover:text-gray-100 rounded transition-colors font-bold text-lg">
+            class="block py-1.5 px-3 text-white hover:bg-green-600 md:hover:bg-transparent md:hover:text-gray-100 rounded transition-colors font-bold text-lg">
             Ayuntamiento
           </a>
         </li>
 
         <li>
           <a href="{{ route('sala-de-prensa') }}" 
-             class="block py-1.5 px-3 text-white hover:bg-green-600 md:hover:bg-transparent md:hover:text-gray-100 rounded transition-colors font-bold text-lg">
+            class="block py-1.5 px-3 text-white hover:bg-green-600 md:hover:bg-transparent md:hover:text-gray-100 rounded transition-colors font-bold text-lg">
             Sala de prensa
           </a>
         </li>
 
         <li>
           <a href="{{ route('login') }}" 
-             class="block py-1.5 px-3 text-white hover:bg-green-600 md:hover:bg-transparent md:hover:text-gray-100 rounded transition-colors font-bold text-lg">
+            class="block py-1.5 px-3 text-white hover:bg-green-600 md:hover:bg-transparent md:hover:text-gray-100 rounded transition-colors font-bold text-lg">
             Iniciar sesión
           </a>
         </li>

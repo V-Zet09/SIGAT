@@ -65,6 +65,7 @@ class InformeController extends Controller
             'titulo' => 'required|string|max:255',
             'periodo' => 'required|string',
             'portada' => 'required|image|max:2048',
+            'plantilla_imagen' => 'nullable|image|max:5120',
             
             // Comuna
             'presidenteNombre' => 'required|string',
@@ -108,6 +109,13 @@ class InformeController extends Controller
         try {
             // Guardar archivos
             $portadaPath = $request->file('portada')->store('informes/portadas', 'public');
+            
+            // Guardar plantilla si existe
+            $plantillaPath = null;
+            if ($request->hasFile('plantilla_imagen')) {
+                $plantillaPath = $request->file('plantilla_imagen')->store('informes/plantillas', 'public');
+            }
+            
             $municipioImagenPath = $request->file('municipio_imagen')->store('informes/municipio', 'public');
             $introduccionImagenPath = $request->file('introduccion_imagen')->store('informes/introduccion', 'public');
             $gobiernoImagenPath = $request->file('gobierno_imagen')->store('informes/gobierno', 'public');
@@ -128,6 +136,7 @@ class InformeController extends Controller
                 'periodo' => $validated['periodo'],
                 'slug' => $slug,
                 'portada_path' => $portadaPath,
+                'plantilla_imagen_path' => $plantillaPath,
                 
                 // Comuna
                 'presidente_nombre' => $validated['presidenteNombre'],
@@ -192,6 +201,8 @@ class InformeController extends Controller
 
         } catch (\Exception $e) {
             Log::error('Error al crear informe: ' . $e->getMessage());
+            Log::error('Stack trace: ' . $e->getTraceAsString());
+            
             return redirect()->back()
                 ->withErrors(['error' => 'Error al crear el informe: ' . $e->getMessage()])
                 ->withInput();
@@ -311,8 +322,10 @@ class InformeController extends Controller
                 'dependencias_seleccionadas' => $validated['dependencias'],
             ]);
 
-            // Regenerar PDF
-            $this->generarPDFAutomatico($informe);
+            $informe->update([
+                'titulo' => $validated['titulo'],
+                'introduccion' => $validated['introduccion'],
+            ]);
 
             // ✅ NOTIFICACIONES: Informe actualizado (solo si hay cambios importantes)
             if (!empty($cambios)) {
@@ -351,6 +364,7 @@ class InformeController extends Controller
 
         } catch (\Exception $e) {
             Log::error('Error al actualizar informe: ' . $e->getMessage());
+            
             return redirect()->back()
                 ->withErrors(['error' => 'Error al actualizar el informe: ' . $e->getMessage()])
                 ->withInput();
@@ -372,12 +386,15 @@ class InformeController extends Controller
                 abort(403, 'No tienes permiso para eliminar este informe');
             }
 
-            // Eliminar archivos
-            if ($informe->portada_path) Storage::disk('public')->delete($informe->portada_path);
-            if ($informe->municipio_imagen_path) Storage::disk('public')->delete($informe->municipio_imagen_path);
-            if ($informe->introduccion_imagen_path) Storage::disk('public')->delete($informe->introduccion_imagen_path);
-            if ($informe->gobierno_imagen_path) Storage::disk('public')->delete($informe->gobierno_imagen_path);
-            if ($informe->pdf_path) Storage::disk('public')->delete($informe->pdf_path);
+        // Eliminar archivos físicos
+        $archivos = [
+            $informe->portada_path,
+            $informe->plantilla_imagen_path,
+            $informe->municipio_imagen_path,
+            $informe->introduccion_imagen_path,
+            $informe->gobierno_imagen_path,
+            $informe->pdf_path
+        ];
 
             $informe->delete();
 
@@ -417,7 +434,20 @@ class InformeController extends Controller
             return redirect()->back()
                 ->withErrors(['error' => 'Error al eliminar el informe: ' . $e->getMessage()]);
         }
+
+        // 🔥 ELIMINAR FÍSICAMENTE (no soft delete)
+        $informe->forceDelete();
+
+        return redirect()->route('informes-generados')
+            ->with('success', '✅ Informe eliminado correctamente');
+
+    } catch (\Exception $e) {
+        Log::error('Error al eliminar informe: ' . $e->getMessage());
+        
+        return redirect()->back()
+            ->withErrors(['error' => 'Error al eliminar: ' . $e->getMessage()]);
     }
+}
 
     /**
      * Descargar PDF por ID
@@ -499,7 +529,7 @@ class InformeController extends Controller
             $pdf->setOptions([
                 'isHtml5ParserEnabled' => true,
                 'isRemoteEnabled' => true,
-                'defaultFont' => 'Arial',
+                'defaultFont' => 'DejaVu Sans',
                 'chroot' => storage_path('app/public'),
             ]);
 
