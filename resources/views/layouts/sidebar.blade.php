@@ -200,7 +200,6 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
 
         <div x-show="openMenu === 'actividades'" x-collapse 
              class="ml-9 mt-1 space-y-0.5 border-l-2 border-slate-700/50 dark:border-gray-700/50 pl-3">
-<<<<<<< HEAD
           
           {{-- Solo roles con permiso pueden crear actividades --}}
           @can('crear actividades')
@@ -219,14 +218,6 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
               Actividades Registradas
             </a>
           @endcan
-=======
-
-          <a href="{{ route('actividades.registradas') }}" 
-             class="block px-3 py-2 text-sm rounded-lg transition
-                    {{ request()->routeIs('actividades.registradas') ? 'text-white bg-slate-800/50 dark:bg-gray-800/50 font-medium' : 'text-slate-400 dark:text-gray-400 hover:text-white hover:bg-slate-800/30 dark:hover:bg-gray-800/30' }}">
-            Actividades Registradas
-          </a>
->>>>>>> main
         </div>
       </div>
 
@@ -249,16 +240,12 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
           <a href="{{ url('dashboard-users') }}" 
              class="block px-3 py-2 text-sm rounded-lg transition
                     {{ request()->is('dashboard-users') ? 'text-white bg-slate-800/50 dark:bg-gray-800/50 font-medium' : 'text-slate-400 dark:text-gray-400 hover:text-white hover:bg-slate-800/30 dark:hover:bg-gray-800/30' }}">
-<<<<<<< HEAD
             Registro de Usuarios
           </a>
           <a href="{{ route('dashboard-crear-usuario') }}" 
              class="block px-3 py-2 text-sm rounded-lg transition
                     {{ request()->routeIs('dashboard-crear-usuario') ? 'text-white bg-slate-800/50 dark:bg-gray-800/50 font-medium' : 'text-slate-400 dark:text-gray-400 hover:text-white hover:bg-slate-800/30 dark:hover:bg-gray-800/30' }}">
             Crear Usuario
-=======
-            Registro
->>>>>>> main
           </a>
 
           <a href="{{ route('roles') }}" 
@@ -342,7 +329,7 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
            
            async markAsRead(id) {
                try {
-                   await fetch(`/notificaciones/${id}/read`, {
+                   await fetch(/notificaciones/${id}/read, {
                        method: 'POST',
                        headers: {
                            'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content
