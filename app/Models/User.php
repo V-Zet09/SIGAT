@@ -11,7 +11,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -26,9 +26,9 @@ class User extends Authenticatable
         'email',
         'password',
         'avatar',
-        'telefono',
-        'jefe_id',
-        'orden',
+        'last_login_at',    
+        'last_login_ip',     
+        'login_history',      
     ];
 
     /**
@@ -48,29 +48,31 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'last_login_at' => 'datetime',     
+        'login_history' => 'array',        
     ];
 
     /**
-     * Relación: Un usuario puede tener un jefe
+     * Relación con notificaciones
      */
-    public function jefe()
+    public function notifications()
     {
-        return $this->belongsTo(User::class, 'jefe_id');
+        return $this->hasMany(Notification::class)->latest();
     }
 
     /**
-     * Relación: Un usuario puede tener muchos subordinados
+     * Notificaciones no leídas
      */
-    public function subordinados()
+    public function unreadNotifications()
     {
-        return $this->hasMany(User::class, 'jefe_id')->orderBy('orden');
+        return $this->notifications()->unread();
     }
 
     /**
-     * Relación recursiva para obtener todos los subordinados anidados
+     * Contar notificaciones no leídas
      */
-    public function subordinadosRecursivos()
+    public function unreadNotificationsCount()
     {
-        return $this->subordinados()->with('subordinadosRecursivos');
+        return $this->unreadNotifications()->count();
     }
 }

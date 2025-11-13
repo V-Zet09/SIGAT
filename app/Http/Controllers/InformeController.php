@@ -10,9 +10,16 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Mpdf\Mpdf;
 use App\Models\Actividad;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Helpers\NotificationHelper;
 
 class InformeController extends Controller
 {
+    /**
+     * Mostrar lista de informes
+     */
     public function index(Request $request)
     {
         $query = Informe::query();
@@ -44,6 +51,9 @@ class InformeController extends Controller
         ));
     }
 
+    /**
+     * Mostrar formulario de creación
+     */
     public function create()
     {
         return view('generar-informe', [
@@ -52,6 +62,9 @@ class InformeController extends Controller
         ]);
     }
 
+    /**
+     * Guardar nuevo informe
+     */
     public function store(Request $request)
     {
         ini_set('memory_limit', '512M');
@@ -179,6 +192,28 @@ class InformeController extends Controller
 
             return redirect()->route('informes-generados')
                 ->with('success', 'Informe generado exitosamente');
+            // ✅ NOTIFICACIONES: Nuevo informe generado
+            
+            // Notificar a roles que pueden ver informes
+            $roles = ['Administrador', 'Presidente Municipal', 'Síndico Procurador', 'Regidor', 'Director de Área'];
+            
+            foreach ($roles as $rol) {
+                NotificationHelper::sendToRole(
+                    $rol,
+                    'informe',
+                    'Nuevo informe generado',
+                    Auth::user()->name . ' ha generado el informe: ' . $informe->titulo . ' (' . $informe->periodo . ')',
+                    [
+                        'link' => route('informes-generados'),
+                        'icon' => 'ri-file-list-line',
+                        'color' => 'green',
+                        'data' => ['informe_id' => $informe->id]
+                    ]
+                );
+            }
+
+            return redirect('/dashboard-informes-generados')
+                ->with('success', 'Informe creado exitosamente');
 
         } catch (\Exception $e) {
             Log::error('❌ ERROR en store: ' . $e->getMessage());
@@ -257,12 +292,18 @@ class InformeController extends Controller
         }
     }
 
+    /**
+     * Mostrar detalle de informe
+     */
     public function show($slug)
     {
         $informe = Informe::where('slug', $slug)->firstOrFail();
         return view('informes.show', compact('informe'));
     }
 
+    /**
+     * Mostrar formulario de edición
+     */
     public function edit($id)
     {
         $informe = Informe::findOrFail($id);
@@ -271,18 +312,66 @@ class InformeController extends Controller
             'informe' => $informe,
             'isEdit' => true
         ]);
+        // Solo el creador o administrador puede editar
+        if ($informe->user_id !== Auth::id() && !Auth::user()->hasRole('Administrador')) {
+            abort(403, 'No tienes permiso para editar este informe');
+        }
+        
+        return view('informes.edit', compact('informe'));
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Actualizar informe
+     */
+    public function update(Request $request, Informe $informe)
     {
         ini_set('memory_limit', '512M');
         ini_set('max_execution_time', '300');
         ini_set('max_input_vars', '5000');
 
         Log::info('=== INICIO UPDATE INFORME ID: ' . $id . ' ===');
+        // Verificar permisos
+        if ($informe->user_id !== Auth::id() && !Auth::user()->hasRole('Administrador')) {
+            abort(403, 'No tienes permiso para editar este informe');
+        }
+
+        $validated = $request->validate([
+            'titulo' => 'required|string|max:255',
+            'periodo' => 'required|string|max:100',
+            'portada' => 'nullable|image|max:2048',
+            
+            // Comuna
+            'presidenteNombre' => 'required|string',
+            'presidenteCargo' => 'required|string',
+            'sindicatoNombre' => 'required|string',
+            'sindicatoCargo' => 'required|string',
+            'secretarioNombre' => 'required|string',
+            'secretarioCargo' => 'required|string',
+            
+            // Municipio
+            'municipio_nombre' => 'required|string',
+            'municipio_descripcion' => 'required|string',
+            'municipio_imagen' => 'nullable|image|max:2048',
+            
+            // Introducciones
+            'introduccion' => 'required|string',
+            'introduccion_imagen' => 'nullable|image|max:2048',
+            'gobierno_introduccion' => 'required|string',
+            'gobierno_imagen' => 'nullable|image|max:2048',
+            
+            // Actividades
+            'actividades_fecha_inicio' => 'required|date',
+            'actividades_fecha_fin' => 'required|date|after_or_equal:actividades_fecha_inicio',
+            'dependencias' => 'required|array|min:1',
+        ]);
 
         try {
-            $informe = Informe::findOrFail($id);
+            // Detectar cambios importantes
+            $cambios = [];
+            
+            if ($informe->titulo !== $validated['titulo']) {
+                $cambios[] = 'Título modificado';
+            }
             
             $validated = $request->validate([
                 'portada_imagen' => 'nullable|image|max:5120',
@@ -321,6 +410,45 @@ class InformeController extends Controller
                 'periodo_inicio' => 'required|date',
                 'periodo_fin' => 'required|date|after_or_equal:periodo_inicio',
                 'dependencias' => 'required|array|min:1',
+            if ($informe->periodo !== $validated['periodo']) {
+                $cambios[] = 'Periodo actualizado: ' . $validated['periodo'];
+            }
+
+            // Actualizar imágenes si se subieron nuevas
+            if($request->hasFile('portada')){
+                if($informe->portada_path) Storage::disk('public')->delete($informe->portada_path);
+                $validated['portada_path'] = $request->file('portada')->store('informes/portadas', 'public');
+            }
+            if($request->hasFile('municipio_imagen')){
+                if($informe->municipio_imagen_path) Storage::disk('public')->delete($informe->municipio_imagen_path);
+                $validated['municipio_imagen_path'] = $request->file('municipio_imagen')->store('informes/municipio', 'public');
+            }
+            if($request->hasFile('introduccion_imagen')){
+                if($informe->introduccion_imagen_path) Storage::disk('public')->delete($informe->introduccion_imagen_path);
+                $validated['introduccion_imagen_path'] = $request->file('introduccion_imagen')->store('informes/introduccion', 'public');
+            }
+            if($request->hasFile('gobierno_imagen')){
+                if($informe->gobierno_imagen_path) Storage::disk('public')->delete($informe->gobierno_imagen_path);
+                $validated['gobierno_imagen_path'] = $request->file('gobierno_imagen')->store('informes/gobierno', 'public');
+            }
+
+            // Actualizar datos
+            $informe->update([
+                'titulo' => $validated['titulo'],
+                'periodo' => $validated['periodo'],
+                'presidente_nombre' => $validated['presidenteNombre'],
+                'presidente_cargo' => $validated['presidenteCargo'],
+                'sindicato_nombre' => $validated['sindicatoNombre'],
+                'sindicato_cargo' => $validated['sindicatoCargo'],
+                'secretario_nombre' => $validated['secretarioNombre'],
+                'secretario_cargo' => $validated['secretarioCargo'],
+                'municipio_nombre' => $validated['municipio_nombre'],
+                'municipio_descripcion' => $validated['municipio_descripcion'],
+                'introduccion' => $validated['introduccion'],
+                'gobierno_introduccion' => $validated['gobierno_introduccion'],
+                'actividades_fecha_inicio' => $validated['actividades_fecha_inicio'],
+                'actividades_fecha_fin' => $validated['actividades_fecha_fin'],
+                'dependencias_seleccionadas' => $validated['dependencias'],
             ]);
 
             Log::info('✅ Validación exitosa');
@@ -420,6 +548,40 @@ class InformeController extends Controller
             // ✅ MENSAJE PERSONALIZADO AL EDITAR
             return redirect()->route('informes-generados')
                 ->with('success', 'Informe editado exitosamente');
+            // ✅ NOTIFICACIONES: Informe actualizado (solo si hay cambios importantes)
+            if (!empty($cambios)) {
+                
+                // Notificar a administradores y presidente
+                NotificationHelper::sendToRole(
+                    'Administrador',
+                    'informe',
+                    'Informe actualizado',
+                    Auth::user()->name . ' ha actualizado el informe: ' . $informe->titulo . 
+                    '. Cambios: ' . implode(', ', $cambios),
+                    [
+                        'link' => route('informes-generados'),
+                        'icon' => 'ri-edit-line',
+                        'color' => 'yellow',
+                        'data' => ['informe_id' => $informe->id]
+                    ]
+                );
+
+                NotificationHelper::sendToRole(
+                    'Presidente Municipal',
+                    'informe',
+                    'Informe actualizado',
+                    'El informe "' . $informe->titulo . '" ha sido actualizado',
+                    [
+                        'link' => route('informes-generados'),
+                        'icon' => 'ri-edit-line',
+                        'color' => 'yellow',
+                        'data' => ['informe_id' => $informe->id]
+                    ]
+                );
+            }
+
+            return redirect('/dashboard-informes-generados')
+                ->with('success', 'Informe actualizado correctamente');
 
         } catch (\Exception $e) {
             Log::error('❌ ERROR al actualizar informe: ' . $e->getMessage());
@@ -432,6 +594,9 @@ class InformeController extends Controller
         }
     }
 
+    /**
+     * Eliminar informe
+     */
     public function destroy($id)
     {
         try {
@@ -472,6 +637,80 @@ class InformeController extends Controller
         }
     }
 
+            $tituloInforme = $informe->titulo;
+            $userId = $informe->user_id;
+
+            // Solo el creador o administrador puede eliminar
+            if ($informe->user_id !== Auth::id() && !Auth::user()->hasRole('Administrador')) {
+                abort(403, 'No tienes permiso para eliminar este informe');
+            }
+
+        // Eliminar archivos físicos
+        $archivos = [
+            $informe->portada_path,
+            $informe->plantilla_imagen_path,
+            $informe->municipio_imagen_path,
+            $informe->introduccion_imagen_path,
+            $informe->gobierno_imagen_path,
+            $informe->pdf_path
+        ];
+
+            $informe->delete();
+
+            // ✅ NOTIFICACIONES: Informe eliminado
+            
+            // Notificar al creador (si no es quien eliminó)
+            if ($userId && $userId !== Auth::id()) {
+                NotificationHelper::send(
+                    $userId,
+                    'informe',
+                    'Tu informe fue eliminado',
+                    'Tu informe "' . $tituloInforme . '" ha sido eliminado del sistema por ' . Auth::user()->name,
+                    [
+                        'icon' => 'ri-delete-bin-line',
+                        'color' => 'red'
+                    ]
+                );
+            }
+
+            // Notificar a administradores
+            NotificationHelper::sendToRole(
+                'Administrador',
+                'informe',
+                'Informe eliminado',
+                Auth::user()->name . ' ha eliminado el informe: ' . $tituloInforme,
+                [
+                    'icon' => 'ri-delete-bin-line',
+                    'color' => 'red'
+                ]
+            );
+
+            return redirect('/dashboard-informes-generados')
+                ->with('success', 'Informe eliminado correctamente');
+
+        } catch (\Exception $e) {
+            Log::error('Error al eliminar informe: ' . $e->getMessage());
+            return redirect()->back()
+                ->withErrors(['error' => 'Error al eliminar el informe: ' . $e->getMessage()]);
+        }
+
+        // 🔥 ELIMINAR FÍSICAMENTE (no soft delete)
+        $informe->forceDelete();
+
+        return redirect()->route('informes-generados')
+            ->with('success', '✅ Informe eliminado correctamente');
+
+    } catch (\Exception $e) {
+        Log::error('Error al eliminar informe: ' . $e->getMessage());
+        
+        return redirect()->back()
+            ->withErrors(['error' => 'Error al eliminar: ' . $e->getMessage()]);
+    }
+}
+
+    /**
+     * Descargar PDF por ID
+     */
     public function downloadById($id)
     {
         try {
@@ -503,6 +742,9 @@ class InformeController extends Controller
         }
     }
 
+    /**
+     * Obtener contador de descargas
+     */
     public function getDownloadCount($id)
     {
         try {
@@ -520,7 +762,22 @@ class InformeController extends Controller
         }
     }
 
+    /**
+     * Obtener estadísticas
+     */
     public function getStats()
+    {
+        $totalDescargas = Informe::sum('descargas');
+        return response()->json([
+            'success' => true,
+            'totalDescargas' => $totalDescargas
+        ]);
+    }
+
+    /**
+     * Generar PDF automático
+     */
+    private function generarPDFAutomatico($informe)
     {
         try {
             $totalDescargas = Informe::sum('descargas');
@@ -529,13 +786,38 @@ class InformeController extends Controller
                 'success' => true,
                 'totalDescargas' => $totalDescargas,
                 'totalInformes' => $totalInformes
+            $pdf = PDF::loadView('informes.pdf', compact('informe'));
+
+            $pdf->setPaper('letter', 'portrait');
+            $pdf->setOptions([
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true,
+                'defaultFont' => 'DejaVu Sans',
+                'chroot' => storage_path('app/public'),
             ]);
+
+            $dirPath = storage_path('app/public/pdfs');
+            if (!file_exists($dirPath)) {
+                mkdir($dirPath, 0755, true);
+            }
+
+            $pdfPath = 'pdfs/informe_' . $informe->id . '_' . time() . '.pdf';
+            Storage::disk('public')->put($pdfPath, $pdf->output());
+
+            $informe->update(['pdf_path' => $pdfPath]);
+
+            Log::info('PDF generado correctamente: ' . $pdfPath);
+            
+            return true;
         } catch (\Exception $e) {
             Log::error('Error: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Error'
             ], 500);
+            Log::error('Error al generar PDF: ' . $e->getMessage());
+            Log::error('Trace: ' . $e->getTraceAsString());
+            return false;
         }
     }
 

@@ -4,7 +4,6 @@
     "description": "The Laravel Framework.",
     "keywords": ["framework", "laravel"],
     "license": "MIT",
-
     "require": {
         "php": "^8.2",
         "barryvdh/laravel-dompdf": "^3.1",
@@ -15,6 +14,7 @@
         "laravel/ui": "^4.2",
         "mpdf/mpdf": "^8.2",
         "spatie/laravel-permission": "^6.20"
+        "spatie/laravel-permission": "^6.21"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -29,7 +29,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Helpers/NotificationHelper.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

@@ -4,12 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
 
 class Informe extends Model
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
+    protected $table = 'informes'; 
+    
     protected $fillable = [
         'user_id',
         'slug',
@@ -45,6 +48,17 @@ class Informe extends Model
         // PDF
         'pdf_path',
         'descargas',
+        
+        // ✅ CAMPOS DE NOTIFICACIONES (si los agregaste en la migración)
+        'creado_por_id',
+        'codigo',
+        'estado',
+        'aprobada_por',
+        'fecha_aprobacion',
+        'rechazada_por',
+        'motivo_rechazo',
+        'fecha_rechazo',
+        'comentarios',
     ];
 
     protected $casts = [
@@ -53,9 +67,16 @@ class Informe extends Model
         'actividades_fecha_inicio' => 'date',
         'actividades_fecha_fin' => 'date',
         'descargas' => 'integer',
+        'fecha_aprobacion' => 'datetime',
+        'fecha_rechazo' => 'datetime',
+        'comentarios' => 'array',
     ];
 
-    // Relaciones
+    // RELACIONES
+    
+    /**
+     * Usuario que creó el informe
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -67,6 +88,31 @@ class Informe extends Model
     }
 
     // ✅ Método boot optimizado - Solo crea secciones después de guardar
+    /**
+     * Alias para compatibilidad con notificaciones
+     */
+    public function creador()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * Usuario que aprobó el informe
+     */
+    public function aprobador()
+    {
+        return $this->belongsTo(User::class, 'aprobada_por');
+    }
+
+    /**
+     * Usuario que rechazó el informe
+     */
+    public function rechazador()
+    {
+        return $this->belongsTo(User::class, 'rechazada_por');
+    }
+
+    // ✅ BOOT: Generar slug automáticamente
     protected static function boot()
     {
         parent::boot();
@@ -99,6 +145,28 @@ class Informe extends Model
     }
 
     // Método para obtener actividades filtradas
+        static::creating(function ($informe) {
+            if (empty($informe->slug)) {
+                $slug = Str::slug($informe->titulo . '-' . $informe->periodo);
+                $slugOriginal = $slug;
+                $contador = 1;
+                
+                // Asegurar que el slug sea único
+                while (self::where('slug', $slug)->exists()) {
+                    $slug = $slugOriginal . '-' . $contador;
+                    $contador++;
+                }
+                
+                $informe->slug = $slug;
+            }
+        });
+    }
+
+    // ✅ MÉTODOS AUXILIARES
+    
+    /**
+     * Obtener actividades filtradas según los criterios del informe
+     */
     public function getActividadesFiltradas()
     {
         return \App\Models\Actividad::whereBetween('fecha', [
@@ -108,13 +176,41 @@ class Informe extends Model
             ->when($this->dependencias_seleccionadas, function($query) {
                 $query->whereIn('tipo_area', $this->dependencias_seleccionadas);
             })
+            ->whereIn('tipo_area', $this->dependencias_seleccionadas ?? [])
             ->orderBy('fecha', 'desc')
             ->get();
     }
     
-    // Incrementar contador de descargas
+    /**
+     * Incrementar contador de descargas
+     */
     public function incrementarDescargas()
     {
         $this->increment('descargas');
+    }
+}
+
+    /**
+     * Verificar si el informe está aprobado
+     */
+    public function estaAprobado()
+    {
+        return $this->estado === 'Aprobado';
+    }
+
+    /**
+     * Verificar si el informe está rechazado
+     */
+    public function estaRechazado()
+    {
+        return $this->estado === 'Rechazado';
+    }
+
+    /**
+     * Verificar si el informe está pendiente
+     */
+    public function estaPendiente()
+    {
+        return $this->estado === 'Pendiente' || $this->estado === null;
     }
 }

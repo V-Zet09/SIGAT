@@ -5,6 +5,7 @@
         "This file is @generated automatically"
     ],
     "content-hash": "d3eb23e11766c56e76be72cbca3e6076",
+    "content-hash": "f9ef95409126feaebb7b11b5ec1f5ad5",
     "packages": [
         {
             "name": "archtechx/enums",
@@ -519,6 +520,16 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/dompdf/dompdf/zipball/db712c90c5b9868df3600e64e68da62e78a34623",
                 "reference": "db712c90c5b9868df3600e64e68da62e78a34623",
+            "version": "v3.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dompdf/dompdf.git",
+                "reference": "baed300e4fb8226359c04395518059a136e2a2e2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dompdf/dompdf/zipball/baed300e4fb8226359c04395518059a136e2a2e2",
+                "reference": "baed300e4fb8226359c04395518059a136e2a2e2",
                 "shasum": ""
             },
             "require": {
@@ -570,6 +581,9 @@
                 "source": "https://github.com/dompdf/dompdf/tree/v3.1.4"
             },
             "time": "2025-10-29T12:43:30+00:00"
+                "source": "https://github.com/dompdf/dompdf/tree/v3.1.3"
+            },
+            "time": "2025-10-14T13:10:17+00:00"
         },
         {
             "name": "dompdf/php-font-lib",
@@ -1480,6 +1494,16 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/laravel/framework/zipball/cad110d7685fbab990a6bb8184d0cfd847d7c4d8",
                 "reference": "cad110d7685fbab990a6bb8184d0cfd847d7c4d8",
+            "version": "v12.34.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/framework.git",
+                "reference": "f9ec5a5d88bc8c468f17b59f88e05c8ac3c8d687"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/f9ec5a5d88bc8c468f17b59f88e05c8ac3c8d687",
+                "reference": "f9ec5a5d88bc8c468f17b59f88e05c8ac3c8d687",
                 "shasum": ""
             },
             "require": {
@@ -1686,6 +1710,7 @@
                 "source": "https://github.com/laravel/framework"
             },
             "time": "2025-10-29T14:20:57+00:00"
+            "time": "2025-10-14T13:58:31+00:00"
         },
         {
             "name": "laravel/prompts",
@@ -7516,6 +7541,16 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/Laravel-Lang/lang/zipball/4f49e4a77ced9ace7955db2159234e4a9c0b22a3",
                 "reference": "4f49e4a77ced9ace7955db2159234e4a9c0b22a3",
+            "version": "15.26.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Laravel-Lang/lang.git",
+                "reference": "3cae5a9b4c5553a065fc701499ffee2c7bc12ffb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Laravel-Lang/lang/zipball/3cae5a9b4c5553a065fc701499ffee2c7bc12ffb",
+                "reference": "3cae5a9b4c5553a065fc701499ffee2c7bc12ffb",
                 "shasum": ""
             },
             "require": {
@@ -7567,6 +7602,7 @@
                 "source": "https://github.com/Laravel-Lang/lang"
             },
             "time": "2025-10-29T12:19:07+00:00"
+            "time": "2025-10-06T23:59:01+00:00"
         },
         {
             "name": "laravel-lang/locales",

@@ -1,95 +1,123 @@
 @extends('layouts.master-without-nav')
 
-@section('title')
-    @lang('translation.password-reset')
-@endsection
+@section('title', 'Recuperar Contraseña')
 
 @section('content')
-<div class="relative h-screen flex items-start justify-center overflow-hidden">
-
-    <!-- Imagen de fondo -->
-    <img src="{{ asset('images/trampasdeluz.jpeg') }}" 
-         alt="Fondo"
-         class="absolute inset-0 w-full h-full object-cover">
-
-    <!-- Capa oscura -->
-    <div class="absolute inset-0 bg-black/50"></div>
-
-    <!-- Tarjeta compacta -->
-    <div class="relative w-full max-w-sm bg-white/30 backdrop-blur-md rounded-2xl shadow-xl p-6 z-10 border border-white/40 mt-20 md:mt-28">
+<div class="relative min-h-screen flex items-center justify-center p-4 overflow-hidden">
+    <!-- Fondo degradado animado -->
+    <div class="absolute inset-0 bg-gradient-to-br from-green-500 via-emerald-600 to-teal-700"></div>
+    
+    <!-- Círculos flotantes animados -->
+    <div class="absolute top-20 left-20 w-72 h-72 bg-white/20 rounded-full blur-3xl animate-blob"></div>
+    <div class="absolute top-40 right-20 w-72 h-72 bg-emerald-300/20 rounded-full blur-3xl animate-blob animation-delay-2000"></div>
+    <div class="absolute -bottom-20 left-40 w-72 h-72 bg-teal-300/20 rounded-full blur-3xl animate-blob animation-delay-4000"></div>
+    
+    <!-- Contenido -->
+    <div class="relative w-full max-w-md z-10">
         
-        <!-- Imagen superior -->
-        <div class="flex justify-center mb-4">
-            <img src="{{ asset('images/carrusel2.jpeg') }}" 
-                 alt="Decoración" 
-                 class="w-20 h-20 rounded-full object-cover shadow-lg border-4 border-white/60">
-        </div>
-
-        <!-- Encabezado -->
-        <div class="text-center mb-3">
-            <h2 class="text-xl font-bold text-white">¿Olvidaste tu contraseña?</h2>
-            <p class="text-gray-200 text-xs">
-                Restablece tu acceso al sistema SIGAT
-            </p>
-        </div>
-
-        <!-- Alerta -->
-        <div class="bg-yellow-200/80 border-l-4 border-yellow-500 text-yellow-900 p-2 rounded mb-3 text-xs">
-            <i class="fas fa-info-circle mr-1"></i> 
-            Ingresa tu correo electrónico para recibir instrucciones.
-        </div>
-
-        <!-- Mensaje de éxito -->
-        @if (session('status'))
-            <div class="bg-green-200/80 border-l-4 border-green-600 text-green-900 p-2 rounded mb-3 text-xs text-center">
-                <i class="fas fa-check-circle mr-1"></i> {{ session('status') }}
-            </div>
-        @endif
-
-        <!-- Formulario -->
-        <form method="POST" action="{{ route('password.email') }}" class="space-y-3">
-            @csrf
-            <div>
-                <label for="email" class="block text-xs font-medium text-white">Correo electrónico</label>
-                <input type="email" id="email" name="email" 
-                       class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-400 focus:border-blue-400 text-sm p-2
-                       @error('email') border-red-500 @enderror"
-                       placeholder="tu@correo.com" value="{{ old('email') }}" required>
-                @error('email')
-                    <p class="text-red-300 text-xs mt-1"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
-                @enderror
+        {{-- Tarjeta principal --}}
+        <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
+            
+            {{-- Header con icono grande --}}
+            <div class="bg-gradient-to-r from-green-600 to-green-700 p-8 text-center">
+                <div class="w-24 h-24 bg-white rounded-full mx-auto mb-4 flex items-center justify-center">
+                    <i class="ri-lock-password-line text-5xl text-green-600"></i>
+                </div>
+                <h1 class="text-2xl font-bold text-white mb-2">¿Olvidaste tu contraseña?</h1>
+                <p class="text-green-100 text-sm">No te preocupes, es fácil recuperarla</p>
             </div>
 
-            <button type="submit" 
-                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg text-sm transition">
-                <i class="fas fa-paper-plane mr-1"></i> Enviar enlace
-            </button>
-        </form>
+            {{-- Contenido --}}
+            <div class="p-8">
+                
+                {{-- Instrucciones claras --}}
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 rounded">
+                    <div class="flex items-start">
+                        <i class="ri-information-line text-2xl text-blue-600 mr-3 mt-0.5"></i>
+                        <div>
+                            <p class="text-blue-900 font-semibold mb-1">Sigue estos pasos:</p>
+                            <ol class="text-blue-800 text-sm space-y-1 list-decimal list-inside">
+                                <li>Escribe tu correo electrónico</li>
+                                <li>Haz clic en "Enviar"</li>
+                                <li>Revisa tu correo (bandeja de entrada)</li>
+                                <li>Haz clic en el enlace que te enviamos</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
 
-        <!-- Enlace login -->
-        <div class="text-center mt-3">
-            <a href="{{ route('login') }}" class="text-xs text-blue-200 hover:underline">
-                <i class="fas fa-sign-in-alt mr-1"></i> ¿Ya recuerdas tu contraseña? Inicia sesión aquí
-            </a>
+                {{-- Mensaje de éxito --}}
+                @if (session('status'))
+                    <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6 rounded animate-fade-in">
+                        <div class="flex items-center">
+                            <i class="ri-check-circle-line text-2xl text-green-600 mr-3"></i>
+                            <div>
+                                <p class="text-green-900 font-semibold">¡Correo enviado!</p>
+                                <p class="text-green-700 text-sm">{{ session('status') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                {{-- Formulario --}}
+                <form method="POST" action="{{ route('password.email') }}" class="space-y-5">
+                    @csrf
+
+                    <div>
+                        <label for="email" class="block text-gray-700 font-semibold mb-2 text-lg">
+                            <i class="ri-mail-line mr-2"></i>Tu correo electrónico
+                        </label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            value="{{ old('email') }}"
+                            class="w-full px-4 py-4 text-lg border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 transition
+                                   @error('email') border-red-500 @enderror"
+                            placeholder="ejemplo@correo.com"
+                            required
+                            autofocus>
+                        
+                        @error('email')
+                            <div class="mt-2 flex items-center text-red-600">
+                                <i class="ri-error-warning-line mr-2"></i>
+                                <span class="text-sm">{{ $message }}</span>
+                            </div>
+                        @enderror
+                    </div>
+
+                    {{-- Botón grande y claro --}}
+                    <button 
+                        type="submit" 
+                        class="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-5 text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-2">
+                        <i class="ri-send-plane-fill text-xl"></i>
+                        <span>Enviar enlace de recuperación</span>
+                    </button>
+                </form>
+
+                {{-- Enlace para volver --}}
+                <div class="mt-6 pt-6 border-t border-gray-200 text-center">
+                    <a href="{{ route('login') }}" 
+                       class="inline-flex items-center text-gray-600 hover:text-green-600 font-medium transition">
+                        <i class="ri-arrow-left-line mr-2"></i>
+                        Volver al inicio de sesión
+                    </a>
+                </div>
+            </div>
         </div>
 
-        <!-- Footer compacto -->
-        <hr class="my-3 border-white/40">
-        <footer class="text-center text-[10px] text-gray-200 leading-4">
-            <p>
-                &copy; <script>document.write(new Date().getFullYear())</script> <strong>SIGAT</strong><br>
-                Desarrollado por Estudiantes de Educación Dual:<br>
-                <strong>Maico Zaet</strong>, <strong>Mariana Lilibeth</strong>, 
-                <strong>Jorge</strong>, <strong>José Ángel</strong><br>
-                Carrera: <strong>Ingeniería Informática</strong><br>
-                Contacto: 
-                <a href="mailto:educaciondualsigat@gmail.com" class="hover:underline text-blue-300">educaciondualsigat@gmail.com</a>
+        {{-- Footer --}}
+        <div class="text-center mt-6 text-gray-400 text-sm">
+            <p>&copy; {{ date('Y') }} SIGAT - Sistema de Gestión del Ayuntamiento</p>
+            <p class="mt-1">
+                ¿Necesitas ayuda? Llama al: 
+                <a href="tel:+524771234567" class="text-green-400 hover:text-green-300 font-semibold">477 123 4567</a>
             </p>
-        </footer>
+        </div>
     </div>
 </div>
 @endsection
 
 @section('script')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.5.1/flowbite.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 @endsection
