@@ -24,8 +24,6 @@ Route::get('/', function () {
 // ✅ Idioma
 Route::get('index/{locale}', [HomeController::class, 'lang']);
 
-<<<<<<< HEAD
-=======
 // ✅ Perfil
 Route::post('/update-profile/{id}', [HomeController::class, 'updateProfile'])->name('updateProfile');
 Route::post('/update-password/{id}', [HomeController::class, 'updatePassword'])->name('updatePassword');
@@ -38,14 +36,12 @@ Route::get('/test-organigrama', function() {
 
 
 
->>>>>>> main
 // ✅ Cargar módulos
 require __DIR__.'/dashboards.php';
 require __DIR__.'/users.php';
 require __DIR__.'/informes.php';
 require __DIR__.'/actividades.php';
 require __DIR__.'/menu.php';
-<<<<<<< HEAD
 
 // ============================================
 // ROLES Y PERMISOS (Solo Administrador)
@@ -95,7 +91,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/notificaciones/clear-read', [App\Http\Controllers\NotificationController::class, 'clearRead'])
         ->name('notifications.clearRead');
 });
-=======
 
 
 use App\Http\Controllers\UserController;
@@ -103,4 +98,3 @@ use App\Http\Controllers\SalaPrensaController;
 // Ruta para Roles simple
 Route::get('/roles-simple', [UserController::class, 'rolesSimple'])->name('roles-simple');
 Route::get('/sala-prensa', [SalaPrensaController::class, 'index'])->name('sala-prensa');
->>>>>>> main
