@@ -12,11 +12,10 @@ class Informe extends Model
 
     protected $fillable = [
         'user_id',
-        'titulo',
-        'periodo',
         'slug',
-        'portada_path',
+        'portada_imagen_path',
         'plantilla_imagen_path',
+        'comuna_imagen_path',
         
         // Comuna
         'presidente_nombre',
@@ -62,28 +61,53 @@ class Informe extends Model
         return $this->belongsTo(User::class);
     }
 
-    // Generar slug automáticamente
+    public function secciones()
+    {
+        return $this->hasMany(InformeSeccion::class)->orderBy('orden');
+    }
+
+    // ✅ Método boot optimizado - Solo crea secciones después de guardar
     protected static function boot()
     {
         parent::boot();
         
-        static::creating(function ($informe) {
-            if (empty($informe->slug)) {
-                $informe->slug = Str::slug($informe->titulo . '-' . $informe->periodo);
-            }
+        // Crear secciones por defecto después de crear el informe
+        static::created(function ($informe) {
+            $informe->crearSeccionesPorDefecto();
         });
+    }
+
+    // Método para crear secciones por defecto
+    public function crearSeccionesPorDefecto()
+    {
+        $seccionesDefault = [
+            ['titulo' => 'Introducción', 'nivel' => 1, 'orden' => 1],
+            ['titulo' => 'Información General del Municipio', 'nivel' => 1, 'orden' => 2],
+            ['titulo' => 'Gobierno y Desarrollo Municipal', 'nivel' => 1, 'orden' => 3],
+            ['titulo' => 'Despacho del Presidente Municipal', 'nivel' => 2, 'orden' => 4],
+            ['titulo' => 'Secretaría Particular', 'nivel' => 3, 'orden' => 5],
+            ['titulo' => 'Sindicatura', 'nivel' => 1, 'orden' => 6],
+            ['titulo' => 'Secretaría General', 'nivel' => 1, 'orden' => 7],
+            ['titulo' => 'Tesorería', 'nivel' => 1, 'orden' => 8],
+            ['titulo' => 'Obras Públicas', 'nivel' => 1, 'orden' => 9],
+            ['titulo' => 'DIF Municipal', 'nivel' => 1, 'orden' => 10],
+        ];
+        
+        foreach ($seccionesDefault as $seccion) {
+            $this->secciones()->create($seccion);
+        }
     }
 
     // Método para obtener actividades filtradas
     public function getActividadesFiltradas()
     {
-        // Aquí conectarás con el modelo de tu compañero
-        // Por ahora retorno un ejemplo
         return \App\Models\Actividad::whereBetween('fecha', [
                 $this->actividades_fecha_inicio,
                 $this->actividades_fecha_fin
             ])
-            ->whereIn('dependencia', $this->dependencias_seleccionadas)
+            ->when($this->dependencias_seleccionadas, function($query) {
+                $query->whereIn('tipo_area', $this->dependencias_seleccionadas);
+            })
             ->orderBy('fecha', 'desc')
             ->get();
     }

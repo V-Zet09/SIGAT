@@ -123,11 +123,6 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
                     {{ request()->is('generar-informe') ? 'text-white bg-slate-800/50 dark:bg-gray-800/50 font-medium' : 'text-slate-400 dark:text-gray-400 hover:text-white hover:bg-slate-800/30 dark:hover:bg-gray-800/30' }}">
             Generar Informe
           </a>
-          <a href="{{ route('informes-generados') }}" 
-             class="block px-3 py-2 text-sm rounded-lg transition
-                    {{ request()->routeIs('informes-generados') ? 'text-white bg-slate-800/50 dark:bg-gray-800/50 font-medium' : 'text-slate-400 dark:text-gray-400 hover:text-white hover:bg-slate-800/30 dark:hover:bg-gray-800/30' }}">
-            Informes Generados
-          </a>
         </div>
       </div>
 

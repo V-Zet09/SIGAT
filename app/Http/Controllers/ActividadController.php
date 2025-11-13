@@ -105,4 +105,33 @@ class ActividadController extends Controller
             'foto' => 'nullable|image|max:2048',
         ]);
     }
+
+    /**
+     * API de conteo previo para el informe
+     * GET /api/actividades/contar?start=YYYY-MM-DD&end=YYYY-MM-DD&areas=a,b,c
+     */
+    public function count(Request $r)
+    {
+
+        $r->validate([
+            'start' => ['required', 'date', 'date_format:Y-m-d'],
+            'end'   => ['required', 'date', 'date_format:Y-m-d', 'after_or_equal:start'],
+            'areas' => ['nullable', 'string'],
+        ]); // [web:340]
+
+
+        $areas = array_values(array_filter(explode(',', (string) $r->query('areas'))));
+
+
+        $q = Actividad::query()->whereBetween('fecha', [$r->query('start'), $r->query('end')]); 
+
+
+        if ($areas) {
+
+            $q->whereIn('tipo_area', $areas);
+
+        }
+
+        return response()->json(['count' => $q->count()]);
+    }
 }
