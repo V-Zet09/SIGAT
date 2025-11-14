@@ -687,6 +687,10 @@ function descargarPDF(event, id) {
     });
 }
 
+
+
+
+
 // ✅ ACTUALIZAR CONTADOR INDIVIDUAL SIN RECARGAR
 function actualizarContador(id) {
     fetch(`/informes/${id}/contador`)
