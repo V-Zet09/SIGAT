@@ -208,12 +208,6 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
               Actividades Registradas
             </a>
           @endcan
-
-          <a href="{{ route('actividades.registradas') }}" 
-             class="block px-3 py-2 text-sm rounded-lg transition
-                    {{ request()->routeIs('actividades.registradas') ? 'text-white bg-slate-800/50 dark:bg-gray-800/50 font-medium' : 'text-slate-400 dark:text-gray-400 hover:text-white hover:bg-slate-800/30 dark:hover:bg-gray-800/30' }}">
-            Actividades Registradas
-          </a>
         </div>
       </div>
 
@@ -242,7 +236,6 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
              class="block px-3 py-2 text-sm rounded-lg transition
                     {{ request()->routeIs('dashboard-crear-usuario') ? 'text-white bg-slate-800/50 dark:bg-gray-800/50 font-medium' : 'text-slate-400 dark:text-gray-400 hover:text-white hover:bg-slate-800/30 dark:hover:bg-gray-800/30' }}">
             Crear Usuario
-            Registro
           </a>
 
           <a href="{{ route('roles') }}" 
@@ -326,7 +319,7 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
            
            async markAsRead(id) {
                try {
-                   await fetch(`/notificaciones/${id}/read`, {
+                   await fetch(/notificaciones/${id}/read, {
                        method: 'POST',
                        headers: {
                            'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content
