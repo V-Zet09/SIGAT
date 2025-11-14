@@ -13,10 +13,10 @@
         "laravel/tinker": "^2.9",
         "laravel/ui": "^4.2",
         "mpdf/mpdf": "^8.2",
-        "spatie/laravel-permission": "^6.20"
         "spatie/laravel-permission": "^6.21"
     },
     "require-dev": {
+        "barryvdh/laravel-ide-helper": "^3.6",
         "fakerphp/faker": "^1.23",
         "laravel-lang/lang": "^15.22",
         "laravel/pint": "^1.13",
