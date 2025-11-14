@@ -9,6 +9,11 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * @method bool hasRole(string $roleName)
+ * @method \Illuminate\Database\Eloquent\Relations\HasMany notifications()
+ * @method \Illuminate\Database\Eloquent\Relations\HasMany unreadNotifications()
+ */
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
@@ -28,7 +33,7 @@ class User extends Authenticatable
         'avatar',
         'last_login_at',    
         'last_login_ip',     
-        'login_history',      
+        'login_history',       
     ];
 
     /**

@@ -426,9 +426,9 @@
                         <span class="text-gray-400">{{ \Carbon\Carbon::parse($informe->created_at)->format('d/m/Y') }}</span>
                     </td>
                     <td class="px-6 py-4 text-center">
-                        <span class="inline-flex items-center space-x-2 rounded-full bg-purple-500/20 px-3 py-1 text-sm font-medium text-purple-300">
+                        <span id="descargas-{{ $informe->id }}" class="inline-flex items-center space-x-2 rounded-full bg-purple-500/20 px-3 py-1 text-sm font-medium text-purple-300">
                             <i class="fas fa-download"></i>
-                            <span>{{ $informe->descargas ?? 0 }}</span>
+                            <span class="contador-valor">{{ $informe->descargas ?? 0 }}</span>
                         </span>
                     </td>
                     <td class="px-6 py-4">
@@ -635,18 +635,42 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ✅ FUNCIÓN PARA DESCARGAR PDF SIN RECARGAR
+let descargaEnProgreso = false;
+
 function descargarPDF(event, id) {
     event.preventDefault();
-    
-    // Iniciar descarga
-    window.location.href = `/informes/${id}/download`;
-    
-    // Actualizar contador después de 1 segundo
-    setTimeout(() => {
-        actualizarContador(id);
-        actualizarEstadisticas();
-    }, 1000);
+
+    if (descargaEnProgreso) {
+        console.log('Descarga en progreso, espere a que termine.');
+        return;
+    }
+    descargaEnProgreso = true;
+
+    fetch(`/informes/${id}/increment-descarga`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            actualizarContador(id);
+            actualizarEstadisticas();
+            window.location.href = `/informes/${id}/download`;
+        }
+    })
+    .catch(error => console.error('Error incrementando descargas:', error))
+    .finally(() => {
+        descargaEnProgreso = false;
+    });
 }
+
+
+
+
 
 // ✅ ACTUALIZAR CONTADOR INDIVIDUAL SIN RECARGAR
 function actualizarContador(id) {

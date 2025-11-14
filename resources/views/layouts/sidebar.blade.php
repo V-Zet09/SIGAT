@@ -163,28 +163,13 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
         </button>
 
         <div x-show="openMenu === 'informes'" x-collapse 
-             class="ml-9 mt-1 space-y-0.5 border-l-2 border-slate-700/50 dark:border-gray-700/50 pl-3">
-          <a href="{{ url('generar-informe') }}" 
-             class="block px-3 py-2 text-sm rounded-lg transition
-                    {{ request()->is('generar-informe') ? 'text-white bg-slate-800/50 dark:bg-gray-800/50 font-medium' : 'text-slate-400 dark:text-gray-400 hover:text-white hover:bg-slate-800/30 dark:hover:bg-gray-800/30' }}">
-            Generar Informe
-          </a>
-          
+             class="ml-9 mt-1 space-y-0.5 border-l-2 border-slate-700/50 dark:border-gray-700/50 pl-3">          
           {{-- Solo roles con permiso pueden generar informes --}}
           @can('generar informes')
             <a href="{{ url('generar-informe') }}" 
                class="block px-3 py-2 text-sm rounded-lg transition
                       {{ request()->is('generar-informe') ? 'text-white bg-slate-800/50 dark:bg-gray-800/50 font-medium' : 'text-slate-400 dark:text-gray-400 hover:text-white hover:bg-slate-800/30 dark:hover:bg-gray-800/30' }}">
               Generar Informe
-            </a>
-          @endcan
-
-          {{-- Todos pueden ver informes generados --}}
-          @can('visualizar informes')
-            <a href="{{ route('informes-generados') }}" 
-               class="block px-3 py-2 text-sm rounded-lg transition
-                      {{ request()->routeIs('informes-generados') ? 'text-white bg-slate-800/50 dark:bg-gray-800/50 font-medium' : 'text-slate-400 dark:text-gray-400 hover:text-white hover:bg-slate-800/30 dark:hover:bg-gray-800/30' }}">
-              Informes Generados
             </a>
           @endcan
         </div>
