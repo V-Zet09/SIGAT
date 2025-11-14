@@ -41,6 +41,7 @@ class Actividad extends Model
         'fecha_aprobacion' => 'datetime',
         'fecha_rechazo' => 'datetime',
         'evidencias' => 'array', // Cast a array para JSON
+ 
     ];
 
     // RELACIONES

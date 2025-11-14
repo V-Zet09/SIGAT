@@ -311,164 +311,193 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
     </button>
   </div>
 
-  {{-- 2️⃣ NOTIFICACIONES (SEGUNDO - como lo tenías) --}}
-  <div class="px-4 py-3 border-b border-slate-700/50 dark:border-gray-700/50"
-       x-data="{
-           showNotifications: false,
-           notifications: [],
-           unreadCount: 0,
-           loading: false,
-           
-           async loadNotifications() {
-               this.loading = true;
-               try {
-                   const response = await fetch('{{ route('notifications.recent') }}');
-                   const data = await response.json();
-                   this.notifications = data.notifications;
-                   this.unreadCount = data.unread_count;
-               } catch (error) {
-                   console.error('Error loading notifications:', error);
-               }
-               this.loading = false;
-           },
-           
-           async markAsRead(id) {
-               try {
-                   await fetch(/notificaciones/${id}/read, {
-                       method: 'POST',
-                       headers: {
-                           'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content
-                       }
-                   });
-                   this.loadNotifications();
-               } catch (error) {
-                   console.error('Error marking as read:', error);
-               }
-           },
-           
-           async markAllAsRead() {
-               try {
-                   await fetch('{{ route('notifications.readAll') }}', {
-                       method: 'POST',
-                       headers: {
-                           'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content
-                       }
-                   });
-                   this.loadNotifications();
-               } catch (error) {
-                   console.error('Error marking all as read:', error);
-               }
-           }
-       }"
-       x-init="loadNotifications(); setInterval(() => loadNotifications(), 60000)">
-      
-      <div class="relative">
-          {{-- Botón de notificaciones --}}
-          <button @click="showNotifications = !showNotifications; if(showNotifications) loadNotifications()"
-                  class="w-full flex items-center justify-between p-3 rounded-xl bg-slate-800/50 dark:bg-gray-800/50 hover:bg-slate-800 dark:hover:bg-gray-800 transition cursor-pointer group">
-              <div class="flex items-center gap-3">
-                  <div class="relative">
-                      <i class="ri-notification-3-line text-xl text-slate-300 dark:text-gray-300 group-hover:text-white transition"></i>
-                      {{-- Badge contador --}}
-                      <span x-show="unreadCount > 0"
-                            x-text="unreadCount > 99 ? '99+' : unreadCount"
-                            class="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1 animate-pulse">
-                      </span>
-                  </div>
-                  <span class="text-sm text-slate-300 dark:text-gray-300 group-hover:text-white transition">
-                      Notificaciones
-                  </span>
-              </div>
-              <i class="ri-arrow-right-s-line text-slate-400 dark:text-gray-400 transition-transform duration-200"
-                 :class="showNotifications ? 'rotate-90' : ''"></i>
-          </button>
-          
-          {{-- Panel de notificaciones --}}
-          <div x-show="showNotifications"
-               x-cloak
-               @click.away="showNotifications = false"
-               x-transition:enter="transition ease-out duration-200"
-               x-transition:enter-start="opacity-0 transform scale-95"
-               x-transition:enter-end="opacity-100 transform scale-100"
-               x-transition:leave="transition ease-in duration-150"
-               x-transition:leave-start="opacity-100 transform scale-100"
-               x-transition:leave-end="opacity-0 transform scale-95"
-               class="absolute bottom-full left-0 right-0 mb-2 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 max-h-[500px] overflow-hidden flex flex-col z-50">
-              
-              {{-- Header --}}
-              <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-                  <h3 class="font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-                      <i class="ri-notification-3-line text-green-600"></i>
-                      Notificaciones
-                  </h3>
-                  <button @click="markAllAsRead()"
-                          x-show="unreadCount > 0"
-                          class="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium">
-                      Marcar todas como leídas
-                  </button>
-              </div>
-              
-              {{-- Lista de notificaciones --}}
-              <div class="overflow-y-auto flex-1">
-                  {{-- Loading --}}
-                  <div x-show="loading" class="p-8 text-center">
-                      <i class="ri-loader-4-line text-3xl text-gray-400 animate-spin"></i>
-                  </div>
-                  
-                  {{-- Sin notificaciones --}}
-                  <div x-show="!loading && notifications.length === 0" 
-                       class="p-8 text-center text-gray-500 dark:text-gray-400">
-                      <i class="ri-notification-off-line text-5xl mb-3 opacity-50"></i>
-                      <p class="text-sm">No tienes notificaciones</p>
-                  </div>
-                  
-                  {{-- Lista --}}
-                  <template x-for="notif in notifications" :key="notif.id">
-                      <a :href="notif.link || '#'"
-                         @click="if(notif.link) markAsRead(notif.id)"
-                         class="block p-4 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition cursor-pointer"
-                         :class="!notif.read ? 'bg-blue-50 dark:bg-blue-900/10' : ''">
-                          <div class="flex items-start gap-3">
-                              {{-- Icono --}}
-                              <div :class="{
-                                  'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400': notif.color === 'blue',
-                                  'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400': notif.color === 'green',
-                                  'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400': notif.color === 'red',
-                                  'bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400': notif.color === 'yellow'
-                              }" class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
-                                  <i :class="notif.icon" class="text-lg"></i>
-                              </div>
-                              
-                              {{-- Contenido --}}
-                              <div class="flex-1 min-w-0">
-                                  <p class="font-medium text-sm text-gray-900 dark:text-gray-100 mb-1" x-text="notif.title"></p>
-                                  <p class="text-xs text-gray-600 dark:text-gray-400 line-clamp-2" x-text="notif.message"></p>
-                                  <p class="text-xs text-gray-500 dark:text-gray-500 mt-1" 
-                                     x-text="new Date(notif.created_at).toLocaleString('es-ES', {
-                                         day: '2-digit',
-                                         month: 'short',
-                                         hour: '2-digit',
-                                         minute: '2-digit'
-                                     })"></p>
-                              </div>
-                              
-                              {{-- Indicador no leída --}}
-                              <div x-show="!notif.read" class="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-2"></div>
-                          </div>
-                      </a>
-                  </template>
-              </div>
-              
-              {{-- Footer --}}
-              <div class="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
-                  <a href="{{ route('notifications.index') }}"
-                     class="block text-center text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium">
-                      Ver todas las notificaciones
-                  </a>
-              </div>
-          </div>
-      </div>
-  </div>
+ {{-- 2️⃣ NOTIFICACIONES --}}
+<div class="px-4 py-3 border-b border-slate-700/50 dark:border-gray-700/50">
+    <div x-data="{
+         showNotifications: false,
+         notifications: [],
+         unreadCount: 0,
+         loading: false,
+         
+         init() {
+             this.loadNotifications();
+             setInterval(() => this.loadNotifications(), 60000);
+             
+             // Cerrar al navegar
+             window.addEventListener('beforeunload', () => {
+                 this.showNotifications = false;
+             });
+         },
+         
+         async loadNotifications() {
+             this.loading = true;
+             try {
+                 const response = await fetch('{{ route('notifications.recent') }}');
+                 const data = await response.json();
+                 this.notifications = data.notifications;
+                 this.unreadCount = data.unread_count;
+             } catch (error) {
+                 console.error('Error loading notifications:', error);
+             }
+             this.loading = false;
+         },
+         
+         async markAsRead(id) {
+             try {
+                 await fetch(`/notificaciones/${id}/read`, {
+                     method: 'POST',
+                     headers: {
+                         'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content
+                     }
+                 });
+                 this.loadNotifications();
+             } catch (error) {
+                 console.error('Error marking as read:', error);
+             }
+         },
+         
+         async markAllAsRead() {
+             try {
+                 await fetch('{{ route('notifications.readAll') }}', {
+                     method: 'POST',
+                     headers: {
+                         'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content
+                     }
+                 });
+                 this.loadNotifications();
+             } catch (error) {
+                 console.error('Error marking all as read:', error);
+             }
+         },
+         
+         closePanel() {
+             this.showNotifications = false;
+         }
+     }">
+        
+        <div class="relative">
+            {{-- Botón de notificaciones --}}
+            <button @click="showNotifications = !showNotifications; if(showNotifications) loadNotifications()"
+                    class="w-full flex items-center justify-between p-3 rounded-xl bg-slate-800/50 dark:bg-gray-800/50 hover:bg-slate-800 dark:hover:bg-gray-800 transition cursor-pointer group">
+                <div class="flex items-center gap-3">
+                    <div class="relative">
+                        <i class="ri-notification-3-line text-xl text-slate-300 dark:text-gray-300 group-hover:text-white transition"></i>
+                        {{-- Badge contador --}}
+                        <span x-show="unreadCount > 0"
+                              x-text="unreadCount > 99 ? '99+' : unreadCount"
+                              class="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1 animate-pulse">
+                        </span>
+                    </div>
+                    <span class="text-sm text-slate-300 dark:text-gray-300 group-hover:text-white transition">
+                        Notificaciones
+                    </span>
+                </div>
+                <i class="ri-arrow-right-s-line text-slate-400 dark:text-gray-400 transition-transform duration-200"
+                   :class="showNotifications ? 'rotate-90' : ''"></i>
+            </button>
+            
+            {{-- Panel de notificaciones --}}
+            <div x-show="showNotifications"
+                 x-cloak
+                 @click.outside="closePanel()"
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0 transform scale-95"
+                 x-transition:enter-end="opacity-100 transform scale-100"
+                 x-transition:leave="transition ease-in duration-150"
+                 x-transition:leave-start="opacity-100 transform scale-100"
+                 x-transition:leave-end="opacity-0 transform scale-95"
+                 class="absolute bottom-full left-0 right-0 mb-2 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 max-h-[500px] overflow-hidden flex flex-col z-50"
+                 style="display: none;">
+                
+                {{-- Header --}}
+                <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                    <h3 class="font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                        <i class="ri-notification-3-line text-green-600"></i>
+                        Notificaciones
+                    </h3>
+                    <button @click="markAllAsRead()"
+                            x-show="unreadCount > 0"
+                            class="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium">
+                        Marcar todas como leídas
+                    </button>
+                </div>
+                
+                {{-- Lista de notificaciones --}}
+                <div class="overflow-y-auto flex-1">
+                    {{-- Loading --}}
+                    <div x-show="loading" class="p-8 text-center">
+                        <i class="ri-loader-4-line text-3xl text-gray-400 animate-spin"></i>
+                    </div>
+                    
+                    {{-- Sin notificaciones --}}
+                    <div x-show="!loading && notifications.length === 0" 
+                         class="p-8 text-center text-gray-500 dark:text-gray-400">
+                        <i class="ri-notification-off-line text-5xl mb-3 opacity-50"></i>
+                        <p class="text-sm">No tienes notificaciones</p>
+                    </div>
+                    
+                    {{-- Lista --}}
+                    <template x-for="notif in notifications" :key="notif.id">
+                        <div class="block p-4 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition"
+                             :class="!notif.read ? 'bg-blue-50 dark:bg-blue-900/10' : ''">
+                            <div class="flex items-start gap-3">
+                                {{-- Icono --}}
+                                <div :class="{
+                                    'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400': notif.color === 'blue',
+                                    'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400': notif.color === 'green',
+                                    'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400': notif.color === 'red',
+                                    'bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400': notif.color === 'yellow'
+                                }" class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <i :class="notif.icon" class="text-lg"></i>
+                                </div>
+                                
+                                {{-- Contenido --}}
+                                <div class="flex-1 min-w-0">
+                                    <p class="font-medium text-sm text-gray-900 dark:text-gray-100 mb-1" x-text="notif.title"></p>
+                                    <p class="text-xs text-gray-600 dark:text-gray-400 line-clamp-2" x-text="notif.message"></p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-500 mt-1" 
+                                       x-text="new Date(notif.created_at).toLocaleString('es-ES', {
+                                           day: '2-digit',
+                                           month: 'short',
+                                           hour: '2-digit',
+                                           minute: '2-digit'
+                                       })"></p>
+                                    
+                                    {{-- Acciones --}}
+                                    <div class="flex items-center gap-3 mt-2">
+                                        <a x-show="notif.link" 
+                                           :href="notif.link"
+                                           @click="markAsRead(notif.id); closePanel();"
+                                           class="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 font-medium">
+                                            Ver detalles →
+                                        </a>
+                                        
+                                        <button x-show="!notif.read"
+                                                @click.stop="markAsRead(notif.id)"
+                                                class="text-xs text-gray-600 hover:text-gray-800 dark:text-gray-400">
+                                            Marcar como leída
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                {{-- Indicador no leída --}}
+                                <div x-show="!notif.read" class="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-2"></div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                
+                {{-- Footer --}}
+                <div class="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
+                    <a href="{{ route('notifications.index') }}"
+                       class="block text-center text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium">
+                        Ver todas las notificaciones
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
   {{-- 3️⃣ USUARIO (TERCERO - como lo tenías) --}}
   <div class="px-4 py-3 bg-slate-900/50 dark:bg-gray-900/50">
