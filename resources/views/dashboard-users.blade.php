@@ -133,10 +133,13 @@ document.getElementById('deleteRecordModal')?.addEventListener('click', (e) => {
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             {{-- Búsqueda --}}
             <div class="relative flex-1 max-w-md">
-                <input type="text" 
-                       placeholder="Buscar por nombre, email, cargo..."
-                       class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                <form method="GET" action="{{ route('usuarios.index') }}" class="relative flex-1 max-w-md">
+                    <input type="text" name="search"
+                        value="{{ request('search') }}"
+                        placeholder="Buscar por nombre, email, cargo..."
+                        class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                </form>
             </div>
 
             {{-- Botones --}}
@@ -145,12 +148,12 @@ document.getElementById('deleteRecordModal')?.addEventListener('click', (e) => {
                     <i class="ri-delete-bin-line"></i>
                     <span class="hidden sm:inline">Eliminar</span>
                 </button>
-                
-                <button class="px-4 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition flex items-center gap-2">
+                <a href="{{ route('usuarios.index') }}"
+                    class="px-4 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition flex items-center gap-2">
                     <i class="ri-filter-3-line"></i>
-                    <span class="hidden sm:inline">Filtro</span>
-                </button>
-                
+                    <span class="hidden sm:inline">Limpiar</span>
+                </a>
+
                 <a href="{{ route('dashboard-crear-usuario') }}" 
                    class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition flex items-center gap-2 font-medium">
                     <i class="ri-add-line"></i>
@@ -171,7 +174,6 @@ document.getElementById('deleteRecordModal')?.addEventListener('click', (e) => {
                     <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Nombre</th>
                     <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Sexo</th>
                     <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Rol</th>
-                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Cargo</th>
                     <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Área</th>
                     <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Correo</th>
                     <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider">Acciones</th>
@@ -210,9 +212,7 @@ document.getElementById('deleteRecordModal')?.addEventListener('click', (e) => {
                                 <span class="text-gray-400 dark:text-gray-500 text-xs italic">Sin rol</span>
                             @endif
                         </td>
-                        <td class="px-4 py-4 text-gray-600 dark:text-gray-400">
-                            {{ $usuario->cargo ?? 'N/A' }}
-                        </td>
+
                         <td class="px-4 py-4 text-gray-600 dark:text-gray-400">
                             {{ $usuario->area ?? 'N/A' }}
                         </td>
