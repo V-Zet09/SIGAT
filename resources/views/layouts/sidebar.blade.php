@@ -296,7 +296,7 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
     </button>
   </div>
 
- {{-- 2️⃣ NOTIFICACIONES --}}
+{{-- 2️⃣ NOTIFICACIONES --}}
 <div class="px-4 py-3 border-b border-slate-700/50 dark:border-gray-700/50">
     <div x-data="{
          showNotifications: false,
