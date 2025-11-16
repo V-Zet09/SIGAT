@@ -265,7 +265,7 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
     <!-- Footer fijo (siempre visible) -->
 <div class="mt-auto border-t border-slate-700/50 dark:border-gray-700/50 flex-shrink-0">
   
-  {{-- 1️⃣ DARK MODE (PRIMERO - como lo tenías) --}}
+  {{-- 1️⃣ DARK MODE --}}
   <div class="px-4 py-3 border-b border-slate-700/50 dark:border-gray-700/50">
     <button @click="instantDarkMode()"
             class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-slate-800/30 dark:bg-gray-800/30 hover:bg-slate-800/50 dark:hover:bg-gray-800/50 transition group"
@@ -484,7 +484,7 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
     </div>
 </div>
 
-  {{-- 3️⃣ USUARIO (TERCERO - como lo tenías) --}}
+  {{-- 3️⃣ USUARIO --}}
   <div class="px-4 py-3 bg-slate-900/50 dark:bg-gray-900/50">
     <button @click="userMenuOpen = !userMenuOpen" 
             class="w-full flex items-center gap-3 p-2.5 rounded-xl bg-slate-800/50 dark:bg-gray-800/50 hover:bg-slate-800 dark:hover:bg-gray-800 transition cursor-pointer group">

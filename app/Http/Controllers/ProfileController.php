@@ -22,16 +22,21 @@ class ProfileController extends Controller
     $request->validate([
         'name' => 'required|string|max:255',
         'email' => 'required|email|unique:users,email,' . Auth::id(),
-        'sexo' => 'required|string',
-        'cargo' => 'required|string',
-        'area' => 'required|string',
-        'avatar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ], [
+        'name.required' => 'El nombre es obligatorio',
+        'email.required' => 'El correo electrónico es obligatorio',
+        'email.email' => 'El correo debe ser válido',
+        'email.unique' => 'Este correo ya está en uso',
+        'avatar.image' => 'El archivo debe ser una imagen',
+        'avatar.mimes' => 'Solo se permiten formatos: jpeg, png, jpg, gif',
+        'avatar.max' => 'La imagen no debe pesar más de 2MB',
     ]);
 
     $user = Auth::user();
     
-    // Actualizar información básica
-    $user->update($request->only(['name', 'email', 'sexo', 'cargo', 'area']));
+    // SOLO actualizar información que el usuario PUEDE cambiar
+    $user->update($request->only(['name', 'email']));
     
     // Manejar avatar si se subió uno nuevo
     if ($request->hasFile('avatar')) {
@@ -39,7 +44,7 @@ class ProfileController extends Controller
         if ($user->avatar && $user->avatar !== 'default.jpg') {
             $oldPath = public_path('images/' . $user->avatar);
             if (file_exists($oldPath)) {
-                unlink($oldPath);
+                @unlink($oldPath);
             }
         }
         
@@ -53,11 +58,10 @@ class ProfileController extends Controller
     
     // Manejar eliminación de avatar
     if ($request->delete_avatar == '1') {
-        // Eliminar archivo anterior
         if ($user->avatar && $user->avatar !== 'default.jpg') {
             $oldPath = public_path('images/' . $user->avatar);
             if (file_exists($oldPath)) {
-                unlink($oldPath);
+                @unlink($oldPath);
             }
         }
         
@@ -65,7 +69,7 @@ class ProfileController extends Controller
     }
 
     return redirect()->route('perfil.index')
-        ->with('success', 'Información actualizada correctamente');
+        ->with('success', '✅ Información actualizada correctamente');
 }
 
     // Cambiar contraseña

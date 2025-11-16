@@ -179,84 +179,114 @@
                 </div>
 
                 {{-- Formulario de información --}}
-                <form @submit.prevent="submitForm($event)" class="space-y-5">
-                    @csrf
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        {{-- Nombre --}}
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                <i class="ri-user-line mr-1"></i>Nombre completo
-                            </label>
-                            <input type="text" name="name" value="{{ old('name', $user->name) }}"
-                                   class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-100 transition"
-                                   required>
-                        </div>
+<form @submit.prevent="submitForm($event)" class="space-y-5">
+    @csrf
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {{-- Nombre (EDITABLE) --}}
+        <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <i class="ri-user-line mr-1"></i>Nombre completo <span class="text-red-500">*</span>
+            </label>
+            <input type="text" 
+                   name="name" 
+                   value="{{ old('name', $user->name) }}"
+                   class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-100 transition"
+                   required>
+        </div>
 
-                        {{-- Email --}}
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                <i class="ri-mail-line mr-1"></i>Correo electrónico
-                            </label>
-                            <input type="email" name="email" value="{{ old('email', $user->email) }}"
-                                   class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-100 transition"
-                                   required>
-                        </div>
+        {{-- Email (EDITABLE) --}}
+        <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <i class="ri-mail-line mr-1"></i>Correo electrónico <span class="text-red-500">*</span>
+            </label>
+            <input type="email" 
+                   name="email" 
+                   value="{{ old('email', $user->email) }}"
+                   class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-100 transition"
+                   required>
+        </div>
 
-                        {{-- Sexo --}}
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                <i class="ri-user-3-line mr-1"></i>Sexo
-                            </label>
-                            <select name="sexo" 
-                                    class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-100 transition"
-                                    required>
-                                <option value="Masculino" {{ $user->sexo === 'Masculino' ? 'selected' : '' }}>Masculino</option>
-                                <option value="Femenino" {{ $user->sexo === 'Femenino' ? 'selected' : '' }}>Femenino</option>
-                            </select>
-                        </div>
+        {{-- Sexo (SOLO LECTURA) --}}
+        <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <i class="ri-user-3-line mr-1"></i>Sexo
+                <span class="text-xs text-gray-500 ml-2">(Solo lectura)</span>
+            </label>
+            <input type="text" 
+                   value="{{ $user->sexo ?? 'No especificado' }}"
+                   class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-800 dark:text-gray-300 cursor-not-allowed"
+                   disabled
+                   readonly>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                <i class="ri-lock-line"></i> Contacta al administrador para cambiar
+            </p>
+        </div>
 
-                        {{-- Cargo --}}
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                <i class="ri-briefcase-line mr-1"></i>Cargo
-                            </label>
-                            <input type="text" name="cargo" value="{{ old('cargo', $user->cargo) }}"
-                                   class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-100 transition"
-                                   required>
-                        </div>
+        {{-- Cargo (SOLO LECTURA) --}}
+        <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <i class="ri-briefcase-line mr-1"></i>Cargo
+                <span class="text-xs text-gray-500 ml-2">(Solo lectura)</span>
+            </label>
+            <input type="text" 
+                   value="{{ $user->cargo ?? 'No especificado' }}"
+                   class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-800 dark:text-gray-300 cursor-not-allowed"
+                   disabled
+                   readonly>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                <i class="ri-lock-line"></i> Contacta al administrador para cambiar
+            </p>
+        </div>
 
-                        {{-- Área --}}
-                        <div class="md:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                <i class="ri-building-line mr-1"></i>Área
-                            </label>
-                            <input type="text" name="area" value="{{ old('area', $user->area) }}"
-                                   class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-100 transition"
-                                   required>
-                        </div>
-                    </div>
+        {{-- Área (SOLO LECTURA) --}}
+        <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <i class="ri-building-line mr-1"></i>Área
+                <span class="text-xs text-gray-500 ml-2">(Solo lectura)</span>
+            </label>
+            <input type="text" 
+                   value="{{ $user->area ?? 'No especificado' }}"
+                   class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-800 dark:text-gray-300 cursor-not-allowed"
+                   disabled
+                   readonly>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                <i class="ri-lock-line"></i> Contacta al administrador para cambiar
+            </p>
+        </div>
+    </div>
 
-                    <div class="flex justify-end pt-4">
-                        <div class="flex gap-3">
-                            {{-- Descartar cambios --}}
-                            <button type="button"
-                                    @click="discardChanges()"
-                                    x-show="avatarChanged || avatarDeleted"
-                                    class="px-6 py-2.5 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium rounded-lg transition flex items-center gap-2">
-                                <i class="ri-close-line"></i>
-                                Descartar
-                            </button>
-                            
-                            {{-- Guardar cambios --}}
-                            <button type="submit" 
-                                    class="px-6 py-2.5 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
-                                <i class="ri-save-line"></i>
-                                Guardar cambios
-                            </button>
-                        </div>
-                    </div>
-                </form>
+    {{-- Aviso informativo --}}
+    <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+        <div class="flex items-start gap-3">
+            <i class="ri-information-line text-blue-600 dark:text-blue-400 text-xl"></i>
+            <div class="flex-1 text-sm text-blue-800 dark:text-blue-200">
+                <p class="font-semibold mb-1">Información protegida</p>
+                <p>Los campos <strong>Sexo</strong>, <strong>Cargo</strong> y <strong>Área</strong> solo pueden ser modificados por un administrador. Si necesitas actualizar esta información, contacta al departamento de administración.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex justify-end pt-4">
+        <div class="flex gap-3">
+            {{-- Descartar cambios --}}
+            <button type="button"
+                    @click="discardChanges()"
+                    x-show="avatarChanged || avatarDeleted"
+                    class="px-6 py-2.5 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium rounded-lg transition flex items-center gap-2">
+                <i class="ri-close-line"></i>
+                Descartar
+            </button>
+            
+            {{-- Guardar cambios --}}
+            <button type="submit" 
+                    class="px-6 py-2.5 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
+                <i class="ri-save-line"></i>
+                Guardar cambios
+            </button>
+        </div>
+    </div>
+</form>
 
                 {{-- Permisos --}}
                 <div class="pt-6 border-t border-gray-200 dark:border-gray-700">
