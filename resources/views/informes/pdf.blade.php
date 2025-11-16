@@ -2,459 +2,412 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>{{ $informe->titulo }}</title>
+    <title>Informe - {{ $informe->municipio_nombre }}</title>
     <style>
-        @page {
-            margin: 0;
-        }
+    * { margin: 0; padding: 0; }
 
-        body {
-            margin: 2cm;
-            font-family: 'DejaVu Sans', Arial, sans-serif;
-            font-size: 11pt;
-            line-height: 1.5;
-            color: #333;
-            position: relative;
-        }
+    html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100%;
+    }
 
+    body {
+        font-family: 'Times New Roman', serif;
+        font-size: 12pt;
+        color: #000;
+        line-height: 1.5;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
 
-        /* ========== MARCA DE AGUA - PLANTILLA ========== */
-        /* La plantilla se verá en TODAS las páginas */
-        body.has-watermark::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
-            background-size: 100% 100%; /* Ocupa todo el espacio del papel */
-            background-position: center center;
-            background-repeat: no-repeat;
-            opacity: 1; /* Se ve igual que el ejemplo */
-            z-index: -1;
-            pointer-events: none;
-        }
+    /* Portada a toda página */
+    @page :first {
+        sheet-size: letter;
+        margin: 0;
+        background-image: @if($informe->portada_imagen_path)
+            url('{{ str_replace("\\", "/", storage_path('app/public/' . $informe->portada_imagen_path)) }}')
+        @else
+            none
+        @endif;
+        background-image-resize: 6;
+    }
 
+    /* Resto de páginas con plantilla y márgenes */
+    @page {
+        sheet-size: letter;
+        margin: 133px 113px 95px 113px;
+        background-image: @if($informe->plantilla_imagen_path)
+            url('{{ str_replace("\\", "/", storage_path('app/public/' . $informe->plantilla_imagen_path)) }}')
+        @else
+            none
+        @endif;
+        background-image-resize: 6;
+    }
 
-        /* PORTADA */
-        .portada {
-            text-align: center;
-            page-break-after: always;
-            padding-top: 150px;
-        }
-        .portada img {
-            max-width: 250px;
-            margin: 0 auto 40px;
-        }
-        .portada h1 {
-            font-size: 32pt;
-            color: #00713D;
-            font-weight: bold;
-            margin: 30px 0;
-            text-transform: uppercase;
-        }
-        .portada .periodo {
-            font-size: 18pt;
-            color: #666;
-            margin: 20px 0;
-        }
-        .portada .municipio {
-            font-size: 14pt;
-            color: #00713D;
-            margin-top: 60px;
-            font-weight: bold;
-        }
+    .contenido {
+        margin: 0 !important;
+        padding: 0 !important;
+        position: relative;
+        z-index: 1;
+        font-size: 11pt;
+    }
 
-        /* ENCABEZADOS */
-        h2 {
-            color: #00713D;
-            font-size: 20pt;
-            font-weight: bold;
-            margin: 40px 0 20px 0;
-            padding-bottom: 8px;
-            border-bottom: 3px solid #00713D;
-            text-transform: uppercase;
-        }
-        h3 {
-            color: #05924a;
-            font-size: 14pt;
-            font-weight: bold;
-            margin: 25px 0 15px 0;
-        }
-        h4 {
-            color: #00713D;
-            font-size: 12pt;
-            font-weight: bold;
-            margin: 15px 0 10px 0;
-        }
+    p {
+        margin: 0 0 8pt 0;
+        text-align: justify;
+        text-indent: 0;
+        line-height: 1.4;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        orphans: 3;
+        widows: 3;
+    }
 
-        /* COMUNA */
-        .comuna-grid {
-            display: table;
-            width: 100%;
-            margin: 20px 0;
-        }
-        .comuna-row {
-            display: table-row;
-        }
-        .comuna-cell {
-            display: table-cell;
-            width: 33.33%;
-            padding: 15px 10px;
-            vertical-align: top;
-        }
-        .autoridad-card {
-            background: #f8f9fa;
-            padding: 15px;
-            border-left: 4px solid #00713D;
-            border-radius: 5px;
-            min-height: 100px;
-        }
-        .autoridad-card .titulo {
-            color: #00713D;
-            font-weight: bold;
-            font-size: 11pt;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-        .autoridad-card .nombre {
-            font-weight: bold;
-            font-size: 10pt;
-            margin: 5px 0;
-        }
-        .autoridad-card .cargo {
-            font-size: 9pt;
-            color: #666;
-            font-style: italic;
-        }
+    h1 {
+        font-size: 13pt;
+        font-weight: bold;
+        margin: 12pt 0 8pt 0;
+        text-align: center;
+        page-break-after: avoid;
+        text-transform: uppercase;
+        orphans: 3;
+        widows: 3;
+    }
 
-        /* REGIDORES */
-        .regidores-grid {
-            display: table;
-            width: 100%;
-            margin: 20px 0;
-        }
-        .regidor-row {
-            display: table-row;
-        }
-        .regidor-cell {
-            display: table-cell;
-            width: 50%;
-            padding: 10px 5px;
-            vertical-align: top;
-        }
+    h2 {
+        font-size: 11pt;
+        font-weight: bold;
+        margin: 10pt 0 6pt 0;
+        page-break-after: avoid;
+        orphans: 3;
+        widows: 3;
+    }
 
-        /* SECCIONES */
-        .seccion {
-            margin: 30px 0;
-            page-break-inside: avoid;
-        }
-        .seccion img {
-            max-width: 100%;
-            height: auto;
-            margin: 20px auto;
-            display: block;
-            border-radius: 8px;
-        }
-        .seccion p {
-            text-align: justify;
-            margin: 10px 0;
-        }
+    h3 {
+        font-size: 10pt;
+        font-weight: bold;
+        font-style: italic;
+        margin: 8pt 0 6pt 0;
+        page-break-after: avoid;
+        orphans: 3;
+        widows: 3;
+    }
 
-        /* ACTIVIDADES */
-        .actividad-dependencia {
-            margin: 25px 0;
-            page-break-inside: avoid;
-        }
-        .actividad-dependencia h3 {
-            background: #00713D;
-            color: white;
-            padding: 10px 15px;
-            margin: 0 0 15px 0;
-            border-radius: 5px;
-        }
-        .actividad-item {
-            background: #f0f9f4;
-            padding: 15px;
-            margin: 15px 0;
-            border-left: 4px solid #00713D;
-            border-radius: 5px;
-            page-break-inside: avoid;
-        }
-        .actividad-item h4 {
-            color: #00713D;
-            margin: 0 0 10px 0;
-            font-size: 11pt;
-        }
-        .actividad-fecha {
-            color: #666;
-            font-size: 9pt;
-            font-style: italic;
-            margin-bottom: 8px;
-        }
-        .actividad-descripcion {
-            font-size: 10pt;
-            line-height: 1.4;
-        }
-        .actividad-imagenes {
-            margin-top: 10px;
-        }
-        .actividad-imagenes img {
-            max-width: 48%;
-            height: auto;
-            display: inline-block;
-            margin: 5px 1%;
-            border-radius: 5px;
-        }
+    .page-break {
+        page-break-after: always;
+        margin: 0 !important;
+        padding: 0 !important;
+        height: 0 !important;
+        line-height: 0 !important;
+    }
 
-        /* PIE DE PÁGINA */
-        .footer {
-            position: fixed;
-            bottom: 1cm;
-            left: 0;
-            right: 0;
-            text-align: center;
-            font-size: 9pt;
-            color: #666;
-            border-top: 1px solid #ddd;
-            padding-top: 8px;
-        }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 8pt 0;
+        font-size: 10pt;
+        page-break-inside: avoid;
+    }
 
-        /* ÍNDICE */
-        .indice {
-            page-break-after: always;
-        }
-        .indice-item {
-            margin: 8px 0;
-            padding-left: 20px;
-        }
-        .indice-item::before {
-            content: "• ";
-            color: #00713D;
-            font-weight: bold;
-        }
+    th {
+        border-top: 1px solid #000;
+        border-bottom: 1px solid #000;
+        padding: 4pt;
+        text-align: left;
+        font-weight: bold;
+        page-break-inside: avoid;
+    }
+
+    td {
+        padding: 4pt;
+        border-bottom: 0.5px solid #ddd;
+        word-break: break-word;
+        overflow-wrap: break-word;
+    }
+
+    tbody tr:last-child td {
+        border-bottom: 1px solid #000;
+    }
+
+    .autoridad {
+        margin: 4pt 0;
+        text-indent: 0;
+        line-height: 1.3;
+        font-size: 10pt;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        page-break-inside: avoid;
+    }
+
+    .autoridad-nombre {
+        font-weight: bold;
+    }
+
+    .foto-comuna {
+        width: 265px;
+        max-width: 265px;
+        height: auto;
+        margin: 8pt auto;
+        text-align: center;
+        page-break-inside: avoid;
+    }
+
+    .foto-comuna img {
+        width: 265px !important;
+        max-width: 265px !important;
+        height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: block;
+    }
+
+    img {
+        width: 265px !important;
+        max-width: 265px !important;
+        height: auto !important;
+        margin: 8pt auto !important;
+        padding: 0 !important;
+        page-break-inside: avoid;
+        display: block;
+    }
+
+    .indice-item {
+        margin: 6pt 0;
+        line-height: 1.4;
+        orphans: 2;
+        widows: 2;
+    }
+
+    .page-number {
+        text-align: right;
+        font-size: 9pt;
+        margin-top: 8pt;
+        color: #666;
+        line-height: 1.0;
+    }
+
+    ul, ol {
+        margin: 6pt 0 6pt 20px;
+        line-height: 1.4;
+        page-break-inside: avoid;
+    }
+
+    li {
+        margin: 4pt 0;
+        word-break: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .titulo-indice {
+        text-align: center;
+        font-size: 13pt;
+        font-weight: bold;
+        margin: 12pt 0 8pt 0;
+        text-transform: uppercase;
+    }
     </style>
-    
-    @php
-        // Generar estilo inline para marca de agua
-        $watermarkStyle = '';
-        if ($informe->plantilla_imagen_path && file_exists(storage_path('app/public/' . $informe->plantilla_imagen_path))) {
-            $imagePath = storage_path('app/public/' . $informe->plantilla_imagen_path);
-            $imageData = base64_encode(file_get_contents($imagePath));
-            $imageType = pathinfo($imagePath, PATHINFO_EXTENSION);
-            $watermarkStyle = 'background-image: url(data:image/' . $imageType . ';base64,' . $imageData . ');';
-        }
-    @endphp
-    
-    @if($watermarkStyle)
-    <style>
-        body.has-watermark::before {
-            {{ $watermarkStyle }}
-        }
-    </style>
-    @endif
 </head>
-<body class="{{ $watermarkStyle ? 'has-watermark' : '' }}">
-    <!-- PORTADA -->
-    <div class="portada">
-        @if($informe->portada_path && file_exists(storage_path('app/public/' . $informe->portada_path)))
-            @php
-                $imagePath = storage_path('app/public/' . $informe->portada_path);
-                $imageData = base64_encode(file_get_contents($imagePath));
-                $imageType = pathinfo($imagePath, PATHINFO_EXTENSION);
-                $imageSrc = 'data:image/' . $imageType . ';base64,' . $imageData;
-            @endphp
-            <img src="{{ $imageSrc }}" alt="Portada">
+<body>
+
+<!-- Portada a fondo completo -->
+<div class="page-break"></div>
+
+<!-- ÍNDICE AUTOMÁTICO -->
+<tocpagebreak 
+    links="on"
+    toc-suppress="off"
+    toc-bookmarkText="Índice"
+    toc-preHTML="&lt;h1 class=&quot;titulo-indice&quot;&gt;ÍNDICE&lt;/h1&gt;"
+/>
+
+<!-- SECCIÓN 1: INFORMACIÓN DE LA COMUNA -->
+<div class="contenido">
+    <h1>Información de la Comuna</h1>
+
+    <div class="foto-comuna">
+        @if($informe->comuna_imagen_path)
+            @php $comuna = storage_path('app/public/' . $informe->comuna_imagen_path); @endphp
+            @if(file_exists($comuna))
+                <img src="{{ $comuna }}" alt="Comuna" />
+            @endif
         @endif
-        
-        <h1>{{ $informe->titulo }}</h1>
-        <p class="periodo">{{ $informe->periodo }}</p>
-        <p class="municipio">{{ $informe->municipio_nombre }}</p>
     </div>
 
-    <!-- ÍNDICE -->
-    <div class="indice">
-        <h2>Índice</h2>
-        <div class="indice-item">Información de la Comuna</div>
-        <div class="indice-item">Información del Municipio</div>
-        <div class="indice-item">Introducción</div>
-        <div class="indice-item">Gobierno y Desarrollo Municipal</div>
-        <div class="indice-item">Actividades Realizadas</div>
+    <h2>Autoridades Municipales</h2>
+    <div class="autoridad">
+        <span class="autoridad-nombre">Presidente:</span> {{ $informe->presidente_nombre }}, {{ $informe->presidente_cargo }}.
     </div>
 
-    <!-- INFORMACIÓN DE LA COMUNA -->
-    <div class="seccion">
-        <h2>Información de la Comuna</h2>
-        
-        <div class="comuna-grid">
-            <div class="comuna-row">
-                <div class="comuna-cell">
-                    <div class="autoridad-card">
-                        <div class="titulo">Presidencia</div>
-                        <div class="nombre">{{ $informe->presidente_nombre }}</div>
-                        <div class="cargo">{{ $informe->presidente_cargo }}</div>
-                    </div>
-                </div>
-                
-                <div class="comuna-cell">
-                    <div class="autoridad-card">
-                        <div class="titulo">Sindicato</div>
-                        <div class="nombre">{{ $informe->sindicato_nombre }}</div>
-                        <div class="cargo">{{ $informe->sindicato_cargo }}</div>
-                    </div>
-                </div>
-                
-                <div class="comuna-cell">
-                    <div class="autoridad-card">
-                        <div class="titulo">Secretaría</div>
-                        <div class="nombre">{{ $informe->secretario_nombre }}</div>
-                        <div class="cargo">{{ $informe->secretario_cargo }}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="autoridad">
+        <span class="autoridad-nombre">Sindicato:</span> {{ $informe->sindicato_nombre }}, {{ $informe->sindicato_cargo }}.
+    </div>
 
-        <h3>Regidores</h3>
-        <div class="regidores-grid">
+    <div class="autoridad">
+        <span class="autoridad-nombre">Secretario General:</span> {{ $informe->secretario_nombre }}, {{ $informe->secretario_cargo }}.
+    </div>
+
+    <h2>Regidores</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Cargo</th>
+            </tr>
+        </thead>
+        <tbody>
             @php
-                $regidores = is_string($informe->regidores) 
-                    ? json_decode($informe->regidores, true) ?? []
-                    : ($informe->regidores ?? []);
-                $chunks = array_chunk($regidores, 2);
+                $regidores = is_string($informe->regidores) ? json_decode($informe->regidores, true) : $informe->regidores;
             @endphp
-            
-            @foreach($chunks as $chunk)
-            <div class="regidor-row">
-                @foreach($chunk as $regidor)
-                <div class="regidor-cell">
-                    <div class="autoridad-card">
-                        <div class="nombre">{{ $regidor['nombre'] ?? '' }}</div>
-                        <div class="cargo">{{ $regidor['cargo'] ?? '' }}</div>
-                    </div>
-                </div>
+            @if($regidores)
+                @foreach($regidores as $r)
+                    <tr>
+                        <td>{{ $r['nombre'] ?? 'N/A' }}</td>
+                        <td>{{ $r['cargo'] ?? 'N/A' }}</td>
+                    </tr>
                 @endforeach
-            </div>
-            @endforeach
-        </div>
-    </div>
+            @endif
+        </tbody>
+    </table>
+</div>
 
-    <!-- INFORMACIÓN DEL MUNICIPIO -->
-    <div class="seccion">
-        <h2>{{ $informe->municipio_nombre }}</h2>
-        
-        @if($informe->municipio_imagen_path && file_exists(storage_path('app/public/' . $informe->municipio_imagen_path)))
-            @php
-                $imagePath = storage_path('app/public/' . $informe->municipio_imagen_path);
-                $imageData = base64_encode(file_get_contents($imagePath));
-                $imageType = pathinfo($imagePath, PATHINFO_EXTENSION);
-                $imageSrc = 'data:image/' . $imageType . ';base64,' . $imageData;
-            @endphp
-            <img src="{{ $imageSrc }}" style="max-height: 300px;" alt="Municipio">
+<!-- SECCIÓN 2: INTRODUCCIÓN -->
+<div class="page-break"></div>
+<div class="contenido">
+    <h1>Introducción</h1>
+    <p>{!! strip_tags($informe->introduccion ?? '', '<p><br><strong><b><i><em><u><ul><li><ol>') !!}</p>
+
+    @if($informe->introduccion_imagen_path)
+        @php $intro = storage_path('app/public/' . $informe->introduccion_imagen_path); @endphp
+        @if(file_exists($intro))
+            <img src="{{ $intro }}" alt="Introducción" />
         @endif
-        
-        <div>{!! $informe->municipio_descripcion ?? '' !!}</div>
-    </div>
+    @endif
+</div>
 
-    <!-- INTRODUCCIÓN -->
-    <div class="seccion">
-        <h2>Introducción</h2>
-        
-        @if($informe->introduccion_imagen_path && file_exists(storage_path('app/public/' . $informe->introduccion_imagen_path)))
-            @php
-                $imagePath = storage_path('app/public/' . $informe->introduccion_imagen_path);
-                $imageData = base64_encode(file_get_contents($imagePath));
-                $imageType = pathinfo($imagePath, PATHINFO_EXTENSION);
-                $imageSrc = 'data:image/' . $imageType . ';base64,' . $imageData;
-            @endphp
-            <img src="{{ $imageSrc }}" style="max-height: 300px;" alt="Introducción">
+<!-- SECCIÓN 3: INFORMACIÓN GENERAL DEL MUNICIPIO -->
+<div class="page-break"></div>
+<div class="contenido">
+    <h1>Información General del Municipio</h1>
+    <p>{!! strip_tags($informe->municipio_descripcion ?? '', '<p><br><strong><b><i><em><u><ul><li><ol>') !!}</p>
+
+    @if($informe->municipio_imagen_path)
+        @php $mun = storage_path('app/public/' . $informe->municipio_imagen_path); @endphp
+        @if(file_exists($mun))
+            <img src="{{ $mun }}" alt="Municipio" />
         @endif
-        
-        <div>{!! $informe->introduccion ?? '' !!}</div>
-    </div>
+    @endif
+</div>
 
-    <!-- GOBIERNO -->
-    <div class="seccion">
-        <h2>Gobierno y Desarrollo Municipal</h2>
-        
-        @if($informe->gobierno_imagen_path && file_exists(storage_path('app/public/' . $informe->gobierno_imagen_path)))
-            @php
-                $imagePath = storage_path('app/public/' . $informe->gobierno_imagen_path);
-                $imageData = base64_encode(file_get_contents($imagePath));
-                $imageType = pathinfo($imagePath, PATHINFO_EXTENSION);
-                $imageSrc = 'data:image/' . $imageType . ';base64,' . $imageData;
-            @endphp
-            <img src="{{ $imageSrc }}" style="max-height: 300px;" alt="Gobierno">
+<!-- SECCIÓN 4: GOBIERNO Y DESARROLLO MUNICIPAL -->
+<div class="page-break"></div>
+<div class="contenido">
+    <h1>Gobierno y Desarrollo Municipal</h1>
+    <p>{!! strip_tags($informe->gobierno_introduccion ?? '', '<p><br><strong><b><i><em><u><ul><li><ol>') !!}</p>
+
+    @if($informe->gobierno_imagen_path)
+        @php $gob = storage_path('app/public/' . $informe->gobierno_imagen_path); @endphp
+        @if(file_exists($gob))
+            <img src="{{ $gob }}" alt="Gobierno" />
         @endif
-        
-        <div>{!! $informe->gobierno_introduccion ?? '' !!}</div>
-    </div>
+    @endif
+</div>
 
-    <!-- ACTIVIDADES -->
-    <div class="seccion">
-        <h2>Actividades Realizadas</h2>
-        <p style="color: #666; font-size: 10pt; margin-bottom: 30px;">
-            <strong>Período:</strong> 
-            {{ \Carbon\Carbon::parse($informe->actividades_fecha_inicio)->format('d/m/Y') }} 
-            al 
-            {{ \Carbon\Carbon::parse($informe->actividades_fecha_fin)->format('d/m/Y') }}
-        </p>
-        
+<!-- SECCIÓN 5: ACTIVIDADES REALIZADAS -->
+<div class="page-break"></div>
+<div class="contenido">
+    <h1>Actividades Realizadas</h1>
+    <p>Se presenta un informe de las actividades realizadas en el período comprendido entre el <strong>{{ \Carbon\Carbon::parse($informe->actividades_fecha_inicio)->locale('es')->isoFormat('D [de] MMMM [de] YYYY') }}</strong> y el <strong>{{ \Carbon\Carbon::parse($informe->actividades_fecha_fin)->locale('es')->isoFormat('D [de] MMMM [de] YYYY') }}</strong>.</p>
+
+    @if($informe->dependencias_seleccionadas)
+        <h2>Dependencias Registradas</h2>
+        <p>Se incluyen actividades de las siguientes dependencias:</p>
+        <ul>
+            @php
+                $dependencias = is_array($informe->dependencias_seleccionadas) ? $informe->dependencias_seleccionadas : json_decode($informe->dependencias_seleccionadas, true);
+            @endphp
+            @if(is_array($dependencias))
+                @foreach($dependencias as $dep)
+                    <li>{{ $dep }}</li>
+                @endforeach
+            @endif
+        </ul>
+    @endif
+
+    <!-- ACTIVIDADES AGRUPADAS POR DEPENDENCIA -->
+    @if(isset($actividades) && $actividades->count() > 0)
         @php
-            try {
-                $actividades = $informe->getActividadesFiltradas();
-                $actividadesPorDependencia = $actividades->groupBy('dependencia');
-            } catch (\Exception $e) {
-                \Log::error('Error al obtener actividades: ' . $e->getMessage());
-                $actividades = collect([]);
-                $actividadesPorDependencia = collect([]);
-            }
+            // Agrupar actividades por tipo_area (ya vienen ordenadas del controlador)
+            $actividadesAgrupadas = $actividades->groupBy('tipo_area');
         @endphp
         
-        @forelse($actividadesPorDependencia as $dependencia => $acts)
-        <div class="actividad-dependencia">
-            <h3>{{ ucwords(str_replace('_', ' ', $dependencia)) }}</h3>
+        @foreach($actividadesAgrupadas as $tipoArea => $actividadesPorArea)
+            <!-- Encabezado de la Dependencia -->
+            <h2 style="margin: 16pt 0 8pt 0; font-size: 12pt; font-weight: bold; color: #000; text-transform: uppercase;">
+                {{ $tipoArea ?? 'Sin Dependencia Asignada' }}
+            </h2>
             
-            @foreach($acts as $actividad)
-            <div class="actividad-item">
-                <h4>{{ $actividad->titulo }}</h4>
-                <div class="actividad-fecha">
-                    {{ \Carbon\Carbon::parse($actividad->fecha)->format('d \d\e F \d\e Y') }}
-                </div>
-                <div class="actividad-descripcion">
-                    {{ $actividad->descripcion }}
-                </div>
-                
-                @if(!empty($actividad->imagenes) && is_array($actividad->imagenes))
-                <div class="actividad-imagenes">
-                    @foreach(array_slice($actividad->imagenes, 0, 4) as $imagen)
-                        @if(file_exists(storage_path('app/public/' . $imagen)))
-                            @php
-                                $imgPath = storage_path('app/public/' . $imagen);
-                                $imgData = base64_encode(file_get_contents($imgPath));
-                                $imgType = pathinfo($imgPath, PATHINFO_EXTENSION);
-                                $imgSrc = 'data:image/' . $imgType . ';base64,' . $imgData;
-                            @endphp
-                            <img src="{{ $imgSrc }}" alt="Actividad">
+            <!-- Actividades de esta Dependencia -->
+            @foreach($actividadesPorArea as $index => $actividad)
+                <div style="page-break-inside: avoid; margin: 8pt 0;">
+                    
+                    <!-- Título -->
+                    <h3 style="margin: 0 0 6pt 0; font-size: 11pt; font-weight: bold; color: #333;">
+                        {{ $index + 1 }}. {{ $actividad->titulo ?? 'Actividad sin título' }}
+                    </h3>
+                    
+                    <!-- PRESUPUESTO - Solo para Obras Públicas -->
+                    @if(strtolower(trim($tipoArea)) === 'obras públicas' || strtolower(trim($tipoArea)) === 'obras publicas')
+                        @if(isset($actividad->presupuesto) && $actividad->presupuesto)
+                            <p style="margin: 0 0 8pt 0; font-size: 10pt; font-weight: bold; color: #118C4F;">
+                                <strong>Presupuesto:</strong> ${{ number_format($actividad->presupuesto, 2, '.', ',') }}
+                            </p>
                         @endif
-                    @endforeach
+                    @endif
+                    
+                    <!-- Resumen -->
+                    @if($actividad->resumen)
+                        <p style="margin: 0 0 10pt 0; font-size: 10pt; line-height: 1.4; text-align: justify; color: #444;">
+                            {{ strip_tags($actividad->resumen) }}
+                        </p>
+                    @else
+                        <p style="margin: 0 0 10pt 0; font-size: 10pt; font-style: italic; color: #999;">
+                            Sin resumen disponible.
+                        </p>
+                    @endif
+                    
+                    <!-- Imagen centrada debajo -->
+                    @if($actividad->foto)
+                        @php 
+                            $actividadImg = storage_path('app/public/' . $actividad->foto);
+                        @endphp
+                        @if(file_exists($actividadImg))
+                            <div style="text-align: center; margin: 8pt 0 0 0;">
+                                <img src="{{ str_replace('\\', '/', $actividadImg) }}" 
+                                    alt="Imagen de actividad" 
+                                    style="max-width: 200px; height: auto;" />
+                            </div>
+                        @endif
+                    @endif
+                    
                 </div>
-                @endif
-            </div>
             @endforeach
-        </div>
-        @empty
-        <p style="text-align: center; color: #666; padding: 40px 0;">
-            No se encontraron actividades para el período y dependencias seleccionadas.
-        </p>
-        @endforelse
-    </div>
 
-    <!-- PIE DE PÁGINA -->
-    <div class="footer">
-        <p>{{ $informe->municipio_nombre }} - {{ $informe->periodo }}</p>
-    </div>
+        @endforeach
+        
+        <!-- Total de actividades -->
+        <p style="margin-top: 16pt; font-weight: bold; text-align: center; font-size: 11pt; color: #000;">
+            Total de actividades registradas: {{ $actividades->count() }}
+        </p>
+        <p style="margin: 4pt 0 0 0; text-align: center; font-size: 9pt; color: #666;">
+            Distribuidas en {{ $actividadesAgrupadas->count() }} {{ $actividadesAgrupadas->count() == 1 ? 'dependencia' : 'dependencias' }}
+        </p>
+    @else
+        <p style="font-style: italic; color: #666; margin: 12pt 0;">
+            No se encontraron actividades registradas para el período y dependencias seleccionadas.
+        </p>
+    @endif
+</div>
+
 </body>
 </html>

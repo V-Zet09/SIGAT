@@ -5,14 +5,20 @@
 @section('css')
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
-    // Configurar Tailwind para usar clase manual en lugar de media query
     tailwind.config = {
         darkMode: 'class',
     }
 </script>
+
+<!-- Alpine.js DEBE estar cargado en tu layout master -->
+<!-- Si no lo tienes, descomenta las siguientes líneas: -->
+<!-- <script defer src="https://cdn.jsdelivr.net/npm/[email protected]/dist/cdn.min.js"></script> -->
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css" rel="stylesheet" />
 <style>
+    [x-cloak] { display: none !important; }
+    
     @keyframes fadeInUp {
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
@@ -70,8 +76,7 @@
         top: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        animation: fadeIn 0.3s;
+        background-color: rgba(0, 0, 0, 0.7);
     }
 
     .modal.active {
@@ -98,7 +103,6 @@
         height: 70vh;
     }
 
-    /* Dark mode para Quill */
     .dark .ql-toolbar {
         background-color: #374151;
         border-color: #4b5563;
@@ -129,7 +133,7 @@
 
 @section('content')
 
-<!-- Toast de Éxito (Emergente) -->
+<!-- Toast de Éxito -->
 @if(session('success'))
 <div id="successToast" 
      class="fixed top-6 right-6 max-w-md bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-800 dark:to-emerald-900 text-white rounded-xl shadow-2xl overflow-hidden z-50 transform transition-all duration-500 ease-out"
@@ -168,7 +172,6 @@
 </div>
 
 <script>
-    // Auto-eliminar el toast después de 3 segundos
     setTimeout(() => {
         const toast = document.getElementById('successToast');
         if (toast) {
@@ -178,7 +181,7 @@
 </script>
 @endif
 
-<!-- Toast de Error (Emergente) -->
+<!-- Toast de Error -->
 @if($errors->any())
 <div id="errorToast" 
      class="fixed top-6 right-6 max-w-md bg-gradient-to-r from-red-600 to-red-700 dark:from-red-800 dark:to-red-900 text-white rounded-xl shadow-2xl overflow-hidden z-50 transform transition-all duration-500 ease-out"
@@ -222,7 +225,6 @@
 </div>
 
 <script>
-    // Auto-eliminar el toast de error después de 5 segundos
     setTimeout(() => {
         const toast = document.getElementById('errorToast');
         if (toast) {
@@ -408,56 +410,103 @@
                         </tr>
                     </thead>
                     <tbody id="informesTableBody" class="divide-y divide-gray-200 dark:divide-gray-600 bg-white dark:bg-gray-800">
-                        @forelse($informes as $informe)
-                        <tr class="table-row hover:bg-green-50 dark:hover:bg-gray-700" data-informe-id="{{ $informe->id }}" data-titulo="{{ strtolower($informe->titulo) }}" data-periodo="{{ strtolower($informe->periodo) }}" data-municipio="{{ strtolower($informe->municipio_nombre ?? '') }}">
+                        @forelse ($informes as $informe)
+                        <tr class="border-b border-gray-700 transition hover:bg-gray-700/50">
                             <td class="px-6 py-4">
                                 <div class="flex items-center space-x-3">
-                                    <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900/30">
-                                        <i class="fas fa-file-invoice text-green-600 dark:text-green-400"></i>
-                                    </div>
-                                    <span class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $informe->titulo }}</span>
+                                    <i class="fas fa-file-alt text-2xl text-green-400"></i>
+                                    <span class="font-medium text-gray-200">
+                                        {{ $informe->titulo ?? 'Informe ' . ($loop->iteration) }}
+                                    </span>
                                 </div>
                             </td>
-                            <td class="px-6 py-4">
-                                <span class="inline-flex items-center rounded-full bg-blue-100 dark:bg-blue-900/30 px-3 py-1 text-sm font-medium text-blue-800 dark:text-blue-300">
-                                    <i class="fas fa-calendar mr-2"></i>
-                                    {{ $informe->periodo }}
+                            <td class="px-6 py-4 text-center">
+                                <span class="inline-flex items-center space-x-2 rounded-full bg-blue-500/20 px-3 py-1 text-sm font-medium text-blue-300">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span>{{ \Carbon\Carbon::parse($informe->periodo)->format('d/m/Y') }}</span>
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <span class="text-gray-300">{{ $informe->municipio_nombre }}</span>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <span class="text-gray-400">{{ \Carbon\Carbon::parse($informe->created_at)->format('d/m/Y') }}</span>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <span id="descargas-{{ $informe->id }}" class="inline-flex items-center space-x-2 rounded-full bg-purple-500/20 px-3 py-1 text-sm font-medium text-purple-300">
+                                    <i class="fas fa-download"></i>
+                                    <span class="contador-valor">{{ $informe->descargas ?? 0 }}</span>
                                 </span>
                             </td>
                             <td class="px-6 py-4">
-                                <span class="text-sm text-gray-700 dark:text-gray-300">{{ $informe->municipio_nombre ?? 'N/A' }}</span>
-                            </td>
-                            <td class="px-6 py-4">
-                                <span class="text-sm text-gray-600 dark:text-gray-400">{{ $informe->created_at->format('d/m/Y') }}</span>
-                            </td>
-                            <td class="px-6 py-4">
-                                <span class="inline-flex items-center rounded-full bg-purple-100 dark:bg-purple-900/30 px-3 py-1 text-sm font-bold text-purple-800 dark:text-purple-300" id="descargas-{{ $informe->id }}">
-                                    <i class="fas fa-download mr-2"></i>
-                                    {{ $informe->descargas ?? 0 }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4">
-                                <div class="flex items-center justify-center flex-wrap gap-2">
-                                    @if(true)
-                                    <a href="{{ route('informes.download', $informe->id) }}" 
-                                        onclick="descargarInforme('{{ route('informes.download', $informe->id) }}', {{ $informe->id }}); return true;"
-                                        class="group flex items-center space-x-2 rounded-lg bg-red-500 px-3 py-2 text-sm font-medium text-white shadow-md transition hover:bg-red-600">
-                                        <i class="fas fa-file-pdf transition group-hover:scale-110"></i>
-                                        <span>PDF</span>
-                                    </a>
-                                    @endif
-                                    
-                                    <button onclick="openEditModal({{ $informe->id }}, '{{ $informe->titulo }}', `{{ addslashes($informe->introduccion ?? '') }}`)" 
-                                       class="group flex items-center space-x-2 rounded-lg bg-blue-500 px-3 py-2 text-sm font-medium text-white shadow-md transition hover:bg-blue-600">
-                                        <i class="fas fa-edit transition group-hover:scale-110"></i>
-                                        <span>Editar</span>
-                                    </button>
-                                    
-                                    <button onclick="confirmDelete({{ $informe->id }})" 
-                                            class="group flex items-center space-x-2 rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white shadow-md transition hover:bg-red-700">
-                                        <i class="fas fa-trash transition group-hover:scale-110"></i>
-                                        <span>Eliminar</span>
-                                    </button>
+                                <div class="flex items-center justify-center">
+                                    <!-- ✅ DROPDOWN FUNCIONAL CON X-TELEPORT Y POSICIONAMIENTO MANUAL -->
+                                    <div x-data="{ open: false }" 
+                                        @click.away="open = false" 
+                                        class="relative">
+                                        
+                                        <!-- Botón de 3 puntos -->
+                                        <button @click="open = !open" 
+                                                x-ref="button{{ $informe->id }}"
+                                                type="button"
+                                                class="group flex items-center justify-center w-10 h-10 rounded-lg text-gray-400 hover:bg-gray-700 hover:text-white transition">
+                                            <i class="fas fa-ellipsis-v text-lg"></i>
+                                        </button>
+
+                                        <!-- Menú Dropdown con x-teleport -->
+                                        <template x-teleport="body">
+                                            <div x-show="open" 
+                                                x-cloak
+                                                @click.outside="open = false"
+                                                x-transition:enter="transition ease-out duration-100"
+                                                x-transition:enter-start="transform opacity-0 scale-95"
+                                                x-transition:enter-end="transform opacity-100 scale-100"
+                                                x-transition:leave="transition ease-in duration-75"
+                                                x-transition:leave-start="transform opacity-100 scale-100"
+                                                x-transition:leave-end="transform opacity-0 scale-95"
+                                                x-init="$watch('open', value => {
+                                                    if (value) {
+                                                        $nextTick(() => {
+                                                            const button = $refs.button{{ $informe->id }}.getBoundingClientRect();
+                                                            $el.style.top = (button.bottom + window.scrollY + 8) + 'px';
+                                                            $el.style.left = (button.right + window.scrollX - 192) + 'px';
+                                                        });
+                                                    }
+                                                })"
+                                                style="position: absolute; width: 12rem;"
+                                                class="z-[9999] rounded-lg bg-white dark:bg-gray-800 shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                                
+                                                <div class="py-1">
+                                                    <!-- Opción PDF -->
+                                                    <a href="#" 
+                                                    @click.prevent="descargarPDF(event, {{ $informe->id }}); open = false"
+                                                    class="group flex items-center px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition">
+                                                        <i class="fas fa-file-pdf mr-3 text-red-500"></i>
+                                                        <span>Descargar PDF</span>
+                                                    </a>
+
+                                                    <!-- Opción Editar -->
+                                                    <a href="{{ route('informes.editar', $informe->id) }}"
+                                                    @click="open = false"
+                                                    class="group flex items-center px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 transition">
+                                                        <i class="fas fa-edit mr-3 text-blue-500"></i>
+                                                        <span>Editar</span>
+                                                    </a>
+
+                                                    <!-- Divisor -->
+                                                    <div class="border-t border-gray-200 dark:border-gray-700 my-1"></div>
+
+                                                    <!-- Opción Eliminar -->
+                                                    <button @click.prevent="confirmDelete({{ $informe->id }}); open = false" 
+                                                            type="button"
+                                                            class="group flex items-center w-full px-4 py-3 text-sm text-left text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition">
+                                                        <i class="fas fa-trash mr-3 text-red-600"></i>
+                                                        <span>Eliminar</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
@@ -473,7 +522,7 @@
                                         <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Comienza creando tu primer informe gubernamental</p>
                                     </div>
                                     <a href="{{ route('generar-informe') }}" 
-                                       class="mt-4 inline-flex items-center space-x-2 rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-3 text-base font-semibold text-white shadow-lg transition hover:scale-105">
+                                    class="mt-4 inline-flex items-center space-x-2 rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-3 text-base font-semibold text-white shadow-lg transition hover:scale-105">
                                         <i class="fas fa-plus-circle"></i>
                                         <span>Crear Primer Informe</span>
                                     </a>
@@ -494,7 +543,6 @@
             </div>
         </div>
         @endif
-
     </div>
 </div>
 
@@ -526,52 +574,6 @@
     </div>
 </div>
 
-<!-- Modal de Edición -->
-<div id="editModal" class="modal">
-    <div class="modal-content bg-white dark:bg-gray-800 rounded-2xl shadow-2xl mx-8 my-8 w-full max-w-6xl max-h-screen overflow-hidden flex flex-col">
-        <div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 p-6">
-            <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                <i class="fas fa-edit mr-2 text-blue-600 dark:text-blue-400"></i>
-                Editar Informe
-            </h3>
-            <button onclick="closeEditModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-2xl">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        
-        <div class="flex-1 overflow-y-auto p-6">
-            <form id="editForm" method="POST">
-                @csrf
-                @method('PUT')
-                
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Título del Informe</label>
-                    <input type="text" id="edit-titulo" name="titulo" 
-                           class="w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-3 text-base">
-                </div>
-                
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Contenido</label>
-                    <div id="editor-container" class="bg-white dark:bg-gray-900 border dark:border-gray-600 rounded-lg"></div>
-                    <textarea id="edit-content" name="introduccion" class="hidden"></textarea>
-                </div>
-                
-                <div class="flex justify-end space-x-3 mt-6">
-                    <button type="button" onclick="closeEditModal()" 
-                            class="rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-6 py-3 text-base font-semibold text-gray-700 dark:text-gray-200 transition hover:bg-gray-50 dark:hover:bg-gray-600">
-                        Cancelar
-                    </button>
-                    <button type="submit" 
-                            class="rounded-lg bg-blue-600 px-6 py-3 text-base font-semibold text-white shadow-lg transition hover:bg-blue-700">
-                        <i class="fas fa-save mr-2"></i>
-                        Guardar Cambios
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 @endsection
 
 @section('scripts')
@@ -580,58 +582,7 @@
 let quillEditor;
 let noResultsMessage = null;
 
-// Función para descargar informe CON actualización en tiempo real
-function descargarInforme(url, informeId) {
-    console.log('Descargando informe ID:', informeId);
-    console.log('URL:', url);
-    
-    // Esperar 1 segundo después del click para actualizar contadores
-    setTimeout(function() {
-        console.log('Actualizando contadores...');
-        
-        // Actualizar contador individual
-        fetch(`/informe/${informeId}/download-count`)
-            .then(response => response.json())
-            .then(data => {
-                console.log('Respuesta servidor:', data);
-                if(data.success) {
-                    // Actualizar contador individual en la tabla
-                    const descargasElement = document.getElementById(`descargas-${informeId}`);
-                    if(descargasElement) {
-                        descargasElement.innerHTML = `<i class="fas fa-download mr-2"></i>${data.descargas}`;
-                        console.log('Contador individual actualizado:', data.descargas);
-                    }
-                    
-                    // Actualizar contador total
-                    actualizarContadorTotal();
-                }
-            })
-            .catch(error => console.error('Error al actualizar contador:', error));
-    }, 1000);
-}
-
-// Función para actualizar el contador total
-function actualizarContadorTotal() {
-    fetch('/dashboard-informes-generados/stats')
-        .then(response => response.json())
-        .then(data => {
-            console.log('Stats totales:', data);
-            if(data.success) {
-                const totalElement = document.querySelector('.total-descargas');
-                if(totalElement) {
-                    totalElement.textContent = data.totalDescargas;
-                    console.log('Total de descargas actualizado:', data.totalDescargas);
-                }
-            }
-        })
-        .catch(error => console.error('Error al actualizar stats:', error));
-}
-
-// Inicializar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM cargado');
-    
-    // Inicializar Quill
     const editorContainer = document.getElementById('editor-container');
     if (editorContainer) {
         quillEditor = new Quill('#editor-container', {
@@ -702,6 +653,81 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// ✅ FUNCIÓN PARA DESCARGAR PDF SIN RECARGAR
+let descargaEnProgreso = false;
+
+function descargarPDF(event, id) {
+    event.preventDefault();
+
+    if (descargaEnProgreso) {
+        console.log('Descarga en progreso, espere a que termine.');
+        return;
+    }
+    descargaEnProgreso = true;
+
+    fetch(`/informes/${id}/increment-descarga`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            actualizarContador(id);
+            actualizarEstadisticas();
+            window.location.href = `/informes/${id}/download`;
+        }
+    })
+    .catch(error => console.error('Error incrementando descargas:', error))
+    .finally(() => {
+        descargaEnProgreso = false;
+    });
+}
+
+
+
+
+
+// ✅ ACTUALIZAR CONTADOR INDIVIDUAL SIN RECARGAR
+function actualizarContador(id) {
+    fetch(`/informes/${id}/contador`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const contadorSpan = document.getElementById(`descargas-${id}`);
+                if (contadorSpan) {
+                    const valorSpan = contadorSpan.querySelector('.contador-valor');
+                    valorSpan.textContent = data.descargas;
+                    
+                    // Animación de actualización
+                    contadorSpan.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        contadorSpan.style.transform = 'scale(1)';
+                    }, 300);
+                }
+            }
+        })
+        .catch(error => console.error('Error actualizando contador:', error));
+}
+
+// ✅ ACTUALIZAR ESTADÍSTICAS GLOBALES
+function actualizarEstadisticas() {
+    fetch(`/dashboard-informes-generados/stats`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const totalDescargasElement = document.querySelector('.total-descargas');
+                if (totalDescargasElement) {
+                    totalDescargasElement.textContent = data.totalDescargas;
+                }
+            }
+        })
+        .catch(error => console.error('Error actualizando estadísticas:', error));
+}
+
 // Modal de eliminación
 function confirmDelete(id) {
     document.getElementById('deleteForm').action = `/informes/${id}`;
@@ -710,30 +736,6 @@ function confirmDelete(id) {
 
 function closeDeleteModal() {
     document.getElementById('deleteModal').classList.remove('active');
-}
-
-// Modal de edición
-function openEditModal(id, titulo, contenido) {
-    if (quillEditor) {
-        document.getElementById('edit-titulo').value = titulo;
-        quillEditor.root.innerHTML = contenido;
-        document.getElementById('editForm').action = `/informes/${id}`;
-        document.getElementById('editModal').classList.add('active');
-    }
-}
-
-function closeEditModal() {
-    document.getElementById('editModal').classList.remove('active');
-}
-
-// Enviar formulario de edición
-const editForm = document.getElementById('editForm');
-if (editForm) {
-    editForm.addEventListener('submit', function(e) {
-        if (quillEditor) {
-            document.getElementById('edit-content').value = quillEditor.root.innerHTML;
-        }
-    });
 }
 
 // Cerrar modales al hacer clic fuera

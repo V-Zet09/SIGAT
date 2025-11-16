@@ -57,7 +57,7 @@
         </li>
 
         <li>
-          <a href="{{ route('gobierno') }}" 
+          <a href="{{ route('gobierno.index') }}" 
             class="block py-1.5 px-3 text-white hover:bg-green-600 md:hover:bg-transparent md:hover:text-gray-100 rounded transition-colors font-bold text-lg">
             Gobierno
           </a>

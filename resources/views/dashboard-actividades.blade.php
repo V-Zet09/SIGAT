@@ -309,7 +309,7 @@ textarea {
             {{-- Foto --}}
             <div>
                 <label for="foto" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Foto</label>
-                <input type="file" name="foto" id="foto"
+                <input type="file" name="foto[]" id="foto" multiple
                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-gray-600 dark:file:text-gray-200 dark:hover:file:bg-gray-500">
             </div>
 

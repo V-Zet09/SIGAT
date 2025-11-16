@@ -4,69 +4,101 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto p-6">
-    <div class="bg-white shadow-lg rounded-lg p-6">
+    <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 border border-gray-200 dark:border-gray-700">
         <!-- Título -->
-        <h2 class="text-2xl font-bold text-gray-800 mb-4">
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">
             {{ $actividad->titulo }}
         </h2>
 
         <!-- Presupuesto -->
-        <div class="flex items-center justify-between mb-4">
-            <p class="text-xl font-bold text-green-600">
+        @if($actividad->presupuesto)
+        <div class="flex items-center justify-between mb-4 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+            <p class="text-xl font-bold text-green-600 dark:text-green-400">
                 ${{ number_format($actividad->presupuesto, 2) }}
             </p>
-            <span class="text-sm text-gray-500">
+            @if($actividad->tipo_presupuesto)
+            <span class="px-3 py-1 text-sm font-medium bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300 rounded-full">
                 {{ $actividad->tipo_presupuesto }}
             </span>
+            @endif
         </div>
+        @endif
 
-        <!--Información del autor y fecha -->
-        <div class="flex flex-wrap gap-6 mb-6 text-gray-600">
+        <!-- Información del autor y fecha -->
+        <div class="flex flex-wrap gap-6 mb-6 text-gray-600 dark:text-gray-400">
             <div class="flex items-center gap-2">
-                <i class="ri-user-line text-gray-500"></i>
+                <i class="ri-user-line text-blue-500 dark:text-blue-400"></i>
                 <span>{{ $actividad->autor ?? 'Anónimo' }}</span>
             </div>
             <div class="flex items-center gap-2">
-                <i class="ri-calendar-line text-gray-500"></i>
+                <i class="ri-calendar-line text-purple-500 dark:text-purple-400"></i>
                 <span>{{ \Carbon\Carbon::parse($actividad->fecha)->format('d/m/Y') }}</span>
             </div>
+            @if($actividad->tipo_area)
             <div class="flex items-center gap-2">
-                <i class="ri-briefcase-line text-gray-500"></i>
+                <i class="ri-briefcase-line text-orange-500 dark:text-orange-400"></i>
                 <span>{{ $actividad->tipo_area }}</span>
             </div>
+            @endif
         </div>
 
         <!-- Resumen -->
-        <div class="mb-4">
-            <h3 class="text-lg font-semibold text-gray-700">Resumen</h3>
-            <p class="text-gray-600">{{ $actividad->resumen }}</p>
+        @if($actividad->resumen)
+        <div class="mb-6 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
+                <i class="ri-file-text-line text-blue-500"></i>
+                Resumen
+            </h3>
+            <div class="text-gray-700 dark:text-gray-300 leading-relaxed">
+                {!! $actividad->resumen !!}
+            </div>
         </div>
+        @endif
 
         <!-- Contenido -->
         <div class="mb-6">
-            <h3 class="text-lg font-semibold text-gray-700">Contenido</h3>
-            <div class="text-gray-600">
-                {!! nl2br(e($actividad->contenido)) !!}
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
+                <i class="ri-article-line text-green-500"></i>
+                Contenido
+            </h3>
+            <div class="text-gray-700 dark:text-gray-300 leading-relaxed prose dark:prose-invert max-w-none">
+                {!! $actividad->contenido !!}
             </div>
         </div>
 
         <!-- Imagen centrada -->
         @if($actividad->foto)
             <div class="flex justify-center mb-6">
-                <img src="{{ asset('storage/' . $actividad->foto) }}"
-                     alt="Foto de actividad"
-                     class="rounded-lg shadow max-h-96 object-contain">
+                <div class="relative rounded-lg overflow-hidden shadow-xl border-4 border-gray-200 dark:border-gray-700">
+                    <img src="{{ asset('storage/' . $actividad->foto) }}"
+                         alt="{{ $actividad->titulo }}"
+                         class="max-h-96 object-contain bg-gray-100 dark:bg-gray-900">
+                </div>
             </div>
         @else
-            <p class="text-center text-gray-500 italic mb-6">No hay imagen</p>
+            <div class="flex justify-center mb-6 p-8 bg-gray-50 dark:bg-gray-700/50 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600">
+                <div class="text-center">
+                    <i class="ri-image-line text-5xl text-gray-400 dark:text-gray-500 mb-2"></i>
+                    <p class="text-gray-500 dark:text-gray-400 italic">No hay imagen disponible</p>
+                </div>
+            </div>
         @endif
 
         <!-- Botón volver -->
-        <div class="text-center">
+        <div class="flex justify-between items-center pt-6 border-t border-gray-200 dark:border-gray-700">
             <a href="{{ route('actividades.registradas') }}"
-               class="inline-flex items-center px-4 py-2 bg-gray-700 text-white text-sm font-medium rounded-md hover:bg-gray-800 transition">
-                ← Volver
+               class="inline-flex items-center gap-2 px-6 py-3 bg-gray-700 dark:bg-gray-600 text-white text-sm font-medium rounded-lg hover:bg-gray-800 dark:hover:bg-gray-500 transition shadow-md hover:shadow-lg">
+                <i class="ri-arrow-left-line"></i>
+                <span>Volver</span>
             </a>
+
+            <div class="flex gap-2">
+                <a href="{{ route('actividades.edit', $actividad->id) }}"
+                   class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white text-sm font-medium rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition">
+                    <i class="ri-edit-line"></i>
+                    <span>Editar</span>
+                </a>
+            </div>
         </div>
     </div>
 </div>
