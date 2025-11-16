@@ -5,81 +5,121 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use App\Models\User;
 
 class RolePermissionSeeder extends Seeder
 {
     public function run(): void
     {
-        // ============================================
-        // ADMINISTRADOR - Todos los permisos
-        // ============================================
-        $admin = Role::findByName('Administrador');
-        $admin->syncPermissions(Permission::all());
+        // Resetear caché de roles y permisos
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // ============================================
-        // PRESIDENTE MUNICIPAL
-        // ============================================
-        $presidente = Role::findByName('Presidente Municipal');
-        $presidente->syncPermissions([
-            'ver actividades',
-            'crear actividades',
-            'editar actividades',
-            'aprobar actividades',
-            'adjuntar evidencia',
-            'generar informes',
-            'editar informes',
-            'visualizar informes',
-            'ver dashboard presidente',
-        ]);
-
-        // ============================================
-        // SÍNDICO PROCURADOR
-        // ============================================
-        $sindico = Role::findByName('Síndico Procurador');
-        $sindico->syncPermissions([
-            'ver actividades',
-            'crear actividades',
-            'editar actividades',
-            'aprobar actividades',
-            'adjuntar evidencia',
-            'visualizar informes',
-        ]);
-
-        // ============================================
-        // REGIDOR
-        // ============================================
-        $regidor = Role::findByName('Regidor');
-        $regidor->syncPermissions([
-            'ver actividades',
-            'visualizar informes',
-        ]);
-
-        // ============================================
-        // DIRECTOR DE ÁREA
-        // ============================================
-        $director = Role::findByName('Director de Área');
-        $director->syncPermissions([
+        // ==========================================
+        // CREAR PERMISOS
+        // ==========================================
+        $permissions = [
+            // Dashboards
+            'acceder dashboard administrador',
+            'acceder dashboard presidente',
+            'acceder dashboard sindico',
+            'acceder dashboard regidor',
+            'acceder dashboard director',
+            'acceder dashboard auxiliar',
+            
+            // Actividades
             'ver actividades',
             'crear actividades',
             'editar actividades',
             'eliminar actividades',
+            'aprobar actividades',
             'adjuntar evidencia',
+            
+            // Informes
+            'visualizar informes',
             'generar informes',
+            'editar informes',
+            'eliminar informes',
+            
+            // Usuarios
+            'gestionar usuarios',
+        ];
+
+        foreach ($permissions as $permission) {
+            Permission::firstOrCreate(['name' => $permission]);
+        }
+
+        // ==========================================
+        // CREAR ROLES Y ASIGNAR PERMISOS
+        // ==========================================
+
+        // 🔴 ADMINISTRADOR (TODOS los permisos)
+        $adminRole = Role::firstOrCreate(['name' => 'Administrador']);
+        $adminRole->syncPermissions(Permission::all()); // Dar TODOS los permisos
+
+        // 🔵 PRESIDENTE MUNICIPAL
+        $presidenteRole = Role::firstOrCreate(['name' => 'Presidente Municipal']);
+        $presidenteRole->syncPermissions([
+            'acceder dashboard presidente',
+            'ver actividades',
+            'crear actividades',
+            'editar actividades',
+            'aprobar actividades',
             'visualizar informes',
-            'ver dashboard director',
+            'generar informes',
+            'editar informes',
         ]);
 
-        // ============================================
-        // AUXILIAR DE ÁREA
-        // ============================================
-        $auxiliar = Role::findByName('Auxiliar de Área');
-        $auxiliar->syncPermissions([
+        // 🟡 SÍNDICO PROCURADOR
+        $sindicoRole = Role::firstOrCreate(['name' => 'Síndico Procurador']);
+        $sindicoRole->syncPermissions([
+            'acceder dashboard sindico',
             'ver actividades',
+            'crear actividades',
+            'editar actividades',
+            'aprobar actividades',
+            'visualizar informes',
+            'generar informes',
+        ]);
+
+        // 🟢 REGIDOR
+        $regidorRole = Role::firstOrCreate(['name' => 'Regidor']);
+        $regidorRole->syncPermissions([
+            'acceder dashboard regidor',
+            'ver actividades',
+            'crear actividades',
+            'visualizar informes',
+        ]);
+
+        // 🟣 DIRECTOR DE ÁREA
+        $directorRole = Role::firstOrCreate(['name' => 'Director de Área']);
+        $directorRole->syncPermissions([
+            'acceder dashboard director',
+            'ver actividades',
+            'crear actividades',
+            'editar actividades',
             'adjuntar evidencia',
             'visualizar informes',
-            'ver dashboard auxiliar',
         ]);
 
-        $this->command->info('✅ Permisos asignados correctamente a todos los roles');
+        // 🟠 AUXILIAR DE ÁREA
+        $auxiliarRole = Role::firstOrCreate(['name' => 'Auxiliar de Área']);
+        $auxiliarRole->syncPermissions([
+            'acceder dashboard auxiliar',
+            'ver actividades',
+            'crear actividades',
+            'adjuntar evidencia',
+            'visualizar informes',
+        ]);
+
+        // ==========================================
+        // ASIGNAR ROL AL USUARIO ADMIN
+        // ==========================================
+        $admin = User::where('email', 'admin@themesbrand.com')->first();
+        if ($admin) {
+            $admin->syncRoles(['Administrador']);
+        }
+
+        $this->command->info('✅ Roles y permisos creados exitosamente!');
+        $this->command->info('✅ El Administrador tiene acceso a TODOS los dashboards');
     }
 }
