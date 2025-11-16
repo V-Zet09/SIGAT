@@ -1,93 +1,11 @@
-@section('script')
-<script src="{{ URL::asset('build/libs/list.js/list.min.js') }}"></script>
-<script src="{{ URL::asset('build/libs/list.pagination.js/list.pagination.min.js') }}"></script>
-<script src="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
-<script src="{{ URL::asset('build/js/pages/crm-leads.init.js') }}"></script>
-<script src="{{ URL::asset('build/js/app.js') }}"></script>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    // Manejo de dropdowns
-    document.querySelectorAll('[data-dropdown-button]').forEach(button => {
-        button.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const menu = button.nextElementSibling;
-            
-            // Cerrar otros menús
-            document.querySelectorAll('[data-dropdown-menu]').forEach(m => {
-                if (m !== menu) m.classList.add('hidden');
-            });
-            
-            menu.classList.toggle('hidden');
-        });
-    });
-
-    // Cerrar menú al hacer click fuera
-    window.addEventListener('click', () => {
-        document.querySelectorAll('[data-dropdown-menu]').forEach(menu => {
-            menu.classList.add('hidden');
-        });
-    });
-
-    // Asegurar que el modal esté oculto al cargar
-    const modal = document.getElementById('deleteRecordModal');
-    if (modal) {
-        modal.style.display = 'none';
-        modal.classList.add('hidden');
-    }
-
-    // Eliminar backdrop si existe
-    const backdrop = document.querySelector('.modal-backdrop');
-    if (backdrop) {
-        backdrop.remove();
-    }
-    document.body.classList.remove('modal-open');
-    document.body.style.overflow = '';
-    document.body.style.paddingRight = '';
-});
-
-// Funciones del modal
-function confirmarEliminacion(url, nombre) {
-    const form = document.getElementById('form-eliminar');
-    const modal = document.getElementById('deleteRecordModal');
-    const nombreElement = document.getElementById('usuario-nombre-eliminar');
-    
-    form.action = url;
-    nombreElement.textContent = nombre;
-    
-    modal.style.display = 'flex';
-    modal.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-    
-    document.getElementById('confirmar-eliminar').onclick = function() {
-        form.submit();
-    };
-}
-
-function cerrarModal() {
-    const modal = document.getElementById('deleteRecordModal');
-    modal.style.display = 'none';
-    modal.classList.add('hidden');
-    document.body.style.overflow = '';
-}
-
-// Cerrar modal con ESC
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        cerrarModal();
-    }
-});
-
-// Cerrar modal al hacer clic fuera
-document.getElementById('deleteRecordModal')?.addEventListener('click', (e) => {
-    if (e.target === e.currentTarget) {
-        cerrarModal();
-    }
-});
-</script>
-@endsection
 @extends('layouts.master')
 @section('title', 'Usuarios')
+
+@section('css')
+<style>
+[x-cloak] { display: none !important; }
+</style>
+@endsection
 
 @section('content')
 {{-- Breadcrumb --}}
@@ -127,7 +45,6 @@ document.getElementById('deleteRecordModal')?.addEventListener('click', (e) => {
 
 {{-- Card contenedor --}}
 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
-    
     {{-- Toolbar --}}
     <div class="p-4 border-b border-gray-200 dark:border-gray-700">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -138,19 +55,16 @@ document.getElementById('deleteRecordModal')?.addEventListener('click', (e) => {
                        class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent">
                 <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
             </div>
-
             {{-- Botones --}}
             <div class="flex items-center gap-2">
                 <button class="px-4 py-2 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 transition flex items-center gap-2">
                     <i class="ri-delete-bin-line"></i>
                     <span class="hidden sm:inline">Eliminar</span>
                 </button>
-                
                 <button class="px-4 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition flex items-center gap-2">
                     <i class="ri-filter-3-line"></i>
                     <span class="hidden sm:inline">Filtro</span>
                 </button>
-                
                 <a href="{{ route('dashboard-crear-usuario') }}" 
                    class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition flex items-center gap-2 font-medium">
                     <i class="ri-add-line"></i>
@@ -181,8 +95,7 @@ document.getElementById('deleteRecordModal')?.addEventListener('click', (e) => {
                 @forelse ($usuarios as $usuario)
                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
                         <td class="px-4 py-4">
-                            <input type="checkbox" value="{{ $usuario->id }}" 
-                                   class="w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-green-600 focus:ring-2 focus:ring-green-500">
+                            <input type="checkbox" value="{{ $usuario->id }}" class="w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-green-600 focus:ring-2 focus:ring-green-500">
                         </td>
                         <td class="px-4 py-4 font-medium text-gray-900 dark:text-gray-100">
                             {{ $usuario->name }}
@@ -219,40 +132,59 @@ document.getElementById('deleteRecordModal')?.addEventListener('click', (e) => {
                         <td class="px-4 py-4 text-gray-600 dark:text-gray-400">
                             {{ $usuario->email }}
                         </td>
+                        <!-- ACCIONES: DROPDOWN MODERNO Y SIEMPRE VISIBLE -->
                         <td class="px-4 py-4">
                             <div class="flex justify-center">
-                                <div class="relative" x-data="{ open: false }">
-                                    <button @click="open = !open" 
-                                            class="px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition flex items-center gap-2 text-sm font-medium">
+                                <div x-data="{ open: false }" class="relative">
+                                    <button @click="open = !open"
+                                        x-ref="button{{ $usuario->id }}"
+                                        class="px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition flex items-center gap-2 text-sm font-medium">
                                         <span>Opciones</span>
                                         <i class="ri-arrow-down-s-line" :class="open && 'rotate-180'" class="transition-transform"></i>
                                     </button>
-
-                                    <div x-show="open" 
-                                         @click.away="open = false"
-                                         x-transition
-                                         class="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-10">
-                                        <a href="{{ route('usuarios.show', $usuario->id) }}" 
-                                           class="flex items-center gap-2 px-4 py-2 text-sm text-green-600 dark:text-green-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-                                            <i class="ri-eye-line"></i>
-                                            <span>Ver</span>
-                                        </a>
-                                        <a href="{{ route('vista-editar-usuario', $usuario->id) }}" 
-                                           class="flex items-center gap-2 px-4 py-2 text-sm text-yellow-600 dark:text-yellow-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-                                            <i class="ri-edit-line"></i>
-                                            <span>Editar</span>
-                                        </a>
-                                        <form action="{{ route('usuarios.destroy', $usuario->id) }}" method="POST" 
-                                              onsubmit="return confirm('¿Seguro que quieres eliminar este usuario?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
+                                    <template x-teleport="body">
+                                        <div x-show="open"
+                                            x-cloak
+                                            @click.outside="open = false"
+                                            x-transition:enter="transition ease-out duration-100"
+                                            x-transition:enter-start="transform opacity-0 scale-95"
+                                            x-transition:enter-end="transform opacity-100 scale-100"
+                                            x-transition:leave="transition ease-in duration-75"
+                                            x-transition:leave-start="transform opacity-100 scale-100"
+                                            x-transition:leave-end="transform opacity-0 scale-95"
+                                            x-init="$watch('open', value => {
+                                                if (value) {
+                                                    $nextTick(() => {
+                                                        const button = $refs.button{{ $usuario->id }}.getBoundingClientRect();
+                                                        $el.style.top = (button.bottom + window.scrollY + 8) + 'px';
+                                                        $el.style.left = (button.right + window.scrollX - 160) + 'px';
+                                                    });
+                                                }
+                                            })"
+                                            style="position: absolute; width: 10rem;"
+                                            class="z-[9999] rounded-lg bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700 py-1">
+                                            <a href="{{ route('usuarios.show', $usuario->id) }}"
+                                                class="flex items-center gap-2 px-4 py-2 text-sm text-green-600 dark:text-green-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                                                <i class="ri-eye-line"></i>
+                                                <span>Ver</span>
+                                            </a>
+                                            <a href="{{ route('vista-editar-usuario', $usuario->id) }}"
+                                                class="flex items-center gap-2 px-4 py-2 text-sm text-yellow-600 dark:text-yellow-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                                                <i class="ri-edit-line"></i>
+                                                <span>Editar</span>
+                                            </a>
+                                            <form action="{{ route('usuarios.destroy', $usuario->id) }}" method="POST"
+                                                onsubmit="return confirm('¿Seguro que quieres eliminar este usuario?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
                                                     class="flex items-center gap-2 w-full px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition text-left">
-                                                <i class="ri-delete-bin-line"></i>
-                                                <span>Eliminar</span>
-                                            </button>
-                                        </form>
-                                    </div>
+                                                    <i class="ri-delete-bin-line"></i>
+                                                    <span>Eliminar</span>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </template>
                                 </div>
                             </div>
                         </td>

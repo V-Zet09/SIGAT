@@ -10,9 +10,19 @@ use Spatie\Permission\Models\Role; // ✅ IMPORTAR
 class UserController extends Controller
 {
     // Mostrar CRUD con todos los usuarios
-    public function index()
+    public function index(Request $request)
     {
-        $usuarios = User::with('roles')->get(); // ✅ Cargar roles
+        $query = $request->input('search');
+
+        $usuarios = User::query()
+            ->when($query, function ($q) use ($query) {
+            $q->where('name', 'like', "%{$query}%")
+              ->orWhere('email', 'like', "%{$query}%")
+              ->orWhere('cargo', 'like', "%{$query}%")
+              ->orWhere('area', 'like', "%{$query}%");
+             })
+            ->with('roles')
+            ->get();
         return view('dashboard-users', compact('usuarios'));
     }
 
@@ -104,16 +114,14 @@ class UserController extends Controller
 
     public function destroy($id)
     {
-        $usuario = User::findOrFail($id);
-        
-        // ✅ Evitar que se elimine a sí mismo
-        if ($usuario->id === auth()->id()) {
+        if ($id == auth()->id()) {
             return redirect()->route('usuarios.index')
                 ->with('error', 'No puedes eliminar tu propia cuenta');
         }
 
+        $usuario = User::findOrFail($id);
         $usuario->delete();
-        
+
         return redirect()->route('usuarios.index')
             ->with('success', 'Usuario eliminado correctamente');
     }

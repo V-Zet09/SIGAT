@@ -9,9 +9,16 @@
         darkMode: 'class',
     }
 </script>
+
+<!-- Alpine.js DEBE estar cargado en tu layout master -->
+<!-- Si no lo tienes, descomenta las siguientes líneas: -->
+<!-- <script defer src="https://cdn.jsdelivr.net/npm/[email protected]/dist/cdn.min.js"></script> -->
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css" rel="stylesheet" />
 <style>
+    [x-cloak] { display: none !important; }
+    
     @keyframes fadeInUp {
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
@@ -404,113 +411,125 @@
                     </thead>
                     <tbody id="informesTableBody" class="divide-y divide-gray-200 dark:divide-gray-600 bg-white dark:bg-gray-800">
                         @forelse ($informes as $informe)
-                <tr class="border-b border-gray-700 transition hover:bg-gray-700/50">
-                    <td class="px-6 py-4">
-                        <div class="flex items-center space-x-3">
-                            <i class="fas fa-file-alt text-2xl text-green-400"></i>
-                            <span class="font-medium text-gray-200">
-                                {{ $informe->titulo ?? 'Informe ' . ($loop->iteration) }}
-                            </span>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4 text-center">
-                        <span class="inline-flex items-center space-x-2 rounded-full bg-blue-500/20 px-3 py-1 text-sm font-medium text-blue-300">
-                            <i class="fas fa-calendar-alt"></i>
-                            <span>{{ \Carbon\Carbon::parse($informe->periodo)->format('d/m/Y') }}</span>
-                        </span>
-                    </td>
-                    <td class="px-6 py-4 text-center">
-                        <span class="text-gray-300">{{ $informe->municipio_nombre }}</span>
-                    </td>
-                    <td class="px-6 py-4 text-center">
-                        <span class="text-gray-400">{{ \Carbon\Carbon::parse($informe->created_at)->format('d/m/Y') }}</span>
-                    </td>
-                    <td class="px-6 py-4 text-center">
-                        <span id="descargas-{{ $informe->id }}" class="inline-flex items-center space-x-2 rounded-full bg-purple-500/20 px-3 py-1 text-sm font-medium text-purple-300">
-                            <i class="fas fa-download"></i>
-                            <span class="contador-valor">{{ $informe->descargas ?? 0 }}</span>
-                        </span>
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="flex items-center justify-center">
-                            <!-- Dropdown Menu con ID único -->
-                            <div x-data="{ open: false }" 
-                                @click.away="open = false" 
-                                class="relative"
-                                x-id="['dropdown-{{ $informe->id }}']">
-                                
-                                <!-- Botón de 3 puntos -->
-                                <button @click="open = !open" 
-                                        type="button"
-                                        class="group flex items-center justify-center w-10 h-10 rounded-lg text-gray-400 hover:bg-gray-700 hover:text-white transition">
-                                    <i class="fas fa-ellipsis-v text-lg"></i>
-                                </button>
-
-                                <!-- Menú Dropdown -->
-                                <div x-show="open" 
-                                    x-cloak
-                                    @click.outside="open = false"
-                                    x-transition:enter="transition ease-out duration-100"
-                                    x-transition:enter-start="transform opacity-0 scale-95"
-                                    x-transition:enter-end="transform opacity-100 scale-100"
-                                    x-transition:leave="transition ease-in duration-75"
-                                    x-transition:leave-start="transform opacity-100 scale-100"
-                                    x-transition:leave-end="transform opacity-0 scale-95"
-                                    class="absolute right-0 z-[9999] mt-2 w-48 origin-top-right rounded-lg bg-white dark:bg-gray-800 shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                    
-                                    <div class="py-1">
-                                        <!-- Opción PDF -->
-                                        <a href="#" 
-                                        @click.prevent="descargarPDF(event, {{ $informe->id }}); open = false"
-                                        class="group flex items-center px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition">
-                                            <i class="fas fa-file-pdf mr-3 text-red-500"></i>
-                                            <span>Descargar PDF</span>
-                                        </a>
-
-                                        <!-- Opción Editar -->
-                                        <a href="{{ route('informes.editar', $informe->id) }}"
-                                        @click="open = false"
-                                        class="group flex items-center px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 transition">
-                                            <i class="fas fa-edit mr-3 text-blue-500"></i>
-                                            <span>Editar</span>
-                                        </a>
-
-                                        <!-- Divisor -->
-                                        <div class="border-t border-gray-200 dark:border-gray-700 my-1"></div>
-
-                                        <!-- Opción Eliminar -->
-                                        <button @click.prevent="confirmDelete({{ $informe->id }}); open = false" 
+                        <tr class="border-b border-gray-700 transition hover:bg-gray-700/50">
+                            <td class="px-6 py-4">
+                                <div class="flex items-center space-x-3">
+                                    <i class="fas fa-file-alt text-2xl text-green-400"></i>
+                                    <span class="font-medium text-gray-200">
+                                        {{ $informe->titulo ?? 'Informe ' . ($loop->iteration) }}
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <span class="inline-flex items-center space-x-2 rounded-full bg-blue-500/20 px-3 py-1 text-sm font-medium text-blue-300">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span>{{ \Carbon\Carbon::parse($informe->periodo)->format('d/m/Y') }}</span>
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <span class="text-gray-300">{{ $informe->municipio_nombre }}</span>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <span class="text-gray-400">{{ \Carbon\Carbon::parse($informe->created_at)->format('d/m/Y') }}</span>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <span id="descargas-{{ $informe->id }}" class="inline-flex items-center space-x-2 rounded-full bg-purple-500/20 px-3 py-1 text-sm font-medium text-purple-300">
+                                    <i class="fas fa-download"></i>
+                                    <span class="contador-valor">{{ $informe->descargas ?? 0 }}</span>
+                                </span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center justify-center">
+                                    <!-- ✅ DROPDOWN FUNCIONAL CON X-TELEPORT Y POSICIONAMIENTO MANUAL -->
+                                    <div x-data="{ open: false }" 
+                                        @click.away="open = false" 
+                                        class="relative">
+                                        
+                                        <!-- Botón de 3 puntos -->
+                                        <button @click="open = !open" 
+                                                x-ref="button{{ $informe->id }}"
                                                 type="button"
-                                                class="group flex items-center w-full px-4 py-3 text-sm text-left text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition">
-                                            <i class="fas fa-trash mr-3 text-red-600"></i>
-                                            <span>Eliminar</span>
+                                                class="group flex items-center justify-center w-10 h-10 rounded-lg text-gray-400 hover:bg-gray-700 hover:text-white transition">
+                                            <i class="fas fa-ellipsis-v text-lg"></i>
                                         </button>
+
+                                        <!-- Menú Dropdown con x-teleport -->
+                                        <template x-teleport="body">
+                                            <div x-show="open" 
+                                                x-cloak
+                                                @click.outside="open = false"
+                                                x-transition:enter="transition ease-out duration-100"
+                                                x-transition:enter-start="transform opacity-0 scale-95"
+                                                x-transition:enter-end="transform opacity-100 scale-100"
+                                                x-transition:leave="transition ease-in duration-75"
+                                                x-transition:leave-start="transform opacity-100 scale-100"
+                                                x-transition:leave-end="transform opacity-0 scale-95"
+                                                x-init="$watch('open', value => {
+                                                    if (value) {
+                                                        $nextTick(() => {
+                                                            const button = $refs.button{{ $informe->id }}.getBoundingClientRect();
+                                                            $el.style.top = (button.bottom + window.scrollY + 8) + 'px';
+                                                            $el.style.left = (button.right + window.scrollX - 192) + 'px';
+                                                        });
+                                                    }
+                                                })"
+                                                style="position: absolute; width: 12rem;"
+                                                class="z-[9999] rounded-lg bg-white dark:bg-gray-800 shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                                
+                                                <div class="py-1">
+                                                    <!-- Opción PDF -->
+                                                    <a href="#" 
+                                                    @click.prevent="descargarPDF(event, {{ $informe->id }}); open = false"
+                                                    class="group flex items-center px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition">
+                                                        <i class="fas fa-file-pdf mr-3 text-red-500"></i>
+                                                        <span>Descargar PDF</span>
+                                                    </a>
+
+                                                    <!-- Opción Editar -->
+                                                    <a href="{{ route('informes.editar', $informe->id) }}"
+                                                    @click="open = false"
+                                                    class="group flex items-center px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 transition">
+                                                        <i class="fas fa-edit mr-3 text-blue-500"></i>
+                                                        <span>Editar</span>
+                                                    </a>
+
+                                                    <!-- Divisor -->
+                                                    <div class="border-t border-gray-200 dark:border-gray-700 my-1"></div>
+
+                                                    <!-- Opción Eliminar -->
+                                                    <button @click.prevent="confirmDelete({{ $informe->id }}); open = false" 
+                                                            type="button"
+                                                            class="group flex items-center w-full px-4 py-3 text-sm text-left text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition">
+                                                        <i class="fas fa-trash mr-3 text-red-600"></i>
+                                                        <span>Eliminar</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </template>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                @empty
-                <tr id="noResultsRow">
-                    <td colspan="6" class="px-6 py-16 text-center">
-                        <div class="flex flex-col items-center justify-center space-y-4">
-                            <div class="flex h-20 w-20 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
-                                <i class="fas fa-inbox text-4xl text-gray-400 dark:text-gray-500"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300">No hay informes generados</h3>
-                                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Comienza creando tu primer informe gubernamental</p>
-                            </div>
-                            <a href="{{ route('generar-informe') }}" 
-                            class="mt-4 inline-flex items-center space-x-2 rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-3 text-base font-semibold text-white shadow-lg transition hover:scale-105">
-                                <i class="fas fa-plus-circle"></i>
-                                <span>Crear Primer Informe</span>
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-                @endforelse
+                            </td>
+                        </tr>
+                        @empty
+                        <tr id="noResultsRow">
+                            <td colspan="6" class="px-6 py-16 text-center">
+                                <div class="flex flex-col items-center justify-center space-y-4">
+                                    <div class="flex h-20 w-20 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
+                                        <i class="fas fa-inbox text-4xl text-gray-400 dark:text-gray-500"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300">No hay informes generados</h3>
+                                        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Comienza creando tu primer informe gubernamental</p>
+                                    </div>
+                                    <a href="{{ route('generar-informe') }}" 
+                                    class="mt-4 inline-flex items-center space-x-2 rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-3 text-base font-semibold text-white shadow-lg transition hover:scale-105">
+                                        <i class="fas fa-plus-circle"></i>
+                                        <span>Crear Primer Informe</span>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -667,10 +686,6 @@ function descargarPDF(event, id) {
         descargaEnProgreso = false;
     });
 }
-
-
-
-
 
 // ✅ ACTUALIZAR CONTADOR INDIVIDUAL SIN RECARGAR
 function actualizarContador(id) {
