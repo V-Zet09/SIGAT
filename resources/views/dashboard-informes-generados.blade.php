@@ -3,17 +3,6 @@
 @section('title', 'Informes Generados')
 
 @section('css')
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-    tailwind.config = {
-        darkMode: 'class',
-    }
-</script>
-
-<!-- Alpine.js DEBE estar cargado en tu layout master -->
-<!-- Si no lo tienes, descomenta las siguientes líneas: -->
-<!-- <script defer src="https://cdn.jsdelivr.net/npm/[email protected]/dist/cdn.min.js"></script> -->
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css" rel="stylesheet" />
 <style>
@@ -285,7 +274,7 @@
                     <input type="text" 
                            id="searchInput"
                            placeholder="Buscar informes..." 
-                           class="w-full rounded-lg border-0 bg-white dark:bg-gray-600 py-3 pl-12 pr-4 text-base text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400 shadow-inner focus:ring-2 focus:ring-green-500">
+                           class="w-full rounded-lg border-2 border-gray-800 dark:border-gray-500 bg-white dark:bg-gray-600 py-3 pl-12 pr-4 text-base text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 shadow-inner focus:ring-2 focus:ring-green-500">
                     <i class="fas fa-search absolute left-4 top-4 text-gray-400"></i>
                 </div>
             </div>
@@ -370,7 +359,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead class="sticky top-0 bg-gray-50 dark:bg-gray-800">
-                        <tr class="border-b border-gray-200 dark:border-gray-600 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">
+                        <tr class="border-b border-gray-200 dark:border-gray-600 text-left text-sm font-semibold text-gray-900 dark:text-gray-200">
                             <th class="px-6 py-4">
                                 <div class="flex items-center space-x-2">
                                     <i class="fas fa-file-alt text-green-600 dark:text-green-400"></i>
@@ -411,49 +400,49 @@
                     </thead>
                     <tbody id="informesTableBody" class="divide-y divide-gray-200 dark:divide-gray-600 bg-white dark:bg-gray-800">
                         @forelse ($informes as $informe)
-                        <tr class="border-b border-gray-700 transition hover:bg-gray-700/50">
+                        <tr class="table-row border-b border-gray-200 dark:border-gray-700 transition hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                            data-titulo="{{ strtolower($informe->titulo ?? 'Informe ' . ($loop->iteration)) }}"
+                            data-periodo="{{ strtolower(\Carbon\Carbon::parse($informe->periodo)->format('d/m/Y')) }}"
+                            data-municipio="{{ strtolower($informe->municipio_nombre) }}">
                             <td class="px-6 py-4">
                                 <div class="flex items-center space-x-3">
-                                    <i class="fas fa-file-alt text-2xl text-green-400"></i>
-                                    <span class="font-medium text-gray-200">
+                                    <i class="fas fa-file-alt text-2xl text-green-600 dark:text-green-400"></i>
+                                    <span class="font-medium text-gray-900 dark:text-gray-200">
                                         {{ $informe->titulo ?? 'Informe ' . ($loop->iteration) }}
                                     </span>
                                 </div>
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <span class="inline-flex items-center space-x-2 rounded-full bg-blue-500/20 px-3 py-1 text-sm font-medium text-blue-300">
+                                <span class="inline-flex items-center space-x-2 rounded-full bg-blue-100 dark:bg-blue-500/20 px-3 py-1 text-sm font-medium text-blue-700 dark:text-blue-300">
                                     <i class="fas fa-calendar-alt"></i>
                                     <span>{{ \Carbon\Carbon::parse($informe->periodo)->format('d/m/Y') }}</span>
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <span class="text-gray-300">{{ $informe->municipio_nombre }}</span>
+                                <span class="text-gray-700 dark:text-gray-300">{{ $informe->municipio_nombre }}</span>
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <span class="text-gray-400">{{ \Carbon\Carbon::parse($informe->created_at)->format('d/m/Y') }}</span>
+                                <span class="text-gray-600 dark:text-gray-400">{{ \Carbon\Carbon::parse($informe->created_at)->format('d/m/Y') }}</span>
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <span id="descargas-{{ $informe->id }}" class="inline-flex items-center space-x-2 rounded-full bg-purple-500/20 px-3 py-1 text-sm font-medium text-purple-300">
+                                <span id="descargas-{{ $informe->id }}" class="inline-flex items-center space-x-2 rounded-full bg-purple-100 dark:bg-purple-500/20 px-3 py-1 text-sm font-medium text-purple-700 dark:text-purple-300">
                                     <i class="fas fa-download"></i>
                                     <span class="contador-valor">{{ $informe->descargas ?? 0 }}</span>
                                 </span>
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex items-center justify-center">
-                                    <!-- ✅ DROPDOWN FUNCIONAL CON X-TELEPORT Y POSICIONAMIENTO MANUAL -->
                                     <div x-data="{ open: false }" 
                                         @click.away="open = false" 
                                         class="relative">
                                         
-                                        <!-- Botón de 3 puntos -->
                                         <button @click="open = !open" 
                                                 x-ref="button{{ $informe->id }}"
                                                 type="button"
-                                                class="group flex items-center justify-center w-10 h-10 rounded-lg text-gray-400 hover:bg-gray-700 hover:text-white transition">
+                                                class="group flex items-center justify-center w-10 h-10 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white transition">
                                             <i class="fas fa-ellipsis-v text-lg"></i>
                                         </button>
 
-                                        <!-- Menú Dropdown con x-teleport -->
                                         <template x-teleport="body">
                                             <div x-show="open" 
                                                 x-cloak
@@ -477,7 +466,6 @@
                                                 class="z-[9999] rounded-lg bg-white dark:bg-gray-800 shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none">
                                                 
                                                 <div class="py-1">
-                                                    <!-- Opción PDF -->
                                                     <a href="#" 
                                                     @click.prevent="descargarPDF(event, {{ $informe->id }}); open = false"
                                                     class="group flex items-center px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition">
@@ -485,7 +473,6 @@
                                                         <span>Descargar PDF</span>
                                                     </a>
 
-                                                    <!-- Opción Editar -->
                                                     <a href="{{ route('informes.editar', $informe->id) }}"
                                                     @click="open = false"
                                                     class="group flex items-center px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 transition">
@@ -493,10 +480,8 @@
                                                         <span>Editar</span>
                                                     </a>
 
-                                                    <!-- Divisor -->
                                                     <div class="border-t border-gray-200 dark:border-gray-700 my-1"></div>
 
-                                                    <!-- Opción Eliminar -->
                                                     <button @click.prevent="confirmDelete({{ $informe->id }}); open = false" 
                                                             type="button"
                                                             class="group flex items-center w-full px-4 py-3 text-sm text-left text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition">
@@ -653,7 +638,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// ✅ FUNCIÓN PARA DESCARGAR PDF SIN RECARGAR
 let descargaEnProgreso = false;
 
 function descargarPDF(event, id) {
@@ -687,11 +671,6 @@ function descargarPDF(event, id) {
     });
 }
 
-
-
-
-
-// ✅ ACTUALIZAR CONTADOR INDIVIDUAL SIN RECARGAR
 function actualizarContador(id) {
     fetch(`/informes/${id}/contador`)
         .then(response => response.json())
@@ -702,7 +681,6 @@ function actualizarContador(id) {
                     const valorSpan = contadorSpan.querySelector('.contador-valor');
                     valorSpan.textContent = data.descargas;
                     
-                    // Animación de actualización
                     contadorSpan.style.transform = 'scale(1.1)';
                     setTimeout(() => {
                         contadorSpan.style.transform = 'scale(1)';
@@ -713,7 +691,6 @@ function actualizarContador(id) {
         .catch(error => console.error('Error actualizando contador:', error));
 }
 
-// ✅ ACTUALIZAR ESTADÍSTICAS GLOBALES
 function actualizarEstadisticas() {
     fetch(`/dashboard-informes-generados/stats`)
         .then(response => response.json())
@@ -728,7 +705,6 @@ function actualizarEstadisticas() {
         .catch(error => console.error('Error actualizando estadísticas:', error));
 }
 
-// Modal de eliminación
 function confirmDelete(id) {
     document.getElementById('deleteForm').action = `/informes/${id}`;
     document.getElementById('deleteModal').classList.add('active');
@@ -738,7 +714,6 @@ function closeDeleteModal() {
     document.getElementById('deleteModal').classList.remove('active');
 }
 
-// Cerrar modales al hacer clic fuera
 window.onclick = function(event) {
     if (event.target.classList.contains('modal')) {
         event.target.classList.remove('active');

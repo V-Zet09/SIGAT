@@ -5,7 +5,9 @@ use App\Http\Controllers\PaginaController;
 use App\Http\Controllers\PresidenteController;
 use App\Http\Controllers\CargoAyuntamientoController;
 use App\Http\Controllers\OrganigramaController;
-
+use App\Http\Controllers\SalaPrensaController;
+use App\Http\Controllers\CarruselController;
+use App\Http\Controllers\GobiernoController;
 /*
 |--------------------------------------------------------------------------
 | RUTAS PÚBLICAS
@@ -68,4 +70,19 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function() {
 
     Route::post('/organigrama/crear', [OrganigramaController::class, 'crear'])
          ->name('organigrama.crear');
+
+
+     // Ruta para Roles simple
+
+     Route::get('/sala-prensa', [SalaPrensaController::class, 'index'])->name('sala-prensa');
+     //Ruta para carrusel de fotos de inicio
+     Route::post('/carrusel/store', [CarruselController::class, 'store'])->name('carrusel.store')->middleware('auth');
+     Route::delete('/carrusel/{id}', [CarruselController::class, 'destroy'])->name('carrusel.destroy')->middleware('auth');
+     // Ruta pública - Ver gobierno
+     Route::get('/gobierno', [GobiernoController::class, 'index'])->name('gobierno.index');
+
+     // Ruta protegida - Actualizar información (solo usuarios autenticados)
+     Route::middleware(['auth'])->group(function () {
+     Route::post('/gobierno/update', [GobiernoController::class, 'update'])->name('gobierno.update');
+});
 });
