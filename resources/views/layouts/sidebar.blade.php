@@ -199,15 +199,6 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
               Generar Actividad
             </a>
           @endcan
-
-          {{-- Todos pueden ver actividades registradas --}}
-          @can('ver actividades')
-            <a href="{{ route('actividades.registradas') }}" 
-               class="block px-3 py-2 text-sm rounded-lg transition
-                      {{ request()->routeIs('actividades.registradas') ? 'text-white bg-slate-800/50 dark:bg-gray-800/50 font-medium' : 'text-slate-400 dark:text-gray-400 hover:text-white hover:bg-slate-800/30 dark:hover:bg-gray-800/30' }}">
-              Actividades Registradas
-            </a>
-          @endcan
         </div>
       </div>
 
@@ -227,11 +218,7 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
 
         <div x-show="openMenu === 'usuarios'" x-collapse 
              class="ml-9 mt-1 space-y-0.5 border-l-2 border-slate-700/50 dark:border-gray-700/50 pl-3">
-          <a href="{{ url('dashboard-users') }}" 
-             class="block px-3 py-2 text-sm rounded-lg transition
-                    {{ request()->is('dashboard-users') ? 'text-white bg-slate-800/50 dark:bg-gray-800/50 font-medium' : 'text-slate-400 dark:text-gray-400 hover:text-white hover:bg-slate-800/30 dark:hover:bg-gray-800/30' }}">
-            Registro de Usuarios
-          </a>
+
           <a href="{{ route('dashboard-crear-usuario') }}" 
              class="block px-3 py-2 text-sm rounded-lg transition
                     {{ request()->routeIs('dashboard-crear-usuario') ? 'text-white bg-slate-800/50 dark:bg-gray-800/50 font-medium' : 'text-slate-400 dark:text-gray-400 hover:text-white hover:bg-slate-800/30 dark:hover:bg-gray-800/30' }}">
@@ -488,10 +475,10 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
   <div class="px-4 py-3 bg-slate-900/50 dark:bg-gray-900/50">
     <button @click="userMenuOpen = !userMenuOpen" 
             class="w-full flex items-center gap-3 p-2.5 rounded-xl bg-slate-800/50 dark:bg-gray-800/50 hover:bg-slate-800 dark:hover:bg-gray-800 transition cursor-pointer group">
-      <img src="{{ asset('images/' . (Auth::user()->avatar ?? 'default.jpg')) }}" 
-           alt="{{ Auth::user()->name }}"
-           class="w-9 h-9 rounded-full object-cover flex-shrink-0"
-           onerror="this.src='{{ asset('images/default.jpg') }}'">
+<img src="{{ asset('storage/avatars/' . (Auth::user()->avatar ?? 'default.jpg')) }}" 
+     alt="{{ Auth::user()->name }}"
+     class="w-9 h-9 rounded-full object-cover flex-shrink-0"
+     onerror="this.src='{{ asset('storage/avatars/default.jpg') }}'">
       <div class="flex-1 min-w-0 text-left">
         <p class="font-medium text-sm truncate text-white">{{ Auth::user()->name ?? 'Usuario' }}</p>
         <p class="text-xs text-slate-400 dark:text-gray-400 truncate">

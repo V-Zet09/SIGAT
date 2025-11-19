@@ -22,73 +22,140 @@ class ActividadController extends Controller
      * Guardar nueva actividad
      */
     public function store(Request $request)
-    {
-        $validated = $this->validarActividad($request);
+{
+    // Validación incluyendo límite de máximo 5 fotos
+    $validated = $request->validate([
+        'titulo' => 'required|string|max:255',
+        'autor' => 'nullable|string|max:255',
+        'fecha' => 'required|date|before_or_equal:today',
+        'tipo_area' => 'nullable|string|max:255',
+        'resumen' => 'nullable|string',
+        'presupuesto' => 'nullable|numeric',
+        'tipo_presupuesto' => 'nullable|string',
+        'contenido' => 'nullable|string',
+        'foto' => 'array|max:5', // máximo 5 archivos como array
+        'foto.*' => 'image|mimes:jpg,jpeg,png,gif|max:2048', // validación por archivo
+    ]);
 
-        if ($request->hasFile('foto')) {
-            $validated['foto'] = $request->file('foto')->store('actividades', 'public');
+    $rutasFotos = [];
+
+    if ($request->hasFile('foto')) {
+        foreach ($request->file('foto') as $archivo) {
+            $rutasFotos[] = $archivo->store('actividades', 'public');
         }
+    }
 
-        // Agregar el creador de la actividad
-        $validated['creado_por_id'] = Auth::id();
-        
-        $actividad = Actividad::create($validated);
+    // Guardamos las rutas de fotos en el validated si se desea guardar en JSON o relación
+    // Aquí como ejemplo se guarda en JSON en columna 'fotos' (debes asegurar que exista)
+    $validated['fotos'] = json_encode($rutasFotos);
 
-        // ✅ NOTIFICACIONES: Nueva actividad creada
-        
-        // Notificar al responsable (si existe)
-        if (!empty($validated['responsable_id'])) {
-            NotificationHelper::send(
-                $validated['responsable_id'],
-                'actividad',
-                'Nueva actividad asignada',
-                'Se te ha asignado la actividad: ' . $actividad->titulo,
-                [
-                    'link' => route('actividades.registradas'),
-                    'icon' => 'ri-calendar-check-line',
-                    'color' => 'blue',
-                    'data' => ['actividad_id' => $actividad->id]
-                ]
-            );
-        }
+    // Agregar ID creador
+    $validated['creado_por_id'] = Auth::id();
 
-        // Notificar a administradores
-        NotificationHelper::sendToRole(
-            'Administrador',
+    $actividad = Actividad::create($validated);
+
+    // El resto del código de notificaciones igual
+
+    if (!empty($validated['responsable_id'])) {
+        NotificationHelper::send(
+            $validated['responsable_id'],
             'actividad',
-            'Nueva actividad creada',
-            Auth::user()->name . ' ha creado la actividad: ' . $actividad->titulo,
+            'Nueva actividad asignada',
+            'Se te ha asignado la actividad: ' . $actividad->titulo,
             [
                 'link' => route('actividades.registradas'),
                 'icon' => 'ri-calendar-check-line',
-                'color' => 'green',
+                'color' => 'blue',
                 'data' => ['actividad_id' => $actividad->id]
             ]
         );
-
-        return redirect()->route('actividades.registradas')
-            ->with('success', 'Actividad registrada correctamente.');
     }
 
-    /**
-     * Mostrar lista de actividades registradas
-     */
-    public function showRegistradas(Request $request)
-    {
-        $query = Actividad::query();
+    NotificationHelper::sendToRole(
+        'Administrador',
+        'actividad',
+        'Nueva actividad creada',
+        Auth::user()->name . ' ha creado la actividad: ' . $actividad->titulo,
+        [
+            'link' => route('actividades.registradas'),
+            'icon' => 'ri-calendar-check-line',
+            'color' => 'green',
+            'data' => ['actividad_id' => $actividad->id]
+        ]
+    );
 
-        if ($request->filled('buscar')) {
-            $query->where('titulo', 'like', '%' . $request->buscar . '%');
-        }
+    return redirect()->route('actividades.registradas')
+        ->with('success', 'Actividad registrada correctamente.');
+}
 
-        if ($request->filled('tipo_area')) {
-            $query->whereRaw('LOWER(tipo_area) = ?', [strtolower(trim($request->tipo_area))]);
-        }
 
-        $actividades = $query->latest()->paginate(10);
+  public function showRegistradas(Request $request)
+{
+    $query = Actividad::query();
 
-        return view('dashboard-actividades-registradas', compact('actividades'));
+    // Filtro por año
+    if ($request->filled('filtro_anio')) {
+        $query->whereYear('fecha', $request->filtro_anio);
     }
+
+    // Filtro por mes
+    if ($request->filled('filtro_mes')) {
+        $query->whereMonth('fecha', $request->filtro_mes);
+    }
+
+    // 🔍 Buscador inteligente (busca en múltiples campos)
+    if ($request->filled('buscar')) {
+        $buscar = $request->buscar;
+        
+        $query->where(function($q) use ($buscar) {
+            // Buscar en título
+            $q->where('titulo', 'like', '%' . $buscar . '%')
+              // Buscar en autor
+              ->orWhere('autor', 'like', '%' . $buscar . '%')
+              // Buscar en área
+              ->orWhere('tipo_area', 'like', '%' . $buscar . '%')
+              // Buscar en contenido/resumen
+              ->orWhere('contenido', 'like', '%' . $buscar . '%')
+              ->orWhere('resumen', 'like', '%' . $buscar . '%');
+            
+            // 📅 Detectar si es una fecha (formato dd/mm/yyyy o dd-mm-yyyy)
+            if (preg_match('/(\d{2})[\/\-](\d{2})[\/\-](\d{4})/', $buscar, $matches)) {
+                $fechaBuscada = $matches[3] . '-' . $matches[2] . '-' . $matches[1]; // Convertir a Y-m-d
+                $q->orWhere('fecha', $fechaBuscada);
+            }
+            
+            // 📅 Detectar si es solo un año (4 dígitos)
+            if (preg_match('/^\d{4}$/', $buscar)) {
+                $q->orWhereYear('fecha', $buscar);
+            }
+            
+            // 📅 Detectar nombre de mes (enero, febrero, etc.)
+            $meses = [
+                'enero' => 1, 'febrero' => 2, 'marzo' => 3, 'abril' => 4,
+                'mayo' => 5, 'junio' => 6, 'julio' => 7, 'agosto' => 8,
+                'septiembre' => 9, 'octubre' => 10, 'noviembre' => 11, 'diciembre' => 12
+            ];
+            
+            $buscarLower = strtolower($buscar);
+            foreach ($meses as $nombreMes => $numeroMes) {
+                if (strpos($buscarLower, $nombreMes) !== false) {
+                    $q->orWhereMonth('fecha', $numeroMes);
+                    break;
+                }
+            }
+        });
+    }
+
+    // Ordenar por fecha descendente (más reciente primero)
+    $actividades = $query->orderBy('fecha', 'desc')->paginate(10);
+
+    return view('dashboard-actividades-registradas', compact('actividades'));
+}
+
+
+
+
+
 
     /**
      * Mostrar formulario de edición
