@@ -146,14 +146,31 @@ input, select {
         <div>
           <label for="area" class="block text-base font-semibold text-gray-800 dark:text-gray-200">
             Área <span class="text-red-500">*</span>
+
           </label>
           <select name="area" id="area" required
             class="mt-1 block w-full rounded-lg border-2 border-gray-800 dark:border-gray-500 dark:bg-gray-700 dark:text-gray-100 bg-white text-gray-900 shadow-sm focus:ring-2 focus:ring-green-300 focus:border-green-500 px-3 py-2">
             <option value="">Seleccionar área</option>
-            <option value="Presidencia" {{ old('area') == 'Presidencia' ? 'selected' : '' }}>Presidencia</option>
             <option value="Agua potable" {{ old('area') == 'Agua potable' ? 'selected' : '' }}>Agua potable</option>
+            <option value="Bienestar Social y Desarrollo Rural" {{ old('area') == 'Bienestar Social y Desarrollo Rural' ? 'selected' : '' }}>Bienestar Social y Desarrollo Rural</option>
+            <option value="Catastro" {{ old('area') == 'Catastro' ? 'selected' : '' }}>Catastro</option>
+            <option value="Contraloria Interna" {{ old('area') == 'Contraloria Interna' ? 'selected' : '' }}>Contraloria Interna</option>
+            <option value="Deportes" {{ old('area') == 'Deportes' ? 'selected' : '' }}>Deportes</option>
+            <option value="DIF" {{ old('area') == 'DIF' ? 'selected' : '' }}>DIF</option>
             <option value="Informática" {{ old('area') == 'Informática' ? 'selected' : '' }}>Informática</option>
-            <option value="Obras públicas" {{ old('area') == 'Obras públicas' ? 'selected' : '' }}>Obras públicas</option>
+            <option value="Limpia" {{ old('area') == 'Limpia' ? 'selected' : '' }}>Limpia</option>
+            <option value="Obras Publicas" {{ old('area') == 'Obras Publicas' ? 'selected' : '' }}>Obras Publicas</option>
+            <option value="Oficialia Mayor" {{ old('area') == 'Oficialia Mayor' ? 'selected' : '' }}>Oficialia Mayor</option>
+            <option value="Presidencia" {{ old('area') == 'Presidencia' ? 'selected' : '' }}>Presidencia</option>
+            <option value="Recursos Humanos" {{ old('area') == 'Recursos Humanos' ? 'selected' : '' }}>Recursos Humanos</option>
+            <option value="Registro Civil" {{ old('area') == 'Registro Civil' ? 'selected' : '' }}>Registro Civil</option>
+            <option value="Regidores" {{ old('area') == 'Regidores' ? 'selected' : '' }}>Regidores</option>
+            <option value="Reglamentos" {{ old('area') == 'Reglamentos' ? 'selected' : '' }}>Reglamentos</option>
+            <option value="Secretaria General" {{ old('area') == 'Secretaria General' ? 'selected' : '' }}>Secretaria General</option>
+            <option value="Seguridad Publica" {{ old('area') == 'Seguridad Publica' ? 'selected' : '' }}>Seguridad Publica</option>
+            <option value="Sindicatura" {{ old('area') == 'Sindicatura' ? 'selected' : '' }}>Sindicatura</option>
+            <option value="Tesoreria" {{ old('area') == 'Tesoreria' ? 'selected' : '' }}>Tesoreria</option>
+            <option value="Transito" {{ old('area') == 'Transito' ? 'selected' : '' }}>Transito</option>
           </select>
         </div>
       </div>
