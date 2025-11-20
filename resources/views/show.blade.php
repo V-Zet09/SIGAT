@@ -66,14 +66,25 @@
             </div>
         </div>
 
-        <!-- Imagen centrada -->
-        @if($actividad->foto)
-            <div class="flex justify-center mb-6">
-                <div class="relative rounded-lg overflow-hidden shadow-xl border-4 border-gray-200 dark:border-gray-700">
-                    <img src="{{ asset('storage/' . $actividad->foto) }}"
-                         alt="{{ $actividad->titulo }}"
-                         class="max-h-96 object-contain bg-gray-100 dark:bg-gray-900">
-                </div>
+        <!-- Imágenes de la actividad (fotos) -->
+        @php
+            $fotos = $actividad->fotos;
+            if (is_string($fotos)) {
+                $fotos = json_decode($fotos, true);
+            }
+        @endphp
+
+        @if(!empty($fotos) && is_array($fotos) && count($fotos) > 0)
+            <div class="flex flex-wrap justify-center gap-6 mb-6">
+                @foreach($fotos as $foto)
+                    @if(!empty($foto))
+                        <div class="relative rounded-lg overflow-hidden shadow-xl border-4 border-gray-200 dark:border-gray-700">
+                            <img src="{{ asset('storage/' . ltrim($foto, '/')) }}"
+                                 alt="{{ $actividad->titulo }}"
+                                 class="max-h-96 object-contain bg-gray-100 dark:bg-gray-900">
+                        </div>
+                    @endif
+                @endforeach
             </div>
         @else
             <div class="flex justify-center mb-6 p-8 bg-gray-50 dark:bg-gray-700/50 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600">

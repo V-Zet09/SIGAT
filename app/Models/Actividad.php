@@ -11,7 +11,7 @@ class Actividad extends Model
 
     protected $table = 'actividades';
     
-    protected $fillable = [
+        protected $fillable = [
         'titulo',
         'autor',
         'fecha',
@@ -23,8 +23,7 @@ class Actividad extends Model
         'tipo_presupuesto',
         'numero',
         'fase',
-        'foto',
-        // NUEVOS CAMPOS
+        'fotos', // Solo este campo
         'creado_por_id',
         'responsable_id',
         'estado',
@@ -40,9 +39,10 @@ class Actividad extends Model
         'fecha' => 'date',
         'fecha_aprobacion' => 'datetime',
         'fecha_rechazo' => 'datetime',
-        'evidencias' => 'array', // Cast a array para JSON
- 
+        'evidencias' => 'array',
+        'fotos' => 'array', // Solo este campo
     ];
+
 
     // RELACIONES
     
