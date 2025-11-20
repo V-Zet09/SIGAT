@@ -20,7 +20,8 @@
 @endsection
 
 @section('content')
-<div class="shadow-2xl rounded-3xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 p-8 mx-auto my-8 max-w-[80vw] transition-colors duration-300">
+<div class="shadow-2xl rounded-3xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 p-8 mx-auto mt-4 max-w-[80vw] transition-colors duration-300">
+
 
     <!-- Header visual tipo informes -->
     <div class="relative mb-6 overflow-hidden rounded-2xl bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 dark:from-green-700 dark:via-emerald-700 dark:to-teal-700 p-6 shadow-xl">
