@@ -24,6 +24,18 @@ Route::get('/', function () {
 // ✅ Idioma
 Route::get('index/{locale}', [HomeController::class, 'lang']);
 
+// ✅ Perfil
+Route::post('/update-profile/{id}', [HomeController::class, 'updateProfile'])->name('updateProfile');
+Route::post('/update-password/{id}', [HomeController::class, 'updatePassword'])->name('updatePassword');
+
+
+Route::get('/test-organigrama', function() {
+    return view('test-organigrama');
+});
+
+
+
+
 // ✅ Cargar módulos
 require __DIR__.'/dashboards.php';
 require __DIR__.'/users.php';
@@ -78,4 +90,23 @@ Route::middleware('auth')->group(function () {
     // Limpiar notificaciones leídas
     Route::post('/notificaciones/clear-read', [App\Http\Controllers\NotificationController::class, 'clearRead'])
         ->name('notifications.clearRead');
+});
+
+
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\SalaPrensaController;
+use App\Http\Controllers\CarruselController;
+use App\Http\Controllers\GobiernoController;
+// Ruta para Roles simple
+Route::get('/roles-simple', [UserController::class, 'rolesSimple'])->name('roles-simple');
+Route::get('/sala-prensa', [SalaPrensaController::class, 'index'])->name('sala-prensa');
+//Ruta para carrusel de fotos de inicio
+Route::post('/carrusel/store', [CarruselController::class, 'store'])->name('carrusel.store')->middleware('auth');
+Route::delete('/carrusel/{id}', [CarruselController::class, 'destroy'])->name('carrusel.destroy')->middleware('auth');
+// Ruta pública - Ver gobierno
+Route::get('/gobierno', [GobiernoController::class, 'index'])->name('gobierno.index');
+
+// Ruta protegida - Actualizar información (solo usuarios autenticados)
+Route::middleware(['auth'])->group(function () {
+    Route::post('/gobierno/update', [GobiernoController::class, 'update'])->name('gobierno.update');
 });

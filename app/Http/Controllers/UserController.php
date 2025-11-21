@@ -10,9 +10,19 @@ use Spatie\Permission\Models\Role; // ✅ IMPORTAR
 class UserController extends Controller
 {
     // Mostrar CRUD con todos los usuarios
-    public function index()
+    public function index(Request $request)
     {
-        $usuarios = User::with('roles')->get(); // ✅ Cargar roles
+        $query = $request->input('search');
+
+        $usuarios = User::query()
+            ->when($query, function ($q) use ($query) {
+            $q->where('name', 'like', "%{$query}%")
+              ->orWhere('email', 'like', "%{$query}%")
+              ->orWhere('cargo', 'like', "%{$query}%")
+              ->orWhere('area', 'like', "%{$query}%");
+             })
+            ->with('roles')
+            ->get();
         return view('dashboard-users', compact('usuarios'));
     }
 
