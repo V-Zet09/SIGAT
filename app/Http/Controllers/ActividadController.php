@@ -26,13 +26,13 @@ class ActividadController extends Controller
             'presupuesto' => 'nullable|numeric',
             'tipo_presupuesto' => 'nullable|string',
             'contenido' => 'nullable|string',
-            'foto' => 'array|max:5',
-            'foto.*' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
+            'fotos' => 'array|max:5',  // ← CAMBIADO de 'foto' a 'fotos'
+            'fotos.*' => 'image|mimes:jpg,jpeg,png,gif|max:2048',  // ← CAMBIADO de 'foto.*' a 'fotos.*'
         ]);
 
         $rutasFotos = [];
-        if ($request->hasFile('foto')) {
-            foreach ($request->file('foto') as $archivo) {
+        if ($request->hasFile('fotos')) {  // ← CAMBIADO de 'foto' a 'fotos'
+            foreach ($request->file('fotos') as $archivo) {  // ← CAMBIADO de 'foto' a 'fotos'
                 $rutasFotos[] = $archivo->store('actividades', 'public');
             }
         }
@@ -132,73 +132,77 @@ class ActividadController extends Controller
         $fotos = $actividad->fotos
             ? (is_array($actividad->fotos) ? $actividad->fotos : json_decode($actividad->fotos, true))
             : [];
-        if (!empty($actividad->foto) && !in_array($actividad->foto, $fotos)) {
-            array_unshift($fotos, $actividad->foto);
-        }
+
         $actividad->fotos = $fotos;
 
         return view('edit', compact('actividad'));
     }
 
     public function update(Request $request, $id)
-    {
-        $actividad = Actividad::findOrFail($id);
+{
+    $actividad = Actividad::findOrFail($id);
 
-        $validated = $request->validate([
-            'titulo' => 'required|string|max:255',
-            'autor' => 'nullable|string|max:255',
-            'fecha' => 'required|date|before_or_equal:today',
-            'tipo_area' => 'required|string|max:255',
-            'resumen' => 'nullable|string',
-            'contenido' => 'nullable|string',
-            'presupuesto' => 'nullable|numeric',
-            'tipo_presupuesto' => 'nullable|string|max:255',
-            'foto' => 'array|max:5',
-            'foto.*' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
-        ]);
+    // Obtener las fotos actuales primero
+    $fotosActuales = $actividad->fotos
+        ? (is_array($actividad->fotos) ? $actividad->fotos : json_decode($actividad->fotos, true))
+        : [];
 
-        $fotosActuales = $actividad->fotos
-            ? (is_array($actividad->fotos) ? $actividad->fotos : json_decode($actividad->fotos, true))
-            : [];
-        if (!empty($actividad->foto) && !in_array($actividad->foto, $fotosActuales)) {
-            array_unshift($fotosActuales, $actividad->foto);
-        }
+    // Contar cuántas fotos ya tiene
+    $cantidadActual = count($fotosActuales);
 
-        if ($request->has('cambiar_foto')) {
-            foreach ($request->file('cambiar_foto', []) as $index => $fotoNueva) {
-                if ($fotoNueva && isset($fotosActuales[$index])) {
-                    Storage::disk('public')->delete($fotosActuales[$index]);
-                    $fotosActuales[$index] = $fotoNueva->store('actividades', 'public');
-                }
+    // Calcular cuántas fotos nuevas puede agregar
+    $maxNuevas = 5 - $cantidadActual;
+
+    // Validación dinámica según cuántas fotos ya tiene
+    $validated = $request->validate([
+        'titulo' => 'required|string|max:255',
+        'autor' => 'nullable|string|max:255',
+        'fecha' => 'required|date|before_or_equal:today',
+        'tipo_area' => 'required|string|max:255',
+        'resumen' => 'nullable|string',
+        'contenido' => 'nullable|string',
+        'presupuesto' => 'nullable|numeric',
+        'tipo_presupuesto' => 'nullable|string|max:255',
+        'fotos' => "nullable|array|max:$maxNuevas",  // ← Validación dinámica
+        'fotos.*' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
+    ], [
+        'fotos.max' => "Solo puedes agregar hasta $maxNuevas foto(s) más. Ya tienes $cantidadActual foto(s).",
+    ]);
+
+    // Manejar el cambio individual de fotos (botón "Cambiar")
+    if ($request->has('cambiar_foto')) {
+        foreach ($request->file('cambiar_foto', []) as $index => $fotoNueva) {
+            if ($fotoNueva && isset($fotosActuales[$index])) {
+                Storage::disk('public')->delete($fotosActuales[$index]);
+                $fotosActuales[$index] = $fotoNueva->store('actividades', 'public');
             }
         }
-
-        if ($request->hasFile('cambiar_foto_legacy')) {
-            $fotoNueva = $request->file('cambiar_foto_legacy');
-            Storage::disk('public')->delete($actividad->foto);
-            $rutaNueva = $fotoNueva->store('actividades', 'public');
-            $actividad->foto = $rutaNueva;
-        }
-
-        if ($request->hasFile('foto')) {
-            $nuevas = [];
-            foreach ($request->file('foto') as $file) {
-                if ($file->isValid()) {
-                    $nuevas[] = $file->store('actividades', 'public');
-                }
-            }
-            $fotosActuales = array_merge($fotosActuales, $nuevas);
-            $fotosActuales = array_slice($fotosActuales, 0, 5);
-        }
-
-        $validated['fotos'] = json_encode($fotosActuales);
-        $validated['foto'] = $actividad->foto ?? null;
-
-        $actividad->update($validated);
-
-        return redirect()->route('actividades.registradas')
-            ->with('success', 'Actividad actualizada correctamente.');
     }
+
+    // Agregar fotos nuevas (botón "Nueva")
+    if ($request->hasFile('fotos')) {
+        $nuevas = [];
+        foreach ($request->file('fotos') as $file) {
+            if ($file->isValid()) {
+                $nuevas[] = $file->store('actividades', 'public');
+            }
+        }
+        
+        // Combinar fotos actuales con las nuevas
+        $fotosActuales = array_merge($fotosActuales, $nuevas);
+        
+        // Asegurar que no exceda 5 fotos en total
+        $fotosActuales = array_slice($fotosActuales, 0, 5);
+    }
+
+    $validated['fotos'] = json_encode($fotosActuales);
+
+    $actividad->update($validated);
+
+    return redirect()->route('actividades.registradas')
+        ->with('success', 'Actividad actualizada correctamente.');
+}
+
 
     public function eliminarFoto($id, $foto)
     {
@@ -206,9 +210,6 @@ class ActividadController extends Controller
         $fotos = $actividad->fotos
             ? (is_array($actividad->fotos) ? $actividad->fotos : json_decode($actividad->fotos, true))
             : [];
-        if (!empty($actividad->foto) && !in_array($actividad->foto, $fotos)) {
-            array_unshift($fotos, $actividad->foto);
-        }
 
         $fotoDecodificada = urldecode($foto);
         $index = array_search($fotoDecodificada, $fotos);
@@ -218,9 +219,6 @@ class ActividadController extends Controller
             array_splice($fotos, $index, 1);
 
             $actividad->fotos = json_encode($fotos);
-            if ($actividad->foto === $fotoDecodificada) {
-                $actividad->foto = null;
-            }
             $actividad->save();
         }
 
@@ -234,8 +232,12 @@ class ActividadController extends Controller
         $responsableId = $actividad->responsable_id;
         $creadoPorId = $actividad->creado_por_id;
 
-        if ($actividad->foto) {
-            Storage::disk('public')->delete($actividad->foto);
+        // Eliminar todas las fotos
+        if ($actividad->fotos) {
+            $fotos = is_array($actividad->fotos) ? $actividad->fotos : json_decode($actividad->fotos, true);
+            foreach ($fotos as $foto) {
+                Storage::disk('public')->delete($foto);
+            }
         }
 
         $actividad->delete();
@@ -424,7 +426,8 @@ class ActividadController extends Controller
             'tipo_presupuesto' => 'nullable|string|max:255',
             'numero' => 'nullable|string|max:255',
             'fase' => 'nullable|string|max:255',
-            'foto' => 'nullable|image|max:2048',
+            'fotos' => 'nullable|array|max:5',  // ← CAMBIADO de 'foto' a 'fotos'
+            'fotos.*' => 'image|max:2048',  // ← CAMBIADO de 'foto.*' a 'fotos.*'
             'responsable_id' => 'nullable|exists:users,id',
         ]);
     }

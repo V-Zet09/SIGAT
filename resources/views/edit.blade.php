@@ -5,21 +5,63 @@
 @section('css')
 <link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css" rel="stylesheet" />
 <style>
-.grid, .flex { display: flex; flex-wrap: wrap; }
-.grid-cols-2 { flex-basis: 48%; }
-.md\:grid-cols-4 { flex-basis: 23%; }
-.gap-3 { gap: 0.75rem; }
-.relative.group { position: relative; }
-.absolute { position: absolute; }
-.top-1 { top: 0.25rem; }
-.right-1 { right: 0.25rem; }
-.rounded-full { border-radius: 9999px; }
-.bg-red-600 { background-color: #dc2626; }
-.text-white { color: #fff; }
-.px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
-.py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
-.text-xs { font-size: 0.75rem; }
-.hover\:bg-red-700:hover { background-color: #b91c1c; }
+/* Fuentes */
+.ql-font-arial { font-family: Arial, sans-serif; }
+.ql-font-times { font-family: 'Times New Roman', serif; }
+.ql-font-georgia { font-family: Georgia, serif; }
+.ql-font-verdana { font-family: Verdana, sans-serif; }
+
+/* Tamaños */
+.ql-size-small { font-size: 12px; }
+.ql-size-large { font-size: 18px; }
+.ql-size-huge { font-size: 24px; }
+
+/* Editor */
+.ql-toolbar.ql-snow {
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem 0.5rem 0 0;
+    background: #f9fafb;
+}
+.dark .ql-toolbar.ql-snow {
+    background: #1f2937;
+    border-color: #374151;
+}
+.ql-container.ql-snow {
+    border: 1px solid #d1d5db;
+    border-top: none;
+    border-radius: 0 0 0.5rem 0.5rem;
+    min-height: 150px;
+    background: #ffffff;
+}
+.dark .ql-container.ql-snow {
+    border-color: #374151;
+    background: #111827;
+}
+.ql-editor {
+    min-height: 150px;
+    padding: 15px;
+    color: #111827;
+}
+.dark .ql-editor {
+    color: #e5e7eb;
+}
+
+/* Inputs modo oscuro */
+input[type="text"],
+input[type="date"],
+input[type="number"],
+select,
+textarea {
+    color-scheme: light;
+}
+.dark input[type="text"],
+.dark input[type="date"],
+.dark input[type="number"],
+.dark select,
+.dark textarea {
+    color: #e5e7eb !important;
+    color-scheme: dark;
+}
 </style>
 @endsection
 
@@ -33,7 +75,7 @@
     <div class="bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-6">
         <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">✏️ Editar Actividad</h2>
 
-        <form id="activityForm" action="{{ route('actividades.update', $actividad->id) }}" method="POST" enctype="multipart/form-data" class="space-y-5">
+        <form id="formEditarActividad" action="{{ route('actividades.update', $actividad->id) }}" method="POST" enctype="multipart/form-data" class="space-y-5">
             @csrf
             @method('PUT')
 
@@ -43,10 +85,11 @@
                        value="{{ old('titulo', $actividad->titulo) }}"
                        class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
             </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label for="autor" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Autor <span class="text-red-500">*</span></label>
-                    <input type="text" name="autor" id="autor" required
+                    <label for="autor" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Autor</label>
+                    <input type="text" name="autor" id="autor"
                            value="{{ old('autor', $actividad->autor) }}"
                            class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                 </div>
@@ -57,6 +100,7 @@
                            class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                 </div>
             </div>
+
             <div>
                 <label for="tipo_area" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Área <span class="text-red-500">*</span></label>
                 <select name="tipo_area" id="tipo_area" required
@@ -72,11 +116,13 @@
                     @endforeach
                 </select>
             </div>
+
             <div>
                 <label for="resumen" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Resumen</label>
                 <div id="resumen-editor" class="border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"></div>
                 <textarea name="resumen" id="resumen-content" class="hidden">{{ old('resumen', $actividad->resumen) }}</textarea>
             </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label for="presupuesto" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Presupuesto</label>
@@ -95,82 +141,80 @@
                     </select>
                 </div>
             </div>
+
             <div>
                 <label for="contenido" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Contenido</label>
                 <div id="contenido-editor" class="border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"></div>
                 <textarea name="contenido" id="contenido-content" class="hidden">{{ old('contenido', $actividad->contenido) }}</textarea>
             </div>
 
-            {{-- FOTOS - MÚLTIPLES --}}
+            {{-- FOTOS --}}
             <div>
-                <label for="foto" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Fotos</label>
-                <input type="file" name="foto[]" id="foto" accept="image/*" multiple
-                       class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Fotos ({{ count($actividad->fotos ?? []) }}/5)
+                </label>
 
-{{-- Mostrar imágenes ya guardadas y botón cambiar --}}
-@if(isset($actividad->fotos) && is_array($actividad->fotos) && count($actividad->fotos) > 0)
-    <div class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3" id="fotos-existentes">
-        @foreach($actividad->fotos as $index => $foto)
-            @if(!empty($foto))
-                <div class="relative group">
-                    <img src="{{ asset('storage/' . $foto) }}" alt="Foto actual"
-                         id="preview-foto-{{ $index }}"
-                         class="w-32 h-24 object-cover rounded-lg shadow-md border-2 border-gray-200 dark:border-gray-600">
-                    <button type="button"
-                        class="absolute bottom-1 left-1 bg-blue-600 text-white rounded px-2 py-1 text-xs hover:bg-blue-700"
-                        onclick="document.getElementById('cambiar-foto-{{ $index }}').click()">
-                        Cambiar
-                    </button>
-                    <input type="file"
-                        name="cambiar_foto[{{ $index }}]"
-                        id="cambiar-foto-{{ $index }}"
-                        accept="image/*"
-                        class="hidden"
-                        onchange="previewFotoCambio(event, {{ $index }})">
-                    <!-- Campo oculto para enviar la ruta anterior al backend -->
-                    <input type="hidden" name="foto_anterior[{{ $index }}]" value="{{ $foto }}">
-                </div>
-            @endif
-        @endforeach
-    </div>
-@endif
-
-@if(isset($actividad->foto) && !empty($actividad->foto) && (!isset($actividad->fotos) || empty($actividad->fotos)))
-    <div class="mt-4 flex gap-4">
-        <div class="relative group">
-            <img src="{{ asset('storage/' . $actividad->foto) }}" alt="Foto actual"
-                id="preview-foto-legacy"
-                class="w-32 h-24 object-cover rounded-lg shadow-md border-2 border-gray-200 dark:border-gray-600">
-            <button type="button"
-                class="absolute bottom-1 left-1 bg-blue-600 text-white rounded px-2 py-1 text-xs hover:bg-blue-700"
-                onclick="document.getElementById('cambiar-foto-legacy').click()">
-                Cambiar
-            </button>
-            <input type="file"
-                name="cambiar_foto_legacy"
-                id="cambiar-foto-legacy"
-                accept="image/*"
-                class="hidden"
-                onchange="previewFotoCambio(event, 'legacy')">
-            <input type="hidden" name="foto_anterior_legacy" value="{{ $actividad->foto }}">
-        </div>
-    </div>
-@endif
-                @if(isset($actividad->foto) && !empty($actividad->foto) && (!isset($actividad->fotos) || empty($actividad->fotos)))
-                    <div class="mt-4 flex gap-4">
-                        <div class="relative group">
-                            <img src="{{ asset('storage/' . $actividad->foto) }}" alt="Foto actual"
-                                 class="w-32 h-24 object-cover rounded-lg shadow-md border-2 border-gray-200 dark:border-gray-600">
-                            <!-- Eliminar manual si quieres, pero el estándar es multi como arriba -->
-                        </div>
+                {{-- Fotos existentes con botón Cambiar --}}
+                @if(isset($actividad->fotos) && is_array($actividad->fotos) && count($actividad->fotos) > 0)
+                    <div class="mb-4 grid grid-cols-2 md:grid-cols-4 gap-3 foto-existente" id="fotos-existentes">
+                        @foreach($actividad->fotos as $index => $foto)
+                            @if(!empty($foto))
+                                <div class="relative group">
+                                    <img src="{{ asset('storage/' . $foto) }}" alt="Foto {{ $index + 1 }}"
+                                         id="preview-foto-{{ $index }}"
+                                         class="w-full h-32 object-cover rounded-lg shadow-md border-2 border-gray-200 dark:border-gray-600">
+                                    
+                                    <button type="button"
+                                            class="absolute bottom-2 left-2 bg-blue-600 text-white rounded px-2 py-1 text-xs hover:bg-blue-700 transition"
+                                            onclick="document.getElementById('cambiar-foto-{{ $index }}').click()">
+                                        Cambiar
+                                    </button>
+                                    
+                                    <a href="{{ route('actividades.eliminar-foto', [$actividad->id, urlencode($foto)]) }}"
+                                       onclick="return confirm('¿Eliminar esta foto?')"
+                                       class="absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-700 transition">
+                                        ×
+                                    </a>
+                                    
+                                    <input type="file"
+                                           name="cambiar_foto[{{ $index }}]"
+                                           id="cambiar-foto-{{ $index }}"
+                                           accept="image/*"
+                                           class="hidden"
+                                           onchange="previewFotoCambio(event, {{ $index }})">
+                                </div>
+                            @endif
+                        @endforeach
                     </div>
                 @endif
-                <div id="preview-fotos-nuevas" class="mt-4 flex flex-wrap gap-3"></div>
+
+                {{-- Input para AGREGAR fotos nuevas --}}
+                @php
+                    $fotosActualesCount = count($actividad->fotos ?? []);
+                    $puedeAgregar = 5 - $fotosActualesCount;
+                @endphp
+
+                @if($puedeAgregar > 0)
+                    <div class="mb-2">
+                        <label for="fotos-nuevas" class="block text-sm text-gray-600 dark:text-gray-400 mb-1">
+                            Agregar más fotos (puedes agregar hasta {{ $puedeAgregar }} más)
+                        </label>
+                        <input type="file" name="fotos[]" id="fotos-nuevas" multiple accept="image/*"
+                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                    </div>
+                    <div id="preview-fotos-nuevas" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+                @else
+                    <p class="text-sm text-yellow-600 dark:text-yellow-400">
+                        Ya tienes el máximo de 5 fotos. Elimina alguna para agregar más.
+                    </p>
+                @endif
             </div>
 
             <div class="flex justify-end gap-3 pt-4">
                 <a href="{{ route('actividades.registradas') }}"
-                   class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition">Cancelar</a>
+                   class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+                    Cancelar
+                </a>
                 <button type="submit"
                         class="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition">
                     <i class="ri-save-line mr-1"></i>
@@ -185,67 +229,163 @@
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    // Quill editors
+document.addEventListener('DOMContentLoaded', function() {
+    // Configuración de Quill
+    const Font = Quill.import('formats/font');
+    Font.whitelist = ['arial', 'times', 'georgia', 'verdana'];
+    Quill.register(Font, true);
+
+    const toolbarOptions = [
+        [{'font': ['arial', 'times', 'georgia', 'verdana']}],
+        [{'size': ['small', false, 'large', 'huge']}],
+        ['bold', 'italic', 'underline', 'strike'],
+        [{'color': []}, {'background': []}],
+        [{'header': [1, 2, 3, false]}],
+        [{'list': 'ordered'}, {'list': 'bullet'}],
+        [{'indent': '-1'}, {'indent': '+1'}],
+        [{'align': []}],
+        ['link', 'image'],
+        ['clean']
+    ];
+
+    // Editor Resumen
     const resumenHidden = document.getElementById('resumen-content');
-    const contenidoHidden = document.getElementById('contenido-content');
-    var quillResumen = new Quill('#resumen-editor', {theme:'snow'});
-    if (resumenHidden.value) quillResumen.root.innerHTML = resumenHidden.value;
-    quillResumen.on('text-change', function () { resumenHidden.value = quillResumen.root.innerHTML; });
-    var quillContenido = new Quill('#contenido-editor', {theme:'snow'});
-    if (contenidoHidden.value) quillContenido.root.innerHTML = contenidoHidden.value;
-    quillContenido.on('text-change', function () { contenidoHidden.value = quillContenido.root.innerHTML; });
-
-    // ==========================
-    // FOTOS NUEVAS (con X)
-    // ==========================
-    const fileInput        = document.getElementById('foto');
-    const previewContainer = document.getElementById('preview-fotos-nuevas');
-    let nuevas = [];
-
-    // Cuando el usuario selecciona archivos
-    fileInput && fileInput.addEventListener('change', function () {
-        nuevas = Array.from(fileInput.files);   // guardamos los File en el arreglo
-        renderNuevasPreviews();
+    const quillResumen = new Quill('#resumen-editor', {
+        theme: 'snow',
+        modules: { toolbar: toolbarOptions }
+    });
+    if (resumenHidden.value) {
+        quillResumen.root.innerHTML = resumenHidden.value;
+    }
+    quillResumen.on('text-change', () => {
+        resumenHidden.value = quillResumen.root.innerHTML;
     });
 
-    // Render de previews + botón X
-    function renderNuevasPreviews() {
-        previewContainer.innerHTML = '';
+    // Editor Contenido
+    const contenidoHidden = document.getElementById('contenido-content');
+    const quillContenido = new Quill('#contenido-editor', {
+        theme: 'snow',
+        modules: { toolbar: toolbarOptions }
+    });
+    if (contenidoHidden.value) {
+        quillContenido.root.innerHTML = contenidoHidden.value;
+    }
+    quillContenido.on('text-change', () => {
+        contenidoHidden.value = quillContenido.root.innerHTML;
+    });
 
-        nuevas.forEach((file, idx) => {
+    // ===================================
+    // SISTEMA DE FOTOS NUEVAS (con acumulación)
+    // ===================================
+    const inputFotosNuevas = document.getElementById('fotos-nuevas');
+    const previewContainerNuevas = document.getElementById('preview-fotos-nuevas');
+    const form = document.getElementById('formEditarActividad');
+
+    let fotosNuevasSeleccionadas = [];
+
+    if (inputFotosNuevas) {
+        inputFotosNuevas.addEventListener('change', function() {
+            const nuevosArchivos = Array.from(this.files);
+            
+            // Contar fotos actuales
+            const fotosExistentesCount = document.querySelectorAll('#fotos-existentes .relative').length || 0;
+            const totalFotos = fotosExistentesCount + fotosNuevasSeleccionadas.length + nuevosArchivos.length;
+
+            if (totalFotos > 5) {
+                alert(`Solo puedes tener máximo 5 fotos. Ya tienes ${fotosExistentesCount} foto(s) guardada(s) y ${fotosNuevasSeleccionadas.length} seleccionada(s).`);
+                this.value = '';
+                return;
+            }
+
+            // Agregar al array de fotos nuevas (acumulando)
+            fotosNuevasSeleccionadas = fotosNuevasSeleccionadas.concat(nuevosArchivos);
+            this.value = '';
+
+            actualizarPreviewNuevas();
+        });
+    }
+
+    function actualizarPreviewNuevas() {
+        if (!previewContainerNuevas) return;
+        
+        previewContainerNuevas.innerHTML = '';
+
+        fotosNuevasSeleccionadas.forEach((file, index) => {
             const reader = new FileReader();
-            reader.onload = function (e) {
+            reader.onload = e => {
                 const div = document.createElement('div');
-                div.className = 'relative group';
+                div.classList.add('relative', 'group');
+
                 div.innerHTML = `
                     <img src="${e.target.result}"
-                         class="w-32 h-24 object-cover rounded-lg shadow-md border-2 border-green-500" />
-                    <span class="absolute top-1 left-1 bg-green-600 text-white rounded px-2 py-1 text-xs">
+                         class="w-full h-32 object-cover rounded-lg shadow-md border-2 border-green-500">
+                    <span class="absolute top-2 left-2 bg-green-600 text-white rounded px-2 py-1 text-xs">
                         Nueva
                     </span>
                     <button type="button"
-                            class="absolute top-1 right-1 rounded-full bg-red-600 text-white px-2 py-1 text-xs hover:bg-red-700"
-                            onclick="eliminarNuevaFoto(${idx})">
-                        X
+                            class="absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-700 transition"
+                            onclick="eliminarFotoNueva(${index})">
+                        ×
                     </button>
                 `;
-                previewContainer.appendChild(div);
+
+                previewContainerNuevas.appendChild(div);
             };
             reader.readAsDataURL(file);
         });
-
-        // Reconstruir FileList del input para que solo envíe lo que queda en 'nuevas'
-        const dataTransfer = new DataTransfer();
-        nuevas.forEach(file => dataTransfer.items.add(file));
-        fileInput.files = dataTransfer.files;
     }
 
     // Eliminar una foto nueva por índice
-    window.eliminarNuevaFoto = function (idx) {
-        nuevas.splice(idx, 1);     // quitamos del arreglo
-        renderNuevasPreviews();    // y volvemos a pintar / actualizar FileList
+    window.eliminarFotoNueva = function(idx) {
+        fotosNuevasSeleccionadas.splice(idx, 1);
+        actualizarPreviewNuevas();
     };
+
+    // ENVÍO CON FORMDATA
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+
+            // Remover el input de fotos nuevas vacío
+            formData.delete('fotos[]');
+
+            // Agregar las fotos nuevas seleccionadas manualmente
+            fotosNuevasSeleccionadas.forEach((file) => {
+                formData.append('fotos[]', file);
+            });
+
+            console.log('Fotos nuevas a enviar:', fotosNuevasSeleccionadas.length);
+
+            // Enviar con fetch
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                    return;
+                }
+                if (response.ok) {
+                    window.location.href = "{{ route('actividades.registradas') }}";
+                } else {
+                    return response.json().then(data => {
+                        throw new Error(data.message || 'Error al actualizar');
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error: ' + error.message);
+            });
+        });
+    }
 
     // ================================
     // Cambio de fotos ya existentes
@@ -255,15 +395,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if (input.files && input.files[0]) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                let img;
-                if (index === 'legacy') {
-                    img = document.getElementById('preview-foto-legacy');
-                } else {
-                    img = document.getElementById('preview-foto-' + index);
-                }
+                const img = document.getElementById('preview-foto-' + index);
                 if (img) {
                     img.src = e.target.result;
-                    img.classList.add('border-green-600');
+                    img.classList.remove('border-gray-200');
+                    img.classList.add('border-blue-500', 'border-4');
                 }
             };
             reader.readAsDataURL(input.files[0]);
@@ -272,4 +408,3 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 @endsection
-

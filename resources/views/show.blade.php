@@ -66,36 +66,48 @@
             </div>
         </div>
 
-        <!-- Imágenes de la actividad (fotos) -->
+        <!-- Galería de Fotos -->
         @php
+            // Obtener las fotos y asegurarse de que sea un array
             $fotos = $actividad->fotos;
             if (is_string($fotos)) {
-                $fotos = json_decode($fotos, true);
+                $fotos = json_decode($fotos, true) ?? [];
+            } elseif (!is_array($fotos)) {
+                $fotos = [];
             }
         @endphp
 
-        @if(!empty($fotos) && is_array($fotos) && count($fotos) > 0)
-            <div class="flex flex-wrap justify-center gap-6 mb-6">
-                @foreach($fotos as $foto)
-                    @if(!empty($foto))
-                        <div class="relative rounded-lg overflow-hidden shadow-xl border-4 border-gray-200 dark:border-gray-700">
-                            <img src="{{ asset('storage/' . ltrim($foto, '/')) }}"
-                                 alt="{{ $actividad->titulo }}"
-                                 class="max-h-96 object-contain bg-gray-100 dark:bg-gray-900">
-                        </div>
-                    @endif
-                @endforeach
+        @if(!empty($fotos) && count($fotos) > 0)
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
+                    <i class="ri-gallery-line text-purple-500"></i>
+                    Galería de Fotos ({{ count($fotos) }})
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    @foreach($fotos as $index => $foto)
+                        @if(!empty($foto))
+                            <div class="relative group rounded-lg overflow-hidden shadow-lg border-2 border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300">
+                                <img src="{{ asset('storage/' . ltrim($foto, '/')) }}"
+                                     alt="{{ $actividad->titulo }} - Foto {{ $index + 1 }}"
+                                     class="w-full h-64 object-cover bg-gray-100 dark:bg-gray-900 group-hover:scale-105 transition-transform duration-300">
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2">
+                                    <p class="text-white text-xs font-medium">Foto {{ $index + 1 }}</p>
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
             </div>
         @else
             <div class="flex justify-center mb-6 p-8 bg-gray-50 dark:bg-gray-700/50 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600">
                 <div class="text-center">
                     <i class="ri-image-line text-5xl text-gray-400 dark:text-gray-500 mb-2"></i>
-                    <p class="text-gray-500 dark:text-gray-400 italic">No hay imagen disponible</p>
+                    <p class="text-gray-500 dark:text-gray-400 italic">No hay fotos disponibles</p>
                 </div>
             </div>
         @endif
 
-        <!-- Botón volver -->
+        <!-- Botones de acción -->
         <div class="flex justify-between items-center pt-6 border-t border-gray-200 dark:border-gray-700">
             <a href="{{ route('actividades.registradas') }}"
                class="inline-flex items-center gap-2 px-6 py-3 bg-gray-700 dark:bg-gray-600 text-white text-sm font-medium rounded-lg hover:bg-gray-800 dark:hover:bg-gray-500 transition shadow-md hover:shadow-lg">
