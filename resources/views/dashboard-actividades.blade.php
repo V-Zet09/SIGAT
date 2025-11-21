@@ -193,7 +193,7 @@ textarea {
     position: absolute;
     top: 0;
     right: 0;
-    background-color: #dc2626; /* rojo */
+    background-color: #dc2626;
     color: white;
     border-radius: 9999px;
     width: 1.25rem;
@@ -244,7 +244,7 @@ textarea {
             ⚠️ No puedes registrar una actividad con fecha futura.
         </div>
 
-        <form action="{{ route('actividades.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
+        <form id="formActividad" action="{{ route('actividades.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
             @csrf
             
             <div>
@@ -327,13 +327,13 @@ textarea {
             </div>
 
             <div>
-                <label for="foto" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Foto</label>
-                <input type="file" name="foto[]" id="foto" multiple
+                <label for="fotos" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Fotos</label>
+                <input type="file" name="fotos[]" id="fotos" multiple
                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400"
-                       >
-                <p id="foto-error" class="hidden text-red-600 text-sm mt-1">Solo puedes subir máximo 5 fotos</p>
+                       accept="image/*">
+                <p id="fotos-error" class="hidden text-red-600 text-sm mt-1">Solo puedes subir máximo 5 fotos</p>
                 <div id="preview-container" class="mt-2 flex flex-wrap gap-2"></div>
-                <p id="foto-count" class="mt-1 text-sm text-gray-700 dark:text-gray-300"></p>
+                <p id="fotos-count" class="mt-1 text-sm text-gray-700 dark:text-gray-300"></p>
             </div>
 
             <div class="flex justify-end gap-3 pt-4">
@@ -348,7 +348,6 @@ textarea {
     </div>
 </div>
 @endsection
-
 
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
@@ -431,11 +430,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     traducir();
 
-    // Manejo de imágenes una por una con borrado individual
-    const inputFotos = document.getElementById('foto');
-    const errorMsg = document.getElementById('foto-error');
+    // Manejo de imágenes con FormData
+    const inputFotos = document.getElementById('fotos');
+    const errorMsg = document.getElementById('fotos-error');
     const previewContainer = document.getElementById('preview-container');
-    const fotoCount = document.getElementById('foto-count');
+    const fotoCount = document.getElementById('fotos-count');
 
     let archivosSeleccionados = [];
 
@@ -488,11 +487,57 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    const form = document.querySelector('form');
-    form.addEventListener('submit', function (e) {
-        const dataTransfer = new DataTransfer();
-        archivosSeleccionados.forEach(file => dataTransfer.items.add(file));
-        inputFotos.files = dataTransfer.files;
+    // ENVÍO CON FORMDATA - SOLUCIÓN RECOMENDADA
+    const form = document.getElementById('formActividad');
+    
+    form.addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevenir envío normal
+
+        // Crear FormData desde el formulario
+        const formData = new FormData(this);
+
+        // Remover el campo fotos[] que viene vacío del input
+        formData.delete('fotos[]');
+
+        // Agregar las fotos seleccionadas manualmente
+        archivosSeleccionados.forEach((file) => {
+            formData.append('fotos[]', file);
+        });
+
+        // Debugging - puedes eliminarlo después de verificar
+        console.log('Total de fotos a enviar:', archivosSeleccionados.length);
+        for (let pair of formData.entries()) {
+            if (pair[0] === 'fotos[]') {
+                console.log('Foto:', pair[1].name);
+            }
+        }
+
+        // Enviar con fetch
+        fetch(this.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            if (response.redirected) {
+                window.location.href = response.url;
+                return;
+            }
+            if (response.ok) {
+                window.location.href = "{{ route('actividades.registradas') }}";
+            } else {
+                return response.json().then(data => {
+                    throw new Error(data.message || 'Error al guardar la actividad');
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al enviar el formulario: ' + error.message);
+        });
     });
 });
 </script>
