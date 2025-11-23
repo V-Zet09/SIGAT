@@ -1,12 +1,5 @@
-<footer class="footer">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-6">
-            </div>
-            <div class="col-sm-6">
-                <div class="text-sm-end d-none d-sm-block">
-                </div>
-            </div>
-        </div>
+<footer class="mt-auto border-t bg-white dark:bg-gray-800 py-6">
+    <div class="max-w-screen-xl mx-auto text-center text-sm text-gray-500 dark:text-gray-300">
+        © 2025 Municipio de Tlapehuala™. Todos los derechos reservados.
     </div>
 </footer>

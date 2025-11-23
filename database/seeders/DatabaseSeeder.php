@@ -6,17 +6,12 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // Si quieres usar factories, puedes descomentarlo:
-        // \App\Models\User::factory(10)->create();
-
-        // Aquí registras tu seeder personalizado
         $this->call([
-            ActividadSeeder::class,
+            RoleSeeder::class,            // 1. Crear roles
+            PermissionSeeder::class,      // 2. Crear permisos (si tienes este seeder)
+            RolePermissionSeeder::class,  // 3. Asignar permisos a roles 
         ]);
     }
 }

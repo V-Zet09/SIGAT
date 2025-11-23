@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Actividad;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use App\Helpers\NotificationHelper;
 
 class ActividadController extends Controller
 {
@@ -15,30 +17,110 @@ class ActividadController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $this->validarActividad($request);
+        $validated = $request->validate([
+            'titulo' => 'required|string|max:255',
+            'autor' => 'nullable|string|max:255',
+            'fecha' => 'required|date|before_or_equal:today',
+            'tipo_area' => 'nullable|string|max:255',
+            'resumen' => 'nullable|string',
+            'presupuesto' => 'nullable|numeric',
+            'tipo_presupuesto' => 'nullable|string',
+            'contenido' => 'nullable|string',
+            'fotos' => 'array|max:5',  // ← CAMBIADO de 'foto' a 'fotos'
+            'fotos.*' => 'image|mimes:jpg,jpeg,png,gif|max:2048',  // ← CAMBIADO de 'foto.*' a 'fotos.*'
+        ]);
 
-        if ($request->hasFile('foto')) {
-            $validated['foto'] = $request->file('foto')->store('actividades', 'public');
+        $rutasFotos = [];
+        if ($request->hasFile('fotos')) {  // ← CAMBIADO de 'foto' a 'fotos'
+            foreach ($request->file('fotos') as $archivo) {  // ← CAMBIADO de 'foto' a 'fotos'
+                $rutasFotos[] = $archivo->store('actividades', 'public');
+            }
         }
 
-        Actividad::create($validated);
+        $validated['fotos'] = json_encode($rutasFotos);
+        $validated['creado_por_id'] = Auth::id();
 
-        return redirect()->route('actividades.registradas')->with('success', 'Actividad registrada correctamente.');
+        $actividad = Actividad::create($validated);
+
+        if (!empty($validated['responsable_id'])) {
+            NotificationHelper::send(
+                $validated['responsable_id'],
+                'actividad',
+                'Nueva actividad asignada',
+                'Se te ha asignado la actividad: ' . $actividad->titulo,
+                [
+                    'link' => route('actividades.registradas'),
+                    'icon' => 'ri-calendar-check-line',
+                    'color' => 'blue',
+                    'data' => ['actividad_id' => $actividad->id]
+                ]
+            );
+        }
+
+        NotificationHelper::sendToRole(
+            'Administrador',
+            'actividad',
+            'Nueva actividad creada',
+            Auth::user()->name . ' ha creado la actividad: ' . $actividad->titulo,
+            [
+                'link' => route('actividades.registradas'),
+                'icon' => 'ri-calendar-check-line',
+                'color' => 'green',
+                'data' => ['actividad_id' => $actividad->id]
+            ]
+        );
+
+        return redirect()->route('actividades.registradas')
+            ->with('success', 'Actividad registrada correctamente.');
     }
 
     public function showRegistradas(Request $request)
     {
         $query = Actividad::query();
 
+        if ($request->filled('filtro_anio')) {
+            $query->whereYear('fecha', $request->filtro_anio);
+        }
+
+        if ($request->filled('filtro_mes')) {
+            $query->whereMonth('fecha', $request->filtro_mes);
+        }
+
         if ($request->filled('buscar')) {
-            $query->where('titulo', 'like', '%' . $request->buscar . '%');
+            $buscar = $request->buscar;
+            $query->where(function($q) use ($buscar) {
+                $q->where('titulo', 'like', '%' . $buscar . '%')
+                    ->orWhere('autor', 'like', '%' . $buscar . '%')
+                    ->orWhere('tipo_area', 'like', '%' . $buscar . '%')
+                    ->orWhere('contenido', 'like', '%' . $buscar . '%')
+                    ->orWhere('resumen', 'like', '%' . $buscar . '%');
+
+                if (preg_match('/(\d{2})[\/\-](\d{2})[\/\-](\d{4})/', $buscar, $matches)) {
+                    $fechaBuscada = $matches[3] . '-' . $matches[2] . '-' . $matches[1];
+                    $q->orWhere('fecha', $fechaBuscada);
+                }
+
+                if (preg_match('/^\d{4}$/', $buscar)) {
+                    $q->orWhereYear('fecha', $buscar);
+                }
+
+                $meses = [
+                    'enero' => 1, 'febrero' => 2, 'marzo' => 3, 'abril' => 4,
+                    'mayo' => 5, 'junio' => 6, 'julio' => 7, 'agosto' => 8,
+                    'septiembre' => 9, 'octubre' => 10, 'noviembre' => 11, 'diciembre' => 12
+                ];
+
+                $buscarLower = strtolower($buscar);
+                foreach ($meses as $nombreMes => $numeroMes) {
+                    if (strpos($buscarLower, $nombreMes) !== false) {
+                        $q->orWhereMonth('fecha', $numeroMes);
+                        break;
+                    }
+                }
+            });
         }
 
-        if ($request->filled('tipo_area')) {
-            $query->whereRaw('LOWER(tipo_area) = ?', [strtolower(trim($request->tipo_area))]);
-        }
-
-        $actividades = $query->latest()->paginate(10);
+        $actividades = $query->orderBy('fecha', 'desc')->paginate(10);
 
         return view('dashboard-actividades-registradas', compact('actividades'));
     }
@@ -46,37 +128,148 @@ class ActividadController extends Controller
     public function edit($id)
     {
         $actividad = Actividad::findOrFail($id);
+
+        $fotos = $actividad->fotos
+            ? (is_array($actividad->fotos) ? $actividad->fotos : json_decode($actividad->fotos, true))
+            : [];
+
+        $actividad->fotos = $fotos;
+
         return view('edit', compact('actividad'));
     }
 
     public function update(Request $request, $id)
-    {
-        $validated = $this->validarActividad($request);
-        $actividad = Actividad::findOrFail($id);
+{
+    $actividad = Actividad::findOrFail($id);
 
-        if ($request->hasFile('foto')) {
-            if ($actividad->foto) {
-                Storage::disk('public')->delete($actividad->foto);
+    // Obtener las fotos actuales primero
+    $fotosActuales = $actividad->fotos
+        ? (is_array($actividad->fotos) ? $actividad->fotos : json_decode($actividad->fotos, true))
+        : [];
+
+    // Contar cuántas fotos ya tiene
+    $cantidadActual = count($fotosActuales);
+
+    // Calcular cuántas fotos nuevas puede agregar
+    $maxNuevas = 5 - $cantidadActual;
+
+    // Validación dinámica según cuántas fotos ya tiene
+    $validated = $request->validate([
+        'titulo' => 'required|string|max:255',
+        'autor' => 'nullable|string|max:255',
+        'fecha' => 'required|date|before_or_equal:today',
+        'tipo_area' => 'required|string|max:255',
+        'resumen' => 'nullable|string',
+        'contenido' => 'nullable|string',
+        'presupuesto' => 'nullable|numeric',
+        'tipo_presupuesto' => 'nullable|string|max:255',
+        'fotos' => "nullable|array|max:$maxNuevas",  // ← Validación dinámica
+        'fotos.*' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
+    ], [
+        'fotos.max' => "Solo puedes agregar hasta $maxNuevas foto(s) más. Ya tienes $cantidadActual foto(s).",
+    ]);
+
+    // Manejar el cambio individual de fotos (botón "Cambiar")
+    if ($request->has('cambiar_foto')) {
+        foreach ($request->file('cambiar_foto', []) as $index => $fotoNueva) {
+            if ($fotoNueva && isset($fotosActuales[$index])) {
+                Storage::disk('public')->delete($fotosActuales[$index]);
+                $fotosActuales[$index] = $fotoNueva->store('actividades', 'public');
             }
-            $validated['foto'] = $request->file('foto')->store('actividades', 'public');
+        }
+    }
+
+    // Agregar fotos nuevas (botón "Nueva")
+    if ($request->hasFile('fotos')) {
+        $nuevas = [];
+        foreach ($request->file('fotos') as $file) {
+            if ($file->isValid()) {
+                $nuevas[] = $file->store('actividades', 'public');
+            }
+        }
+        
+        // Combinar fotos actuales con las nuevas
+        $fotosActuales = array_merge($fotosActuales, $nuevas);
+        
+        // Asegurar que no exceda 5 fotos en total
+        $fotosActuales = array_slice($fotosActuales, 0, 5);
+    }
+
+    $validated['fotos'] = json_encode($fotosActuales);
+
+    $actividad->update($validated);
+
+    return redirect()->route('actividades.registradas')
+        ->with('success', 'Actividad actualizada correctamente.');
+}
+
+
+    public function eliminarFoto($id, $foto)
+    {
+        $actividad = Actividad::findOrFail($id);
+        $fotos = $actividad->fotos
+            ? (is_array($actividad->fotos) ? $actividad->fotos : json_decode($actividad->fotos, true))
+            : [];
+
+        $fotoDecodificada = urldecode($foto);
+        $index = array_search($fotoDecodificada, $fotos);
+
+        if ($index !== false) {
+            Storage::disk('public')->delete($fotos[$index]);
+            array_splice($fotos, $index, 1);
+
+            $actividad->fotos = json_encode($fotos);
+            $actividad->save();
         }
 
-        $actividad->update($validated);
-
-        return redirect()->route('actividades.registradas')->with('success', 'Actividad actualizada correctamente.');
+        return redirect()->back()->with('success', 'Foto eliminada correctamente.');
     }
 
     public function destroy($id)
     {
         $actividad = Actividad::findOrFail($id);
+        $tituloActividad = $actividad->titulo;
+        $responsableId = $actividad->responsable_id;
+        $creadoPorId = $actividad->creado_por_id;
 
-        if ($actividad->foto) {
-            Storage::disk('public')->delete($actividad->foto);
+        // Eliminar todas las fotos
+        if ($actividad->fotos) {
+            $fotos = is_array($actividad->fotos) ? $actividad->fotos : json_decode($actividad->fotos, true);
+            foreach ($fotos as $foto) {
+                Storage::disk('public')->delete($foto);
+            }
         }
 
         $actividad->delete();
 
-        return redirect()->route('actividades.registradas')->with('success', 'Actividad eliminada correctamente.');
+        if ($responsableId && $responsableId !== Auth::id()) {
+            NotificationHelper::send(
+                $responsableId,
+                'actividad',
+                'Actividad eliminada',
+                'La actividad "' . $tituloActividad . '" ha sido eliminada del sistema por ' . Auth::user()->name,
+                [
+                    'icon' => 'ri-delete-bin-line',
+                    'color' => 'red'
+                ]
+            );
+        }
+
+        if ($creadoPorId && $creadoPorId !== Auth::id()) {
+            NotificationHelper::send(
+                $creadoPorId,
+                'actividad',
+                'Tu actividad fue eliminada',
+                'Tu actividad "' . $tituloActividad . '" ha sido eliminada del sistema por ' . Auth::user()->name,
+                [
+                    'icon' => 'ri-delete-bin-line',
+                    'color' => 'red'
+                ]
+            );
+        }
+
+        return redirect()->route('actividades.registradas')
+            ->with('success', 'Actividad eliminada correctamente.');
     }
 
     public function show($id)
@@ -85,9 +278,140 @@ class ActividadController extends Controller
         return view('show', compact('actividad'));
     }
 
-    /**
-     * Validación centralizada para store y update
-     */
+    public function aprobar($id)
+    {
+        $actividad = Actividad::findOrFail($id);
+
+        $actividad->update([
+            'estado' => 'Aprobada',
+            'aprobada_por' => Auth::id(),
+            'fecha_aprobacion' => now()
+        ]);
+
+        if ($actividad->creado_por_id) {
+            NotificationHelper::send(
+                $actividad->creado_por_id,
+                'actividad',
+                '✓ Actividad aprobada',
+                Auth::user()->name . ' ha aprobado tu actividad: ' . $actividad->titulo,
+                [
+                    'link' => route('actividades.registradas'),
+                    'icon' => 'ri-check-double-line',
+                    'color' => 'green',
+                    'data' => ['actividad_id' => $actividad->id]
+                ]
+            );
+        }
+
+        if ($actividad->responsable_id && $actividad->responsable_id !== $actividad->creado_por_id) {
+            NotificationHelper::send(
+                $actividad->responsable_id,
+                'actividad',
+                '✓ Actividad aprobada',
+                'La actividad "' . $actividad->titulo . '" ha sido aprobada',
+                [
+                    'link' => route('actividades.registradas'),
+                    'icon' => 'ri-check-double-line',
+                    'color' => 'green',
+                    'data' => ['actividad_id' => $actividad->id]
+                ]
+            );
+        }
+
+        return redirect()->back()
+            ->with('success', 'Actividad aprobada correctamente.');
+    }
+
+    public function rechazar(Request $request, $id)
+    {
+        $request->validate([
+            'motivo' => 'required|string|max:500'
+        ]);
+
+        $actividad = Actividad::findOrFail($id);
+
+        $actividad->update([
+            'estado' => 'Rechazada',
+            'rechazada_por' => Auth::id(),
+            'motivo_rechazo' => $request->motivo,
+            'fecha_rechazo' => now()
+        ]);
+
+        if ($actividad->creado_por_id) {
+            NotificationHelper::send(
+                $actividad->creado_por_id,
+                'actividad',
+                '✗ Actividad rechazada',
+                Auth::user()->name . ' ha rechazado tu actividad: ' . $actividad->titulo .
+                '. Motivo: ' . $request->motivo,
+                [
+                    'link' => route('actividades.registradas'),
+                    'icon' => 'ri-close-circle-line',
+                    'color' => 'red',
+                    'data' => ['actividad_id' => $actividad->id, 'motivo' => $request->motivo]
+                ]
+            );
+        }
+
+        if ($actividad->responsable_id && $actividad->responsable_id !== $actividad->creado_por_id) {
+            NotificationHelper::send(
+                $actividad->responsable_id,
+                'actividad',
+                '✗ Actividad rechazada',
+                'La actividad "' . $actividad->titulo . '" ha sido rechazada. Motivo: ' . $request->motivo,
+                [
+                    'link' => route('actividades.registradas'),
+                    'icon' => 'ri-close-circle-line',
+                    'color' => 'red',
+                    'data' => ['actividad_id' => $actividad->id]
+                ]
+            );
+        }
+
+        return redirect()->back()
+            ->with('success', 'Actividad rechazada.');
+    }
+
+    public function adjuntarEvidencia(Request $request, $id)
+    {
+        $request->validate([
+            'evidencia' => 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:5120',
+            'descripcion' => 'nullable|string|max:255'
+        ]);
+
+        $actividad = Actividad::findOrFail($id);
+        $path = $request->file('evidencia')->store('evidencias', 'public');
+
+        $evidencias = $actividad->evidencias ?? [];
+        $evidencias[] = [
+            'archivo' => $path,
+            'descripcion' => $request->descripcion,
+            'usuario_id' => Auth::id(),
+            'usuario_nombre' => Auth::user()->name,
+            'fecha' => now()->toDateTimeString()
+        ];
+
+        $actividad->update(['evidencias' => $evidencias]);
+
+        if ($actividad->creado_por_id && $actividad->creado_por_id !== Auth::id()) {
+            NotificationHelper::send(
+                $actividad->creado_por_id,
+                'actividad',
+                'Nueva evidencia adjuntada',
+                Auth::user()->name . ' ha adjuntado evidencia a la actividad: ' . $actividad->titulo,
+                [
+                    'link' => route('actividades.registradas'),
+                    'icon' => 'ri-attachment-line',
+                    'color' => 'blue',
+                    'data' => ['actividad_id' => $actividad->id]
+                ]
+            );
+        }
+
+        return redirect()->back()
+            ->with('success', 'Evidencia adjuntada correctamente.');
+    }
+
     private function validarActividad(Request $request)
     {
         return $request->validate([
@@ -102,7 +426,25 @@ class ActividadController extends Controller
             'tipo_presupuesto' => 'nullable|string|max:255',
             'numero' => 'nullable|string|max:255',
             'fase' => 'nullable|string|max:255',
-            'foto' => 'nullable|image|max:2048',
+            'fotos' => 'nullable|array|max:5',  // ← CAMBIADO de 'foto' a 'fotos'
+            'fotos.*' => 'image|max:2048',  // ← CAMBIADO de 'foto.*' a 'fotos.*'
+            'responsable_id' => 'nullable|exists:users,id',
         ]);
+    }
+
+    public function count(Request $r)
+    {
+        $r->validate([
+            'start' => ['required', 'date', 'date_format:Y-m-d'],
+            'end' => ['required', 'date', 'date_format:Y-m-d', 'after_or_equal:start'],
+            'areas' => ['nullable', 'string'],
+        ]);
+
+        $areas = array_values(array_filter(explode(',', (string) $r->query('areas'))));
+        $q = Actividad::query()->whereBetween('fecha', [$r->query('start'), $r->query('end')]);
+        if ($areas) {
+            $q->whereIn('tipo_area', $areas);
+        }
+        return response()->json(['count' => $q->count()]);
     }
 }

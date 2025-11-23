@@ -1,137 +1,123 @@
 @extends('layouts.master-without-nav')
 
-@section('title')
-    @lang('translation.password-reset')
-@endsection
+@section('title', 'Recuperar Contraseña')
 
 @section('content')
-
-<style>
-    :root {
-        --primary-blue: #2776BA;
-        --secondary-blue: #5490AA;
-        --light-blue: #7480AA;
-        --accent-wine: #854256;
-        --card-bg: rgba(255, 255, 255, 0.95);
-    }
+<div class="relative min-h-screen flex items-center justify-center p-4 overflow-hidden">
+    <!-- Fondo degradado animado -->
+    <div class="absolute inset-0 bg-gradient-to-br from-green-500 via-emerald-600 to-teal-700"></div>
     
-    .bg-persianas-gruesas {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: 
-            linear-gradient(
-                90deg,
-                rgba(255,255,255,0.15) 0%,
-                rgba(255,255,255,0) 10%,
-                rgba(255,255,255,0) 90%,
-                rgba(255,255,255,0.15) 100%
-            ),
-            url('{{ asset('images/fondo.jpeg') }}');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        z-index: -1;
-        opacity: 0.9;
-        mask-image: repeating-linear-gradient(
-            90deg,
-            transparent 0px,
-            transparent 15px,       <!-- Espacio transparente reducido -->
-            rgba(0,0,0,0.8) 15px,  <!-- Persianas más gruesas -->
-            rgba(0,0,0,0.8) 60px   <!-- Ancho aumentado -->
-        );
-        -webkit-mask-image: repeating-linear-gradient(
-            90deg,
-            transparent 0px,
-            transparent 15px,
-            rgba(0,0,0,0.8) 15px,
-            rgba(0,0,0,0.8) 60px
-        );
-    }
+    <!-- Círculos flotantes animados -->
+    <div class="absolute top-20 left-20 w-72 h-72 bg-white/20 rounded-full blur-3xl animate-blob"></div>
+    <div class="absolute top-40 right-20 w-72 h-72 bg-emerald-300/20 rounded-full blur-3xl animate-blob animation-delay-2000"></div>
+    <div class="absolute -bottom-20 left-40 w-72 h-72 bg-teal-300/20 rounded-full blur-3xl animate-blob animation-delay-4000"></div>
     
-    .compact-card {
-        max-width: 480px;
-        padding: 1.75rem;
-        border-radius: 12px;
-        backdrop-filter: blur(6px);
-        background-color: var(--card-bg);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.35);
-    }
-</style>
-
-<div class="auth-page-wrapper pt-4 position-relative" style="min-height: 100vh;">
-    
-    <!-- Fondo con persianas gruesas -->
-    <div class="bg-persianas-gruesas"></div>
-    
-    <!-- Contenido compacto -->
-    <div class="container d-flex justify-content-center align-items-center min-vh-100">
-        <div class="compact-card shadow-sm">
-            <div class="text-center">
-                <h4 class="text-primary fw-bold mb-2">¿Olvidaste tu contraseña?</h4>
-                <p class="mb-3" style="color: var(--secondary-blue);">Solicita el restablecimiento de tu acceso al sistema SIGAT</p>
-                <lord-icon src="https://cdn.lordicon.com/rhvddzym.json" trigger="loop" colors="primary:#2776BA" style="width:80px;height:80px;"></lord-icon>
-            </div>
-
-            <div class="alert alert-warning text-start py-2 mb-3">
-                <i class="fas fa-info-circle me-2"></i> Ingresa tu correo electrónico registrado y sigue las instrucciones enviadas.
-            </div>
-
-            @if (session('status'))
-                <div class="alert alert-success text-center py-2 mb-3">
-                    <i class="fas fa-check-circle me-2"></i> {{ session('status') }}
+    <!-- Contenido -->
+    <div class="relative w-full max-w-md z-10">
+        
+        {{-- Tarjeta principal --}}
+        <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
+            
+            {{-- Header con icono grande --}}
+            <div class="bg-gradient-to-r from-green-600 to-green-700 p-8 text-center">
+                <div class="w-24 h-24 bg-white rounded-full mx-auto mb-4 flex items-center justify-center">
+                    <i class="ri-lock-password-line text-5xl text-green-600"></i>
                 </div>
-            @endif
+                <h1 class="text-2xl font-bold text-white mb-2">¿Olvidaste tu contraseña?</h1>
+                <p class="text-green-100 text-sm">No te preocupes, es fácil recuperarla</p>
+            </div>
 
-            <form method="POST" action="{{ route('password.email') }}">
-                @csrf
-                <div class="mb-3">
-                    <label for="email" class="form-label" style="color: var(--secondary-blue); font-weight: 500;">Correo electrónico</label>
-                    <input type="email" name="email" id="email" class="form-control py-2 @error('email') is-invalid @enderror" placeholder="Ingresa tu correo electrónico" value="{{ old('email') }}" required>
-                    @error('email')
-                        <div class="invalid-feedback">
-                            <i class="fas fa-exclamation-circle me-1"></i> {{ $message }}
+            {{-- Contenido --}}
+            <div class="p-8">
+                
+                {{-- Instrucciones claras --}}
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 rounded">
+                    <div class="flex items-start">
+                        <i class="ri-information-line text-2xl text-blue-600 mr-3 mt-0.5"></i>
+                        <div>
+                            <p class="text-blue-900 font-semibold mb-1">Sigue estos pasos:</p>
+                            <ol class="text-blue-800 text-sm space-y-1 list-decimal list-inside">
+                                <li>Escribe tu correo electrónico</li>
+                                <li>Haz clic en "Enviar"</li>
+                                <li>Revisa tu correo (bandeja de entrada)</li>
+                                <li>Haz clic en el enlace que te enviamos</li>
+                            </ol>
                         </div>
-                    @enderror
+                    </div>
                 </div>
 
-                <div class="d-grid mb-3">
-                    <button type="submit" class="btn btn-primary py-2">
-                        <i class="fas fa-paper-plane me-2"></i> Enviar enlace de recuperación
+                {{-- Mensaje de éxito --}}
+                @if (session('status'))
+                    <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6 rounded animate-fade-in">
+                        <div class="flex items-center">
+                            <i class="ri-check-circle-line text-2xl text-green-600 mr-3"></i>
+                            <div>
+                                <p class="text-green-900 font-semibold">¡Correo enviado!</p>
+                                <p class="text-green-700 text-sm">{{ session('status') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                {{-- Formulario --}}
+                <form method="POST" action="{{ route('password.email') }}" class="space-y-5">
+                    @csrf
+
+                    <div>
+                        <label for="email" class="block text-gray-700 font-semibold mb-2 text-lg">
+                            <i class="ri-mail-line mr-2"></i>Tu correo electrónico
+                        </label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            value="{{ old('email') }}"
+                            class="w-full px-4 py-4 text-lg border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 transition
+                                   @error('email') border-red-500 @enderror"
+                            placeholder="ejemplo@correo.com"
+                            required
+                            autofocus>
+                        
+                        @error('email')
+                            <div class="mt-2 flex items-center text-red-600">
+                                <i class="ri-error-warning-line mr-2"></i>
+                                <span class="text-sm">{{ $message }}</span>
+                            </div>
+                        @enderror
+                    </div>
+
+                    {{-- Botón grande y claro --}}
+                    <button 
+                        type="submit" 
+                        class="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-5 text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-2">
+                        <i class="ri-send-plane-fill text-xl"></i>
+                        <span>Enviar enlace de recuperación</span>
                     </button>
-                </div>
-            </form>
+                </form>
 
-            <div class="text-center mt-3">
-                <a href="{{ route('login') }}" style="color: var(--light-blue);">
-                    <i class="fas fa-sign-in-alt me-1"></i> ¿Ya recuerdas tu contraseña? Inicia sesión aquí
-                </a>
+                {{-- Enlace para volver --}}
+                <div class="mt-6 pt-6 border-t border-gray-200 text-center">
+                    <a href="{{ route('login') }}" 
+                       class="inline-flex items-center text-gray-600 hover:text-green-600 font-medium transition">
+                        <i class="ri-arrow-left-line mr-2"></i>
+                        Volver al inicio de sesión
+                    </a>
+                </div>
             </div>
+        </div>
 
-            <hr class="my-3" style="border-top: 1px solid rgba(116, 128, 170, 0.2);">
-
-            <footer class="text-center" style="color: var(--secondary-blue); font-size: 0.9rem;">
-                <div class="mb-1">
-                    &copy; <script>document.write(new Date().getFullYear())</script> <strong>SIGAT</strong>
-                </div>
-                <div class="mb-1">
-                    Desarrollado por estudiantes de Educación Dual:
-                </div>
-                <div class="mb-1">
-                    <strong>Maico Zaet</strong>, <strong>Mariana Lilibeth</strong>, <strong>Jorge</strong>, <strong>José Ángel</strong>
-                </div>
-                <div class="mb-1">
-                    Carrera: <strong>Ingeniería Informática</strong>
-                </div>
-                <div>
-                    Contacto: <a href="mailto:educaciondualsigat@gmail.com" style="color: var(--light-blue);">educaciondualsigat@gmail.com</a>
-                </div>
-            </footer>
+        {{-- Footer --}}
+        <div class="text-center mt-6 text-gray-400 text-sm">
+            <p>&copy; {{ date('Y') }} SIGAT - Sistema de Gestión del Ayuntamiento</p>
+            <p class="mt-1">
+                ¿Necesitas ayuda? Llama al: 
+                <a href="tel:+524771234567" class="text-green-400 hover:text-green-300 font-semibold">477 123 4567</a>
+            </p>
         </div>
     </div>
 </div>
+@endsection
 
+@section('script')
+<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 @endsection

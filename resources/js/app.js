@@ -1,11 +1,6 @@
-/*
-Template Name: Velzon - Admin & Dashboard Template
-Author: Themesbrand
-Version: 4.3.0
-Website: https://themesbrand.com/
-Contact: Themesbrand@gmail.com
-File: Main Js File
-*/
+import 'alpinejs'
+import 'flowbite';
+
 
 (function () {
     ("use strict");

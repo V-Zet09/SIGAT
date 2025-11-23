@@ -1,131 +1,133 @@
+/* ============================================
+   SWEETALERT2 STYLES - Sin variables Bootstrap
+============================================ */
 
-//
-//  _sweetalert2.scss
-//
+// Reemplaza las variables de Bootstrap con valores directos
+$font-weight-medium: 500;
+$font-weight-normal: 400;
+$font-weight-bold: 600;
 
-.swal2-container {
-  .swal2-title{
-    padding: 24px 24px 0;
-    font-size: 20px;
+// Si hay más variables, agrégalas aquí con valores directos
+$border-radius: 0.5rem;
+$box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+// Estilos de SweetAlert2
+.swal2-popup {
     font-weight: $font-weight-medium;
-  }  
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+    
+    // Estilos light mode
+    background: #ffffff;
+    color: #1f2937;
 }
 
-.swal2-popup{
-  padding-bottom: 24px;
-  border-radius: $modal-content-border-radius;
-  background-color: var(--#{$prefix}secondary-bg);
-  color: var(--#{$prefix}body-color);
-
-  .swal2-title{
-    color: var(--#{$prefix}heading-color);
-  }
-
-  .swal2-html-container{
-    color: var(--#{$prefix}body-color);
-  }
+.swal2-title {
+    font-weight: $font-weight-bold;
+    color: #111827;
 }
 
-.swal2-footer{
-  border-top: 1px solid var(--#{$prefix}border-color);
-  color: var(--#{$prefix}body-color);
+.swal2-content {
+    font-weight: $font-weight-normal;
+    color: #4b5563;
 }
 
-.swal2-html-container{
-  font-size: 16px;
-}
-
-.swal2-icon{
-  &.swal2-question{
-    border-color: var(--#{$prefix}info);
-    color: var(--#{$prefix}info);
-  }
-  &.swal2-success {
-    [class^=swal2-success-line]{
-      background-color: var(--#{$prefix}success);
+// Botones
+.swal2-confirm {
+    background: #16a34a !important;
+    border: none;
+    font-weight: $font-weight-medium;
+    
+    &:hover {
+        background: #15803d !important;
     }
+}
 
-    .swal2-success-ring{
-      border-color: rgba(var(--#{$prefix}success-rgb), 0.3);
+.swal2-cancel {
+    background: #6b7280 !important;
+    border: none;
+    font-weight: $font-weight-medium;
+    
+    &:hover {
+        background: #4b5563 !important;
     }
-  }
-  &.swal2-warning{
-    border-color: var(--#{$prefix}warning);
-    color: var(--#{$prefix}warning);
-  }
 }
 
-.swal2-styled{
-  &:focus{
-    box-shadow: none;
-  }
-}
-
-.swal2-loader{
-  border-color: var(--#{$prefix}primary) transparent var(--#{$prefix}primary) transparent;
-}
-
-.swal2-timer-progress-bar{
-  background-color: rgba(var(--#{$prefix}success-rgb), 0.4);
-}
-
-.swal2-progress-steps {
-  .swal2-progress-step{
-    background: var(--#{$prefix}primary);
-    &.swal2-active-progress-step{
-      background: var(--#{$prefix}primary);
-      &~.swal2-progress-step, &~.swal2-progress-step-line{
-        background: rgba(var(--#{$prefix}primary-rgb), 0.3);
-      }
+.swal2-deny {
+    background: #dc2626 !important;
+    border: none;
+    font-weight: $font-weight-medium;
+    
+    &:hover {
+        background: #b91c1c !important;
     }
-  }
-  .swal2-progress-step-line{
-    background: var(--#{$prefix}primary);
-  }
 }
 
-.swal2-actions.swal2-loading{
-  .swal2-styled.swal2-confirm{
-    border-left-color: var(--#{$prefix}primary) !important;
-    border-right-color: var(--#{$prefix}primary) !important;
-  }
-}
-
-.swal2-file, .swal2-input, .swal2-textarea{
-  border: 1px solid $input-border-color;
-  &:focus{
-    box-shadow: none;
-    border-color: $input-focus-border-color;
-  }
-}
-
-.swal2-input{
-  height: auto;
-  display: block;
-  padding: $input-padding-y $input-padding-x;
-  font-family: $input-font-family;
-  @include font-size($input-font-size);
-  font-weight: $input-font-weight;
-  line-height: $input-line-height;
-  color: $input-color;
-  background-color: $input-bg;
-  background-clip: padding-box;
-  border: $input-border-width solid $input-border-color;
-}
-
-.swal2-close{
-  font-family: $font-family-base;
-  font-weight: $font-weight-light;
-  font-size: 28px;
-  &:focus{
-    box-shadow: none;
-  }
-
-  &:hover{
-    color: var(--#{$prefix}primary);
-  }
-}
-
-.swal2-validation-message{
-  background-color: transparent;
+// Dark mode para SweetAlert2
+.dark {
+    .swal2-popup {
+        background: #1f2937 !important;
+        color: #f3f4f6 !important;
+    }
+    
+    .swal2-title {
+        color: #f9fafb !important;
+    }
+    
+    .swal2-content,
+    .swal2-html-container {
+        color: #d1d5db !important;
+    }
+    
+    .swal2-input,
+    .swal2-textarea {
+        background: #374151 !important;
+        color: #f3f4f6 !important;
+        border: 1px solid #4b5563 !important;
+        
+        &:focus {
+            border-color: #16a34a !important;
+        }
+    }
+    
+    .swal2-validation-message {
+        background: #991b1b !important;
+        color: #fecaca !important;
+    }
+    
+    // Iconos en dark mode
+    .swal2-icon {
+        &.swal2-success {
+            .swal2-success-ring {
+                border-color: rgba(34, 197, 94, 0.3) !important;
+            }
+            
+            [class^='swal2-success-line'] {
+                background-color: #22c55e !important;
+            }
+        }
+        
+        &.swal2-error {
+            border-color: #dc2626 !important;
+            
+            [class^='swal2-x-mark-line'] {
+                background-color: #ef4444 !important;
+            }
+        }
+        
+        &.swal2-warning {
+            border-color: #f59e0b !important;
+            color: #fbbf24 !important;
+        }
+        
+        &.swal2-info {
+            border-color: #3b82f6 !important;
+            color: #60a5fa !important;
+        }
+        
+        &.swal2-question {
+            border-color: #6b7280 !important;
+            color: #9ca3af !important;
+        }
+    }
 }

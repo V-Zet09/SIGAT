@@ -1,0 +1,77 @@
+[33m08da865[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mzaet-branch[m[33m, [m[1;31morigin/zaet-branch[m[33m)[m PRUEBAS DE GENERACION DE INFORME Y EDITOR DE TEXTO
+[33m73be2c5[m CAMBIOS
+[33mc613f7b[m cambios
+[33m7ae08d8[m ORGANIGRAMA
+[33m1d873bd[m MENU DE INICIO NOTICIAS
+[33m50d64a3[m Correcion actividades registradas
+[33m2e238ef[m CAMBIOS MAICOOO
+[33m6cb14ae[m Arreglo Sidebar
+[33m869d2bd[m Cambios roles
+[33mb824f55[m Merge pull request #4 from V-Zet09/zaet-branch
+[33ma787a40[m Tailwind
+[33m063047f[m Merge pull request #3 from V-Zet09/zaet-branch
+[33m0d2123a[m Merge branch 'main' into zaet-branch
+[33m8dc4634[m creacion de archivos de rutas web por separado
+[33m45282af[m Eliminando archivos de cache del repo
+[33m7c0764d[m Merge pull request #2 from V-Zet09/zaet-branch
+[33m93bc033[m Resolved merge conflicts: removed compiled view files
+[33me10d732[m ARREGLOS LOGIN Y LOGIN CONTROLLER
+[33m0d8b115[m Actualizo .gitignore para ignorar vistas cacheadas
+[33mc9fd607[m Ignorar archivos temporales de Blade
+[33m5c98f68[m[33m ([m[1;32mmain[m[33m)[m cambios 27 de agosto
+[33m18a1dc0[m cambios otra vez locales
+[33m1e66d6f[m cambios otra vez locales
+[33mcc31e40[m[33m ([m[1;31morigin/dark-branch[m[33m, [m[1;32mmariana-branch[m[33m, [m[1;32mjorge-branch[m[33m, [m[1;32mdark-branch[m[33m)[m Prueba 1
+[33me318a73[m CAMBIOS MENU.ARROW
+[33m8d6edc1[m ARREGLADO
+[33m5085033[m Merge branch 'main' of https://github.com/V-Zet09/SIGAT
+[33m6c768af[m CAMBIOS MAICO
+[33mdb3c1a5[m Merge branch 'main' of https://github.com/V-Zet09/SIGAT
+[33m9e78c72[m usuarios
+[33m75df609[m Modificacion campos requeridos imagen
+[33ma098811[m cambios otra vez locales
+[33m325efb2[m GENERAR INFORME CAMBIOS
+[33mdecc99d[m FINALIZACION DE REGISTRO DE ACTIVIDADES
+[33mf9a0efc[m cambios otra vez locales
+[33ma5de319[m cambios locales
+[33m3dafd2c[m Merge branch 'main' of https://github.com/V-Zet09/SIGAT
+[33m9191ddc[m cambios dark actividades
+[33m98fa42d[m Delete database/migrations/2025_08_14_040746_create_actividades_table.php
+[33m62909ca[m Resolviendo conflicto en master.blade.php
+[33mcf774be[m Ajustes en master.blade.php antes del merge
+[33m3c5ecf9[m Merge pull request #1 from V-Zet09/version_estable
+[33m314e06b[m[33m ([m[1;31morigin/version_estable[m[33m)[m cambios 14/08/2025
+[33m9fda450[m Mis cambios locales
+[33m2e3207b[m Mis cambios locales
+[33mc6b2ab7[m Eliminado campo municipio y ajustes de estilos
+[33mcde7700[m Merge branch 'main' of https://github.com/V-Zet09/SIGAT
+[33m9100203[m ACTIVIDADES DARK
+[33m644bebb[m Merge branch 'main' of https://github.com/V-Zet09/SIGAT
+[33mecac2d2[m Cambios locales antes del pull
+[33ma29a79a[m cambios locales
+[33m2249ed1[m ARRIBA EL CLASH ROYALE CAMBIOS 06/08/2025
+[33mbc1c197[m CAMBIOS
+[33md5dea75[m Resolviendo conflictos y limpiando archivos temporales
+[33m48e3297[m CAMBIOS 06/08/2025
+[33m8adcb43[m Cambios 30/07/2025
+[33m15df1fb[m Merge branch 'main' of https://github.com/V-Zet09/SIGAT
+[33m31177c6[m Merge branch 'main' of https://github.com/V-Zet09/SIGAT
+[33mdb0300e[m cambios 22/07/2025
+[33m9d532fc[m cambios22/072025
+[33mc3cd245[m cambios barra y dash crm 22/07/2025
+[33m1e29b5d[m cambios22/07/2025
+[33me6c0d5f[m Merge branch 'main' of https://github.com/V-Zet09/SIGAT
+[33m663ed09[m cambios 22/07/2025
+[33mc208ee2[m cambios
+[33mb5517b4[m cambiosbarraydashcrm22072025
+[33m53a03cd[m dark 1
+[33m908522a[m cambios errores
+[33mf1fa37d[m LOGIN ACTULIZADO
+[33m34111b4[m CAMBIO DE INGLES A ESPAÑOL SIGAT 17/07/2025
+[33mf0ec7fc[m DISEÑO RESTABLECER CONTRASEÑA 2025 VISTA
+[33m6f1596d[m Cambios Login 08/07/2025
+[33m40035f8[m Cambios proyecto SIGAT 03/07/2025
+[33md1841d2[m Prueba1
+[33m4bd7096[m PROYECTO PRINCIPAL H. AYUNTAMIENTO TLAPEHUALA SIGAT
+[33m018c1ff[m Initial commit
+[33md9a2b17[m Configuración inicial de Laravel

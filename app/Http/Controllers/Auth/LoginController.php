@@ -9,17 +9,6 @@ use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
     use AuthenticatesUsers;
 
     /**
@@ -27,6 +16,27 @@ class LoginController extends Controller
      */
     protected function authenticated(Request $request, $user)
     {
+        // ✅ Registrar historial de sesión
+        $loginHistory = $user->login_history ?? [];
+        
+        // Agregar nuevo inicio de sesión al historial (máximo 10)
+        array_unshift($loginHistory, [
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'timestamp' => now()->toDateTimeString(),
+        ]);
+        
+        // Mantener solo los últimos 10 inicios de sesión
+        $loginHistory = array_slice($loginHistory, 0, 10);
+        
+        // Actualizar usuario
+        $user->update([
+            'last_login_at' => now(),
+            'last_login_ip' => $request->ip(),
+            'login_history' => $loginHistory,
+        ]);
+        
+        // Redirección según cargo
         return match ($user->cargo) {
             'Administrador' => redirect('/dashboard-administrador'),
             'Presidente'   => redirect('/dashboard-presidente-municipal'),
@@ -34,7 +44,7 @@ class LoginController extends Controller
             'Regidor'      => redirect('/dashboard-regidor'),
             'Director'     => redirect('/dashboard-director-de-area'),
             'Auxiliar'     => redirect('/dashboard-auxiliar-area'),
-            default        => redirect('/home'),
+            default        => redirect()->route('usuarios.index'),
         };
     }
 

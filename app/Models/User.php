@@ -9,9 +9,14 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * @method bool hasRole(string $roleName)
+ * @method \Illuminate\Database\Eloquent\Relations\HasMany notifications()
+ * @method \Illuminate\Database\Eloquent\Relations\HasMany unreadNotifications()
+ */
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -26,6 +31,9 @@ class User extends Authenticatable
         'email',
         'password',
         'avatar',
+        'last_login_at',    
+        'last_login_ip',     
+        'login_history',       
     ];
 
     /**
@@ -45,5 +53,31 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'last_login_at' => 'datetime',     
+        'login_history' => 'array',        
     ];
+
+    /**
+     * Relación con notificaciones
+     */
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class)->latest();
+    }
+
+    /**
+     * Notificaciones no leídas
+     */
+    public function unreadNotifications()
+    {
+        return $this->notifications()->unread();
+    }
+
+    /**
+     * Contar notificaciones no leídas
+     */
+    public function unreadNotificationsCount()
+    {
+        return $this->unreadNotifications()->count();
+    }
 }
