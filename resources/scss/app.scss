@@ -457,3 +457,28 @@ body, html {
         transition: transform 0.2s, opacity 0.2s;
     }
 }
+
+/* ============================================
+   FIX: Panel de notificaciones
+   ============================================ */
+
+/* Ocultar elementos de Alpine antes de que cargue */
+[x-cloak] { 
+    display: none !important; 
+}
+
+/* Asegurar que el panel de notificaciones inicie oculto */
+.notifications-panel {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* Solo mostrarlo cuando Alpine lo active */
+[x-show="true"].notifications-panel {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}

@@ -295,9 +295,14 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
              this.loadNotifications();
              setInterval(() => this.loadNotifications(), 60000);
              
-             // Cerrar al navegar
-             window.addEventListener('beforeunload', () => {
-                 this.showNotifications = false;
+             // Cerrar al hacer clic en cualquier enlace de navegación
+             document.querySelectorAll('a[href]').forEach(link => {
+                 link.addEventListener('click', (e) => {
+                     // Si el enlace no es para abrir notificaciones, cerrar el panel
+                     if (!e.target.closest('.notifications-trigger')) {
+                         this.showNotifications = false;
+                     }
+                 });
              });
          },
          
@@ -345,18 +350,20 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
          closePanel() {
              this.showNotifications = false;
          }
-     }">
+     }" 
+     @click.away="showNotifications = false">
         
         <div class="relative">
             {{-- Botón de notificaciones --}}
             <button @click="showNotifications = !showNotifications; if(showNotifications) loadNotifications()"
-                    class="w-full flex items-center justify-between p-3 rounded-xl bg-slate-800/50 dark:bg-gray-800/50 hover:bg-slate-800 dark:hover:bg-gray-800 transition cursor-pointer group">
+                    class="notifications-trigger w-full flex items-center justify-between p-3 rounded-xl bg-slate-800/50 dark:bg-gray-800/50 hover:bg-slate-800 dark:hover:bg-gray-800 transition cursor-pointer group">
                 <div class="flex items-center gap-3">
                     <div class="relative">
                         <i class="ri-notification-3-line text-xl text-slate-300 dark:text-gray-300 group-hover:text-white transition"></i>
                         {{-- Badge contador --}}
                         <span x-show="unreadCount > 0"
                               x-text="unreadCount > 99 ? '99+' : unreadCount"
+                              x-cloak
                               class="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1 animate-pulse">
                         </span>
                     </div>
@@ -371,15 +378,13 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
             {{-- Panel de notificaciones --}}
             <div x-show="showNotifications"
                  x-cloak
-                 @click.outside="closePanel()"
-                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter="transition ease-out duration-150"
                  x-transition:enter-start="opacity-0 transform scale-95"
                  x-transition:enter-end="opacity-100 transform scale-100"
-                 x-transition:leave="transition ease-in duration-150"
+                 x-transition:leave="transition ease-in duration-100"
                  x-transition:leave-start="opacity-100 transform scale-100"
                  x-transition:leave-end="opacity-0 transform scale-95"
-                 class="absolute bottom-full left-0 right-0 mb-2 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 max-h-[500px] overflow-hidden flex flex-col z-50"
-                 style="display: none;">
+                 class="notifications-panel absolute bottom-full left-0 right-0 mb-2 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 max-h-[500px] overflow-hidden flex flex-col z-50">
                 
                 {{-- Header --}}
                 <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
@@ -389,6 +394,7 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
                     </h3>
                     <button @click="markAllAsRead()"
                             x-show="unreadCount > 0"
+                            x-cloak
                             class="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium">
                         Marcar todas como leídas
                     </button>
@@ -397,12 +403,13 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
                 {{-- Lista de notificaciones --}}
                 <div class="overflow-y-auto flex-1">
                     {{-- Loading --}}
-                    <div x-show="loading" class="p-8 text-center">
+                    <div x-show="loading" x-cloak class="p-8 text-center">
                         <i class="ri-loader-4-line text-3xl text-gray-400 animate-spin"></i>
                     </div>
                     
                     {{-- Sin notificaciones --}}
                     <div x-show="!loading && notifications.length === 0" 
+                         x-cloak
                          class="p-8 text-center text-gray-500 dark:text-gray-400">
                         <i class="ri-notification-off-line text-5xl mb-3 opacity-50"></i>
                         <p class="text-sm">No tienes notificaciones</p>
@@ -439,7 +446,7 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
                                     <div class="flex items-center gap-3 mt-2">
                                         <a x-show="notif.link" 
                                            :href="notif.link"
-                                           @click="markAsRead(notif.id); closePanel();"
+                                           @click="markAsRead(notif.id); showNotifications = false;"
                                            class="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 font-medium">
                                             Ver detalles →
                                         </a>
@@ -453,7 +460,7 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
                                 </div>
                                 
                                 {{-- Indicador no leída --}}
-                                <div x-show="!notif.read" class="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-2"></div>
+                                <div x-show="!notif.read" x-cloak class="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-2"></div>
                             </div>
                         </div>
                     </template>
@@ -462,6 +469,7 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
                 {{-- Footer --}}
                 <div class="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
                     <a href="{{ route('notifications.index') }}"
+                       @click="showNotifications = false"
                        class="block text-center text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium">
                         Ver todas las notificaciones
                     </a>
