@@ -74,56 +74,54 @@ class ActividadController extends Controller
             ->with('success', 'Actividad registrada correctamente.');
     }
 
-    public function showRegistradas(Request $request)
-    {
-        $query = Actividad::query();
+   public function showRegistradas(Request $request)
+{
+    $query = Actividad::query();
 
-        if ($request->filled('filtro_anio')) {
-            $query->whereYear('fecha', $request->filtro_anio);
-        }
-
-        if ($request->filled('filtro_mes')) {
-            $query->whereMonth('fecha', $request->filtro_mes);
-        }
-
-        if ($request->filled('buscar')) {
-            $buscar = $request->buscar;
-            $query->where(function($q) use ($buscar) {
-                $q->where('titulo', 'like', '%' . $buscar . '%')
-                    ->orWhere('autor', 'like', '%' . $buscar . '%')
-                    ->orWhere('tipo_area', 'like', '%' . $buscar . '%')
-                    ->orWhere('contenido', 'like', '%' . $buscar . '%')
-                    ->orWhere('resumen', 'like', '%' . $buscar . '%');
-
-                if (preg_match('/(\d{2})[\/\-](\d{2})[\/\-](\d{4})/', $buscar, $matches)) {
-                    $fechaBuscada = $matches[3] . '-' . $matches[2] . '-' . $matches[1];
-                    $q->orWhere('fecha', $fechaBuscada);
-                }
-
-                if (preg_match('/^\d{4}$/', $buscar)) {
-                    $q->orWhereYear('fecha', $buscar);
-                }
-
-                $meses = [
-                    'enero' => 1, 'febrero' => 2, 'marzo' => 3, 'abril' => 4,
-                    'mayo' => 5, 'junio' => 6, 'julio' => 7, 'agosto' => 8,
-                    'septiembre' => 9, 'octubre' => 10, 'noviembre' => 11, 'diciembre' => 12
-                ];
-
-                $buscarLower = strtolower($buscar);
-                foreach ($meses as $nombreMes => $numeroMes) {
-                    if (strpos($buscarLower, $nombreMes) !== false) {
-                        $q->orWhereMonth('fecha', $numeroMes);
-                        break;
-                    }
-                }
-            });
-        }
-
-        $actividades = $query->orderBy('fecha', 'desc')->paginate(10);
-
-        return view('dashboard-actividades-registradas', compact('actividades'));
+    // Filtros
+    if ($request->filled('filtro_anio')) {
+        $query->whereYear('fecha', $request->filtro_anio);
     }
+    if ($request->filled('filtro_mes')) {
+        $query->whereMonth('fecha', $request->filtro_mes);
+    }
+    if ($request->filled('buscar')) {
+        $buscar = $request->buscar;
+        $query->where(function($q) use ($buscar) {
+            $q->where('titulo', 'like', '%' . $buscar . '%')
+              ->orWhere('autor', 'like', '%' . $buscar . '%')
+              ->orWhere('tipo_area', 'like', '%' . $buscar . '%')
+              ->orWhere('contenido', 'like', '%' . $buscar . '%')
+              ->orWhere('resumen', 'like', '%' . $buscar . '%');
+            // Filtros avanzados
+            if (preg_match('/(\d{2})[\/\-](\d{2})[\/\-](\d{4})/', $buscar, $matches)) {
+                $fechaBuscada = $matches[3] . '-' . $matches[2] . '-' . $matches[1];
+                $q->orWhere('fecha', $fechaBuscada);
+            }
+            if (preg_match('/^\d{4}$/', $buscar)) {
+                $q->orWhereYear('fecha', $buscar);
+            }
+            $meses = [
+                'enero' => 1, 'febrero' => 2, 'marzo' => 3, 'abril' => 4,
+                'mayo' => 5, 'junio' => 6, 'julio' => 7, 'agosto' => 8,
+                'septiembre' => 9, 'octubre' => 10, 'noviembre' => 11, 'diciembre' => 12
+            ];
+            $buscarLower = strtolower($buscar);
+            foreach ($meses as $nombreMes => $numeroMes) {
+                if (strpos($buscarLower, $nombreMes) !== false) {
+                    $q->orWhereMonth('fecha', $numeroMes);
+                    break;
+                }
+            }
+        });
+    }
+
+    // PAGINACIÓN CORRECTA
+    $actividades = $query->orderBy('fecha', 'desc')->paginate(10);
+
+    return view('dashboard-actividades-registradas', compact('actividades'));
+}
+
 
     public function edit($id)
     {
