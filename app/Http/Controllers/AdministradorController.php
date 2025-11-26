@@ -10,17 +10,17 @@ use App\Models\Informe;
 class AdministradorController extends Controller
 {
     public function index()
-    {
-        $totalUsuarios = User::count();
-        $totalActividades = Actividad::count();
-        $totalInformes = Informe::count();
-        $actividadesPendientes = Actividad::where('estado', 'Pendiente')->count();
-        
-        return view('dashboard-administrador', compact(
-            'totalUsuarios',
-            'totalActividades', 
-            'totalInformes',
-            'actividadesPendientes'
-        ));
-    }
+{
+    return view('dashboard-administrador', [
+        'totalActividades' => Actividad::count(),
+        'totalUsuarios' => User::count(),
+        'totalInformes' => Informe::count(),
+        'actividadesRecientes' => Actividad::latest()->paginate(5),
+        'usuariosRecientes' => User::latest()->paginate(5),
+        'actividadesRevisadas' => Actividad::where('estado', 'revisada')->count(),
+        'actividadesPendientes' => Actividad::where('estado', 'pendiente')->count(),
+        'usuariosActivos' => User::where('activo', 1)->count(),
+    ]);
+}
+
 }

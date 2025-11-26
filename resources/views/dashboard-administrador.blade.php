@@ -3,206 +3,127 @@
 @section('title', 'Dashboard Administrador')
 
 @section('content')
-<div class="min-h-screen bg-gray-50 dark:bg-gray-900 p-6 transition-colors duration-300">
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
 
     <!-- Header -->
     <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
         ¡Hola, Administrador!
     </h1>
 
-    <!-- Grid de estadísticas -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <div class="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-4 rounded-2xl shadow hover:shadow-lg transition">
+    <!-- Estadísticas principales -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow text-center">
             <h2 class="text-sm font-semibold">Actividades</h2>
-            <p class="text-2xl font-bold">4</p>
-            <span class="text-xs text-gray-500 dark:text-gray-400">Registradas</span>
+            <p class="text-2xl font-bold">{{ $totalActividades }}</p>
+            <span class="text-xs text-gray-500">Registros totales</span>
         </div>
-        <div class="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-4 rounded-2xl shadow hover:shadow-lg transition">
-            <h2 class="text-sm font-semibold">Total orders</h2>
-            <p class="text-2xl font-bold">2025</p>
-            <span class="text-xs text-gray-500 dark:text-gray-400">Últimos 7 días</span>
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow text-center">
+            <h2 class="text-sm font-semibold">Usuarios</h2>
+            <p class="text-2xl font-bold">{{ $totalUsuarios }}</p>
+            <span class="text-xs text-gray-500">Activos</span>
         </div>
-        <div class="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-4 rounded-2xl shadow hover:shadow-lg transition">
-            <h2 class="text-sm font-semibold">Completadas</h2>
-            <p class="text-2xl font-bold">16,247</p>
-            <span class="text-xs text-gray-500 dark:text-gray-400">Pending payment</span>
-        </div>
-        <div class="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-4 rounded-2xl shadow hover:shadow-lg transition">
-            <h2 class="text-sm font-semibold">Usuarios activos</h2>
-            <p class="text-2xl font-bold">4</p>
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow text-center">
+            <h2 class="text-sm font-semibold">Informes</h2>
+            <p class="text-2xl font-bold">{{ $totalInformes }}</p>
+            <span class="text-xs text-gray-500">Generados</span>
         </div>
     </div>
 
-    <!-- Cards informativos -->
+    <!-- Accesos rápidos -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        <div class="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-2xl shadow p-6">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow">
+            <h3 class="text-lg font-bold mb-2">Acciones rápidas</h3>
+            <div class="flex flex-wrap gap-3">
+                <a href="{{ route('actividades.create') }}" class="btn btn-primary">Registrar Actividad</a>
+                <a href="{{ route('usuarios.index') }}" class="btn btn-secondary">Ver Usuarios</a>
+                <a href="{{ route('informes-generados') }}" class="btn btn-info">Generar Informe</a>
+            </div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow">
             <h3 class="text-lg font-bold mb-2">Estado general</h3>
             <ul class="space-y-2 text-sm">
-                <li class="flex items-center">
-                    <span class="text-green-500 mr-2">✔</span> Actividades reguladas
-                </li>
-                <li class="flex items-center">
-                    <span class="text-yellow-500 mr-2">⧗</span> Actividades en revisión
-                </li>
-                <li class="flex items-center">
-                    <span class="text-blue-500 mr-2">👤</span> Usuarios activos
-                </li>
-                <li class="flex items-center">
-                    <span class="text-gray-500 mr-2">📅</span> Reporte anual 2023-2025
-                </li>
+                <li><span class="text-green-500">✔</span> {{ $actividadesRevisadas }} actividades revisadas</li>
+                <li><span class="text-yellow-500">⧗</span> {{ $actividadesPendientes }} actividades pendientes</li>
+                <li><span class="text-blue-500">👤</span> {{ $usuariosActivos }} usuarios activos</li>
             </ul>
         </div>
-
-        <div class="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-2xl shadow p-6">
-            <h3 class="text-lg font-bold mb-2">Historial</h3>
-            <p class="text-sm mb-1">📌 Título anterior: <span class="font-semibold">Lleva 7 años</span></p>
-            <p class="text-sm mb-1">✅ Estado: Cumplido</p>
-            <p class="text-sm mb-1">📝 Puedes presentar</p>
-            <p class="text-sm">📂 Aprobación con área</p>
-        </div>
     </div>
 
-    <div class="divider"></div>
-
-    <div class="row mt-4">
-        <div class="col-xl-3 col-md-6">
-            <div class="dashboard-card">
-                <h4>4 actividades en revisión</h4>
-            </div>
-        </div>
-        
-        <div class="col-xl-3 col-md-6">
-            <div class="dashboard-card">
-                <div class="highlight">16,247</div>
-            </div>
-        </div>
-        
-        <div class="col-xl-3 col-md-6">
-            <div class="dashboard-card">
-                <h4>Actividades por área</h4>
-            </div>
-        </div>
-        
-        <div class="col-xl-3 col-md-6">
-            <div class="dashboard-card">
-                <h4>4 usuarios activos</h4>
-            </div>
-        </div>
-    </div>
-
-    <div class="row mt-4">
-        <div class="col-xl-12">
-            <div class="dashboard-card">
-                <h4>2025</h4>
-                <div class="highlight">45 actividades registradas</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Manteniendo tus secciones originales -->
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title mb-4">Actividades reguladas</h4>
-                    <ul class="list-unstyled">
-                        <li><i class="mdi mdi-check-circle text-success me-2"></i> Actividades reguladas</li>
-                        <li><i class="mdi mdi-check-circle text-success me-2"></i> Actividades en revistas</li>
-                        <li><i class="mdi mdi-check-circle text-success me-2"></i> Usuarios activos</li>
-                        <li><i class="mdi mdi-check-circle text-success me-2"></i> 2023 a actividades reguladas</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row mt-4">
-        <div class="col-xl-6">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title mb-4">Título anterior</h4>
-                    <p class="text-muted mb-0">Lleva 7 años</p>
-                    
-                    <div class="mt-4">
-                        <h4 class="card-title mb-4">Cumplido</h4>
-                        <p class="text-muted">Puedes presentar</p>
-                    </div>
-                    
-                    <div class="mt-4">
-                        <h4 class="card-title mb-4">Aprobación con área</h4>
-                        <div class="progress">
-                            <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-xl-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered mb-0">
-                            <thead>
-                                <tr>
-                                    <th>Mes</th>
-                                    <th>Actividades</th>
-                                    <th>Usuarios</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Enero</td>
-                                    <td>120</td>
-                                    <td>85</td>
-                                </tr>
-                                <tr>
-                                    <td>Febrero</td>
-                                    <td>150</td>
-                                    <td>92</td>
-                                </tr>
-                                <tr>
-                                    <td>Marzo</td>
-                                    <td>180</td>
-                                    <td>110</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row mt-4">
-        <div class="col-12">
-        </div>
-        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead class="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium uppercase">Mes</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium uppercase">Actividades</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium uppercase">Usuarios</th>
+   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Actividades -->
+    <div class="bg-gradient-to-tr from-gray-700 via-gray-800 to-gray-900 p-4 rounded-2xl shadow-xl border border-gray-800">
+        <h3 class="text-xl font-bold text-white mb-4 flex items-center">
+            <i class="fas fa-list-check mr-2"></i>Últimas Actividades
+        </h3>
+        <div class="bg-white dark:bg-gray-900 rounded-xl shadow-inner px-3 py-2 overflow-x-auto">
+            <table class="min-w-full text-xs">
+                <thead>
+                <tr class="text-gray-700 dark:text-gray-200 border-b border-gray-300 dark:border-gray-800 font-semibold">
+                    <th class="py-1 px-2 text-left">Título</th>
+                    <th class="py-1 px-2 text-left">Autor</th>
+                    <th class="py-1 px-2 text-left">Fecha</th>
+                    <th class="py-1 px-2 text-left">Área</th>
                 </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                <tr>
-                    <td class="px-6 py-4">Enero</td>
-                    <td class="px-6 py-4">120</td>
-                    <td class="px-6 py-4">85</td>
+                </thead>
+                <tbody>
+                @foreach($actividadesRecientes as $actividad)
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-800/70">
+                        <td class="py-1 px-2">{{ $actividad->titulo }}</td>
+                        <td class="py-1 px-2">{{ $actividad->autor ?? 'Anónimo' }}</td>
+                        <td class="py-1 px-2">{{ \Carbon\Carbon::parse($actividad->fecha)->format('d/m/Y') }}</td>
+                        <td class="py-1 px-2">
+                            <span class="inline-block bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-100 rounded px-2 py-0.5 text-xs">
+                                {{ $actividad->tipo_area ?? 'Sin área' }}
+                            </span>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+            <a href="{{ route('actividades.registradas') }}" class="text-sm font-semibold text-gray-600 hover:underline mt-2 block text-right">Ver todas</a>
+        </div>
+    </div>
+    
+    <!-- Usuarios -->
+    <div class="bg-gradient-to-tr from-gray-700 via-gray-800 to-gray-900 p-4 rounded-2xl shadow-xl border border-gray-800">
+        <h3 class="text-xl font-bold text-white mb-4 flex items-center">
+            <i class="fas fa-user-group mr-2"></i>Últimos Usuarios
+        </h3>
+        <div class="bg-white dark:bg-gray-900 rounded-xl shadow-inner px-3 py-2 overflow-x-auto">
+            <table class="min-w-full text-xs">
+                <thead>
+                <tr class="text-gray-700 dark:text-gray-200 border-b border-gray-300 dark:border-gray-800 font-semibold">
+                    <th class="py-1 px-2 text-left">Nombre</th>
+                    <th class="py-1 px-2 text-left">Email</th>
+                    <th class="py-1 px-2 text-left">Registrado</th>
                 </tr>
-                <tr>
-                    <td class="px-6 py-4">Febrero</td>
-                    <td class="px-6 py-4">150</td>
-                    <td class="px-6 py-4">92</td>
-                </tr>
-                <tr>
-                    <td class="px-6 py-4">Marzo</td>
-                    <td class="px-6 py-4">180</td>
-                    <td class="px-6 py-4">110</td>
-                </tr>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                @foreach($usuariosRecientes as $usuario)
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-800/70">
+                        <td class="py-1 px-2">{{ $usuario->name }}</td>
+                        <td class="py-1 px-2">{{ $usuario->email }}</td>
+                        <td class="py-1 px-2">{{ \Carbon\Carbon::parse($usuario->created_at)->format('d/m/Y') }}</td>
+                    </tr>
+                @endforeach
+                @if($usuariosRecientes->isEmpty())
+                    <tr>
+                        <td colspan="3" class="text-center text-gray-500 py-2">Sin registros</td>
+                    </tr>
+                @endif
+                </tbody>
+            </table>
+            <a href="{{ route('usuarios.index') }}" class="text-sm font-semibold text-gray-600 hover:underline mt-2 block text-right">Ver todos</a>
+        </div>
+    </div>
+</div>
+
+
+    <!-- Reportes rápidos -->
+    <div class="mt-6">
+        <a href="{{ route('informes.stats') }}" class="btn btn-success">
+            Exportar informes generales
+        </a>
     </div>
 </div>
 @endsection

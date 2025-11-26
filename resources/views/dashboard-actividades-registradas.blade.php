@@ -22,7 +22,6 @@
 @section('content')
 <div class="shadow-2xl rounded-3xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 p-8 mx-auto mt-4 max-w-[80vw] transition-colors duration-300">
 
-
     <!-- Header visual tipo informes -->
     <div class="relative mb-6 overflow-hidden rounded-2xl bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 dark:from-green-700 dark:via-emerald-700 dark:to-teal-700 p-6 shadow-xl">
         <div class="absolute top-0 right-0 -mt-4 -mr-4 h-32 w-32 rounded-full bg-white dark:bg-gray-900 opacity-10"></div>
@@ -67,18 +66,11 @@
                 <select name="filtro_mes" onchange="document.getElementById('filtro-form').submit()"
                     class="w-full rounded-lg border-2 border-gray-800 dark:border-gray-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-3 py-2 text-sm shadow-sm outline-none">
                     <option value="">Todos los meses</option>
-                    <option value="1" {{ request('filtro_mes') == '1' ? 'selected' : '' }}>Enero</option>
-                    <option value="2" {{ request('filtro_mes') == '2' ? 'selected' : '' }}>Febrero</option>
-                    <option value="3" {{ request('filtro_mes') == '3' ? 'selected' : '' }}>Marzo</option>
-                    <option value="4" {{ request('filtro_mes') == '4' ? 'selected' : '' }}>Abril</option>
-                    <option value="5" {{ request('filtro_mes') == '5' ? 'selected' : '' }}>Mayo</option>
-                    <option value="6" {{ request('filtro_mes') == '6' ? 'selected' : '' }}>Junio</option>
-                    <option value="7" {{ request('filtro_mes') == '7' ? 'selected' : '' }}>Julio</option>
-                    <option value="8" {{ request('filtro_mes') == '8' ? 'selected' : '' }}>Agosto</option>
-                    <option value="9" {{ request('filtro_mes') == '9' ? 'selected' : '' }}>Septiembre</option>
-                    <option value="10" {{ request('filtro_mes') == '10' ? 'selected' : '' }}>Octubre</option>
-                    <option value="11" {{ request('filtro_mes') == '11' ? 'selected' : '' }}>Noviembre</option>
-                    <option value="12" {{ request('filtro_mes') == '12' ? 'selected' : '' }}>Diciembre</option>
+                    @for ($m = 1; $m <= 12; $m++)
+                        <option value="{{ $m }}" {{ request('filtro_mes') == $m ? 'selected' : '' }}>
+                            {{ \Carbon\Carbon::create(null, $m, 1)->format('F') }}
+                        </option>
+                    @endfor
                 </select>
             </div>
 
@@ -184,7 +176,7 @@
         </div>
     @endif
 
-    {{-- Modal de Confirmación de Eliminación --}}
+    {{-- Modal y formulario de eliminar --}}
     <div id="modal-eliminar-actividad" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 z-50 flex items-center justify-center">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4 transform transition-all">
             <div class="p-6">
