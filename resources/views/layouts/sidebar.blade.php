@@ -296,7 +296,7 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
     </button>
   </div>
 
- {{-- 2️⃣ NOTIFICACIONES --}}
+{{-- 2️⃣ NOTIFICACIONES --}}
 <div class="px-4 py-3 border-b border-slate-700/50 dark:border-gray-700/50">
     <div x-data="{
          showNotifications: false,
@@ -307,16 +307,6 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
          init() {
              this.loadNotifications();
              setInterval(() => this.loadNotifications(), 60000);
-             
-             // Cerrar al hacer clic en cualquier enlace de navegación
-             document.querySelectorAll('a[href]').forEach(link => {
-                 link.addEventListener('click', (e) => {
-                     // Si el enlace no es para abrir notificaciones, cerrar el panel
-                     if (!e.target.closest('.notifications-trigger')) {
-                         this.showNotifications = false;
-                     }
-                 });
-             });
          },
          
          async loadNotifications() {
@@ -358,18 +348,13 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
              } catch (error) {
                  console.error('Error marking all as read:', error);
              }
-         },
-         
-         closePanel() {
-             this.showNotifications = false;
          }
-     }" 
-     @click.away="showNotifications = false">
+     }">
         
-        <div class="relative">
+        <div class="relative" @click.outside="showNotifications = false">
             {{-- Botón de notificaciones --}}
             <button @click="showNotifications = !showNotifications; if(showNotifications) loadNotifications()"
-                    class="notifications-trigger w-full flex items-center justify-between p-3 rounded-xl bg-slate-800/50 dark:bg-gray-800/50 hover:bg-slate-800 dark:hover:bg-gray-800 transition cursor-pointer group">
+                    class="w-full flex items-center justify-between p-3 rounded-xl bg-slate-800/50 dark:bg-gray-800/50 hover:bg-slate-800 dark:hover:bg-gray-800 transition cursor-pointer group">
                 <div class="flex items-center gap-3">
                     <div class="relative">
                         <i class="ri-notification-3-line text-xl text-slate-300 dark:text-gray-300 group-hover:text-white transition"></i>
@@ -397,7 +382,7 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
                  x-transition:leave="transition ease-in duration-100"
                  x-transition:leave-start="opacity-100 transform scale-100"
                  x-transition:leave-end="opacity-0 transform scale-95"
-                 class="notifications-panel absolute bottom-full left-0 right-0 mb-2 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 max-h-[500px] overflow-hidden flex flex-col z-50">
+                 class="absolute bottom-full left-0 right-0 mb-2 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 max-h-[500px] overflow-hidden flex flex-col z-50">
                 
                 {{-- Header --}}
                 <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
@@ -459,7 +444,6 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
                                     <div class="flex items-center gap-3 mt-2">
                                         <a x-show="notif.link" 
                                            :href="notif.link"
-                                           @click="markAsRead(notif.id); showNotifications = false;"
                                            class="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 font-medium">
                                             Ver detalles →
                                         </a>
@@ -478,12 +462,12 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
                         </div>
                     </template>
                 </div>
-                
-                {{-- Footer --}}
-                <div class="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
+              
+                {{-- Footer - PERMITE HACER CLIC --}}
+                <div class="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50"
+                     @click.stop>
                     <a href="{{ route('notifications.index') }}"
-                       @click="showNotifications = false"
-                       class="block text-center text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium">
+                       class="block text-center text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium py-2">
                         Ver todas las notificaciones
                     </a>
                 </div>

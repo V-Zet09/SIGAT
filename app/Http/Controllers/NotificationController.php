@@ -24,19 +24,33 @@ class NotificationController extends Controller
      * Obtener notificaciones para el dropdown (AJAX)
      */
     public function getRecent()
-    {
-        $notifications = Auth::user()
-            ->notifications()
-            ->take(10)
-            ->get();
+{
+    $notifications = Notification::where('user_id', auth()->id())
+        ->latest()
+        ->take(10)
+        ->get()
+        ->map(function($notif) {
+            return [
+                'id' => $notif->id,
+                'title' => $notif->title ?? 'Notificación',
+                'message' => $notif->message ?? '',
+                'icon' => $notif->icon ?? 'ri-notification-3-line',
+                'color' => $notif->color ?? 'blue',
+                'link' => $notif->link ?? null,
+                'read' => $notif->read_at !== null,
+                'created_at' => $notif->created_at->toISOString(),
+            ];
+        });
 
-        $unreadCount = Auth::user()->unreadNotificationsCount();
+    $unreadCount = Notification::where('user_id', auth()->id())
+        ->whereNull('read_at')
+        ->count();
 
-        return response()->json([
-            'notifications' => $notifications,
-            'unread_count' => $unreadCount,
-        ]);
-    }
+    return response()->json([
+        'notifications' => $notifications,
+        'unread_count' => $unreadCount,
+    ]);
+}
 
     /**
      * Marcar una notificación como leída
