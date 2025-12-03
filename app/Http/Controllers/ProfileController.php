@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
+use App\Models\AuditLog; // ← AGREGADO
 
 class ProfileController extends Controller
 {
@@ -36,6 +37,15 @@ class ProfileController extends Controller
 
         $user = Auth::user();
         
+        // ✅ Detectar cambios para el log
+        $cambios = [];
+        if ($user->name !== $request->name) {
+            $cambios[] = "nombre: {$user->name} → {$request->name}";
+        }
+        if ($user->email !== $request->email) {
+            $cambios[] = "email: {$user->email} → {$request->email}";
+        }
+        
         // Actualizar información básica
         $user->update($request->only(['name', 'email']));
         
@@ -54,6 +64,14 @@ class ProfileController extends Controller
             $file->storeAs('public/avatars', $filename);
             
             $user->update(['avatar' => $filename]);
+            
+            // ✅ Registrar cambio de avatar
+            AuditLog::log(
+                action: 'editar',
+                description: 'Actualizó su foto de perfil',
+                modelType: 'App\Models\User',
+                modelId: $user->id
+            );
         }
         
         // Manejar eliminación de avatar
@@ -63,6 +81,24 @@ class ProfileController extends Controller
             }
             
             $user->update(['avatar' => 'default.jpg']);
+            
+            // ✅ Registrar eliminación de avatar
+            AuditLog::log(
+                action: 'editar',
+                description: 'Eliminó su foto de perfil',
+                modelType: 'App\Models\User',
+                modelId: $user->id
+            );
+        }
+
+        // ✅ Registrar cambios de información personal
+        if (!empty($cambios)) {
+            AuditLog::log(
+                action: 'editar',
+                description: 'Actualizó su información personal: ' . implode(', ', $cambios),
+                modelType: 'App\Models\User',
+                modelId: $user->id
+            );
         }
 
         return redirect()->route('perfil.index')
@@ -90,6 +126,14 @@ class ProfileController extends Controller
         $user->update([
             'password' => Hash::make($request->password)
         ]);
+
+        // ✅ Registrar cambio de contraseña
+        AuditLog::log(
+            action: 'editar',
+            description: 'Cambió su contraseña',
+            modelType: 'App\Models\User',
+            modelId: $user->id
+        );
 
         return redirect()->route('perfil.index')
             ->with('success', '✅ Contraseña actualizada correctamente');
@@ -121,6 +165,14 @@ class ProfileController extends Controller
 
         $user->update(['avatar' => $filename]);
 
+        // ✅ Registrar cambio de avatar
+        AuditLog::log(
+            action: 'editar',
+            description: 'Actualizó su foto de perfil',
+            modelType: 'App\Models\User',
+            modelId: $user->id
+        );
+
         return redirect()->route('perfil.index')
             ->with('success', '✅ Foto de perfil actualizada correctamente');
     }
@@ -135,6 +187,14 @@ class ProfileController extends Controller
         }
 
         $user->update(['avatar' => 'default.jpg']);
+
+        // ✅ Registrar eliminación de avatar
+        AuditLog::log(
+            action: 'editar',
+            description: 'Eliminó su foto de perfil',
+            modelType: 'App\Models\User',
+            modelId: $user->id
+        );
 
         return redirect()->route('perfil.index')
             ->with('success', '✅ Foto de perfil eliminada correctamente');
@@ -154,6 +214,14 @@ class ProfileController extends Controller
         if (!Hash::check($request->password, $user->password)) {
             return back()->withErrors(['password' => 'La contraseña es incorrecta']);
         }
+
+        // ✅ Registrar cierre de sesiones
+        AuditLog::log(
+            action: 'logout',
+            description: 'Cerró todas las sesiones activas',
+            modelType: 'App\Models\User',
+            modelId: $user->id
+        );
 
         $user->update([
             'login_history' => []
