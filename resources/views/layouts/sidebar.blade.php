@@ -1,4 +1,3 @@
-<!-- AlpineJS y RemixIcon -->
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 
@@ -19,20 +18,35 @@
     }
 </style>
 
-<!-- Contenedor principal con Alpine -->
 <div x-data="{ 
-  openSidebar: true, 
+  openSidebar: window.innerWidth >= 1024, 
   openMenu: null, 
   userMenuOpen: false
 }" 
 class="min-h-screen bg-gray-50 dark:bg-gray-900">
 
-  <!-- Sidebar -->
-  <div class="sidebar fixed inset-y-0 left-0 w-64 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 
-              dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 text-white 
-              transform transition-transform duration-300 ease-in-out z-50 lg:translate-x-0
-              border-r border-slate-700/50 dark:border-gray-700/50 flex flex-col overflow-hidden"
-       :class="openSidebar ? 'translate-x-0' : '-translate-x-full'">
+  <!-- ✅ BOTÓN HAMBURGUESA (NUEVO - AGREGAR AQUÍ) -->
+  <button @click="openSidebar = true" 
+          class="lg:hidden fixed top-4 left-4 z-50 w-10 h-10 bg-slate-900 dark:bg-gray-900 text-white rounded-lg shadow-lg flex items-center justify-center hover:bg-slate-800 dark:hover:bg-gray-800 transition"
+          x-show="!openSidebar"
+          x-transition>
+    <i class="ri-menu-line text-xl"></i>
+  </button>
+
+  <!-- ✅ OVERLAY (NUEVO - AGREGAR AQUÍ) -->
+  <div x-show="openSidebar" 
+       @click="openSidebar = false"
+       class="lg:hidden fixed inset-0 bg-black/50 z-40"
+       x-transition>
+  </div>
+
+  <!-- Sidebar (ESTE YA LO TIENES - NO CAMBIAR) -->
+  <div
+    class="sidebar fixed inset-y-0 left-0 w-64 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 
+           dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 text-white 
+           transform transition-transform duration-300 ease-in-out z-50 lg:translate-x-0
+           border-r border-slate-700/50 dark:border-gray-700/50 flex flex-col overflow-hidden"
+    :class="openSidebar ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'">
 
     <!-- Header -->
     <div class="px-4 py-6 border-b border-slate-700/50 dark:border-gray-700/50 relative flex-shrink-0">
@@ -51,15 +65,13 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
         <i class="ri-close-line text-xl"></i>
       </button>
     </div>
-
     <!-- Menú con scroll independiente -->
     <nav class="flex-1 px-4 py-6 space-y-6 overflow-y-auto custom-scrollbar">
 
       <!-- DASHBOARDS -->
       <div>
         <button @click="openMenu = (openMenu === 'dashboards' ? null : 'dashboards')"
-                class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg 
-                       hover:bg-slate-800/50 dark:hover:bg-gray-800/50 transition group">
+                class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-slate-800/50 dark:hover:bg-gray-800/50 transition group">
           <span class="flex items-center gap-3 text-sm">
             <i class="ri-dashboard-2-line text-slate-400 dark:text-gray-400 group-hover:text-green-400 transition"></i>
             <span class="text-slate-300 dark:text-gray-300 group-hover:text-white transition">Dashboards</span>
@@ -67,7 +79,7 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
           <i class="ri-arrow-right-s-line text-slate-400 dark:text-gray-400 transition-transform duration-200"
              :class="openMenu === 'dashboards' ? 'rotate-90 text-green-400' : ''"></i>
         </button>
- 
+
         <div x-show="openMenu === 'dashboards'" x-collapse 
              class="ml-9 mt-1 space-y-0.5 border-l-2 border-slate-700/50 dark:border-gray-700/50 pl-3">
           
@@ -98,9 +110,9 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
                       {{ request()->routeIs('dashboard-director-de-area') ? 'text-white bg-slate-800/50 dark:bg-gray-800/50 font-medium' : 'text-slate-400 dark:text-gray-400 hover:text-white hover:bg-slate-800/30 dark:hover:bg-gray-800/30' }}">
               Director de Área
             </a>
-            <a href="{{ route('dashboard-auxiliar-area') }}" 
+            <a href="{{ route('dashboard-auxiliar-de-area') }}" 
                class="block px-3 py-2 text-sm rounded-lg transition
-                      {{ request()->routeIs('dashboard-auxiliar-area') ? 'text-white bg-slate-800/50 dark:bg-gray-800/50 font-medium' : 'text-slate-400 dark:text-gray-400 hover:text-white hover:bg-slate-800/30 dark:hover:bg-gray-800/30' }}">
+                      {{ request()->routeIs('dashboard-auxiliar-de-area') ? 'text-white bg-slate-800/50 dark:bg-gray-800/50 font-medium' : 'text-slate-400 dark:text-gray-400 hover:text-white hover:bg-slate-800/30 dark:hover:bg-gray-800/30' }}">
               Auxiliar de Área
             </a>
           @endrole
@@ -139,9 +151,9 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
           @endrole
 
           @role('Auxiliar de Área')
-            <a href="{{ route('dashboard-auxiliar-area') }}" 
+            <a href="{{ route('dashboard-auxiliar-de-area') }}" 
                class="block px-3 py-2 text-sm rounded-lg transition
-                      {{ request()->routeIs('dashboard-auxiliar-area') ? 'text-white bg-slate-800/50 dark:bg-gray-800/50 font-medium' : 'text-slate-400 dark:text-gray-400 hover:text-white hover:bg-slate-800/30 dark:hover:bg-gray-800/30' }}">
+                      {{ request()->routeIs('dashboard-auxiliar-de-area') ? 'text-white bg-slate-800/50 dark:bg-gray-800/50 font-medium' : 'text-slate-400 dark:text-gray-400 hover:text-white hover:bg-slate-800/30 dark:hover:bg-gray-800/30' }}">
               Auxiliar de Área
             </a>
           @endrole
@@ -250,7 +262,7 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
     </nav>
 
     <!-- Footer fijo (siempre visible) -->
-<div class="mt-auto border-t border-slate-700/50 dark:border-gray-700/50 flex-shrink-0">
+ <div class="mt-auto border-t border-slate-700/50 dark:border-gray-700/50 flex-shrink-0">
   
   {{-- 1️⃣ DARK MODE --}}
   <div class="px-4 py-3 border-b border-slate-700/50 dark:border-gray-700/50">
@@ -294,16 +306,6 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
          init() {
              this.loadNotifications();
              setInterval(() => this.loadNotifications(), 60000);
-             
-             // Cerrar al hacer clic en cualquier enlace de navegación
-             document.querySelectorAll('a[href]').forEach(link => {
-                 link.addEventListener('click', (e) => {
-                     // Si el enlace no es para abrir notificaciones, cerrar el panel
-                     if (!e.target.closest('.notifications-trigger')) {
-                         this.showNotifications = false;
-                     }
-                 });
-             });
          },
          
          async loadNotifications() {
@@ -345,18 +347,13 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
              } catch (error) {
                  console.error('Error marking all as read:', error);
              }
-         },
-         
-         closePanel() {
-             this.showNotifications = false;
          }
-     }" 
-     @click.away="showNotifications = false">
+     }">
         
-        <div class="relative">
+        <div class="relative" @click.outside="showNotifications = false">
             {{-- Botón de notificaciones --}}
             <button @click="showNotifications = !showNotifications; if(showNotifications) loadNotifications()"
-                    class="notifications-trigger w-full flex items-center justify-between p-3 rounded-xl bg-slate-800/50 dark:bg-gray-800/50 hover:bg-slate-800 dark:hover:bg-gray-800 transition cursor-pointer group">
+                    class="w-full flex items-center justify-between p-3 rounded-xl bg-slate-800/50 dark:bg-gray-800/50 hover:bg-slate-800 dark:hover:bg-gray-800 transition cursor-pointer group">
                 <div class="flex items-center gap-3">
                     <div class="relative">
                         <i class="ri-notification-3-line text-xl text-slate-300 dark:text-gray-300 group-hover:text-white transition"></i>
@@ -384,7 +381,7 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
                  x-transition:leave="transition ease-in duration-100"
                  x-transition:leave-start="opacity-100 transform scale-100"
                  x-transition:leave-end="opacity-0 transform scale-95"
-                 class="notifications-panel absolute bottom-full left-0 right-0 mb-2 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 max-h-[500px] overflow-hidden flex flex-col z-50">
+                 class="absolute bottom-full left-0 right-0 mb-2 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 max-h-[500px] overflow-hidden flex flex-col z-50">
                 
                 {{-- Header --}}
                 <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
@@ -446,7 +443,6 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
                                     <div class="flex items-center gap-3 mt-2">
                                         <a x-show="notif.link" 
                                            :href="notif.link"
-                                           @click="markAsRead(notif.id); showNotifications = false;"
                                            class="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 font-medium">
                                             Ver detalles →
                                         </a>
@@ -465,12 +461,12 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
                         </div>
                     </template>
                 </div>
-                
+              
                 {{-- Footer --}}
-                <div class="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
+                <div class="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50"
+                     @click.stop>
                     <a href="{{ route('notifications.index') }}"
-                       @click="showNotifications = false"
-                       class="block text-center text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium">
+                       class="block text-center text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium py-2">
                         Ver todas las notificaciones
                     </a>
                 </div>
@@ -544,7 +540,7 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
       @endrole
 
       @role('Auxiliar de Área')
-        <a href="{{ route('dashboard-auxiliar-area') }}" 
+        <a href="{{ route('dashboard-auxiliar-de-area') }}" 
            class="flex items-center gap-3 px-3 py-2 text-sm text-slate-300 dark:text-gray-300 hover:text-white hover:bg-slate-700/50 dark:hover:bg-gray-700/50 transition rounded">
           <i class="ri-dashboard-line text-slate-400 dark:text-gray-400"></i>
           <span>Dashboard</span>
@@ -573,9 +569,10 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
 </div>
 
   <!-- Botón para abrir sidebar en móvil -->
-  <button @click="openSidebar = true" 
+ <button @click="openSidebar = true" 
           class="lg:hidden fixed top-4 left-4 z-40 w-10 h-10 bg-slate-900 dark:bg-gray-900 text-white rounded-lg shadow-lg flex items-center justify-center"
-          x-show="!openSidebar">
+          x-show="!openSidebar"
+          x-transition>
     <i class="ri-menu-line text-xl"></i>
   </button>
 
@@ -589,6 +586,6 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
        x-transition:leave="transition-opacity ease-in duration-200"
        x-transition:leave-start="opacity-100"
        x-transition:leave-end="opacity-0">
-    </div>
   </div>
+</div>
 </div>

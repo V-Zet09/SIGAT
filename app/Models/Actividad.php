@@ -4,14 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Auditable; // ← AGREGADO
 
 class Actividad extends Model
 {
-    use HasFactory;
+    use HasFactory, Auditable; // ← AGREGADO Auditable
 
     protected $table = 'actividades';
     
-        protected $fillable = [
+    protected $fillable = [
         'titulo',
         'autor',
         'fecha',
@@ -42,7 +43,6 @@ class Actividad extends Model
         'evidencias' => 'array',
         'fotos' => 'array', // Solo este campo
     ];
-
 
     // RELACIONES
     
