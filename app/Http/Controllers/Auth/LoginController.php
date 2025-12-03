@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use App\Models\AuditLog; // ← AGREGADO
 
 class LoginController extends Controller
 {
@@ -36,6 +37,14 @@ class LoginController extends Controller
             'login_history' => $loginHistory,
         ]);
         
+        // ✅ REGISTRAR LOG DE LOGIN
+        AuditLog::log(
+            action: 'login',
+            description: "Inició sesión en el sistema - Cargo: {$user->cargo}",
+            modelType: 'App\Models\User',
+            modelId: $user->id
+        );
+        
         // Redirección según cargo
         return match ($user->cargo) {
             'Administrador' => redirect('/dashboard-administrador'),
@@ -43,9 +52,32 @@ class LoginController extends Controller
             'Sindico'      => redirect('/dashboard-sindico-procurador'),
             'Regidor'      => redirect('/dashboard-regidor'),
             'Director'     => redirect('/dashboard-director-de-area'),
-            'Auxiliar'     => redirect('/dashboard-auxiliar-area'),
+            'Auxiliar'     => redirect('/dashboard-auxiliar-de-area'),
             default        => redirect()->route('usuarios.index'),
         };
+    }
+
+    /**
+     * ✅ SOBRESCRIBIR MÉTODO LOGOUT PARA REGISTRAR
+     */
+    public function logout(Request $request)
+    {
+        // Registrar logout ANTES de cerrar sesión
+        if (auth()->check()) {
+            AuditLog::log(
+                action: 'logout',
+                description: 'Cerró sesión',
+                modelType: 'App\Models\User',
+                modelId: auth()->id()
+            );
+        }
+        
+        // Ejecutar logout normal
+        $this->guard()->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        
+        return redirect('/');
     }
 
     /**
