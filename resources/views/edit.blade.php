@@ -151,7 +151,7 @@ textarea {
             {{-- FOTOS --}}
             <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Fotos ({{ count($actividad->fotos ?? []) }}/5)
+                    Fotos ({{ is_array($actividad->fotos) ? count($actividad->fotos) : 0 }}/5)
                 </label>
 
                 {{-- Fotos existentes con botón Cambiar --}}
@@ -170,12 +170,6 @@ textarea {
                                         Cambiar
                                     </button>
                                     
-                                    <a href="{{ route('actividades.eliminar-foto', [$actividad->id, urlencode($foto)]) }}"
-                                       onclick="return confirm('¿Eliminar esta foto?')"
-                                       class="absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-700 transition">
-                                        ×
-                                    </a>
-                                    
                                     <input type="file"
                                            name="cambiar_foto[{{ $index }}]"
                                            id="cambiar-foto-{{ $index }}"
@@ -190,10 +184,9 @@ textarea {
 
                 {{-- Input para AGREGAR fotos nuevas --}}
                 @php
-                    $fotosActualesCount = count($actividad->fotos ?? []);
+                    $fotosActualesCount = is_array($actividad->fotos) ? count($actividad->fotos) : 0;
                     $puedeAgregar = 5 - $fotosActualesCount;
                 @endphp
-
                 @if($puedeAgregar > 0)
                     <div class="mb-2">
                         <label for="fotos-nuevas" class="block text-sm text-gray-600 dark:text-gray-400 mb-1">
