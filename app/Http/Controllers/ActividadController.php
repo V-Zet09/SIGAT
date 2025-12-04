@@ -383,38 +383,37 @@ public function update(Request $request, $id)
         return response()->json(['success' => false], 400);
     }
 
-    /**
-     * Eliminar actividad
-     */
     public function destroy($id)
-    {
-        $actividad = Actividad::findOrFail($id);
-        
-        // Solo Admin o el creador pueden eliminar (si está Pendiente)
-        $user = Auth::user();
-        
-        if ($user->cargo !== 'Administrador') {
-            if ($actividad->creado_por_id !== $user->id) {
-                abort(403, 'No tienes permiso para eliminar esta actividad');
-            }
-            if ($actividad->estado !== 'Pendiente' && $actividad->estado !== null) {
-                return redirect()->back()
-                    ->with('error', 'No puedes eliminar una actividad que ya fue procesada');
-            }
+{
+    $actividad = Actividad::findOrFail($id);
+
+    // Solo Admin o el creador pueden eliminar (si está Pendiente)
+    $user = Auth::user();
+
+    if ($user->cargo !== 'Administrador') {
+        if ($actividad->creado_por_id !== $user->id) {
+            abort(403, 'No tienes permiso para eliminar esta actividad');
         }
-        
-        // Eliminar fotos físicas
-        if ($actividad->fotos) {
-            foreach ($actividad->fotos as $foto) {
-                Storage::disk('public')->delete($foto);
-            }
+        if ($actividad->estado !== 'Pendiente' && $actividad->estado !== null) {
+            return redirect()->back()
+                ->with('error', 'No puedes eliminar una actividad que ya fue procesada');
         }
-        
-        $actividad->delete();
-        
-        return redirect()->route('actividades.index')
-            ->with('success', 'Actividad eliminada exitosamente');
     }
+
+    // Eliminar fotos físicas
+    if ($actividad->fotos) {
+        foreach ($actividad->fotos as $foto) {
+            Storage::disk('public')->delete($foto);
+        }
+    }
+
+    $actividad->delete();
+
+    // 🔹 Redirigir al listado de actividades registradas
+    return redirect()->route('actividades.registradas')
+        ->with('success', 'Actividad eliminada exitosamente');
+}
+
 
     /**
      * Buscar actividades (para Ajax)
