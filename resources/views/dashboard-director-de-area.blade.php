@@ -34,10 +34,16 @@
                     </h1>
                     <p class="text-orange-100 dark:text-orange-200 flex items-center gap-2">
                         <i class="fas fa-user-tie text-yellow-300"></i>
-                        <span class="font-medium">Director de Área</span>
+                        <span class="font-medium">
+                            @if($isAdmin ?? false)
+                                Administrador del Sistema
+                            @else
+                                Director de Área
+                            @endif
+                        </span>
                         <span class="mx-2">•</span>
                         <i class="fas fa-building text-orange-200"></i>
-                        <span>{{ Auth::user()->departamento ?? 'Departamento' }}</span>
+                        <span>{{ Auth::user()->area ?? 'Sin área asignada' }}</span>
                         <span class="mx-2">•</span>
                         <i class="fas fa-clock text-orange-200"></i>
                         <span>{{ now()->format('d/m/Y - H:i') }}</span>
@@ -57,7 +63,7 @@
 
     <!-- Estadísticas principales -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <!-- Total Actividades de mi Área -->
+        <!-- Total Actividades -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
@@ -65,10 +71,20 @@
                         <i class="fas fa-tasks text-2xl text-orange-600 dark:text-orange-400"></i>
                     </div>
                     <span class="text-xs font-semibold text-orange-600 dark:text-orange-400 bg-orange-100 dark:bg-orange-900/30 px-3 py-1 rounded-full">
-                        MI ÁREA
+                        @if($isAdmin ?? false)
+                            SISTEMA
+                        @else
+                            MI ÁREA
+                        @endif
                     </span>
                 </div>
-                <h2 class="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">Actividades del Área</h2>
+                <h2 class="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">
+                    @if($isAdmin ?? false)
+                        Actividades del Sistema
+                    @else
+                        Actividades del Área
+                    @endif
+                </h2>
                 <p class="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-1">{{ $actividadesArea }}</p>
                 <div class="flex items-center gap-2 text-sm">
                     <span class="text-orange-600 dark:text-orange-400 font-medium flex items-center gap-1">
@@ -141,7 +157,13 @@
                     <span class="text-green-600 dark:text-green-400 font-medium flex items-center gap-1">
                         <i class="fas fa-thumbs-up text-xs"></i> {{ round(($actividadesAprobadas / max($actividadesArea, 1)) * 100) }}%
                     </span>
-                    <span class="text-gray-500 dark:text-gray-400">del área</span>
+                    <span class="text-gray-500 dark:text-gray-400">
+                        @if($isAdmin ?? false)
+                            del sistema
+                        @else
+                            del área
+                        @endif
+                    </span>
                 </div>
             </div>
             <div class="bg-gradient-to-r from-green-500 to-green-600 h-1"></div>
@@ -174,7 +196,11 @@
         <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
             <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
                 <i class="fas fa-chart-pie mr-2 text-orange-600"></i>
-                Resumen de mi Área
+                @if($isAdmin ?? false)
+                    Resumen del Sistema
+                @else
+                    Resumen de mi Área
+                @endif
             </h3>
             <ul class="space-y-3">
                 <li class="flex items-center justify-between text-base p-4 bg-gradient-to-r from-orange-50 to-orange-100/50 dark:from-orange-900/20 dark:to-orange-900/10 rounded-xl border border-orange-200 dark:border-orange-800">
@@ -184,7 +210,13 @@
                         </div>
                         <div>
                             <p class="font-bold text-gray-900 dark:text-gray-100">{{ $actividadesArea }}</p>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">Total de actividades del área</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                @if($isAdmin ?? false)
+                                    Total de actividades del sistema
+                                @else
+                                    Total de actividades del área
+                                @endif
+                            </p>
                         </div>
                     </div>
                 </li>
@@ -206,7 +238,7 @@
                         </div>
                         <div>
                             <p class="font-bold text-gray-900 dark:text-gray-100">{{ $actividadesPendientes }}</p>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">Pendientes de mi aprobación</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Pendientes de aprobación</p>
                         </div>
                     </div>
                 </li>
@@ -232,7 +264,11 @@
         <div class="flex items-center justify-between mb-5">
             <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100 flex items-center">
                 <i class="fas fa-tasks mr-3 text-orange-600 dark:text-orange-400"></i>
-                Gestión de Actividades del Área
+                @if($isAdmin ?? false)
+                    Gestión de Actividades del Sistema
+                @else
+                    Gestión de Actividades del Área
+                @endif
             </h3>
             @if($actividadesPendientes > 0)
                 <span class="bg-yellow-500 text-white text-sm font-bold px-4 py-2 rounded-full animate-pulse flex items-center gap-2">
@@ -246,6 +282,9 @@
             <table class="min-w-full text-sm">
                 <thead class="sticky top-0 bg-gray-50 dark:bg-gray-900/50 z-10">
                     <tr class="text-gray-700 dark:text-gray-300 border-b-2 border-gray-300 dark:border-gray-700 font-semibold">
+                        @if($isAdmin ?? false)
+                            <th class="py-3 px-4 text-left">Área</th>
+                        @endif
                         <th class="py-3 px-4 text-left">Título</th>
                         <th class="py-3 px-4 text-left">Tipo</th>
                         <th class="py-3 px-4 text-left">Creador</th>
@@ -257,6 +296,13 @@
                 <tbody>
                     @forelse($actividadesPendientesLista as $actividad)
                         <tr class="border-b border-gray-200 dark:border-gray-800 hover:bg-orange-50 dark:hover:bg-orange-900/10 transition-colors">
+                            @if($isAdmin ?? false)
+                                <td class="py-3 px-4 text-gray-900 dark:text-gray-100">
+                                    <span class="text-xs bg-purple-100 dark:bg-purple-900/40 text-purple-800 dark:text-purple-200 px-2 py-1 rounded-full font-semibold">
+                                        {{ $actividad->tipo_area ?? 'Sin área' }}
+                                    </span>
+                                </td>
+                            @endif
                             <td class="py-3 px-4 text-gray-900 dark:text-gray-100 font-medium">
                                 {{ Str::limit($actividad->titulo, 45) }}
                             </td>
@@ -321,7 +367,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center text-gray-500 dark:text-gray-400 py-10">
+                            <td colspan="{{ ($isAdmin ?? false) ? '7' : '6' }}" class="text-center text-gray-500 dark:text-gray-400 py-10">
                                 <i class="fas fa-check-circle text-5xl mb-3 text-green-500"></i>
                                 <p class="text-lg font-semibold">¡Excelente trabajo!</p>
                                 <p class="text-sm">No hay actividades pendientes de gestión</p>
@@ -339,7 +385,11 @@
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
             <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
                 <i class="fas fa-chart-line mr-2 text-orange-600"></i>
-                Actividades de mi Área (Últimos 6 meses)
+                @if($isAdmin ?? false)
+                    Actividades del Sistema (Últimos 6 meses)
+                @else
+                    Actividades de mi Área (Últimos 6 meses)
+                @endif
             </h3>
             <div id="chart-actividades-mes" class="h-80"></div>
         </div>
@@ -348,7 +398,11 @@
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
             <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
                 <i class="fas fa-chart-pie mr-2 text-amber-600"></i>
-                Estado de Actividades del Área
+                @if($isAdmin ?? false)
+                    Estado de Actividades del Sistema
+                @else
+                    Estado de Actividades del Área
+                @endif
             </h3>
             <div id="chart-estado-actividades" class="h-80"></div>
         </div>
@@ -356,15 +410,23 @@
 
     <!-- Tablas de Actividades -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <!-- Últimas Actividades del Área -->
+        <!-- Últimas Actividades -->
         <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
             <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-                <i class="fas fa-list mr-2 text-orange-600 dark:text-orange-400"></i>Últimas Actividades del Área
+                <i class="fas fa-list mr-2 text-orange-600 dark:text-orange-400"></i>
+                @if($isAdmin ?? false)
+                    Últimas Actividades del Sistema
+                @else
+                    Últimas Actividades del Área
+                @endif
             </h3>
             <div class="bg-gray-50 dark:bg-gray-900/50 rounded-xl px-3 py-2 overflow-x-auto border border-gray-200 dark:border-gray-800 max-h-96 custom-scrollbar">
                 <table class="min-w-full text-xs">
                     <thead class="sticky top-0 bg-gray-50 dark:bg-gray-900/50">
                         <tr class="text-gray-700 dark:text-gray-300 border-b-2 border-gray-300 dark:border-gray-700 font-semibold">
+                            @if($isAdmin ?? false)
+                                <th class="py-2 px-2 text-left">Área</th>
+                            @endif
                             <th class="py-2 px-2 text-left">Título</th>
                             <th class="py-2 px-2 text-left">Estado</th>
                             <th class="py-2 px-2 text-left">Fecha</th>
@@ -374,6 +436,13 @@
                     <tbody>
                         @forelse($actividadesRecientesArea as $actividad)
                             <tr class="border-b border-gray-200 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800/70 transition-colors">
+                                @if($isAdmin ?? false)
+                                    <td class="py-2 px-2 text-gray-900 dark:text-gray-100">
+                                        <span class="text-xs bg-purple-100 dark:bg-purple-900/40 text-purple-800 dark:text-purple-200 px-2 py-0.5 rounded-full font-medium">
+                                            {{ Str::limit($actividad->tipo_area ?? 'Sin área', 15) }}
+                                        </span>
+                                    </td>
+                                @endif
                                 <td class="py-2 px-2 text-gray-900 dark:text-gray-100">{{ Str::limit($actividad->titulo, 30) }}</td>
                                 <td class="py-2 px-2">
                                     @if($actividad->estado === 'Aprobada')
@@ -399,7 +468,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="text-center text-gray-500 dark:text-gray-400 py-4">Sin actividades recientes</td>
+                                <td colspan="{{ ($isAdmin ?? false) ? '5' : '4' }}" class="text-center text-gray-500 dark:text-gray-400 py-4">Sin actividades recientes</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -419,6 +488,9 @@
                 <table class="min-w-full text-xs">
                     <thead class="sticky top-0 bg-gray-50 dark:bg-gray-900/50">
                         <tr class="text-gray-700 dark:text-gray-300 border-b-2 border-gray-300 dark:border-gray-700 font-semibold">
+                            @if($isAdmin ?? false)
+                                <th class="py-2 px-2 text-left">Área</th>
+                            @endif
                             <th class="py-2 px-2 text-left">Título</th>
                             <th class="py-2 px-2 text-left">Motivo</th>
                             <th class="py-2 px-2 text-left">Fecha</th>
@@ -428,6 +500,13 @@
                     <tbody>
                         @forelse($actividadesRechazadas as $actividad)
                             <tr class="border-b border-gray-200 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800/70 transition-colors">
+                                @if($isAdmin ?? false)
+                                    <td class="py-2 px-2 text-gray-900 dark:text-gray-100">
+                                        <span class="text-xs bg-purple-100 dark:bg-purple-900/40 text-purple-800 dark:text-purple-200 px-2 py-0.5 rounded-full font-medium">
+                                            {{ Str::limit($actividad->tipo_area ?? 'Sin área', 15) }}
+                                        </span>
+                                    </td>
+                                @endif
                                 <td class="py-2 px-2 text-gray-900 dark:text-gray-100">{{ Str::limit($actividad->titulo, 25) }}</td>
                                 <td class="py-2 px-2 text-gray-700 dark:text-gray-300 text-xs">{{ Str::limit($actividad->motivo_rechazo ?? 'Sin motivo', 30) }}</td>
                                 <td class="py-2 px-2 text-gray-700 dark:text-gray-300">{{ $actividad->fecha_rechazo ? \Carbon\Carbon::parse($actividad->fecha_rechazo)->format('d/m/Y') : 'N/A' }}</td>
@@ -439,7 +518,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="text-center text-gray-500 dark:text-gray-400 py-4">
+                                <td colspan="{{ ($isAdmin ?? false) ? '5' : '4' }}" class="text-center text-gray-500 dark:text-gray-400 py-4">
                                     <i class="fas fa-check-circle text-2xl mb-2"></i>
                                     <p>No hay actividades rechazadas</p>
                                 </td>
@@ -705,7 +784,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ===================================
 function abrirModalAprobar(id, titulo) {
     document.getElementById('tituloActividadAprobar').textContent = titulo;
-    document.getElementById('formAprobar').action = `/actividades/${id}/aprobar`;
+    document.getElementById('formAprobar').action = `/actividades/${id}/aprobar`; // ✅ CORREGIDO
     document.getElementById('modalAprobar').classList.remove('hidden');
 }
 
@@ -715,7 +794,7 @@ function cerrarModalAprobar() {
 
 function abrirModalRechazar(id, titulo) {
     document.getElementById('tituloActividadRechazar').textContent = titulo;
-    document.getElementById('formRechazar').action = `/actividades/${id}/rechazar`;
+    document.getElementById('formRechazar').action = `/actividades/${id}/rechazar`; // ✅ CORREGIDO
     document.getElementById('modalRechazar').classList.remove('hidden');
 }
 
