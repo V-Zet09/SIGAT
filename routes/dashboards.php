@@ -1,5 +1,5 @@
 <?php
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
     AdministradorController,
@@ -9,11 +9,30 @@ use App\Http\Controllers\{
     DirectorDeAreaController,
     AuxiliarDeAreaController,
     HomeController
+    
 };
-
 Route::get('/', function () {
+    if (Auth::check()) {
+        $user = Auth::user();
+        
+        if ($user->hasRole('Administrador')) {
+            return redirect()->route('dashboard-administrador');
+        } elseif ($user->hasRole('Presidente Municipal')) {
+            return redirect()->route('dashboard-presidente-municipal');
+        } elseif ($user->hasRole('Síndico Procurador')) {
+            return redirect()->route('dashboard-sindico-procurador');
+        } elseif ($user->hasRole('Regidor')) {
+            return redirect()->route('dashboard-regidor');
+        } elseif ($user->hasRole('Director de Área')) {
+            return redirect()->route('dashboard-director-de-area');
+        } else {
+            return redirect()->route('dashboard-auxiliar-de-area');
+        }
+    }
+    
     return redirect()->route('login');
-});
+})->name('home');
+
 
 Route::middleware(['auth', 'prevent-back-history'])->group(function () {
 
