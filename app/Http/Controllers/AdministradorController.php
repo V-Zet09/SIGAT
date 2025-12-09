@@ -12,45 +12,54 @@ use Carbon\Carbon;
 class AdministradorController extends Controller
 {
     public function index()
-    {
-        // Obtener mes actual
-        $mesActual = Carbon::now()->startOfMonth();
-        $mesFinal = Carbon::now()->endOfMonth();
+{
+    // Obtener mes actual
+    $mesActual = Carbon::now()->startOfMonth();
+    $mesFinal = Carbon::now()->endOfMonth();
+    
+    // Obtener fechas con eventos del mes actual
+    $fechasActividades = $this->getFechasActividades($mesActual, $mesFinal);
+    $fechasUsuarios = $this->getFechasUsuarios($mesActual, $mesFinal);
+    $fechasInformes = $this->getFechasInformes($mesActual, $mesFinal);
+    
+    // ✅ OBTENER LOGS (ÚLTIMOS 50 CON PAGINACIÓN)
+    $logs = AuditLog::with('user')
+        ->latest()
+        ->paginate(50);
+    
+    // ✅ ACTIVIDADES PENDIENTES PARA GESTIÓN (ADMINISTRADOR VE TODAS)
+    $actividadesPendientesLista = Actividad::with('creador')
+        ->orderBy('tipo_area', 'asc')      // Primero por área
+        ->orderBy('created_at', 'desc')    // Luego por fecha
+        ->get(); // Sin límite, trae todas las actividades
+    
+    return view('dashboard-administrador', [
+        // Estadísticas generales
+        'totalActividades' => Actividad::count(),
+        'totalUsuarios' => User::count(),
+        'totalInformes' => Informe::count(),
         
-        // Obtener fechas con eventos del mes actual
-        $fechasActividades = $this->getFechasActividades($mesActual, $mesFinal);
-        $fechasUsuarios = $this->getFechasUsuarios($mesActual, $mesFinal);
-        $fechasInformes = $this->getFechasInformes($mesActual, $mesFinal);
+        // Datos recientes
+        'actividadesRecientes' => Actividad::latest()->take(5)->get(),
+        'usuariosRecientes' => User::latest()->take(5)->get(),
         
-        // ✅ OBTENER LOGS (ÚLTIMOS 50 CON PAGINACIÓN)
-        $logs = AuditLog::with('user')
-            ->latest()
-            ->paginate(50);
+        // Estados
+        'actividadesRevisadas' => Actividad::where('estado', 'Aprobada')->count(),
+        'actividadesPendientes' => Actividad::where('estado', 'Pendiente')->orWhereNull('estado')->count(),
+        'usuariosActivos' => User::count(),
         
-        return view('dashboard-administrador', [
-            // Estadísticas generales
-            'totalActividades' => Actividad::count(),
-            'totalUsuarios' => User::count(),
-            'totalInformes' => Informe::count(),
-            
-            // Datos recientes
-            'actividadesRecientes' => Actividad::latest()->take(5)->get(),
-            'usuariosRecientes' => User::latest()->take(5)->get(),
-            
-            // Estados
-            'actividadesRevisadas' => Actividad::where('estado', 'Aprobada')->count(),
-            'actividadesPendientes' => Actividad::where('estado', 'Pendiente')->orWhereNull('estado')->count(),
-            'usuariosActivos' => User::count(), // Ajusta según tu lógica de usuarios activos
-            
-            // Fechas para calendario
-            'fechasActividades' => $fechasActividades,
-            'fechasUsuarios' => $fechasUsuarios,
-            'fechasInformes' => $fechasInformes,
-            
-            // ✅ LOGS DE AUDITORÍA
-            'logs' => $logs,
-        ]);
-    }
+        // Fechas para calendario
+        'fechasActividades' => $fechasActividades,
+        'fechasUsuarios' => $fechasUsuarios,
+        'fechasInformes' => $fechasInformes,
+        
+        // ✅ LOGS DE AUDITORÍA
+        'logs' => $logs,
+        
+        // ✅ LISTA DE ACTIVIDADES PARA GESTIÓN
+        'actividadesPendientesLista' => $actividadesPendientesLista,
+    ]);
+}
 
     /**
      * Obtener eventos del calendario para un mes específico
