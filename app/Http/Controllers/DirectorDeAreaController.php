@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Actividad;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use App\Models\AuditLog;
 
 class DirectorDeAreaController extends Controller
 {
@@ -177,45 +178,73 @@ if ($isAdmin) {
     }
 
     public function aprobar(Request $request, $id)
-    {
-        $actividad = Actividad::findOrFail($id);
-        $user = Auth::user();
-        
-        // ✅ Admin puede aprobar cualquier actividad
-        if (!$user->hasRole('admin') && $actividad->tipo_area !== $user->area) {
-            return redirect()->back()->with('error', 'No tienes permiso para aprobar esta actividad');
-        }
-        
-        $actividad->update([
-            'estado' => 'Aprobada',
-            'aprobada_por' => Auth::id(),
-            'fecha_aprobacion' => now(),
-        ]);
-        
-        return redirect()->back()->with('success', 'Actividad aprobada exitosamente');
-    }
+{
+    $actividad = Actividad::findOrFail($id);
+    $user = Auth::user();
+    
+    // Roles que pueden aprobar cualquier área
+    $esGlobal = $user->hasRole(['Administrador', 'Presidente Municipal', 'Síndico Procurador']);
 
-    public function rechazar(Request $request, $id)
-    {
-        $request->validate([
-            'motivo_rechazo' => 'required|string|max:500'
-        ]);
-        
-        $actividad = Actividad::findOrFail($id);
-        $user = Auth::user();
-        
-        // ✅ Admin puede rechazar cualquier actividad
-        if (!$user->hasRole('admin') && $actividad->tipo_area !== $user->area) {
-            return redirect()->back()->with('error', 'No tienes permiso para rechazar esta actividad');
-        }
-        
-        $actividad->update([
-            'estado' => 'Rechazada',
-            'rechazada_por' => Auth::id(),
-            'motivo_rechazo' => $request->motivo_rechazo,
-            'fecha_rechazo' => now(),
-        ]);
-        
-        return redirect()->back()->with('success', 'Actividad rechazada exitosamente');
+    // Si NO es global (es Director de área), solo puede aprobar su propia área
+    if (!$esGlobal && $actividad->tipo_area !== $user->area) {
+        return redirect()->back()->with('error', 'No tienes permiso para aprobar esta actividad');
     }
+    
+    $actividad->update([
+        'estado'           => 'Aprobada',
+        'aprobada_por'     => $user->id,
+        'fecha_aprobacion' => now(),
+    ]);
+    
+    // ✅ Registrar log de aprobación
+    AuditLog::log(
+        'aprobar',
+        'Aprobó Actividad: ' . $actividad->titulo,
+        'App\Models\Actividad',
+        $actividad->id,
+        ['estado' => 'Pendiente'],
+        ['estado' => 'Aprobada']
+    );
+    
+    return redirect()->back()->with('success', 'Actividad aprobada exitosamente');
+}
+
+public function rechazar(Request $request, $id)
+{
+    $request->validate([
+        'motivo_rechazo' => 'required|string|max:500'
+    ]);
+    
+    $actividad = Actividad::findOrFail($id);
+    $user = Auth::user();
+    
+    // Roles que pueden rechazar cualquier área
+    $esGlobal = $user->hasRole(['Administrador', 'Presidente Municipal', 'Síndico Procurador']);
+
+    // Si NO es global (es Director de área), solo puede rechazar su propia área
+    if (!$esGlobal && $actividad->tipo_area !== $user->area) {
+        return redirect()->back()->with('error', 'No tienes permiso para rechazar esta actividad');
+    }
+    
+    $actividad->update([
+        'estado'         => 'Rechazada',
+        'rechazada_por'  => $user->id,
+        'motivo_rechazo' => $request->motivo_rechazo,
+        'fecha_rechazo'  => now(),
+    ]);
+    
+    // ✅ Registrar log de rechazo
+    AuditLog::log(
+        'rechazar',
+        'Rechazó Actividad: ' . $actividad->titulo . ' - Motivo: ' . $request->motivo_rechazo,
+        'App\Models\Actividad',
+        $actividad->id,
+        ['estado' => 'Pendiente'],
+        ['estado' => 'Rechazada', 'motivo' => $request->motivo_rechazo]
+    );
+    
+    return redirect()->back()->with('success', 'Actividad rechazada exitosamente');
+}
+
+
 }

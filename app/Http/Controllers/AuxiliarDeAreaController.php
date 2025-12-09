@@ -10,18 +10,56 @@ use Illuminate\Support\Facades\Auth;
 class AuxiliarDeAreaController extends Controller
 {
     public function index()
-    {
-        $userId = Auth::id();
-        
-        // ============================================
-        // OBTENER EL ÁREA/DEPARTAMENTO DEL AUXILIAR
-        // ============================================
-        $areaAuxiliar = Auth::user()->departamento ?? null;
+{
+    $user = Auth::user();
+    $userId = $user->id;
+    $areaAuxiliar = $user->departamento ?? null;
+
+    // ============================================
+    // SI ES ADMINISTRADOR: VER TODO EL SISTEMA
+    // ============================================
+    if ($user->hasRole('Administrador')) {
+
+        // Estadísticas globales
+        $misActividades = Actividad::count(); // total actividades
+        $actividadesArea = Actividad::count(); // puedes cambiar a otro concepto si quieres
+        $actividadesPendientes = Actividad::where(function($query) {
+                $query->where('estado', 'Pendiente')
+                      ->orWhereNull('estado');
+            })->count();
+
+        $misActividadesAprobadas = Actividad::where('estado', 'Aprobada')->count();
+
+        $actividadesMes = Actividad::whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->count();
+
+        // Listas
+        $misActividadesLista = Actividad::latest()
+            ->take(50) // puedes subir este límite
+            ->get();
+
+        $actividadesRecientesArea = Actividad::latest()
+            ->take(20)
+            ->get();
+
+        // Gráfica: global últimos 6 meses
+        $misActividadesPorMes = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $mes = Carbon::now()->subMonths($i);
+            $nombreMes = $mes->translatedFormat('M Y');
+            $count = Actividad::whereYear('created_at', $mes->year)
+                ->whereMonth('created_at', $mes->month)
+                ->count();
+            $misActividadesPorMes[$nombreMes] = $count;
+        }
+
+    } else {
 
         // ============================================
-        // ESTADÍSTICAS PERSONALES (FILTRADAS POR DEPARTAMENTO)
+        // COMPORTAMIENTO NORMAL DE AUXILIAR
         // ============================================
-        
+
         // Mis actividades (creadas por mí)
         $misActividades = Actividad::where('creado_por_id', $userId)->count();
         
@@ -47,10 +85,6 @@ class AuxiliarDeAreaController extends Controller
             ->whereYear('created_at', Carbon::now()->year)
             ->count();
 
-        // ============================================
-        // LISTAS DE ACTIVIDADES
-        // ============================================
-        
         // Mis últimas actividades (últimas 20 para edición)
         $misActividadesLista = Actividad::where('creado_por_id', $userId)
             ->latest()
@@ -63,9 +97,7 @@ class AuxiliarDeAreaController extends Controller
             ->take(15)
             ->get();
 
-        // ============================================
-        // MIS ACTIVIDADES POR MES (ÚLTIMOS 6 MESES)
-        // ============================================
+        // Mis actividades por mes (últimos 6 meses)
         $misActividadesPorMes = [];
         for ($i = 5; $i >= 0; $i--) {
             $mes = Carbon::now()->subMonths($i);
@@ -76,24 +108,21 @@ class AuxiliarDeAreaController extends Controller
                 ->count();
             $misActividadesPorMes[$nombreMes] = $count;
         }
-
-        // ============================================
-        // RETORNAR VISTA CON TODOS LOS DATOS
-        // ============================================
-        return view('dashboard-auxiliar-de-area', [
-            // Estadísticas personales
-            'misActividades' => $misActividades,
-            'actividadesArea' => $actividadesArea,
-            'actividadesPendientes' => $actividadesPendientes,
-            'misActividadesAprobadas' => $misActividadesAprobadas,
-            'actividadesMes' => $actividadesMes,
-            
-            // Listas de actividades
-            'misActividadesLista' => $misActividadesLista,
-            'actividadesRecientesArea' => $actividadesRecientesArea,
-            
-            // Datos para gráfica
-            'misActividadesPorMes' => $misActividadesPorMes,
-        ]);
     }
+
+    // ============================================
+    // RETORNAR VISTA CON TODOS LOS DATOS
+    // ============================================
+    return view('dashboard-auxiliar-de-area', [
+        'misActividades' => $misActividades,
+        'actividadesArea' => $actividadesArea,
+        'actividadesPendientes' => $actividadesPendientes,
+        'misActividadesAprobadas' => $misActividadesAprobadas,
+        'actividadesMes' => $actividadesMes,
+        'misActividadesLista' => $misActividadesLista,
+        'actividadesRecientesArea' => $actividadesRecientesArea,
+        'misActividadesPorMes' => $misActividadesPorMes,
+    ]);
+}
+
 }

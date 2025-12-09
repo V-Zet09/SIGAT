@@ -53,7 +53,7 @@
             
             <!-- Acceso rápido -->
             <div class="hidden md:flex gap-3">
-                <a href="#" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg hover:shadow-xl">
+                 <a href="{{ route('actividades.create') }}"  class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg hover:shadow-xl">
                     <i class="fas fa-plus-circle"></i>
                     Nueva Actividad
                 </a>
@@ -173,25 +173,37 @@
     <!-- Sección principal: Acciones rápidas + Resumen del Área -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         
-        <!-- Acciones rápidas -->
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
-            <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-                <i class="fas fa-bolt mr-2 text-yellow-500"></i>
-                Acciones rápidas
-            </h3>
-            <div class="grid grid-cols-1 gap-3">
-                <a href="#" class="bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white text-center py-4 text-base font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
-                    <i class="fas fa-plus-circle mr-2"></i>Registrar Nueva Actividad
-                </a>
-                <a href="#" class="bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white text-center py-4 text-base font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
-                    <i class="fas fa-edit mr-2"></i>Editar Mis Actividades
-                </a>
-                <a href="#" class="bg-gradient-to-r from-cyan-600 to-cyan-700 hover:from-cyan-700 hover:to-cyan-800 text-white text-center py-4 text-base font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
-                    <i class="fas fa-file-alt mr-2"></i>Ver Informes
-                </a>
-            </div>
-        </div>
-        
+<!-- Acciones rápidas -->
+<div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
+    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
+        <i class="fas fa-bolt mr-2 text-yellow-500"></i>
+        Acciones rápidas
+    </h3>
+    <div class="grid grid-cols-1 gap-3">
+        {{-- Botón: Registrar Nueva Actividad --}}
+        @can('crear actividades')
+        <a href="{{ route('actividades.create') }}" 
+           class="bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white text-center py-4 text-base font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+            <i class="fas fa-plus-circle mr-2"></i>Registrar Nueva Actividad
+        </a>
+        @endcan
+
+        {{-- Botón: Ver Mis Actividades --}}
+        <a href="{{ route('actividades.registradas') }}" 
+           class="bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white text-center py-4 text-base font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+            <i class="fas fa-edit mr-2"></i>Ver Mis Actividades
+        </a>
+
+        {{-- Botón: Ver Informes --}}
+        @can('generar informes')
+        <a href="{{ route('informes-generados') }}" 
+           class="bg-gradient-to-r from-cyan-600 to-cyan-700 hover:from-cyan-700 hover:to-cyan-800 text-white text-center py-4 text-base font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+            <i class="fas fa-file-alt mr-2"></i>Ver Informes
+        </a>
+        @endcan
+    </div>
+</div>
+
         <!-- Resumen del Área -->
         <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
             <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
