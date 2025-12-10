@@ -11,6 +11,7 @@ use Mpdf\Mpdf;
 use App\Models\Actividad;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Helpers\NotificationHelper;
+use App\Models\AuditLog; // ← AGREGADO
 
 class InformeController extends Controller
 {
@@ -154,11 +155,35 @@ class InformeController extends Controller
             $actividades = $actividades->sortBy('tipo_area');
             Log::info('📊 Actividades para PDF: ' . $actividades->count());
 
+            /* ⭐ NUEVO: no permitir informes sin actividades aceptadas */
+            if ($actividades->count() === 0) {
+                // Opcional: borrar el informe recién creado
+                // $informe->delete();
+
+                return back()
+                    ->withErrors(['error' => 'No hay actividades aceptadas en el periodo y dependencias seleccionadas'])
+                    ->withInput();
+            }
+
             $this->generarPDFConMPdf($informe, $actividades);
 
             Log::info('✅ PDF generado exitosamente');
 
-            // Notificar a roles que pueden ver informes (ajustar si no existe "titulo"/"periodo")
+            // ✅ REGISTRAR LOG DE CREACIÓN DE INFORME
+            AuditLog::log(
+                action: 'crear',
+                description: "Generó informe del municipio: {$validated['municipio_nombre']} - Período: {$validated['periodo_inicio']} a {$validated['periodo_fin']}",
+                modelType: 'App\Models\Informe',
+                modelId: $informe->id,
+                newValues: [
+                    'municipio' => $validated['municipio_nombre'],
+                    'periodo' => $validated['periodo_inicio'] . ' - ' . $validated['periodo_fin'],
+                    'dependencias' => count($validated['dependencias']),
+                    'actividades' => $actividades->count()
+                ]
+            );
+
+            // Notificar a roles que pueden ver informes
             $roles = ['Administrador', 'Presidente Municipal', 'Síndico Procurador', 'Regidor', 'Director de Área'];
             foreach ($roles as $rol) {
                 NotificationHelper::sendToRole(
@@ -193,7 +218,7 @@ class InformeController extends Controller
     {
         $informe = Informe::findOrFail($id);
 
-        // Verificar permiso aquí antes de retornar vista
+        // Verificar permiso
         if ($informe->user_id !== Auth::id() && !Auth::user()->hasRole('Administrador')) {
             abort(403, 'No tienes permiso para editar este informe');
         }
@@ -252,7 +277,7 @@ class InformeController extends Controller
         ]);
 
         try {
-            // Actualizar imágenes si se suben nuevas (eliminando previas)
+            // Actualizar imágenes si se suben nuevas
             if ($request->hasFile('portada_imagen')) {
                 if (!empty($informe->portada_imagen_path)) {
                     Storage::disk('public')->delete($informe->portada_imagen_path);
@@ -318,15 +343,24 @@ class InformeController extends Controller
             ];
             $informe->save();
 
-            Log::info('✅ Informe actualizado en BD');
-
+                        Log::info('✅ Informe actualizado en BD');
             $actividades = $informe->getActividadesFiltradas();
             $actividades = $actividades->sortBy('tipo_area');
             Log::info('📊 Actividades para PDF actualizado: ' . $actividades->count());
 
+            /* ⭐ NUEVO: no permitir edición si no hay actividades aceptadas */
+            if ($actividades->count() === 0) {
+                return back()
+                    ->withErrors(['error' => 'No hay actividades aceptadas en el periodo y dependencias seleccionadas'])
+                    ->withInput();
+            }
+
+
             $this->generarPDFConMPdf($informe, $actividades);
 
             Log::info('✅ PDF regenerado exitosamente');
+
+            // ✅ LOG DE EDICIÓN (se hace automáticamente con Auditable trait)
 
             return redirect()->route('informes-generados')
                 ->with('success', 'Informe editado exitosamente');
@@ -345,13 +379,14 @@ class InformeController extends Controller
     {
         try {
             $informe = Informe::findOrFail($id);
+            $municipioNombre = $informe->municipio_nombre;
 
             // Solo el creador o administrador puede eliminar
             if ($informe->user_id !== Auth::id() && !Auth::user()->hasRole('Administrador')) {
                 abort(403, 'No tienes permiso para eliminar este informe');
             }
 
-            // Eliminar imágenes del storage si existen
+            // Eliminar imágenes del storage
             if (!empty($informe->portada_imagen_path)) {
                 Storage::disk('public')->delete($informe->portada_imagen_path);
             }
@@ -377,6 +412,8 @@ class InformeController extends Controller
             InformeSeccion::where('informe_id', $informe->id)->delete();
 
             $informe->forceDelete();
+
+            // ✅ LOG DE ELIMINACIÓN (se hace automáticamente con Auditable trait)
 
             return redirect()->route('informes-generados')
                 ->with('success', 'Informe eliminado exitosamente');
@@ -404,6 +441,13 @@ class InformeController extends Controller
                 abort(404, 'Archivo no encontrado');
             }
 
+            // ✅ REGISTRAR LOG DE DESCARGA
+            AuditLog::log(
+                action: 'descargar',
+                description: "Descargó el informe: {$informe->municipio_nombre}",
+                modelType: 'App\Models\Informe',
+                modelId: $informe->id
+            );
 
             return response()->download(
                 $filePath,
@@ -517,10 +561,19 @@ class InformeController extends Controller
             throw $e;
         }
     }
+    
     public function incrementDescarga($id) {
-    $informe = Informe::findOrFail($id);
-    $informe->increment('descargas');
-    return response()->json(['success' => true, 'descargas' => $informe->descargas]);
-}
-
+        $informe = Informe::findOrFail($id);
+        $informe->increment('descargas');
+        
+        // ✅ REGISTRAR LOG DE DESCARGA
+        AuditLog::log(
+            action: 'descargar',
+            description: "Incrementó contador de descargas del informe: {$informe->municipio_nombre}",
+            modelType: 'App\Models\Informe',
+            modelId: $informe->id
+        );
+        
+        return response()->json(['success' => true, 'descargas' => $informe->descargas]);
+    }
 }

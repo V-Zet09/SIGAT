@@ -1,5 +1,5 @@
 <?php
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
     AdministradorController,
@@ -7,48 +7,74 @@ use App\Http\Controllers\{
     SindicoProcuradorController,
     RegidorController,
     DirectorDeAreaController,
-    AuxiliarDeAreaController
+    AuxiliarDeAreaController,
+    HomeController
+    
 };
+Route::get('/', function () {
+    if (Auth::check()) {
+        $user = Auth::user();
+        
+        if ($user->hasRole('Administrador')) {
+            return redirect()->route('dashboard-administrador');
+        } elseif ($user->hasRole('Presidente Municipal')) {
+            return redirect()->route('dashboard-presidente-municipal');
+        } elseif ($user->hasRole('Síndico Procurador')) {
+            return redirect()->route('dashboard-sindico-procurador');
+        } elseif ($user->hasRole('Regidor')) {
+            return redirect()->route('dashboard-regidor');
+        } elseif ($user->hasRole('Director de Área')) {
+            return redirect()->route('dashboard-director-de-area');
+        } else {
+            return redirect()->route('dashboard-auxiliar-de-area');
+        }
+    }
+    
+    return redirect()->route('login');
+})->name('home');
 
-/*
-|--------------------------------------------------------------------------
-| RUTAS DE DASHBOARDS
-|--------------------------------------------------------------------------
-| Todas las rutas de dashboards protegidas por autenticación y permisos.
-| El Administrador puede ver TODOS los dashboards.
-| Otros roles solo ven SU dashboard.
-*/
 
 Route::middleware(['auth', 'prevent-back-history'])->group(function () {
 
-    // Dashboard Administrador
-    Route::middleware(['can:acceder dashboard administrador'])
-        ->get('/dashboard-administrador', [AdministradorController::class, 'index'])
+    // DASHBOARD ADMINISTRADOR
+    Route::get('/dashboard-administrador', [AdministradorController::class, 'index'])
+        ->middleware('role:Administrador')
         ->name('dashboard-administrador');
+    
+    Route::get('/api/calendario-eventos', [AdministradorController::class, 'getCalendarioEventos'])
+        ->middleware('role:Administrador')
+        ->name('api.calendario.eventos');
 
-    // Dashboard Presidente Municipal
-    Route::middleware(['can:acceder dashboard presidente'])
-        ->get('/dashboard-presidente-municipal', [PresidenteMunicipalController::class, 'index'])
+    // DASHBOARD PRESIDENTE MUNICIPAL
+    Route::get('/dashboard-presidente-municipal', [PresidenteMunicipalController::class, 'index'])
+        ->middleware('can:acceder dashboard presidente')
         ->name('dashboard-presidente-municipal');
 
-    // Dashboard Síndico Procurador
-    Route::middleware(['can:acceder dashboard sindico'])
-        ->get('/dashboard-sindico-procurador', [SindicoProcuradorController::class, 'index'])
+    // DASHBOARD SÍNDICO PROCURADOR
+    Route::get('/dashboard-sindico-procurador', [SindicoProcuradorController::class, 'index'])
+        ->middleware('can:acceder dashboard sindico')
         ->name('dashboard-sindico-procurador');
 
-    // Dashboard Regidor
-    Route::middleware(['can:acceder dashboard regidor'])
-        ->get('/dashboard-regidor', [RegidorController::class, 'index'])
+    // DASHBOARD REGIDOR
+    Route::get('/dashboard-regidor', [RegidorController::class, 'index'])
+        ->middleware('can:acceder dashboard regidor')
         ->name('dashboard-regidor');
 
-    // Dashboard Director de Área
-    Route::middleware(['can:acceder dashboard director'])
-        ->get('/dashboard-director-de-area', [DirectorDeAreaController::class, 'index'])
+    // DASHBOARD DIRECTOR DE ÁREA
+    Route::get('/dashboard-director-de-area', [DirectorDeAreaController::class, 'index'])
+        ->middleware('can:acceder dashboard director')
         ->name('dashboard-director-de-area');
+    
+    Route::put('/actividades/{id}/aprobar', [DirectorDeAreaController::class, 'aprobar'])
+        ->middleware('can:acceder dashboard director')
+        ->name('actividades.aprobar');
+    
+    Route::put('/actividades/{id}/rechazar', [DirectorDeAreaController::class, 'rechazar'])
+        ->middleware('can:acceder dashboard director')
+        ->name('actividades.rechazar');
 
-    // Dashboard Auxiliar de Área
-    Route::middleware(['can:acceder dashboard auxiliar'])
-        ->get('/dashboard-auxiliar-area', [AuxiliarDeAreaController::class, 'index'])
-        ->name('dashboard-auxiliar-area');
-
+    // ✅ DASHBOARD AUXILIAR DE ÁREA (CONSISTENTE CON LOS DEMÁS)
+    Route::get('/dashboard-auxiliar-de-area', [AuxiliarDeAreaController::class, 'index'])
+        ->middleware('can:acceder dashboard auxiliar')
+        ->name('dashboard-auxiliar-de-area');
 });

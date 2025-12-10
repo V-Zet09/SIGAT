@@ -139,16 +139,7 @@
                                 <i class="ri-shield-user-line mr-1"></i>
                                 {{ $rol }}
                             </span>
-                        @endif
-
-                        {{-- Input oculto para archivo --}}
-                        <input type="file" 
-                               id="avatar-input" 
-                               name="avatar" 
-                               accept="image/*" 
-                               @change="handleFileSelect($event)"
-                               class="hidden">
-                        
+                        @endif                        
                         {{-- Información --}}
                         <div class="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
                             <p class="text-xs text-blue-800 dark:text-blue-200">
@@ -179,8 +170,25 @@
                 </div>
 
                 {{-- Formulario de información --}}
-<form @submit.prevent="submitForm($event)" class="space-y-5">
+<form action="{{ route('perfil.update') }}" 
+      method="POST" 
+      enctype="multipart/form-data" 
+      class="space-y-5">
     @csrf
+    
+    {{-- Input avatar DENTRO del form --}}
+    <input type="file" 
+           id="avatar-input" 
+           name="avatar" 
+           accept="image/*" 
+           @change="handleFileSelect($event)"
+           class="hidden">
+    
+    {{-- Campo hidden para delete_avatar --}}
+    <input type="hidden" 
+           name="delete_avatar" 
+           :value="avatarDeleted ? '1' : '0'">
+
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
         {{-- Nombre (EDITABLE) --}}
@@ -684,8 +692,8 @@ function profileData() {
         showCameraModal: false,
         
         // Avatar
-        avatarPreview: '{{ asset('images/' . ($user->avatar ?? 'default.jpg')) }}',
-        avatarOriginal: '{{ asset('images/' . ($user->avatar ?? 'default.jpg')) }}',
+        avatarPreview: "{{ asset('storage/avatars/' . ($user->avatar ?? 'default.jpg')) }}",
+        avatarOriginal: "{{ asset('storage/avatars/' . ($user->avatar ?? 'default.jpg')) }}",
         avatarFile: null,
         avatarChanged: false,
         avatarDeleted: false,
@@ -715,55 +723,19 @@ function profileData() {
         },
         
         deleteAvatar() {
-            this.avatarPreview = '{{ asset('images/default.jpg') }}';
+            this.avatarPreview = "{{ asset('storage/avatars/default.jpg') }}";
             this.avatarDeleted = true;
             this.avatarChanged = false;
             this.avatarFile = null;
             document.getElementById('avatar-input').value = '';
         },
-        
+
         discardChanges() {
             this.avatarPreview = this.avatarOriginal;
             this.avatarChanged = false;
             this.avatarDeleted = false;
             this.avatarFile = null;
             document.getElementById('avatar-input').value = '';
-        },
-        
-        // ==================== ENVÍO DE FORMULARIO ====================
-        
-        async submitForm(event) {
-            const form = event.target;
-            const formData = new FormData(form);
-            
-            // Agregar archivo de avatar si hay cambios
-            if (this.avatarFile) {
-                formData.append('avatar', this.avatarFile);
-            }
-            
-            // Agregar flag de eliminación
-            if (this.avatarDeleted) {
-                formData.append('delete_avatar', '1');
-            }
-            
-            try {
-                const response = await fetch('{{ route('perfil.update') }}', {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    }
-                });
-                
-                if (response.ok) {
-                    window.location.reload();
-                } else {
-                    alert('Error al guardar los cambios');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Error al guardar los cambios');
-            }
         },
         
         // ==================== MÉTODOS DE CÁMARA ====================

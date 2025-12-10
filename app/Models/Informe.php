@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
+use App\Traits\Auditable; // ← AGREGADO
 
 class Informe extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Auditable; // ← AGREGADO Auditable
 
     protected $table = 'informes'; 
     
@@ -158,12 +159,14 @@ class Informe extends Model
                 $this->actividades_fecha_inicio,
                 $this->actividades_fecha_fin
             ])
-            ->when($this->dependencias_seleccionadas, function($query) {
+            ->when($this->dependencias_seleccionadas, function ($query) {
                 $query->whereIn('tipo_area', $this->dependencias_seleccionadas);
             })
+            ->where('estatus_validacion', 'aceptada') // ← SOLO actividades aceptadas
             ->orderBy('fecha', 'desc')
             ->get();
     }
+
     
     public function incrementarDescargas()
     {

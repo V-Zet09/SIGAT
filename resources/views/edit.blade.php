@@ -22,109 +22,45 @@
     border-radius: 0.5rem 0.5rem 0 0;
     background: #f9fafb;
 }
-
 .dark .ql-toolbar.ql-snow {
-    background: #374151;
-    border-color: #4b5563;
+    background: #1f2937;
+    border-color: #374151;
 }
-
 .ql-container.ql-snow {
     border: 1px solid #d1d5db;
     border-top: none;
     border-radius: 0 0 0.5rem 0.5rem;
     min-height: 150px;
+    background: #ffffff;
 }
-
 .dark .ql-container.ql-snow {
-    border-color: #4b5563;
-    background: #1f2937;
+    border-color: #374151;
+    background: #111827;
 }
-
 .ql-editor {
     min-height: 150px;
     padding: 15px;
+    color: #111827;
 }
-
 .dark .ql-editor {
-    color: #f3f4f6;
+    color: #e5e7eb;
 }
 
-.ql-toolbar button:hover { color: #2563eb !important; }
-.ql-toolbar button.ql-active { color: #2563eb !important; }
-
-.dark .ql-toolbar button,
-.dark .ql-toolbar .ql-picker-label,
-.dark .ql-toolbar .ql-stroke {
-    stroke: #d1d5db !important;
+/* Inputs modo oscuro */
+input[type="text"],
+input[type="date"],
+input[type="number"],
+select,
+textarea {
+    color-scheme: light;
 }
-
-.dark .ql-toolbar button:hover,
-.dark .ql-toolbar button.ql-active {
-    color: #60a5fa !important;
-}
-
-.dark .ql-toolbar .ql-fill {
-    fill: #d1d5db !important;
-}
-
-/* Corrector ortográfico */
-[spellcheck="true"] {
-    outline: none;
-}
-
-/* Nombres en selectores */
-.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="arial"]::before,
-.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="arial"]::before {
-    content: 'Arial' !important;
-}
-.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="times"]::before,
-.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="times"]::before {
-    content: 'Times New Roman' !important;
-}
-.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="georgia"]::before,
-.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="georgia"]::before {
-    content: 'Georgia' !important;
-}
-.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="verdana"]::before,
-.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="verdana"]::before {
-    content: 'Verdana' !important;
-}
-.ql-snow .ql-picker.ql-font .ql-picker-label::before {
-    content: 'Fuente' !important;
-}
-
-/* Tamaños */
-.ql-snow .ql-picker.ql-size .ql-picker-label::before {
-    content: 'Normal' !important;
-}
-.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="small"]::before,
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="small"]::before {
-    content: 'Pequeño' !important;
-}
-.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="large"]::before,
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="large"]::before {
-    content: 'Grande' !important;
-}
-.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="huge"]::before,
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="huge"]::before {
-    content: 'Enorme' !important;
-}
-
-/* Títulos */
-.ql-snow .ql-picker.ql-header .ql-picker-label::before {
-    content: 'Normal' !important;
-}
-.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="1"]::before,
-.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="1"]::before {
-    content: 'Título 1' !important;
-}
-.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="2"]::before,
-.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="2"]::before {
-    content: 'Título 2' !important;
-}
-.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="3"]::before,
-.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="3"]::before {
-    content: 'Título 3' !important;
+.dark input[type="text"],
+.dark input[type="date"],
+.dark input[type="number"],
+.dark select,
+.dark textarea {
+    color: #e5e7eb !important;
+    color-scheme: dark;
 }
 </style>
 @endsection
@@ -132,128 +68,72 @@
 @section('content')
 @php
     $hoy = date('Y-m-d');
+    $fechaValor = old('fecha', isset($actividad->fecha) ? \Illuminate\Support\Carbon::parse($actividad->fecha)->format('Y-m-d') : '');
 @endphp
 
 <div class="max-w-5xl mx-auto px-6 py-8">
     <div class="bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-6">
         <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">✏️ Editar Actividad</h2>
 
-        {{-- Alerta de corrector --}}
-        <div class="mb-4 p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
-            <div class="flex items-center gap-2">
-                <i class="ri-magic-line"></i>
-                <span class="text-sm">✨ Corrector ortográfico activado - Las palabras con errores se subrayarán automáticamente</span>
-            </div>
-        </div>
-
-        {{-- Alerta de validación --}}
-        <div id="validation-alert" class="hidden mb-4 p-4 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800">
-            <div class="flex items-start gap-3">
-                <i class="ri-error-warning-line text-xl"></i>
-                <div class="flex-1">
-                    <h4 class="font-bold mb-2">⚠️ Campos incompletos</h4>
-                    <p class="text-sm mb-2">Por favor, completa los siguientes campos obligatorios:</p>
-                    <ul id="error-list" class="text-sm space-y-1 list-disc list-inside"></ul>
-                </div>
-                <button onclick="document.getElementById('validation-alert').classList.add('hidden')" 
-                        class="text-red-500 hover:text-red-700">
-                    <i class="ri-close-line text-xl"></i>
-                </button>
-            </div>
-        </div>
-
-        <form id="activityForm" action="{{ route('actividades.update', $actividad->id) }}" method="POST" enctype="multipart/form-data" class="space-y-5">
+        <form id="formEditarActividad" action="{{ route('actividades.update', $actividad->id) }}" method="POST" enctype="multipart/form-data" class="space-y-5">
             @csrf
             @method('PUT')
 
-            {{-- Título --}}
             <div>
-                <label for="titulo" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Título <span class="text-red-500">*</span>
-                </label>
-                <input type="text" name="titulo" id="titulo"
+                <label for="titulo" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Título <span class="text-red-500">*</span></label>
+                <input type="text" name="titulo" id="titulo" required
                        value="{{ old('titulo', $actividad->titulo) }}"
-                       spellcheck="true" lang="es" required
-                       class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400"
-                       data-required="Título">
+                       class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
             </div>
 
-            {{-- Autor y Fecha --}}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label for="autor" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Autor <span class="text-red-500">*</span>
-                    </label>
+                    <label for="autor" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Autor</label>
                     <input type="text" name="autor" id="autor"
                            value="{{ old('autor', $actividad->autor) }}"
-                           spellcheck="true" lang="es" required
-                           class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400"
-                           data-required="Autor">
+                           class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                 </div>
-
                 <div>
-                    <label for="fecha" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Fecha <span class="text-red-500">*</span>
-                    </label>
-                    <input type="date" name="fecha" id="fecha" max="{{ $hoy }}"
-                           value="{{ old('fecha', $actividad->fecha) }}" required
-                           class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400"
-                           data-required="Fecha">
+                    <label for="fecha" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Fecha <span class="text-red-500">*</span></label>
+                    <input type="date" name="fecha" id="fecha" max="{{ $hoy }}" required
+                           value="{{ $fechaValor }}"
+                           class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                 </div>
             </div>
 
-            {{-- Área --}}
             <div>
-                <label for="tipo_area" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Área <span class="text-red-500">*</span>
-                </label>
+                <label for="tipo_area" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Área <span class="text-red-500">*</span></label>
                 <select name="tipo_area" id="tipo_area" required
-                        class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400"
-                        data-required="Área">
+                        class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                     <option value="">Seleccionar área</option>
-                    <option value="Agua potable" {{ old('tipo_area', $actividad->tipo_area) == 'Agua potable' ? 'selected' : '' }}>Agua potable</option>
-                    <option value="Bienestar Social y Desarrollo Rural" {{ old('tipo_area', $actividad->tipo_area) == 'Bienestar Social y Desarrollo Rural' ? 'selected' : '' }}>Bienestar Social y Desarrollo Rural</option>
-                    <option value="Catastro" {{ old('tipo_area', $actividad->tipo_area) == 'Catastro' ? 'selected' : '' }}>Catastro</option>
-                    <option value="Contraloria Interna" {{ old('tipo_area', $actividad->tipo_area) == 'Contraloria Interna' ? 'selected' : '' }}>Contraloria Interna</option>
-                    <option value="Deportes" {{ old('tipo_area', $actividad->tipo_area) == 'Deportes' ? 'selected' : '' }}>Deportes</option>
-                    <option value="DIF" {{ old('tipo_area', $actividad->tipo_area) == 'DIF' ? 'selected' : '' }}>DIF</option>
-                    <option value="Informática" {{ old('tipo_area', $actividad->tipo_area) == 'Informática' ? 'selected' : '' }}>Informática</option>
-                    <option value="Limpia" {{ old('tipo_area', $actividad->tipo_area) == 'Limpia' ? 'selected' : '' }}>Limpia</option>
-                    <option value="Obras Publicas" {{ old('tipo_area', $actividad->tipo_area) == 'Obras Publicas' ? 'selected' : '' }}>Obras Publicas</option>
-                    <option value="Oficialia Mayor" {{ old('tipo_area', $actividad->tipo_area) == 'Oficialia Mayor' ? 'selected' : '' }}>Oficialia Mayor</option>
-                    <option value="Presidencia" {{ old('tipo_area', $actividad->tipo_area) == 'Presidencia' ? 'selected' : '' }}>Presidencia</option>
-                    <option value="Recursos Humanos" {{ old('tipo_area', $actividad->tipo_area) == 'Recursos Humanos' ? 'selected' : '' }}>Recursos Humanos</option>
-                    <option value="Registro Civil" {{ old('tipo_area', $actividad->tipo_area) == 'Registro Civil' ? 'selected' : '' }}>Registro Civil</option>
-                    <option value="Regidores" {{ old('tipo_area', $actividad->tipo_area) == 'Regidores' ? 'selected' : '' }}>Regidores</option>
-                    <option value="Reglamentos" {{ old('tipo_area', $actividad->tipo_area) == 'Reglamentos' ? 'selected' : '' }}>Reglamentos</option>
-                    <option value="Secretaria General" {{ old('tipo_area', $actividad->tipo_area) == 'Secretaria General' ? 'selected' : '' }}>Secretaria General</option>
-                    <option value="Seguridad Publica" {{ old('tipo_area', $actividad->tipo_area) == 'Seguridad Publica' ? 'selected' : '' }}>Seguridad Publica</option>
-                    <option value="Sindicatura" {{ old('tipo_area', $actividad->tipo_area) == 'Sindicatura' ? 'selected' : '' }}>Sindicatura</option>
-                    <option value="Tesoreria" {{ old('tipo_area', $actividad->tipo_area) == 'Tesoreria' ? 'selected' : '' }}>Tesoreria</option>
-                    <option value="Transito" {{ old('tipo_area', $actividad->tipo_area) == 'Transito' ? 'selected' : '' }}>Transito</option>
+                    @foreach([
+                        'Agua potable', 'Bienestar Social y Desarrollo Rural', 'Catastro', 'Contraloria Interna',
+                        'Deportes', 'DIF', 'Informática', 'Limpia', 'Obras Publicas', 'Oficialia Mayor', 'Presidencia',
+                        'Recursos Humanos', 'Registro Civil', 'Regidores', 'Reglamentos', 'Secretaria General',
+                        'Seguridad Publica', 'Sindicatura', 'Tesoreria', 'Transito'
+                    ] as $area)
+                        <option value="{{ $area }}" {{ old('tipo_area', $actividad->tipo_area) == $area ? 'selected' : '' }}>{{ $area }}</option>
+                    @endforeach
                 </select>
             </div>
 
-            {{-- Resumen --}}
             <div>
                 <label for="resumen" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Resumen</label>
                 <div id="resumen-editor" class="border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"></div>
                 <textarea name="resumen" id="resumen-content" class="hidden">{{ old('resumen', $actividad->resumen) }}</textarea>
             </div>
 
-            {{-- Presupuesto y Tipo --}}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label for="presupuesto" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Presupuesto</label>
                     <input type="number" name="presupuesto" id="presupuesto" step="0.01"
                            value="{{ old('presupuesto', $actividad->presupuesto) }}"
-                           class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400">
+                           class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                 </div>
-
                 <div>
                     <label for="tipo_presupuesto" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tipo de Presupuesto</label>
                     <select name="tipo_presupuesto" id="tipo_presupuesto"
-                            class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400">
+                            class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                         <option value="">Seleccionar</option>
                         <option value="Municipal" {{ old('tipo_presupuesto', $actividad->tipo_presupuesto) == 'Municipal' ? 'selected' : '' }}>Municipal</option>
                         <option value="Estatal" {{ old('tipo_presupuesto', $actividad->tipo_presupuesto) == 'Estatal' ? 'selected' : '' }}>Estatal</option>
@@ -262,29 +142,67 @@
                 </div>
             </div>
 
-            {{-- Contenido --}}
             <div>
                 <label for="contenido" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Contenido</label>
                 <div id="contenido-editor" class="border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"></div>
                 <textarea name="contenido" id="contenido-content" class="hidden">{{ old('contenido', $actividad->contenido) }}</textarea>
             </div>
 
-            {{-- Foto --}}
+            {{-- FOTOS --}}
             <div>
-                <label for="foto" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Foto</label>
-                <input type="file" name="foto" id="foto" accept="image/*"
-                       class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-gray-600 dark:file:text-gray-200 dark:hover:file:bg-gray-500">
-                
-                @if($actividad->foto)
-                    <div class="mt-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
-                        <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Foto actual:</p>
-                        <img src="{{ asset('storage/' . $actividad->foto) }}" alt="Foto actual"
-                             class="w-48 h-32 object-cover rounded-lg shadow-md border-2 border-gray-200 dark:border-gray-600">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Fotos ({{ is_array($actividad->fotos) ? count($actividad->fotos) : 0 }}/5)
+                </label>
+
+                {{-- Fotos existentes con botón Cambiar --}}
+                @if(isset($actividad->fotos) && is_array($actividad->fotos) && count($actividad->fotos) > 0)
+                    <div class="mb-4 grid grid-cols-2 md:grid-cols-4 gap-3 foto-existente" id="fotos-existentes">
+                        @foreach($actividad->fotos as $index => $foto)
+                            @if(!empty($foto))
+                                <div class="relative group">
+                                    <img src="{{ asset('storage/' . $foto) }}" alt="Foto {{ $index + 1 }}"
+                                         id="preview-foto-{{ $index }}"
+                                         class="w-full h-32 object-cover rounded-lg shadow-md border-2 border-gray-200 dark:border-gray-600">
+                                    
+                                    <button type="button"
+                                            class="absolute bottom-2 left-2 bg-blue-600 text-white rounded px-2 py-1 text-xs hover:bg-blue-700 transition"
+                                            onclick="document.getElementById('cambiar-foto-{{ $index }}').click()">
+                                        Cambiar
+                                    </button>
+                                    
+                                    <input type="file"
+                                           name="cambiar_foto[{{ $index }}]"
+                                           id="cambiar-foto-{{ $index }}"
+                                           accept="image/*"
+                                           class="hidden"
+                                           onchange="previewFotoCambio(event, {{ $index }})">
+                                </div>
+                            @endif
+                        @endforeach
                     </div>
+                @endif
+
+                {{-- Input para AGREGAR fotos nuevas --}}
+                @php
+                    $fotosActualesCount = is_array($actividad->fotos) ? count($actividad->fotos) : 0;
+                    $puedeAgregar = 5 - $fotosActualesCount;
+                @endphp
+                @if($puedeAgregar > 0)
+                    <div class="mb-2">
+                        <label for="fotos-nuevas" class="block text-sm text-gray-600 dark:text-gray-400 mb-1">
+                            Agregar más fotos (puedes agregar hasta {{ $puedeAgregar }} más)
+                        </label>
+                        <input type="file" name="fotos[]" id="fotos-nuevas" multiple accept="image/*"
+                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                    </div>
+                    <div id="preview-fotos-nuevas" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+                @else
+                    <p class="text-sm text-yellow-600 dark:text-yellow-400">
+                        Ya tienes el máximo de 5 fotos. Elimina alguna para agregar más.
+                    </p>
                 @endif
             </div>
 
-            {{-- Botones --}}
             <div class="flex justify-end gap-3 pt-4">
                 <a href="{{ route('actividades.registradas') }}"
                    class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition">
@@ -304,148 +222,182 @@
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
 <script>
-let quillResumen, quillContenido;
-
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
     // Configuración de Quill
     const Font = Quill.import('formats/font');
     Font.whitelist = ['arial', 'times', 'georgia', 'verdana'];
     Quill.register(Font, true);
 
     const toolbarOptions = [
-        [{ 'font': ['arial', 'times', 'georgia', 'verdana'] }],
-        [{ 'size': ['small', false, 'large', 'huge'] }],
+        [{'font': ['arial', 'times', 'georgia', 'verdana']}],
+        [{'size': ['small', false, 'large', 'huge']}],
         ['bold', 'italic', 'underline', 'strike'],
-        [{ 'color': [] }, { 'background': [] }],
-        [{ 'header': [1, 2, 3, false] }],
-        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-        [{ 'indent': '-1'}, { 'indent': '+1' }],
-        [{ 'align': [] }],
+        [{'color': []}, {'background': []}],
+        [{'header': [1, 2, 3, false]}],
+        [{'list': 'ordered'}, {'list': 'bullet'}],
+        [{'indent': '-1'}, {'indent': '+1'}],
+        [{'align': []}],
         ['link', 'image'],
         ['clean']
     ];
 
-    const traducciones = {
-        'Bold': 'Negrita',
-        'Italic': 'Cursiva',
-        'Underline': 'Subrayado',
-        'Strike': 'Tachado',
-        'Link': 'Enlace',
-        'Image': 'Imagen',
-        'Clean': 'Limpiar',
-        'Ordered List': 'Lista numerada',
-        'Bullet List': 'Lista con viñetas'
+    // Editor Resumen
+    const resumenHidden = document.getElementById('resumen-content');
+    const quillResumen = new Quill('#resumen-editor', {
+        theme: 'snow',
+        modules: { toolbar: toolbarOptions }
+    });
+    if (resumenHidden.value) {
+        quillResumen.root.innerHTML = resumenHidden.value;
+    }
+    quillResumen.on('text-change', () => {
+        resumenHidden.value = quillResumen.root.innerHTML;
+    });
+
+    // Editor Contenido
+    const contenidoHidden = document.getElementById('contenido-content');
+    const quillContenido = new Quill('#contenido-editor', {
+        theme: 'snow',
+        modules: { toolbar: toolbarOptions }
+    });
+    if (contenidoHidden.value) {
+        quillContenido.root.innerHTML = contenidoHidden.value;
+    }
+    quillContenido.on('text-change', () => {
+        contenidoHidden.value = quillContenido.root.innerHTML;
+    });
+
+    // ===================================
+    // SISTEMA DE FOTOS NUEVAS (con acumulación)
+    // ===================================
+    const inputFotosNuevas = document.getElementById('fotos-nuevas');
+    const previewContainerNuevas = document.getElementById('preview-fotos-nuevas');
+    const form = document.getElementById('formEditarActividad');
+
+    let fotosNuevasSeleccionadas = [];
+
+    if (inputFotosNuevas) {
+        inputFotosNuevas.addEventListener('change', function() {
+            const nuevosArchivos = Array.from(this.files);
+            
+            // Contar fotos actuales
+            const fotosExistentesCount = document.querySelectorAll('#fotos-existentes .relative').length || 0;
+            const totalFotos = fotosExistentesCount + fotosNuevasSeleccionadas.length + nuevosArchivos.length;
+
+            if (totalFotos > 5) {
+                alert(`Solo puedes tener máximo 5 fotos. Ya tienes ${fotosExistentesCount} foto(s) guardada(s) y ${fotosNuevasSeleccionadas.length} seleccionada(s).`);
+                this.value = '';
+                return;
+            }
+
+            // Agregar al array de fotos nuevas (acumulando)
+            fotosNuevasSeleccionadas = fotosNuevasSeleccionadas.concat(nuevosArchivos);
+            this.value = '';
+
+            actualizarPreviewNuevas();
+        });
+    }
+
+    function actualizarPreviewNuevas() {
+        if (!previewContainerNuevas) return;
+        
+        previewContainerNuevas.innerHTML = '';
+
+        fotosNuevasSeleccionadas.forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = e => {
+                const div = document.createElement('div');
+                div.classList.add('relative', 'group');
+
+                div.innerHTML = `
+                    <img src="${e.target.result}"
+                         class="w-full h-32 object-cover rounded-lg shadow-md border-2 border-green-500">
+                    <span class="absolute top-2 left-2 bg-green-600 text-white rounded px-2 py-1 text-xs">
+                        Nueva
+                    </span>
+                    <button type="button"
+                            class="absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-700 transition"
+                            onclick="eliminarFotoNueva(${index})">
+                        ×
+                    </button>
+                `;
+
+                previewContainerNuevas.appendChild(div);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // Eliminar una foto nueva por índice
+    window.eliminarFotoNueva = function(idx) {
+        fotosNuevasSeleccionadas.splice(idx, 1);
+        actualizarPreviewNuevas();
     };
 
-    function traducir() {
-        document.querySelectorAll('.ql-toolbar button').forEach(el => {
-            const title = el.getAttribute('title');
-            if (traducciones[title]) el.setAttribute('title', traducciones[title]);
-        });
-    }
+    // ENVÍO CON FORMDATA
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
 
-    // Inicializar editor Resumen
-    const resumenHidden = document.getElementById('resumen-content');
-    if (document.getElementById('resumen-editor') && resumenHidden) {
-        quillResumen = new Quill('#resumen-editor', {
-            theme: 'snow',
-            modules: { toolbar: toolbarOptions }
-        });
-        
-        if (resumenHidden.value) {
-            quillResumen.root.innerHTML = resumenHidden.value;
-        }
-        
-        quillResumen.on('text-change', () => {
-            resumenHidden.value = quillResumen.root.innerHTML;
-        });
-    }
+            const formData = new FormData(this);
 
-    // Inicializar editor Contenido
-    const contenidoHidden = document.getElementById('contenido-content');
-    if (document.getElementById('contenido-editor') && contenidoHidden) {
-        quillContenido = new Quill('#contenido-editor', {
-            theme: 'snow',
-            modules: { toolbar: toolbarOptions }
-        });
-        
-        if (contenidoHidden.value) {
-            quillContenido.root.innerHTML = contenidoHidden.value;
-        }
-        
-        quillContenido.on('text-change', () => {
-            contenidoHidden.value = quillContenido.root.innerHTML;
-        });
-    }
+            // Remover el input de fotos nuevas vacío
+            formData.delete('fotos[]');
 
-    traducir();
-
-    // Validación del formulario
-    const form = document.getElementById('activityForm');
-    const validationAlert = document.getElementById('validation-alert');
-    const errorList = document.getElementById('error-list');
-
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const errors = [];
-        
-        // Validar campos requeridos
-        const requiredFields = form.querySelectorAll('[data-required]');
-        requiredFields.forEach(field => {
-            if (!field.value.trim()) {
-                errors.push(field.getAttribute('data-required'));
-                field.classList.add('border-red-500', 'dark:border-red-500');
-            } else {
-                field.classList.remove('border-red-500', 'dark:border-red-500');
-            }
-        });
-
-        // Validar Resumen (Quill)
-        if (quillResumen && quillResumen.getText().trim().length === 0) {
-            errors.push('Resumen');
-            document.getElementById('resumen-editor').classList.add('border-red-500', 'dark:border-red-500');
-        } else if (quillResumen) {
-            document.getElementById('resumen-editor').classList.remove('border-red-500', 'dark:border-red-500');
-        }
-
-        // Validar Contenido (Quill)
-        if (quillContenido && quillContenido.getText().trim().length === 0) {
-            errors.push('Contenido');
-            document.getElementById('contenido-editor').classList.add('border-red-500', 'dark:border-red-500');
-        } else if (quillContenido) {
-            document.getElementById('contenido-editor').classList.remove('border-red-500', 'dark:border-red-500');
-        }
-
-        if (errors.length > 0) {
-            // Mostrar alerta
-            validationAlert.classList.remove('hidden');
-            errorList.innerHTML = '';
-            errors.forEach(error => {
-                const li = document.createElement('li');
-                li.textContent = error;
-                errorList.appendChild(li);
+            // Agregar las fotos nuevas seleccionadas manualmente
+            fotosNuevasSeleccionadas.forEach((file) => {
+                formData.append('fotos[]', file);
             });
 
-            // Scroll a la alerta
-            validationAlert.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            
-            return false;
-        } else {
-            // Ocultar alerta y enviar formulario
-            validationAlert.classList.add('hidden');
-            
-            // Actualizar contenido de editores antes de enviar
-            if (quillResumen) {
-                document.getElementById('resumen-content').value = quillResumen.root.innerHTML;
-            }
-            if (quillContenido) {
-                document.getElementById('contenido-content').value = quillContenido.root.innerHTML;
-            }
-            
-            form.submit();
+            console.log('Fotos nuevas a enviar:', fotosNuevasSeleccionadas.length);
+
+            // Enviar con fetch
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                    return;
+                }
+                if (response.ok) {
+                    window.location.href = "{{ route('actividades.registradas') }}";
+                } else {
+                    return response.json().then(data => {
+                        throw new Error(data.message || 'Error al actualizar');
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error: ' + error.message);
+            });
+        });
+    }
+
+    // ================================
+    // Cambio de fotos ya existentes
+    // ================================
+    window.previewFotoCambio = function(event, index) {
+        const input = event.target;
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.getElementById('preview-foto-' + index);
+                if (img) {
+                    img.src = e.target.result;
+                    img.classList.remove('border-gray-200');
+                    img.classList.add('border-blue-500', 'border-4');
+                }
+            };
+            reader.readAsDataURL(input.files[0]);
         }
-    });
+    };
 });
 </script>
 @endsection

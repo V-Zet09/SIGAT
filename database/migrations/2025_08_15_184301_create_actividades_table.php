@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('tipo_presupuesto')->nullable();
             $table->string('numero')->nullable();
             $table->string('fase')->nullable();
-            $table->string('foto')->nullable();
+            $table->string('fotos')->nullable();  
             $table->timestamps();
         });
     }
