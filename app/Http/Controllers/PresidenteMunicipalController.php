@@ -57,6 +57,12 @@ class PresidenteMunicipalController extends Controller
             ->take(10)
             ->get();
 
+        // ✅ LISTA COMPLETA PARA GESTIÓN (PRESIDENTE VE TODAS)
+        $actividadesGestionLista = Actividad::with('creador')
+            ->orderBy('tipo_area', 'asc')      // Primero por área
+            ->orderBy('created_at', 'desc')    // Luego por fecha
+            ->get(); // Sin límite, trae todas las actividades
+
         // ============================================
         // ACTIVIDADES POR ÁREA (PARA GRÁFICA)
         // ============================================
@@ -133,6 +139,9 @@ class PresidenteMunicipalController extends Controller
             // Listas de actividades
             'actividadesPendientesLista' => $actividadesPendientesLista,
             'actividadesAprobadasLista' => $actividadesAprobadasLista,
+            
+            // ✅ LISTA DE ACTIVIDADES PARA GESTIÓN
+            'actividadesGestionLista' => $actividadesGestionLista,
             
             // Datos para gráficas
             'actividadesPorArea' => $actividadesPorArea,

@@ -155,6 +155,16 @@ class InformeController extends Controller
             $actividades = $actividades->sortBy('tipo_area');
             Log::info('📊 Actividades para PDF: ' . $actividades->count());
 
+            /* ⭐ NUEVO: no permitir informes sin actividades aceptadas */
+            if ($actividades->count() === 0) {
+                // Opcional: borrar el informe recién creado
+                // $informe->delete();
+
+                return back()
+                    ->withErrors(['error' => 'No hay actividades aceptadas en el periodo y dependencias seleccionadas'])
+                    ->withInput();
+            }
+
             $this->generarPDFConMPdf($informe, $actividades);
 
             Log::info('✅ PDF generado exitosamente');
@@ -333,11 +343,18 @@ class InformeController extends Controller
             ];
             $informe->save();
 
-            Log::info('✅ Informe actualizado en BD');
-
+                        Log::info('✅ Informe actualizado en BD');
             $actividades = $informe->getActividadesFiltradas();
             $actividades = $actividades->sortBy('tipo_area');
             Log::info('📊 Actividades para PDF actualizado: ' . $actividades->count());
+
+            /* ⭐ NUEVO: no permitir edición si no hay actividades aceptadas */
+            if ($actividades->count() === 0) {
+                return back()
+                    ->withErrors(['error' => 'No hay actividades aceptadas en el periodo y dependencias seleccionadas'])
+                    ->withInput();
+            }
+
 
             $this->generarPDFConMPdf($informe, $actividades);
 
