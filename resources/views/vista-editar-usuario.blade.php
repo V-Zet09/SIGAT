@@ -115,18 +115,35 @@
                 </div>
 
                 <div>
-                    <label for="area" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Área <span class="text-red-500">*</span>
-                    </label>
-                    <select name="area" id="area" required
-                        class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                        <option value="">Seleccionar área</option>
-                        <option value="Presidencia" {{ old('area', $usuario->area) == 'Presidencia' ? 'selected' : '' }}>Presidencia</option>
-                        <option value="Agua potable" {{ old('area', $usuario->area) == 'Agua potable' ? 'selected' : '' }}>Agua potable</option>
-                        <option value="Informática" {{ old('area', $usuario->area) == 'Informática' ? 'selected' : '' }}>Informática</option>
-                        <option value="Obras públicas" {{ old('area', $usuario->area) == 'Obras públicas' ? 'selected' : '' }}>Obras públicas</option>
-                    </select>
-                </div>
+    <label for="area" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+        Área <span class="text-red-500">*</span>
+    </label>
+    <select name="area" id="area" required
+        class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+        <option value="">Seleccionar área</option>
+        <option value="Agua potable" {{ old('area', $usuario->area) == 'Agua potable' ? 'selected' : '' }}>Agua potable</option>
+        <option value="Bienestar Social y Desarrollo Rural" {{ old('area', $usuario->area) == 'Bienestar Social y Desarrollo Rural' ? 'selected' : '' }}>Bienestar Social y Desarrollo Rural</option>
+        <option value="Catastro" {{ old('area', $usuario->area) == 'Catastro' ? 'selected' : '' }}>Catastro</option>
+        <option value="Contraloria Interna" {{ old('area', $usuario->area) == 'Contraloria Interna' ? 'selected' : '' }}>Contraloria Interna</option>
+        <option value="Deportes" {{ old('area', $usuario->area) == 'Deportes' ? 'selected' : '' }}>Deportes</option>
+        <option value="DIF" {{ old('area', $usuario->area) == 'DIF' ? 'selected' : '' }}>DIF</option>
+        <option value="Informática" {{ old('area', $usuario->area) == 'Informática' ? 'selected' : '' }}>Informática</option>
+        <option value="Limpia" {{ old('area', $usuario->area) == 'Limpia' ? 'selected' : '' }}>Limpia</option>
+        <option value="Obras Publicas" {{ old('area', $usuario->area) == 'Obras Publicas' ? 'selected' : '' }}>Obras Publicas</option>
+        <option value="Oficialia Mayor" {{ old('area', $usuario->area) == 'Oficialia Mayor' ? 'selected' : '' }}>Oficialia Mayor</option>
+        <option value="Presidencia" {{ old('area', $usuario->area) == 'Presidencia' ? 'selected' : '' }}>Presidencia</option>
+        <option value="Recursos Humanos" {{ old('area', $usuario->area) == 'Recursos Humanos' ? 'selected' : '' }}>Recursos Humanos</option>
+        <option value="Registro Civil" {{ old('area', $usuario->area) == 'Registro Civil' ? 'selected' : '' }}>Registro Civil</option>
+        <option value="Regidores" {{ old('area', $usuario->area) == 'Regidores' ? 'selected' : '' }}>Regidores</option>
+        <option value="Reglamentos" {{ old('area', $usuario->area) == 'Reglamentos' ? 'selected' : '' }}>Reglamentos</option>
+        <option value="Secretaria General" {{ old('area', $usuario->area) == 'Secretaria General' ? 'selected' : '' }}>Secretaria General</option>
+        <option value="Seguridad Publica" {{ old('area', $usuario->area) == 'Seguridad Publica' ? 'selected' : '' }}>Seguridad Publica</option>
+        <option value="Sindicatura" {{ old('area', $usuario->area) == 'Sindicatura' ? 'selected' : '' }}>Sindicatura</option>
+        <option value="Tesoreria" {{ old('area', $usuario->area) == 'Tesoreria' ? 'selected' : '' }}>Tesoreria</option>
+        <option value="Transito" {{ old('area', $usuario->area) == 'Transito' ? 'selected' : '' }}>Transito</option>
+    </select>
+</div>
+
             </div>
 
             <!-- Email -->

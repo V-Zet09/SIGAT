@@ -4,6 +4,44 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto p-6">
+
+@php
+    $success = request('success');
+@endphp
+
+@if($success)
+    <div
+        id="flash-alert"
+        class="mb-4 flex items-center gap-3 rounded-xl border px-4 py-3 shadow-lg
+               border-emerald-400 bg-emerald-50 text-emerald-900
+               dark:bg-gray-900/90 dark:text-gray-100 dark:border-emerald-500
+               transform transition-all duration-500 opacity-0 -translate-y-3"
+    >
+        <div class="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600">
+            <i class="fas fa-check-circle"></i>
+        </div>
+
+        <div class="flex-1">
+            <p class="text-sm font-semibold tracking-wide">Éxito</p>
+            <p class="text-sm">
+                {{ $success }}
+            </p>
+        </div>
+
+        <button
+            type="button"
+            onclick="hideFlashAlert()"
+            class="ml-2 inline-flex h-8 w-8 items-center justify-center rounded-full
+                   hover:bg-black/5 dark:hover:bg-white/10 transition"
+        >
+            <i class="fas fa-times text-xs"></i>
+        </button>
+    </div>
+@endif
+
+
+
+
     <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 border border-gray-200 dark:border-gray-700">
         <!-- Título -->
         <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">
@@ -12,16 +50,16 @@
 
         <!-- Presupuesto -->
         @if($actividad->presupuesto)
-        <div class="flex items-center justify-between mb-4 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
-            <p class="text-xl font-bold text-green-600 dark:text-green-400">
-                ${{ number_format($actividad->presupuesto, 2) }}
-            </p>
-            @if($actividad->tipo_presupuesto)
-            <span class="px-3 py-1 text-sm font-medium bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300 rounded-full">
-                {{ $actividad->tipo_presupuesto }}
-            </span>
-            @endif
-        </div>
+            <div class="flex items-center justify-between mb-4 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                <p class="text-xl font-bold text-green-600 dark:text-green-400">
+                    ${{ number_format($actividad->presupuesto, 2) }}
+                </p>
+                @if($actividad->tipo_presupuesto)
+                    <span class="px-3 py-1 text-sm font-medium bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300 rounded-full">
+                        {{ $actividad->tipo_presupuesto }}
+                    </span>
+                @endif
+            </div>
         @endif
 
         <!-- Información del autor y fecha -->
@@ -35,24 +73,24 @@
                 <span>{{ \Carbon\Carbon::parse($actividad->fecha)->format('d/m/Y') }}</span>
             </div>
             @if($actividad->tipo_area)
-            <div class="flex items-center gap-2">
-                <i class="ri-briefcase-line text-orange-500 dark:text-orange-400"></i>
-                <span>{{ $actividad->tipo_area }}</span>
-            </div>
+                <div class="flex items-center gap-2">
+                    <i class="ri-briefcase-line text-orange-500 dark:text-orange-400"></i>
+                    <span>{{ $actividad->tipo_area }}</span>
+                </div>
             @endif
         </div>
 
         <!-- Resumen -->
         @if($actividad->resumen)
-        <div class="mb-6 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
-            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
-                <i class="ri-file-text-line text-blue-500"></i>
-                Resumen
-            </h3>
-            <div class="text-gray-700 dark:text-gray-300 leading-relaxed">
-                {!! $actividad->resumen !!}
+            <div class="mb-6 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
+                    <i class="ri-file-text-line text-blue-500"></i>
+                    Resumen
+                </h3>
+                <div class="text-gray-700 dark:text-gray-300 leading-relaxed">
+                    {!! $actividad->resumen !!}
+                </div>
             </div>
-        </div>
         @endif
 
         <!-- Contenido -->
@@ -68,7 +106,6 @@
 
         <!-- Galería de Fotos -->
         @php
-            // Obtener las fotos y asegurarse de que sea un array
             $fotos = $actividad->fotos;
             if (is_string($fotos)) {
                 $fotos = json_decode($fotos, true) ?? [];
@@ -125,4 +162,24 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    const flashAlert = document.getElementById('flash-alert');
+
+    function hideFlashAlert() {
+        if (!flashAlert) return;
+        flashAlert.classList.add('opacity-0', '-translate-y-3');
+        setTimeout(() => flashAlert.remove(), 500);
+    }
+
+    if (flashAlert) {
+        setTimeout(() => {
+            flashAlert.classList.remove('opacity-0', '-translate-y-3');
+        }, 100);
+
+        setTimeout(hideFlashAlert, 3000);
+    }
+</script>
 @endsection

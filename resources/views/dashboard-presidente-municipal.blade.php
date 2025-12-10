@@ -145,6 +145,208 @@
             <div class="bg-gradient-to-r from-cyan-500 to-cyan-600 h-1"></div>
         </div>
     </div>
+    <!-- ============================================ -->
+    <!-- SECCIÓN: GESTIÓN DE ACTIVIDADES (PRESIDENTE) -->
+    <!-- ============================================ -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border-2 border-emerald-200 dark:border-emerald-800 mb-6">
+        <div class="flex items-center justify-between mb-5">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100 flex items-center">
+                <i class="fas fa-tasks mr-3 text-emerald-600 dark:text-emerald-400"></i>
+                Gestión de Actividades del Sistema
+            </h3>
+            @if(($actividadesPendientes ?? 0) > 0)
+                <span class="bg-yellow-500 text-white text-sm font-bold px-4 py-2 rounded-full animate-pulse flex items-center gap-2">
+                    <i class="fas fa-exclamation-circle"></i>
+                    {{ $actividadesPendientes }} Por Revisar
+                </span>
+            @endif
+        </div>
+        
+        <div class="bg-gray-50 dark:bg-gray-900/50 rounded-xl px-4 py-3 overflow-x-auto border border-gray-200 dark:border-gray-800 max-h-[600px] custom-scrollbar">
+            <table class="min-w-full text-sm">
+                <thead class="sticky top-0 bg-gray-50 dark:bg-gray-900/50 z-10">
+                    <tr class="text-gray-700 dark:text-gray-300 border-b-2 border-gray-300 dark:border-gray-700 font-semibold">
+                        <th class="py-3 px-4 text-left">Área</th>
+                        <th class="py-3 px-4 text-left">Título</th>
+                        <th class="py-3 px-4 text-left">Tipo</th>
+                        <th class="py-3 px-4 text-left">Creador</th>
+                        <th class="py-3 px-4 text-left">Fecha</th>
+                        <th class="py-3 px-4 text-center">Estado</th>
+                        <th class="py-3 px-4 text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($actividadesGestionLista ?? [] as $actividad)
+                        <tr class="border-b border-gray-200 dark:border-gray-800 hover:bg-emerald-50 dark:hover:bg-emerald-900/10 transition-colors">
+                            <td class="py-3 px-4 text-gray-900 dark:text-gray-100">
+                                <span class="text-xs bg-purple-100 dark:bg-purple-900/40 text-purple-800 dark:text-purple-200 px-2 py-1 rounded-full font-semibold">
+                                    {{ $actividad->tipo_area ?? 'Sin área' }}
+                                </span>
+                            </td>
+                            <td class="py-3 px-4 text-gray-900 dark:text-gray-100 font-medium">
+                                {{ Str::limit($actividad->titulo, 45) }}
+                            </td>
+                            <td class="py-3 px-4 text-gray-700 dark:text-gray-300">
+                                <span class="text-xs bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full">
+                                    {{ $actividad->tipo_actividad ?? 'N/A' }}
+                                </span>
+                            </td>
+                            <td class="py-3 px-4 text-gray-700 dark:text-gray-300">
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-user-circle text-gray-400"></i>
+                                    {{ $actividad->creador->name ?? 'N/A' }}
+                                </div>
+                            </td>
+                            <td class="py-3 px-4 text-gray-700 dark:text-gray-300">
+                                <i class="fas fa-calendar text-gray-400 mr-1"></i>
+                                {{ \Carbon\Carbon::parse($actividad->fecha)->format('d/m/Y') }}
+                            </td>
+                            <td class="py-3 px-4 text-center">
+                                @if($actividad->estado === 'Aprobada')
+                                    <span class="inline-flex items-center gap-1 bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-200 rounded-full px-3 py-1 text-xs font-semibold">
+                                        <i class="fas fa-check-circle"></i>Aprobada
+                                    </span>
+                                @elseif($actividad->estado === 'Rechazada')
+                                    <span class="inline-flex items-center gap-1 bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-200 rounded-full px-3 py-1 text-xs font-semibold">
+                                        <i class="fas fa-times-circle"></i>Rechazada
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center gap-1 bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-200 rounded-full px-3 py-1 text-xs font-semibold">
+                                        <i class="fas fa-clock"></i>Pendiente
+                                    </span>
+                                @endif
+                            </td>
+                            <td class="py-3 px-4">
+                                <div class="flex items-center justify-center gap-2">
+                                    <!-- Ver detalles -->
+                                    <button onclick="verDetalles({{ $actividad->id }})" class="text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 p-2 rounded-lg transition-colors" title="Ver detalles">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    
+                                    @if($actividad->estado !== 'Aprobada' && $actividad->estado !== 'Rechazada')
+                                        <!-- Aprobar -->
+                                        <button onclick="abrirModalAprobar({{ $actividad->id }}, '{{ addslashes($actividad->titulo) }}')" class="text-green-600 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/40 p-2 rounded-lg transition-colors" title="Aprobar">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                        
+                                        <!-- Rechazar -->
+                                        <button onclick="abrirModalRechazar({{ $actividad->id }}, '{{ addslashes($actividad->titulo) }}')" class="text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 p-2 rounded-lg transition-colors" title="Rechazar">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    @else
+                                        <span class="text-xs text-gray-400 italic">
+                                            @if($actividad->estado === 'Aprobada')
+                                                <i class="fas fa-check text-green-500"></i> Procesada
+                                            @else
+                                                <i class="fas fa-times text-red-500"></i> Procesada
+                                            @endif
+                                        </span>
+                                    @endif
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="text-center text-gray-500 dark:text-gray-400 py-10">
+                                <i class="fas fa-check-circle text-5xl mb-3 text-green-500"></i>
+                                <p class="text-lg font-semibold">¡Excelente trabajo!</p>
+                                <p class="text-sm">No hay actividades pendientes de gestión</p>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- MODALES PARA APROBAR/RECHAZAR -->
+    <div id="modalAprobar" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 animate-fade-in">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center">
+                    <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                    Aprobar Actividad
+                </h3>
+                <button onclick="cerrarModalAprobar()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <p class="text-gray-600 dark:text-gray-400 mb-4">
+                ¿Estás seguro de aprobar la siguiente actividad?
+            </p>
+            
+            <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4 mb-4">
+                <p class="text-sm font-semibold text-green-900 dark:text-green-100" id="tituloActividadAprobar"></p>
+            </div>
+            
+            <form id="formAprobar" method="POST" action="">
+                @csrf
+                @method('PUT')
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Observaciones (opcional)
+                    </label>
+                    <textarea name="observaciones" rows="3" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-gray-100" placeholder="Comentarios adicionales..."></textarea>
+                </div>
+                
+                <div class="flex gap-3">
+                    <button type="button" onclick="cerrarModalAprobar()" class="flex-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 py-2 px-4 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="flex-1 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-2 px-4 rounded-lg font-semibold transition-all duration-200 flex items-center justify-center gap-2">
+                        <i class="fas fa-check"></i>
+                        Aprobar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modalRechazar" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 animate-fade-in">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center">
+                    <i class="fas fa-times-circle text-red-600 mr-2"></i>
+                    Rechazar Actividad
+                </h3>
+                <button onclick="cerrarModalRechazar()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <p class="text-gray-600 dark:text-gray-400 mb-4">
+                ¿Estás seguro de rechazar la siguiente actividad?
+            </p>
+            
+            <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-4">
+                <p class="text-sm font-semibold text-red-900 dark:text-red-100" id="tituloActividadRechazar"></p>
+            </div>
+            
+            <form id="formRechazar" method="POST" action="">
+                @csrf
+                @method('PUT')
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Motivo del rechazo <span class="text-red-500">*</span>
+                    </label>
+                    <textarea name="motivo_rechazo" rows="4" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-100" placeholder="Explica por qué rechazas esta actividad..."></textarea>
+                </div>
+                
+                <div class="flex gap-3">
+                    <button type="button" onclick="cerrarModalRechazar()" class="flex-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 py-2 px-4 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="flex-1 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white py-2 px-4 rounded-lg font-semibold transition-all duration-200 flex items-center justify-center gap-2">
+                        <i class="fas fa-times"></i>
+                        Rechazar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- Sección principal: Acciones rápidas + Resumen -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
@@ -504,5 +706,30 @@ document.addEventListener('DOMContentLoaded', function() {
     const chartTendencia = new ApexCharts(document.querySelector("#chart-tendencia-mensual"), optionsTendencia);
     chartTendencia.render();
 });
+// FUNCIONES PARA MODALES DE APROBAR/RECHAZAR
+function abrirModalAprobar(id, titulo) {
+    document.getElementById('tituloActividadAprobar').textContent = titulo;
+    document.getElementById('formAprobar').action = `/actividades/${id}/aprobar`;
+    document.getElementById('modalAprobar').classList.remove('hidden');
+}
+
+function cerrarModalAprobar() {
+    document.getElementById('modalAprobar').classList.add('hidden');
+}
+
+function abrirModalRechazar(id, titulo) {
+    document.getElementById('tituloActividadRechazar').textContent = titulo;
+    document.getElementById('formRechazar').action = `/actividades/${id}/rechazar`;
+    document.getElementById('modalRechazar').classList.remove('hidden');
+}
+
+function cerrarModalRechazar() {
+    document.getElementById('modalRechazar').classList.add('hidden');
+}
+
+function verDetalles(id) {
+    window.location.href = `/actividades/${id}`;
+}
+
 </script>
 @endsection
