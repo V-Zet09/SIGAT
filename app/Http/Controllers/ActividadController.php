@@ -7,6 +7,7 @@ use App\Models\Actividad;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Models\AuditLog;
 
 class ActividadController extends Controller
 {
@@ -120,20 +121,25 @@ public function showRegistradas(Request $request)
     }
     
     // ===================================
+    // ⭐ FILTRO POR ESTADO (NUEVO)
+    // ===================================
+    if ($request->filled('estado')) {
+        $query->where('estado', $request->estado);
+    }
+    
+    // ===================================
     // FILTRO POR AÑO
     // ===================================
     if ($request->filled('filtro_anio') && $request->filtro_anio !== 'Todos los años') {
         $query->whereYear('fecha', $request->filtro_anio);
     }
     
-
-// ===================================
-// FILTRO POR MES
-// ===================================
-if ($request->filled('filtro_mes') && $request->filtro_mes !== '') {
-    $query->whereMonth('fecha', $request->filtro_mes);
-}
-
+    // ===================================
+    // FILTRO POR MES
+    // ===================================
+    if ($request->filled('filtro_mes') && $request->filtro_mes !== '') {
+        $query->whereMonth('fecha', $request->filtro_mes);
+    }
     
     // ===================================
     // BÚSQUEDA AUTOMÁTICA (área, autor, fecha, título)
@@ -186,6 +192,7 @@ if ($request->filled('filtro_mes') && $request->filtro_mes !== '') {
     
     return view('dashboard-actividades-registradas', compact('actividades'));
 }
+
 
 
     /**
@@ -285,8 +292,23 @@ public function update(Request $request, $id)
         'fase' => 'nullable|string',
         'responsable_id' => 'nullable|exists:users,id',
         'fotos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
-        'cambiar_foto.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // ← AGREGAR
+        'cambiar_foto.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
     ]);
+
+    // ✅ CAPTURAR VALORES ANTERIORES PARA LOG
+    $valoresAntiguos = [
+        'titulo' => $actividad->titulo,
+        'autor' => $actividad->autor,
+        'fecha' => $actividad->fecha,
+        'tipo_area' => $actividad->tipo_area,
+        'resumen' => $actividad->resumen,
+        'contenido' => $actividad->contenido,
+        'presupuesto' => $actividad->presupuesto,
+        'tipo_presupuesto' => $actividad->tipo_presupuesto,
+        'numero' => $actividad->numero,
+        'fase' => $actividad->fase,
+        'responsable_id' => $actividad->responsable_id,
+    ];
 
     // Obtener fotos actuales
     $fotosActuales = is_array($actividad->fotos) ? $actividad->fotos : 
@@ -295,6 +317,11 @@ public function update(Request $request, $id)
     if (!is_array($fotosActuales)) {
         $fotosActuales = [];
     }
+
+    $cantidadFotosAntes = count($fotosActuales);
+    $fotosModificadas = false;
+    $fotosAgregadas = 0;
+    $fotosCambiadas = 0;
 
     // ✅ PROCESAR FOTOS CAMBIADAS (botón "Cambiar")
     if ($request->hasFile('cambiar_foto')) {
@@ -309,6 +336,8 @@ public function update(Request $request, $id)
                 
                 // Reemplazar en el array
                 $fotosActuales[$index] = $path;
+                $fotosModificadas = true;
+                $fotosCambiadas++;
             }
         }
     }
@@ -320,7 +349,32 @@ public function update(Request $request, $id)
                 $filename = time() . '_' . uniqid() . '.' . $foto->getClientOriginalExtension();
                 $path = $foto->storeAs('actividades/fotos', $filename, 'public');
                 $fotosActuales[] = $path;
+                $fotosModificadas = true;
+                $fotosAgregadas++;
             }
+        }
+    }
+
+    // ✅ CAPTURAR VALORES NUEVOS
+    $valoresNuevos = [
+        'titulo' => $request->titulo,
+        'autor' => $request->autor,
+        'fecha' => $request->fecha,
+        'tipo_area' => $request->tipo_area,
+        'resumen' => $request->resumen,
+        'contenido' => $request->contenido,
+        'presupuesto' => $request->presupuesto,
+        'tipo_presupuesto' => $request->tipo_presupuesto,
+        'numero' => $request->numero,
+        'fase' => $request->fase,
+        'responsable_id' => $request->responsable_id,
+    ];
+
+    // ✅ DETECTAR QUÉ CAMPOS CAMBIARON
+    $camposModificados = [];
+    foreach ($valoresAntiguos as $campo => $valorAntiguo) {
+        if ($valorAntiguo != $valoresNuevos[$campo]) {
+            $camposModificados[] = $campo;
         }
     }
 
@@ -350,12 +404,62 @@ public function update(Request $request, $id)
         ]);
     }
 
-    return redirect()->route('actividades.show', $actividad->id)
-        ->with('success', 'Actividad actualizada exitosamente');
+    // ✅ REGISTRAR LOG DE EDICIÓN CON DETALLES
+    $descripcionLog = "Editó Actividad: " . $actividad->titulo;
+    
+    // Agregar detalles de qué cambió
+    $detalles = [];
+    
+    if (!empty($camposModificados)) {
+        $nombresAmigables = [
+            'titulo' => 'título',
+            'autor' => 'autor',
+            'fecha' => 'fecha',
+            'tipo_area' => 'área',
+            'resumen' => 'resumen',
+            'contenido' => 'descripción',
+            'presupuesto' => 'presupuesto',
+            'tipo_presupuesto' => 'tipo de presupuesto',
+            'numero' => 'número',
+            'fase' => 'fase',
+            'responsable_id' => 'responsable',
+        ];
+        
+        foreach ($camposModificados as $campo) {
+            $nombreCampo = $nombresAmigables[$campo] ?? $campo;
+            $detalles[] = $nombreCampo;
+        }
+    }
+    
+    if ($fotosModificadas) {
+        if ($fotosAgregadas > 0) {
+            $detalles[] = "agregó {$fotosAgregadas} " . ($fotosAgregadas == 1 ? 'foto' : 'fotos');
+        }
+        if ($fotosCambiadas > 0) {
+            $detalles[] = "cambió {$fotosCambiadas} " . ($fotosCambiadas == 1 ? 'foto' : 'fotos');
+        }
+    }
+    
+    if (!empty($detalles)) {
+        $descripcionLog .= " - Modificó: " . implode(', ', $detalles);
+    }
+
+    // Registrar en AuditLog
+    \App\Models\AuditLog::log(
+        'editar',
+        $descripcionLog,
+        'App\Models\Actividad',
+        $actividad->id,
+        $valoresAntiguos,
+        $valoresNuevos
+    );
+
+return redirect()->route('actividades.show', [
+    'id' => $actividad->id,
+    'success' => 'Actividad actualizada exitosamente'
+]);
+
 }
-
-
-
 
     /**
      * Eliminar foto de una actividad
@@ -400,19 +504,36 @@ public function update(Request $request, $id)
         }
     }
 
+    // Normalizar fotos a array
+    $fotos = $actividad->fotos;
+
+    if (is_string($fotos) && !empty($fotos)) {
+        // Si por alguna razón quedó guardado como JSON o como una sola ruta
+        $decoded = json_decode($fotos, true);
+        if (json_last_error() === JSON_ERROR_NONE) {
+            $fotos = $decoded;
+        } else {
+            $fotos = [$fotos];
+        }
+    }
+
+    if (!is_array($fotos)) {
+        $fotos = [];
+    }
+
     // Eliminar fotos físicas
-    if ($actividad->fotos) {
-        foreach ($actividad->fotos as $foto) {
+    foreach ($fotos as $foto) {
+        if ($foto && Storage::disk('public')->exists($foto)) {
             Storage::disk('public')->delete($foto);
         }
     }
 
     $actividad->delete();
 
-    // 🔹 Redirigir al listado de actividades registradas
     return redirect()->route('actividades.registradas')
         ->with('success', 'Actividad eliminada exitosamente');
 }
+
 
 
     /**
@@ -484,4 +605,30 @@ public function update(Request $request, $id)
         
         return response()->json($actividades);
     }
+    /**
+ * Contar actividades para el informe (solo Aprobadas)
+ */
+public function contarParaInforme(Request $request)
+{
+    $query = Actividad::where('estado', 'Aprobada');
+
+    if ($request->filled('start') && $request->filled('end')) {
+        $query->whereBetween('fecha', [$request->start, $request->end]);
+    }
+
+    if ($request->filled('areas')) {
+        $areas = explode(',', $request->areas);      // ← convierte el string a array
+        $areas = array_filter($areas);               // limpia vacíos
+        if (!empty($areas)) {
+            $query->whereIn('tipo_area', $areas);
+        }
+    }
+
+    return response()->json([
+        'success' => true,
+        'count'   => $query->count(),
+    ]);
+}
+
+    
 }

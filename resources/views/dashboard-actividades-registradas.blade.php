@@ -16,11 +16,66 @@
         font-size: 1rem;
         border-radius: 0.375rem;
     }
+    /* Estilos para tabs */
+    .tab-button {
+        transition: all 0.3s ease;
+    }
+    .tab-button.active {
+        border-bottom: 3px solid #10b981;
+        color: #10b981;
+    }
 </style>
 @endsection
 
 @section('content')
 <div class="shadow-2xl rounded-3xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 p-8 mx-auto mt-4 max-w-[80vw] transition-colors duration-300">
+{{-- Notificación flash --}}
+@if(session('success') || session('error'))
+    <div
+        id="flash-alert"
+        class="mb-4 flex items-center gap-3 rounded-xl border px-4 py-3 shadow-lg
+               @if(session('success'))
+                   border-emerald-400 bg-emerald-50 text-emerald-900
+               @else
+                   border-red-400 bg-red-50 text-red-900
+               @endif
+               dark:bg-gray-900/90 dark:text-gray-100 dark:border-emerald-500
+               transform transition-all duration-500 opacity-0 -translate-y-3"
+    >
+        <div class="flex h-9 w-9 items-center justify-center rounded-full
+            @if(session('success'))
+                bg-emerald-500/10 text-emerald-600
+            @else
+                bg-red-500/10 text-red-600
+            @endif
+        ">
+            @if(session('success'))
+                <i class="fas fa-check-circle"></i>
+            @else
+                <i class="fas fa-exclamation-triangle"></i>
+            @endif
+        </div>
+
+        <div class="flex-1">
+            <p class="text-sm font-semibold tracking-wide">
+                @if(session('success')) Éxito @else Atención @endif
+            </p>
+            <p class="text-sm">
+                {{ session('success') ?? session('error') }}
+            </p>
+        </div>
+
+        <button
+            type="button"
+            onclick="hideFlashAlert()"
+            class="ml-2 inline-flex h-8 w-8 items-center justify-center rounded-full
+                   hover:bg-black/5 dark:hover:bg-white/10 transition"
+        >
+            <i class="fas fa-times text-xs"></i>
+        </button>
+    </div>
+@endif
+
 
     <!-- Header visual tipo informes -->
     <div class="relative mb-6 overflow-hidden rounded-2xl bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 dark:from-green-700 dark:via-emerald-700 dark:to-teal-700 p-6 shadow-xl">
@@ -43,9 +98,61 @@
         </div>
     </div>
 
+    {{-- ⭐ TABS DE ESTADO --}}
+    <div class="mb-6 bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden">
+        <div class="border-b border-gray-200 dark:border-gray-700">
+            <nav class="flex flex-wrap -mb-px" aria-label="Tabs">
+                {{-- Todas --}}
+                <a href="{{ route('actividades.registradas', array_merge(request()->except('estado'), [])) }}" 
+                   class="tab-button px-6 py-3 text-sm font-medium {{ !request('estado') ? 'active text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300' }}">
+                    <i class="fas fa-list mr-2"></i>
+                    Todas
+                    <span class="ml-2 px-2 py-1 text-xs rounded-full bg-gray-100 dark:bg-gray-700">
+                        {{ \App\Models\Actividad::count() }}
+                    </span>
+                </a>
+
+                {{-- Pendientes --}}
+                <a href="{{ route('actividades.registradas', array_merge(request()->except('estado'), ['estado' => 'Pendiente'])) }}" 
+                   class="tab-button px-6 py-3 text-sm font-medium {{ request('estado') == 'Pendiente' ? 'active text-yellow-600 dark:text-yellow-400' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300' }}">
+                    <i class="fas fa-clock mr-2"></i>
+                    Pendientes
+                    <span class="ml-2 px-2 py-1 text-xs rounded-full bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200">
+                        {{ \App\Models\Actividad::where('estado', 'Pendiente')->count() }}
+                    </span>
+                </a>
+
+                {{-- Aceptadas --}}
+                <a href="{{ route('actividades.registradas', array_merge(request()->except('estado'), ['estado' => 'Aprobada'])) }}" 
+                   class="tab-button px-6 py-3 text-sm font-medium {{ request('estado') == 'Aprobada' ? 'active text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300' }}">
+                    <i class="fas fa-check-circle mr-2"></i>
+                    Aceptadas
+                    <span class="ml-2 px-2 py-1 text-xs rounded-full bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
+                        {{ \App\Models\Actividad::where('estado', 'Aprobada')->count() }}
+                    </span>
+                </a>
+
+                {{-- Rechazadas --}}
+                <a href="{{ route('actividades.registradas', array_merge(request()->except('estado'), ['estado' => 'Rechazada'])) }}" 
+                   class="tab-button px-6 py-3 text-sm font-medium {{ request('estado') == 'Rechazada' ? 'active text-red-600 dark:text-red-400' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300' }}">
+                    <i class="fas fa-times-circle mr-2"></i>
+                    Rechazadas
+                    <span class="ml-2 px-2 py-1 text-xs rounded-full bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200">
+                        {{ \App\Models\Actividad::where('estado', 'Rechazada')->count() }}
+                    </span>
+                </a>
+            </nav>
+        </div>
+    </div>
+
     <!-- Buscador inteligente -->
     <div class="mb-6 bg-white dark:bg-gray-800 shadow-md rounded-lg p-4">
         <form method="GET" action="{{ route('actividades.registradas') }}" id="filtro-form" class="flex flex-wrap items-end gap-4 w-full">
+            {{-- ⭐ Mantener el estado seleccionado --}}
+            @if(request('estado'))
+                <input type="hidden" name="estado" value="{{ request('estado') }}">
+            @endif
+
             <!-- Año -->
             <div class="flex-1 min-w-[150px]">
                 <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Año</label>
@@ -124,6 +231,7 @@
                             <th scope="col" class="px-6 py-3 text-gray-900 dark:text-gray-100">Autor</th>
                             <th scope="col" class="px-6 py-3 text-gray-900 dark:text-gray-100">Fecha</th>
                             <th scope="col" class="px-6 py-3 text-gray-900 dark:text-gray-100">Área</th>
+                            <th scope="col" class="px-6 py-3 text-gray-900 dark:text-gray-100">Estado</th>
                             <th scope="col" class="px-6 py-3 text-center text-gray-900 dark:text-gray-100">Acciones</th>
                         </tr>
                     </thead>
@@ -143,6 +251,21 @@
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
                                         {{ $actividad->tipo_area ?? 'Sin área' }}
                                     </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    @if($actividad->estado === 'Aprobada')
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
+                                            <i class="fas fa-check-circle mr-1"></i> Aprobada
+                                        </span>
+                                    @elseif($actividad->estado === 'Rechazada')
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200">
+                                            <i class="fas fa-times-circle mr-1"></i> Rechazada
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200">
+                                            <i class="fas fa-clock mr-1"></i> Pendiente
+                                        </span>
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex justify-center gap-2">
@@ -220,7 +343,6 @@
     </form>
 </div>
 
-{{-- ✅ JAVASCRIPT DIRECTO ANTES DEL @endsection --}}
 <script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
 <script>
     let actividadIdAEliminar = null;
@@ -243,11 +365,30 @@
         }
     }
 
-    // Cerrar modal al hacer clic fuera de él
     document.getElementById('modal-eliminar-actividad').addEventListener('click', function(e) {
         if (e.target === this) {
             cerrarModalEliminar();
         }
     });
+
+    const flashAlert = document.getElementById('flash-alert');
+
+    function hideFlashAlert() {
+        if (!flashAlert) return;
+        flashAlert.classList.add('opacity-0', '-translate-y-3');
+        setTimeout(() => flashAlert.remove(), 500); // tiempo animación
+    }
+
+    if (flashAlert) {
+        // Mostrar con animación
+        setTimeout(() => {
+            flashAlert.classList.remove('opacity-0', '-translate-y-3');
+        }, 100);
+
+        // Ocultar automáticamente a los 3s
+        setTimeout(hideFlashAlert, 3000);
+    }
+
+
 </script>
 @endsection

@@ -1364,41 +1364,52 @@ function filtroSoloPeriodo(inicioEdit = null, finEdit = null, dependenciasEdit =
     },
 
     async actualizarConteo() {
-      if (!this.inicio || !this.fin) { 
-        this.count = null; 
-        this.hasResponse = false; 
-        return; 
-      }
-      
-      this.loading = true; 
-      this.hasResponse = false;
-      
-      const params = new URLSearchParams({ 
-        start: this.inicio, 
-        end: this.fin, 
-        areas: this.seleccionadas.join(',') 
-      });
-      
-      try {
-        const res = await fetch(`/api/actividades/contar?${params.toString()}`, { 
-          headers: { 'Accept': 'application/json' } 
-        });
-        
-        if (!res.ok) { 
-          this.count = null; 
-          return; 
-        }
-        
-        const json = await res.json();
-        this.count = json?.count ?? 0; 
-        this.hasResponse = true;
-      } catch (error) {
-        console.error('Error al contar actividades:', error);
+    if (!this.inicio || !this.fin) {
         this.count = null;
-      } finally { 
-        this.loading = false; 
-      }
+        this.hasResponse = false;
+        return;
     }
+
+    this.loading = true;
+    this.hasResponse = false;
+
+    const params = new URLSearchParams({
+        start: this.inicio,
+        end: this.fin,
+        areas: this.seleccionadas.join(',')
+    });
+
+    try {
+        const url = "{{ route('actividades.contarInforme') }}" + "?" + params.toString();
+
+        console.log('URL conteo:', url);
+
+        const res = await fetch(url, {
+            headers: { 'Accept': 'application/json' }
+        });
+
+        this.hasResponse = true;
+
+        if (!res.ok) {
+            console.error('Respuesta no OK', res.status, res.statusText);
+            this.count = 0;
+            return;
+        }
+
+        const json = await res.json();
+        console.log('Conteo recibido', json);
+        this.count = json?.count ?? 0;
+    } catch (error) {
+        console.error('Error al contar actividades:', error);
+        this.count = 0;
+        this.hasResponse = true;
+    } finally {
+        this.loading = false;
+    }
+}
+
+
+
   }
 }
 
