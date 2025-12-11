@@ -154,18 +154,19 @@ class Informe extends Model
     }
 
     public function getActividadesFiltradas()
-    {
-        return \App\Models\Actividad::whereBetween('fecha', [
-                $this->actividades_fecha_inicio,
-                $this->actividades_fecha_fin
-            ])
-            ->when($this->dependencias_seleccionadas, function ($query) {
-                $query->whereIn('tipo_area', $this->dependencias_seleccionadas);
-            })
-            ->where('estatus_validacion', 'aceptada') // ← SOLO actividades aceptadas
-            ->orderBy('fecha', 'desc')
-            ->get();
-    }
+{
+    return \App\Models\Actividad::whereBetween('fecha', [
+            $this->actividades_fecha_inicio,
+            $this->actividades_fecha_fin
+        ])
+        ->when($this->dependencias_seleccionadas, function ($query) {
+            $query->whereIn('tipo_area', $this->dependencias_seleccionadas);
+        })
+        ->where('estado', 'Aprobada') 
+        ->orderBy('fecha', 'desc')
+        ->get();
+}
+
 
     
     public function incrementarDescargas()

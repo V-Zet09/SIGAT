@@ -335,78 +335,89 @@
     @endif
 
     <!-- ACTIVIDADES AGRUPADAS POR DEPENDENCIA -->
-    @if(isset($actividades) && $actividades->count() > 0)
-        @php
-            // Agrupar actividades por tipo_area (ya vienen ordenadas del controlador)
-            $actividadesAgrupadas = $actividades->groupBy('tipo_area');
-        @endphp
+@if(isset($actividades) && $actividades->count() > 0)
+    @php
+        // Agrupar actividades por tipo_area
+        $actividadesAgrupadas = $actividades->groupBy('tipo_area');
+        $contadorGlobal = 1;
+    @endphp
+    
+    @foreach($actividadesAgrupadas as $tipoArea => $actividadesPorArea)
+        <!-- Encabezado de la Dependencia -->
+        <h2 style="margin: 16pt 0 8pt 0; font-size: 12pt; font-weight: bold; color: #000; text-transform: uppercase;">
+            {{ $tipoArea ?? 'Sin Dependencia Asignada' }}
+        </h2>
         
-        @foreach($actividadesAgrupadas as $tipoArea => $actividadesPorArea)
-            <!-- Encabezado de la Dependencia -->
-            <h2 style="margin: 16pt 0 8pt 0; font-size: 12pt; font-weight: bold; color: #000; text-transform: uppercase;">
-                {{ $tipoArea ?? 'Sin Dependencia Asignada' }}
-            </h2>
-            
-            <!-- Actividades de esta Dependencia -->
-            @foreach($actividadesPorArea as $index => $actividad)
-                <div style="page-break-inside: avoid; margin: 8pt 0;">
-                    
-                    <!-- Título -->
-                    <h3 style="margin: 0 0 6pt 0; font-size: 11pt; font-weight: bold; color: #333;">
-                        {{ $index + 1 }}. {{ $actividad->titulo ?? 'Actividad sin título' }}
-                    </h3>
-                    
-                    <!-- PRESUPUESTO - Solo para Obras Públicas -->
-                    @if(strtolower(trim($tipoArea)) === 'obras públicas' || strtolower(trim($tipoArea)) === 'obras publicas')
-                        @if(isset($actividad->presupuesto) && $actividad->presupuesto)
-                            <p style="margin: 0 0 8pt 0; font-size: 10pt; font-weight: bold; color: #118C4F;">
-                                <strong>Presupuesto:</strong> ${{ number_format($actividad->presupuesto, 2, '.', ',') }}
-                            </p>
-                        @endif
-                    @endif
-                    
-                    <!-- Resumen -->
-                    @if($actividad->resumen)
-                        <p style="margin: 0 0 10pt 0; font-size: 10pt; line-height: 1.4; text-align: justify; color: #444;">
-                            {{ strip_tags($actividad->resumen) }}
-                        </p>
-                    @else
-                        <p style="margin: 0 0 10pt 0; font-size: 10pt; font-style: italic; color: #999;">
-                            Sin resumen disponible.
+        <!-- Actividades de esta Dependencia -->
+        @foreach($actividadesPorArea as $actividad)
+            <div style="page-break-inside: avoid; margin: 8pt 0;">
+                
+                <!-- Título con numeración global - COLOR NEGRO -->
+                <h3 style="margin: 0 0 6pt 0; font-size: 11pt; font-weight: bold; color: #000;">
+                    {{ $contadorGlobal }}. {{ $actividad->titulo ?? 'Actividad sin título' }}
+                </h3>
+                
+                <!-- PRESUPUESTO - Solo para Obras Públicas -->
+                @if(strtolower(trim($tipoArea)) === 'obras públicas' || strtolower(trim($tipoArea)) === 'obras publicas')
+                    @if(isset($actividad->presupuesto) && $actividad->presupuesto > 0)
+                        <p style="margin: 0 0 8pt 0; font-size: 10pt; font-weight: bold; color: #118C4F;">
+                            <strong>Presupuesto:</strong> ${{ number_format($actividad->presupuesto, 2, '.', ',') }}
                         </p>
                     @endif
-                    
-                    <!-- Imagen centrada debajo -->
-                    @if($actividad->foto)
-                        @php 
-                            $actividadImg = storage_path('app/public/' . $actividad->foto);
-                        @endphp
-                        @if(file_exists($actividadImg))
-                            <div style="text-align: center; margin: 8pt 0 0 0;">
+                @endif
+                
+                <!-- Resumen -->
+                @if($actividad->resumen)
+                    <p style="margin: 0 0 10pt 0; font-size: 10pt; line-height: 1.4; text-align: justify; color: #000;">
+                        {{ strip_tags($actividad->resumen) }}
+                    </p>
+                @else
+                    <p style="margin: 0 0 10pt 0; font-size: 10pt; font-style: italic; color: #999;">
+                        Sin resumen disponible.
+                    </p>
+                @endif
+                
+                <!-- TODAS las imágenes de la actividad -->
+                @php
+                    // Decodificar el array de fotos
+                    $fotos = is_string($actividad->fotos) ? json_decode($actividad->fotos, true) : $actividad->fotos;
+                @endphp
+                
+                @if(is_array($fotos) && count($fotos) > 0)
+                    <div style="text-align: center; margin: 8pt 0 0 0;">
+                        @foreach($fotos as $foto)
+                            @php 
+                                $actividadImg = storage_path('app/public/' . $foto);
+                            @endphp
+                            @if(file_exists($actividadImg))
                                 <img src="{{ str_replace('\\', '/', $actividadImg) }}" 
                                     alt="Imagen de actividad" 
-                                    style="max-width: 200px; height: auto;" />
-                            </div>
-                        @endif
-                    @endif
-                    
-                </div>
-            @endforeach
-
+                                    style="max-width: 265px; height: auto; margin: 4pt 0; display: block; margin-left: auto; margin-right: auto;" />
+                            @endif
+                        @endforeach
+                    </div>
+                @endif
+                
+            </div>
+            
+            @php $contadorGlobal++; @endphp
         @endforeach
-        
-        <!-- Total de actividades -->
-        <p style="margin-top: 16pt; font-weight: bold; text-align: center; font-size: 11pt; color: #000;">
-            Total de actividades registradas: {{ $actividades->count() }}
-        </p>
-        <p style="margin: 4pt 0 0 0; text-align: center; font-size: 9pt; color: #666;">
-            Distribuidas en {{ $actividadesAgrupadas->count() }} {{ $actividadesAgrupadas->count() == 1 ? 'dependencia' : 'dependencias' }}
-        </p>
-    @else
-        <p style="font-style: italic; color: #666; margin: 12pt 0;">
-            No se encontraron actividades registradas para el período y dependencias seleccionadas.
-        </p>
-    @endif
+
+    @endforeach
+    
+    <!-- Total de actividades -->
+    <p style="margin-top: 16pt; font-weight: bold; text-align: center; font-size: 11pt; color: #000;">
+        Total de actividades registradas: {{ $actividades->count() }}
+    </p>
+    <p style="margin: 4pt 0 0 0; text-align: center; font-size: 9pt; color: #666;">
+        Distribuidas en {{ $actividadesAgrupadas->count() }} {{ $actividadesAgrupadas->count() == 1 ? 'dependencia' : 'dependencias' }}
+    </p>
+@else
+    <p style="font-style: italic; color: #666; margin: 12pt 0;">
+        No se encontraron actividades registradas para el período y dependencias seleccionadas.
+    </p>
+@endif
+
 </div>
 
 </body>
