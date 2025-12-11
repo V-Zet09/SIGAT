@@ -11,7 +11,7 @@ use Mpdf\Mpdf;
 use App\Models\Actividad;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Helpers\NotificationHelper;
-use App\Models\AuditLog; // ← AGREGADO
+use App\Models\AuditLog;
 
 class InformeController extends Controller
 {
@@ -155,19 +155,42 @@ class InformeController extends Controller
             $actividades = $actividades->sortBy('tipo_area');
             Log::info('📊 Actividades para PDF: ' . $actividades->count());
 
-            /* ⭐ NUEVO: no permitir informes sin actividades aceptadas */
             if ($actividades->count() === 0) {
-                // Opcional: borrar el informe recién creado
-                // $informe->delete();
-
+                $informe->delete();
                 return back()
                     ->withErrors(['error' => 'No hay actividades aceptadas en el periodo y dependencias seleccionadas'])
                     ->withInput();
             }
 
-            $this->generarPDFConMPdf($informe, $actividades);
-
-            Log::info('✅ PDF generado exitosamente');
+            // ⭐ MANEJO ROBUSTO DE ERRORES DEL PDF
+            try {
+                $this->generarPDFConMPdf($informe, $actividades);
+                
+                // Verificar que el PDF se generó correctamente
+                $informe->refresh();
+                if (!$informe->pdf_path) {
+                    throw new \Exception('El pdf_path no se guardó en la base de datos después de la generación');
+                }
+                
+                $fullPath = storage_path('app/public/' . $informe->pdf_path);
+                if (!file_exists($fullPath)) {
+                    throw new \Exception('El archivo PDF no existe en: ' . $fullPath);
+                }
+                
+                Log::info('✅ PDF generado y verificado exitosamente para informe ID: ' . $informe->id);
+                
+            } catch (\Exception $pdfError) {
+                Log::error('❌ ERROR CRÍTICO GENERANDO PDF: ' . $pdfError->getMessage());
+                Log::error('Línea del error: ' . $pdfError->getLine());
+                Log::error('Stack trace: ' . $pdfError->getTraceAsString());
+                
+                // Eliminar el informe fallido
+                $informe->delete();
+                
+                return back()
+                    ->withErrors(['error' => 'Error al generar el PDF: ' . $pdfError->getMessage() . ' (Línea: ' . $pdfError->getLine() . ')'])
+                    ->withInput();
+            }
 
             // ✅ REGISTRAR LOG DE CREACIÓN DE INFORME
             AuditLog::log(
@@ -218,7 +241,6 @@ class InformeController extends Controller
     {
         $informe = Informe::findOrFail($id);
 
-        // Verificar permiso
         if ($informe->user_id !== Auth::id() && !Auth::user()->hasRole('Administrador')) {
             abort(403, 'No tienes permiso para editar este informe');
         }
@@ -237,7 +259,6 @@ class InformeController extends Controller
 
         Log::info('=== INICIO UPDATE INFORME ID: ' . $informe->id . ' ===');
 
-        // Verificar permisos
         if ($informe->user_id !== Auth::id() && !Auth::user()->hasRole('Administrador')) {
             abort(403, 'No tienes permiso para editar este informe');
         }
@@ -343,27 +364,40 @@ class InformeController extends Controller
             ];
             $informe->save();
 
-                        Log::info('✅ Informe actualizado en BD');
+            Log::info('✅ Informe actualizado en BD');
             $actividades = $informe->getActividadesFiltradas();
             $actividades = $actividades->sortBy('tipo_area');
             Log::info('📊 Actividades para PDF actualizado: ' . $actividades->count());
 
-            /* ⭐ NUEVO: no permitir edición si no hay actividades aceptadas */
             if ($actividades->count() === 0) {
                 return back()
                     ->withErrors(['error' => 'No hay actividades aceptadas en el periodo y dependencias seleccionadas'])
                     ->withInput();
             }
 
-
-            $this->generarPDFConMPdf($informe, $actividades);
-
-            Log::info('✅ PDF regenerado exitosamente');
-
-            // ✅ LOG DE EDICIÓN (se hace automáticamente con Auditable trait)
+            // ⭐ MANEJO ROBUSTO DE ERRORES DEL PDF EN UPDATE
+            try {
+                $this->generarPDFConMPdf($informe, $actividades);
+                
+                $informe->refresh();
+                if (!$informe->pdf_path) {
+                    throw new \Exception('El pdf_path no se actualizó en la base de datos');
+                }
+                
+                Log::info('✅ PDF regenerado exitosamente');
+                
+            } catch (\Exception $pdfError) {
+                Log::error('❌ ERROR REGENERANDO PDF: ' . $pdfError->getMessage());
+                Log::error('Stack: ' . $pdfError->getTraceAsString());
+                
+                return back()
+                    ->withErrors(['error' => 'Error al regenerar el PDF: ' . $pdfError->getMessage()])
+                    ->withInput();
+            }
 
             return redirect()->route('informes-generados')
                 ->with('success', 'Informe editado exitosamente');
+                
         } catch (\Exception $e) {
             Log::error('❌ ERROR al actualizar informe: ' . $e->getMessage());
             Log::error('Línea: ' . $e->getLine());
@@ -381,7 +415,6 @@ class InformeController extends Controller
             $informe = Informe::findOrFail($id);
             $municipioNombre = $informe->municipio_nombre;
 
-            // Solo el creador o administrador puede eliminar
             if ($informe->user_id !== Auth::id() && !Auth::user()->hasRole('Administrador')) {
                 abort(403, 'No tienes permiso para eliminar este informe');
             }
@@ -410,13 +443,11 @@ class InformeController extends Controller
             }
 
             InformeSeccion::where('informe_id', $informe->id)->delete();
-
             $informe->forceDelete();
-
-            // ✅ LOG DE ELIMINACIÓN (se hace automáticamente con Auditable trait)
 
             return redirect()->route('informes-generados')
                 ->with('success', 'Informe eliminado exitosamente');
+                
         } catch (\Exception $e) {
             Log::error('Error al eliminar informe: ' . $e->getMessage());
             return redirect()->back()
@@ -495,11 +526,13 @@ class InformeController extends Controller
             $tempDir = storage_path('app/temp');
             if (!is_dir($tempDir)) {
                 mkdir($tempDir, 0777, true);
+                Log::info('📁 Directorio temp creado');
             }
 
             $pdfDir = storage_path('app/public/pdfs');
             if (!is_dir($pdfDir)) {
                 mkdir($pdfDir, 0777, true);
+                Log::info('📁 Directorio pdfs creado');
             }
 
             $pdfPath = 'pdfs/informe_' . $informe->id . '.pdf';
@@ -518,55 +551,99 @@ class InformeController extends Controller
             $actividades = $actividades->sortBy('tipo_area');
 
             Log::info('🔄 Renderizando HTML con ' . $actividades->count() . ' actividades...');
-            $html = view('informes.pdf', compact('informe', 'actividades'))->render();
-            Log::info('✅ HTML renderizado');
+            
+            try {
+                $html = view('informes.pdf', compact('informe', 'actividades'))->render();
+                Log::info('✅ HTML renderizado correctamente');
+            } catch (\Exception $viewError) {
+                Log::error('❌ ERROR renderizando vista: ' . $viewError->getMessage());
+                throw new \Exception('Error en la vista PDF: ' . $viewError->getMessage());
+            }
 
-            Log::info('🔧 Creando mPDF...');
-            $mpdf = new Mpdf([
-                'mode' => 'utf-8',
-                'format' => 'Letter',
-                'orientation' => 'P',
-                'margin_left' => 0,
-                'margin_right' => 0,
-                'margin_top' => 0,
-                'margin_bottom' => 0,
-                'tempDir' => $tempDir,
-            ]);
-            Log::info('✅ mPDF creado');
+            Log::info('🔧 Creando instancia mPDF...');
+            try {
+                $mpdf = new Mpdf([
+                    'mode' => 'utf-8',
+                    'format' => 'Letter',
+                    'orientation' => 'P',
+                    'margin_left' => 0,
+                    'margin_right' => 0,
+                    'margin_top' => 0,
+                    'margin_bottom' => 0,
+                    'tempDir' => $tempDir,
+                ]);
+                Log::info('✅ mPDF creado correctamente');
+            } catch (\Exception $mpdfError) {
+                Log::error('❌ ERROR creando mPDF: ' . $mpdfError->getMessage());
+                throw new \Exception('Error al inicializar mPDF: ' . $mpdfError->getMessage());
+            }
+
             $mpdf->h2toc = ['H1' => 0, 'H2' => 1, 'H3' => 2];
             $mpdf->h2bookmarks = ['H1' => 0, 'H2' => 1, 'H3' => 2];
-
             $mpdf->shrink_tables_to_fit = 1;
             $mpdf->SetCompression(true);
             $mpdf->simpleTables = true;
 
             Log::info('📝 Escribiendo HTML en PDF...');
-            $mpdf->WriteHTML($html);
-            Log::info('✅ HTML escrito');
-
-            Log::info('💾 Guardando PDF a archivo...');
-            $mpdf->Output($fullPath, 'F');
-            Log::info('✅ PDF guardado');
-
-            if (!file_exists($fullPath)) {
-                throw new \Exception('El archivo no se creó en: ' . $fullPath);
+            try {
+                $mpdf->WriteHTML($html);
+                Log::info('✅ HTML escrito en mPDF');
+            } catch (\Exception $writeError) {
+                Log::error('❌ ERROR en WriteHTML: ' . $writeError->getMessage());
+                throw new \Exception('Error escribiendo HTML en PDF: ' . $writeError->getMessage());
             }
 
-            Log::info('✅ Archivo verificado, actualizando BD...');
+            Log::info('💾 Guardando PDF a archivo...');
+            try {
+                $mpdf->Output($fullPath, 'F');
+                Log::info('✅ PDF guardado en: ' . $fullPath);
+            } catch (\Exception $outputError) {
+                Log::error('❌ ERROR en Output: ' . $outputError->getMessage());
+                throw new \Exception('Error guardando archivo PDF: ' . $outputError->getMessage());
+            }
+
+            // ⭐ VERIFICACIONES ROBUSTAS
+            if (!file_exists($fullPath)) {
+                throw new \Exception('El archivo PDF no se creó en: ' . $fullPath);
+            }
+
+            $fileSize = filesize($fullPath);
+            Log::info('📦 Tamaño del PDF: ' . number_format($fileSize / 1024, 2) . ' KB');
+
+            if ($fileSize < 1000) {
+                throw new \Exception('El PDF generado es demasiado pequeño (' . $fileSize . ' bytes), posible error de generación');
+            }
+
+            if (!is_readable($fullPath)) {
+                throw new \Exception('El archivo PDF no tiene permisos de lectura');
+            }
+
+            Log::info('✅ Actualizando pdf_path en BD: ' . $pdfPath);
             $informe->update(['pdf_path' => $pdfPath]);
-            Log::info('✅✅✅ PDF GENERADO EXITOSAMENTE');
+
+            // Verificar que se guardó
+            $informe->refresh();
+            if (!$informe->pdf_path) {
+                throw new \Exception('ERROR CRÍTICO: pdf_path no se guardó en la base de datos');
+            }
+
+            Log::info('✅✅✅ PDF GENERADO, VERIFICADO Y GUARDADO EXITOSAMENTE');
+            
         } catch (\Exception $e) {
-            Log::error('❌ ERROR EN generarPDFConMPdf: ' . $e->getMessage());
-            Log::error('Stack: ' . $e->getTraceAsString());
+            Log::error('❌❌❌ ERROR FATAL EN generarPDFConMPdf: ' . $e->getMessage());
+            Log::error('Archivo esperado: ' . ($fullPath ?? 'N/A'));
+            Log::error('Línea del error: ' . $e->getLine());
+            Log::error('Archivo del error: ' . $e->getFile());
+            Log::error('Stack completo: ' . $e->getTraceAsString());
             throw $e;
         }
     }
     
-    public function incrementDescarga($id) {
+    public function incrementDescarga($id)
+    {
         $informe = Informe::findOrFail($id);
         $informe->increment('descargas');
         
-        // ✅ REGISTRAR LOG DE DESCARGA
         AuditLog::log(
             action: 'descargar',
             description: "Incrementó contador de descargas del informe: {$informe->municipio_nombre}",
