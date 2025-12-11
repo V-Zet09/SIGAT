@@ -692,8 +692,8 @@ function profileData() {
         showCameraModal: false,
         
         // Avatar
-        avatarPreview: "{{ asset('storage/avatars/' . ($user->avatar ?? 'default.jpg')) }}",
-        avatarOriginal: "{{ asset('storage/avatars/' . ($user->avatar ?? 'default.jpg')) }}",
+        avatarPreview: "{{ asset('images/' . ($user->avatar ?? 'default.jpg')) }}",
+        avatarOriginal: "{{ asset('images/' . ($user->avatar ?? 'default.jpg')) }}",
         avatarFile: null,
         avatarChanged: false,
         avatarDeleted: false,
@@ -723,7 +723,7 @@ function profileData() {
         },
         
         deleteAvatar() {
-            this.avatarPreview = "{{ asset('storage/avatars/default.jpg') }}";
+            this.avatarPreview = "{{ asset('images/default.jpg') }}";
             this.avatarDeleted = true;
             this.avatarChanged = false;
             this.avatarFile = null;
@@ -843,32 +843,40 @@ function profileData() {
         },
         
         uploadCapturedPhoto() {
-            if (!this.capturedImageData) return;
+    if (!this.capturedImageData) return;
+    
+    fetch(this.capturedImageData)
+        .then(res => res.blob())
+        .then(blob => {
+            const file = new File([blob], 'camera-photo.jpg', { type: 'image/jpeg' });
             
-            fetch(this.capturedImageData)
-                .then(res => res.blob())
-                .then(blob => {
-                    const file = new File([blob], 'camera-photo.jpg', { type: 'image/jpeg' });
-                    
-                    // Actualizar preview y marcar como cambiado
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        this.avatarPreview = e.target.result;
-                        this.avatarFile = file;
-                        this.avatarChanged = true;
-                        this.avatarDeleted = false;
-                    };
-                    reader.readAsDataURL(file);
-                    
-                    // Cerrar modal
-                    this.showCameraModal = false;
-                    this.stopCamera();
-                })
-                .catch(err => {
-                    console.error('Error al procesar la foto:', err);
-                    alert('Error al procesar la foto');
-                });
-        }
+            // Crear un DataTransfer para simular la selección de archivo
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            
+            // Asignar al input file
+            const input = document.getElementById('avatar-input');
+            input.files = dataTransfer.files;
+            
+            // Actualizar preview y marcar como cambiado
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                this.avatarPreview = e.target.result;
+                this.avatarFile = file;
+                this.avatarChanged = true;
+                this.avatarDeleted = false;
+            };
+            reader.readAsDataURL(file);
+            
+            // Cerrar modal
+            this.showCameraModal = false;
+            this.stopCamera();
+        })
+        .catch(err => {
+            console.error('Error al procesar la foto:', err);
+            alert('Error al procesar la foto');
+        });
+}
     }
 }
 </script>

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
-use App\Models\AuditLog; // ← AGREGADO
+use App\Models\AuditLog;
 
 class ProfileController extends Controller
 {
@@ -49,19 +49,22 @@ class ProfileController extends Controller
         // Actualizar información básica
         $user->update($request->only(['name', 'email']));
         
-        // Manejar avatar si se subió uno nuevo
+        // 📸 Manejar avatar si se subió uno nuevo
         if ($request->hasFile('avatar')) {
             // Eliminar avatar anterior (si no es default)
             if ($user->avatar && $user->avatar !== 'default.jpg') {
-                Storage::delete('public/avatars/' . $user->avatar);
+                $oldPath = public_path('images/' . $user->avatar);
+                if (file_exists($oldPath)) {
+                    @unlink($oldPath);
+                }
             }
             
-            // Guardar nuevo avatar en storage/app/public/avatars
+            // Guardar nuevo avatar en public/images/
             $file = $request->file('avatar');
             $filename = time() . '_' . $user->id . '.' . $file->getClientOriginalExtension();
             
-            // Laravel maneja permisos automáticamente
-            $file->storeAs('public/avatars', $filename);
+            // Mover a public/images
+            $file->move(public_path('images'), $filename);
             
             $user->update(['avatar' => $filename]);
             
@@ -74,10 +77,13 @@ class ProfileController extends Controller
             );
         }
         
-        // Manejar eliminación de avatar
+        // 🗑️ Manejar eliminación de avatar
         if ($request->delete_avatar == '1') {
             if ($user->avatar && $user->avatar !== 'default.jpg') {
-                Storage::delete('public/avatars/' . $user->avatar);
+                $oldPath = public_path('images/' . $user->avatar);
+                if (file_exists($oldPath)) {
+                    @unlink($oldPath);
+                }
             }
             
             $user->update(['avatar' => 'default.jpg']);
@@ -155,13 +161,16 @@ class ProfileController extends Controller
 
         // Eliminar avatar anterior
         if ($user->avatar && $user->avatar !== 'default.jpg') {
-            Storage::delete('public/avatars/' . $user->avatar);
+            $oldPath = public_path('images/' . $user->avatar);
+            if (file_exists($oldPath)) {
+                @unlink($oldPath);
+            }
         }
 
-        // Guardar nuevo avatar
+        // Guardar nuevo avatar en public/images/
         $file = $request->file('avatar');
         $filename = time() . '_' . $user->id . '.' . $file->getClientOriginalExtension();
-        $file->storeAs('public/avatars', $filename);
+        $file->move(public_path('images'), $filename);
 
         $user->update(['avatar' => $filename]);
 
@@ -183,7 +192,10 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         if ($user->avatar && $user->avatar !== 'default.jpg') {
-            Storage::delete('public/avatars/' . $user->avatar);
+            $oldPath = public_path('images/' . $user->avatar);
+            if (file_exists($oldPath)) {
+                @unlink($oldPath);
+            }
         }
 
         $user->update(['avatar' => 'default.jpg']);
