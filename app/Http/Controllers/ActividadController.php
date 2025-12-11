@@ -25,18 +25,17 @@ class ActividadController extends Controller
                 ->latest()
                 ->paginate(20);
         } elseif ($user->cargo === 'Director') {
-            // Director ve solo las de SU área
             $actividades = Actividad::with(['creador', 'responsable'])
-                ->where('tipo_area', $user->departamento)
+                ->where('tipo_area', $user->area)   // antes $user->departamento
                 ->latest()
                 ->paginate(20);
         } else {
-            // Auxiliar ve solo las de SU área
             $actividades = Actividad::with(['creador', 'responsable'])
-                ->where('tipo_area', $user->departamento)
+                ->where('tipo_area', $user->area)   // antes $user->departamento
                 ->latest()
                 ->paginate(20);
         }
+
         
         return view('actividades.index', compact('actividades'));
     }
@@ -107,89 +106,72 @@ public function store(Request $request)
 public function showRegistradas(Request $request)
 {
     $user = Auth::user();
-    
-    // Construir la query base según el rol
+
+    // 1) Query base SEGÚN ROL
     $query = Actividad::with(['creador', 'responsable']);
-    
-    // Filtrar por rol
-    if ($user->cargo === 'Administrador') {
-        // Admin ve TODAS
-    } elseif ($user->cargo === 'Director') {
-        $query->where('tipo_area', $user->departamento);
-    } else {
-        $query->where('tipo_area', $user->departamento);
+
+    // Admin ve todas
+    if ($user->cargo !== 'Administrador') {
+        $query->where('tipo_area', $user->area);   // antes $user->departamento
     }
-    
-    // ===================================
-    // ⭐ FILTRO POR ESTADO (NUEVO)
-    // ===================================
+
+
+    // 2) FILTRO POR ESTADO
     if ($request->filled('estado')) {
         $query->where('estado', $request->estado);
     }
-    
-    // ===================================
-    // FILTRO POR AÑO
-    // ===================================
-    if ($request->filled('filtro_anio') && $request->filtro_anio !== 'Todos los años') {
+
+    // 3) FILTRO POR AÑO
+    if ($request->filled('filtro_anio') && $request->filtro_anio !== '') {
         $query->whereYear('fecha', $request->filtro_anio);
     }
-    
-    // ===================================
-    // FILTRO POR MES
-    // ===================================
+
+    // 4) FILTRO POR MES
     if ($request->filled('filtro_mes') && $request->filtro_mes !== '') {
         $query->whereMonth('fecha', $request->filtro_mes);
     }
-    
-    // ===================================
-    // BÚSQUEDA AUTOMÁTICA (área, autor, fecha, título)
-    // ===================================
+
+    // 5) BUSCADOR
     if ($request->filled('buscar')) {
         $busqueda = $request->buscar;
-        
+
         $query->where(function($q) use ($busqueda) {
-            // Buscar en título
             $q->where('titulo', 'LIKE', "%{$busqueda}%")
-              // Buscar en autor
               ->orWhere('autor', 'LIKE', "%{$busqueda}%")
-              // Buscar en área
               ->orWhere('tipo_area', 'LIKE', "%{$busqueda}%")
-              // Buscar en contenido
               ->orWhere('contenido', 'LIKE', "%{$busqueda}%")
-              // Buscar en resumen
               ->orWhere('resumen', 'LIKE', "%{$busqueda}%");
-            
-            // Buscar por fecha (formato dd/mm/yyyy)
-            if (preg_match('/(\d{2})[\/\-](\d{2})[\/\-](\d{4})/', $busqueda, $matches)) {
-                $fechaBuscada = $matches[3] . '-' . $matches[2] . '-' . $matches[1];
+
+            // fecha dd/mm/yyyy
+            if (preg_match('/(\d{2})[\/\-](\d{2})[\/\-](\d{4})/', $busqueda, $m)) {
+                $fechaBuscada = $m[3].'-'.$m[2].'-'.$m[1];
                 $q->orWhere('fecha', $fechaBuscada);
             }
-            
-            // Buscar por año (formato yyyy)
+
+            // año yyyy
             if (preg_match('/^\d{4}$/', $busqueda)) {
                 $q->orWhereYear('fecha', $busqueda);
             }
-            
-            // Buscar por mes en español
-            $mesesEspanol = [
+
+            // mes en español
+            $meses = [
                 'enero' => 1, 'febrero' => 2, 'marzo' => 3, 'abril' => 4,
                 'mayo' => 5, 'junio' => 6, 'julio' => 7, 'agosto' => 8,
-                'septiembre' => 9, 'octubre' => 10, 'noviembre' => 11, 'diciembre' => 12
+                'septiembre' => 9, 'octubre' => 10, 'noviembre' => 11, 'diciembre' => 12,
             ];
-            
-            $busquedaLower = strtolower($busqueda);
-            foreach ($mesesEspanol as $nombreMes => $numeroMes) {
-                if (strpos($busquedaLower, $nombreMes) !== false) {
-                    $q->orWhereMonth('fecha', $numeroMes);
+            $b = strtolower($busqueda);
+            foreach ($meses as $nombre => $num) {
+                if (strpos($b, $nombre) !== false) {
+                    $q->orWhereMonth('fecha', $num);
                     break;
                 }
             }
         });
     }
-    
-    // Ordenar por fecha más reciente
+
+    // 6) ORDEN Y PAGINACIÓN
     $actividades = $query->orderBy('fecha', 'desc')->paginate(10);
-    
+
     return view('dashboard-actividades-registradas', compact('actividades'));
 }
 
@@ -198,24 +180,25 @@ public function showRegistradas(Request $request)
     /**
      * Mostrar detalle de una actividad
      */
-    public function show($id)
-    {
-        $actividad = Actividad::with(['creador', 'responsable', 'aprobador', 'rechazador'])
-            ->findOrFail($id);
-        
-        // Verificar permisos
-        $user = Auth::user();
-        if ($user->cargo !== 'Administrador' && $actividad->tipo_area !== $user->departamento) {
-            abort(403, 'No tienes permiso para ver esta actividad');
-        }
-        
-        return view('show', compact('actividad'));
+public function show($id)
+{
+    $actividad = Actividad::with(['creador', 'responsable', 'aprobador', 'rechazador'])
+        ->findOrFail($id);
+
+    // Verificar permisos
+    $user = Auth::user();
+    if ($user->cargo !== 'Administrador' && $actividad->tipo_area !== $user->area) {
+        abort(403, 'No tienes permiso para ver esta actividad');
     }
+
+    return view('show', compact('actividad'));
+}
+
 
     /**
      * Mostrar formulario de edición
      */
-    public function edit($id)
+public function edit($id)
 {
     $actividad = Actividad::findOrFail($id);
     
@@ -234,7 +217,7 @@ public function showRegistradas(Request $request)
             return redirect()->back()
                 ->with('error', 'No puedes editar una actividad que ya fue aprobada');
         }
-    } elseif ($user->cargo === 'Director' && $actividad->tipo_area === $user->departamento) {
+    } elseif ($user->cargo === 'Director' && $actividad->tipo_area === $user->area) {
         // Director puede editar las de su área
     } else {
         abort(403, 'No tienes permiso para editar esta actividad');
@@ -257,6 +240,7 @@ public function showRegistradas(Request $request)
     
     return view('edit', compact('actividad', 'usuarios'));
 }
+
 
 public function update(Request $request, $id)
 {
@@ -546,7 +530,7 @@ return redirect()->route('actividades.show', [
         
         $actividades = Actividad::query()
             ->when($user->cargo !== 'Administrador', function($q) use ($user) {
-                return $q->where('tipo_area', $user->departamento);
+                return $q->where('tipo_area', $user->area);   // antes $user->departamento
             })
             ->where(function($q) use ($query) {
                 $q->where('titulo', 'LIKE', "%{$query}%")
@@ -570,7 +554,7 @@ return redirect()->route('actividades.show', [
         
         $actividades = Actividad::query()
             ->when($user->cargo !== 'Administrador', function($q) use ($user) {
-                return $q->where('tipo_area', $user->departamento);
+                return $q->where('tipo_area', $user->area);   // antes $user->departamento
             })
             ->where('estado', $estado)
             ->with(['creador', 'responsable'])
@@ -589,7 +573,7 @@ return redirect()->route('actividades.show', [
         
         $actividades = Actividad::query()
             ->when($user->cargo !== 'Administrador', function($q) use ($user) {
-                return $q->where('tipo_area', $user->departamento);
+                return $q->where('tipo_area', $user->area);   // antes $user->departamento
             })
             ->select('id', 'titulo', 'fecha', 'estado', 'tipo_area')
             ->get()
