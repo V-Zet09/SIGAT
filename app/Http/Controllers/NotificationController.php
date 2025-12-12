@@ -38,7 +38,7 @@ class NotificationController extends Controller
                     'message' => $notif->message ?? '',
                     'icon' => $notif->icon ?? 'ri-notification-3-line',
                     'color' => $notif->color ?? 'blue',
-                    'link' => null, // Por defecto sin link
+                    'link' => null, // Por defecto null, se asignará si tiene permiso
                     'read' => $notif->read_at !== null,
                     'created_at' => $notif->created_at->toISOString(),
                 ];

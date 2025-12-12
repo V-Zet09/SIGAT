@@ -13,8 +13,7 @@
                 <div class="relative">
                     <div class="w-20 h-20 rounded-full bg-white dark:bg-gray-800 p-1 shadow-lg">
                         @if(Auth::user()->avatar)
-                           <img src="{{ asset('storage/avatars/' . Auth::user()->avatar) }}" 
-                                 alt="{{ Auth::user()->name }}" 
+                           <img src="{{ asset('images/' . (Auth::user()->avatar ?? 'default.jpg')) }}" 
                                  class="w-full h-full rounded-full object-cover">
                         @else
                             <div class="w-full h-full rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center">
