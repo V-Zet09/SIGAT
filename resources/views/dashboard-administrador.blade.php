@@ -4,17 +4,14 @@
 
 @section('content')
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
-
-    <!-- Header mejorado con perfil del administrador - Verde Institucional -->
     <div class="bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-700 dark:to-teal-700 rounded-2xl shadow-xl p-6 mb-6">
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-4">
-                <!-- Avatar del administrador con foto real -->
                 <div class="relative">
                     <div class="w-20 h-20 rounded-full bg-white dark:bg-gray-800 p-1 shadow-lg">
                         @if(Auth::user()->avatar)
-                           <img src="{{ asset('storage/avatars/' . Auth::user()->avatar) }}" 
-                                 alt="{{ Auth::user()->name }}" 
+                           <img src="{{ asset('storage/avatars/' . Auth::user()->avatar) }}"
+                                 alt="{{ Auth::user()->name }}"
                                  class="w-full h-full rounded-full object-cover">
                         @else
                             <div class="w-full h-full rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center">
@@ -26,8 +23,7 @@
                     </div>
                     <span class="absolute bottom-0 right-0 w-6 h-6 bg-green-500 border-4 border-white dark:border-gray-800 rounded-full"></span>
                 </div>
-                
-                <!-- Información del administrador -->
+
                 <div>
                     <h1 class="text-3xl font-bold text-white mb-1">
                         ¡Bienvenido, {{ Auth::user()->name ?? 'admin' }}!
@@ -41,8 +37,7 @@
                     </p>
                 </div>
             </div>
-            
-            <!-- Acceso rápido al perfil -->
+
             <div class="hidden md:block">
                 <a href="{{ route('usuarios.index') }}" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg hover:shadow-xl">
                     <i class="fas fa-cog"></i>
@@ -52,9 +47,7 @@
         </div>
     </div>
 
-    <!-- Estadísticas principales mejoradas -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <!-- Actividades -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
@@ -77,8 +70,8 @@
             <div class="bg-gradient-to-r from-emerald-500 to-emerald-600 h-1"></div>
         </div>
 
-        <!-- Usuarios -->
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+        <a href="{{ route('usuarios.index', ['estado' => 'conectado']) }}"
+           class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden block">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
                     <div class="w-14 h-14 bg-teal-100 dark:bg-teal-900/30 rounded-xl flex items-center justify-center">
@@ -88,19 +81,28 @@
                         ACTIVOS
                     </span>
                 </div>
-                <h2 class="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">Usuarios</h2>
-                <p class="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-1">{{ $totalUsuarios }}</p>
+
+                <h2 class="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">
+                    Usuarios
+                </h2>
+
+                <p class="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-1">
+                    {{ $totalUsuarios ?? 0 }}
+                </p>
+
                 <div class="flex items-center gap-2 text-sm">
                     <span class="text-green-600 dark:text-green-400 font-medium flex items-center gap-1">
-                        <i class="fas fa-check-circle text-xs"></i> {{ $usuariosActivos }}
+                        <i class="fas fa-check-circle text-xs"></i>
+                        {{ $usuariosActivos ?? 0 }}
                     </span>
-                    <span class="text-gray-500 dark:text-gray-400">conectados</span>
+                    <span class="text-gray-500 dark:text-gray-400">
+                        conectados
+                    </span>
                 </div>
             </div>
             <div class="bg-gradient-to-r from-teal-500 to-teal-600 h-1"></div>
-        </div>
+        </a>
 
-        <!-- Informes -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
@@ -124,12 +126,8 @@
         </div>
     </div>
 
-    <!-- Sección de Acciones, Estado y Calendario en 2 columnas -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        
-        <!-- Columna izquierda: Acciones rápidas y Estado general -->
         <div class="space-y-6">
-            <!-- Acciones rápidas -->
             <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
                 <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
                     <i class="fas fa-bolt mr-2 text-yellow-500"></i>
@@ -147,8 +145,7 @@
                     </a>
                 </div>
             </div>
-            
-            <!-- Estado general -->
+
             <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
                 <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
                     <i class="fas fa-chart-pie mr-2 text-emerald-600"></i>
@@ -192,31 +189,27 @@
             </div>
         </div>
 
-        <!-- Columna derecha: Calendario -->
         <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
             <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
                 <i class="fas fa-calendar-days mr-2 text-emerald-600"></i>Calendario de Eventos
             </h3>
-            
+
             <div id="calendar-container">
-                <!-- Controles de navegación -->
                 <div class="flex items-center justify-between mb-4">
                     <button id="prev-month" class="p-2 rounded-lg hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors" title="Mes anterior">
                         <i class="fas fa-chevron-left text-emerald-600 dark:text-emerald-400 text-lg"></i>
                     </button>
-                    
+
                     <h4 class="text-lg font-semibold text-gray-900 dark:text-gray-100" id="calendar-month-year"></h4>
-                    
+
                     <button id="next-month" class="p-2 rounded-lg hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors" title="Mes siguiente">
                         <i class="fas fa-chevron-right text-emerald-600 dark:text-emerald-400 text-lg"></i>
                     </button>
                 </div>
-                
-                <!-- Calendario -->
+
                 <div id="calendar-grid" class="grid grid-cols-7 gap-2 mb-4"></div>
             </div>
-            
-            <!-- Leyenda -->
+
             <div class="pt-4 border-t border-gray-200 dark:border-gray-700">
                 <div class="grid grid-cols-3 gap-3">
                     <div class="flex flex-col items-center gap-2 p-2 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
@@ -235,9 +228,7 @@
             </div>
         </div>
     </div>
-        <!-- ============================================ -->
-    <!-- SECCIÓN: GESTIÓN DE ACTIVIDADES (ADMIN) -->
-    <!-- ============================================ -->
+
     <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border-2 border-emerald-200 dark:border-emerald-800 mb-6">
         <div class="flex items-center justify-between mb-5">
             <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100 flex items-center">
@@ -251,7 +242,7 @@
                 </span>
             @endif
         </div>
-        
+
         <div class="bg-gray-50 dark:bg-gray-900/50 rounded-xl px-4 py-3 overflow-x-auto border border-gray-200 dark:border-gray-800 max-h-[600px] custom-scrollbar">
             <table class="min-w-full text-sm">
                 <thead class="sticky top-0 bg-gray-50 dark:bg-gray-900/50 z-10">
@@ -308,18 +299,15 @@
                             </td>
                             <td class="py-3 px-4">
                                 <div class="flex items-center justify-center gap-2">
-                                    <!-- Ver detalles -->
                                     <button onclick="verDetalles({{ $actividad->id }})" class="text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 p-2 rounded-lg transition-colors" title="Ver detalles">
                                         <i class="fas fa-eye"></i>
                                     </button>
-                                    
+
                                     @if($actividad->estado !== 'Aprobada' && $actividad->estado !== 'Rechazada')
-                                        <!-- Aprobar -->
                                         <button onclick="abrirModalAprobar({{ $actividad->id }}, '{{ addslashes($actividad->titulo) }}')" class="text-green-600 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/40 p-2 rounded-lg transition-colors" title="Aprobar">
                                             <i class="fas fa-check"></i>
                                         </button>
-                                        
-                                        <!-- Rechazar -->
+
                                         <button onclick="abrirModalRechazar({{ $actividad->id }}, '{{ addslashes($actividad->titulo) }}')" class="text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 p-2 rounded-lg transition-colors" title="Rechazar">
                                             <i class="fas fa-times"></i>
                                         </button>
@@ -349,7 +337,6 @@
         </div>
     </div>
 
-    <!-- MODALES PARA APROBAR/RECHAZAR -->
     <div id="modalAprobar" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 animate-fade-in">
             <div class="flex items-center justify-between mb-4">
@@ -361,26 +348,26 @@
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
-            
+
             <p class="text-gray-600 dark:text-gray-400 mb-4">
                 ¿Estás seguro de aprobar la siguiente actividad?
             </p>
-            
+
             <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4 mb-4">
                 <p class="text-sm font-semibold text-green-900 dark:text-green-100" id="tituloActividadAprobar"></p>
             </div>
-            
+
             <form id="formAprobar" method="POST" action="">
                 @csrf
                 @method('PUT')
-                
+
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Observaciones (opcional)
                     </label>
                     <textarea name="observaciones" rows="3" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-gray-100" placeholder="Comentarios adicionales..."></textarea>
                 </div>
-                
+
                 <div class="flex gap-3">
                     <button type="button" onclick="cerrarModalAprobar()" class="flex-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 py-2 px-4 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
                         Cancelar
@@ -405,26 +392,26 @@
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
-            
+
             <p class="text-gray-600 dark:text-gray-400 mb-4">
                 ¿Estás seguro de rechazar la siguiente actividad?
             </p>
-            
+
             <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-4">
                 <p class="text-sm font-semibold text-red-900 dark:text-red-100" id="tituloActividadRechazar"></p>
             </div>
-            
+
             <form id="formRechazar" method="POST" action="">
                 @csrf
                 @method('PUT')
-                
+
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Motivo del rechazo <span class="text-red-500">*</span>
                     </label>
                     <textarea name="motivo_rechazo" rows="4" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-100" placeholder="Explica por qué rechazas esta actividad..."></textarea>
                 </div>
-                
+
                 <div class="flex gap-3">
                     <button type="button" onclick="cerrarModalRechazar()" class="flex-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 py-2 px-4 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
                         Cancelar
@@ -438,13 +425,8 @@
         </div>
     </div>
 
-
-    <!-- ========================================== -->
-    <!-- SECCIÓN DE LOGS DE AUDITORÍA -->
-    <!-- ========================================== -->
     <div class="mb-6">
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
-            <!-- Header de Logs -->
             <div class="bg-gradient-to-r from-purple-600 to-indigo-600 p-6">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3">
@@ -464,10 +446,8 @@
                 </div>
             </div>
 
-            <!-- Filtros y Pestañas -->
             <div class="border-b border-gray-200 dark:border-gray-700">
                 <div class="p-4 flex flex-wrap items-center justify-between gap-4">
-                    <!-- Pestañas de Filtro -->
                     <div class="flex gap-2 flex-wrap">
                         <button class="log-filter-btn active" data-filter="all">
                             <i class="fas fa-list-ul mr-1"></i> Todos
@@ -484,18 +464,14 @@
                         <button class="log-filter-btn" data-filter="eliminar">
                             <i class="fas fa-trash mr-1"></i> Eliminaciones
                         </button>
-                        <button class="log-filter-btn" data-filter="aprobar">
-                            <i class="fas fa-check-circle mr-1"></i> Aprobaciones
-                        </button>
                     </div>
 
-                    <!-- Buscador -->
                     <div class="flex-1 max-w-md">
                         <div class="relative">
-                            <input 
-                                type="text" 
-                                id="log-search" 
-                                placeholder="Buscar en logs..." 
+                            <input
+                                type="text"
+                                id="log-search"
+                                placeholder="Buscar en logs..."
                                 class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             >
                             <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
@@ -504,16 +480,14 @@
                 </div>
             </div>
 
-            <!-- Logs Timeline -->
             <div class="p-6">
                 <div id="logs-container" class="space-y-3 max-h-[600px] overflow-y-auto custom-scrollbar">
                     @forelse($logs ?? [] as $log)
-                        <div class="log-item" 
-                             data-action="{{ $log->action }}" 
+                        <div class="log-item"
+                             data-action="{{ $log->action }}"
                              data-search="{{ strtolower($log->description . ' ' . $log->user_name) }}">
-                            
+
                             <div class="flex items-start gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 border border-gray-200 dark:border-gray-600">
-                                <!-- Icono de Acción -->
                                 <div class="flex-shrink-0">
                                     <div class="w-12 h-12 rounded-xl flex items-center justify-center
                                         @if($log->action === 'crear') bg-green-100 dark:bg-green-900/30
@@ -542,7 +516,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Contenido del Log -->
                                 <div class="flex-1 min-w-0">
                                     <div class="flex items-start justify-between gap-2 mb-1">
                                         <div class="flex-1">
@@ -571,7 +544,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- Meta información -->
                                     <div class="flex items-center gap-4 mt-2 text-xs text-gray-500 dark:text-gray-400 flex-wrap">
                                         <span class="flex items-center gap-1">
                                             <i class="fas fa-clock"></i>
@@ -595,7 +567,6 @@
                                         @endif
                                     </div>
 
-                                    <!-- Detalles adicionales (colapsable) -->
                                     @if($log->old_values || $log->new_values)
                                         <button onclick="toggleDetails({{ $log->id }})" class="mt-2 text-xs text-purple-600 dark:text-purple-400 hover:underline flex items-center gap-1">
                                             <i class="fas fa-chevron-down transition-transform" id="icon-{{ $log->id }}"></i>
@@ -628,7 +599,6 @@
                     @endforelse
                 </div>
 
-                <!-- Paginación -->
                 @if(isset($logs) && $logs->hasPages())
                     <div class="mt-6 flex justify-center">
                         {{ $logs->links() }}
@@ -638,9 +608,7 @@
         </div>
     </div>
 
-    <!-- Tablas de Actividades y Usuarios -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Últimas Actividades -->
         <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
             <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
                 <i class="fas fa-list-check mr-2 text-emerald-600 dark:text-emerald-400"></i>Últimas Actividades
@@ -673,8 +641,7 @@
                 <a href="{{ route('actividades.registradas') }}" class="text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:underline mt-3 block text-right">Ver todas →</a>
             </div>
         </div>
-        
-        <!-- Últimos Usuarios -->
+
         <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
             <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
                 <i class="fas fa-user-group mr-2 text-teal-600 dark:text-teal-400"></i>Últimos Usuarios
@@ -710,7 +677,6 @@
 </div>
 
 <style>
-    /* Estilos para calendario */
     .calendar-day {
         width: 40px;
         height: 40px;
@@ -722,12 +688,11 @@
         cursor: default;
         transition: all 0.2s;
     }
-    
+
     .calendar-day:hover {
         transform: scale(1.08);
     }
 
-    /* Estilos para botones de filtro de logs */
     .log-filter-btn {
         padding: 0.5rem 1rem;
         border-radius: 0.5rem;
@@ -760,7 +725,6 @@
         box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
     }
 
-    /* Animación para logs */
     .log-item {
         animation: slideIn 0.3s ease-out;
     }
@@ -776,7 +740,6 @@
         }
     }
 
-    /* Scrollbar personalizado */
     .custom-scrollbar::-webkit-scrollbar {
         width: 8px;
     }
@@ -801,24 +764,18 @@
 </style>
 
 <script>
-// ===================================
-// CALENDARIO
-// ===================================
 let currentYear, currentMonth;
 let allActividades = @json($fechasActividades);
 let allUsuarios = @json($fechasUsuarios);
 let allInformes = @json($fechasInformes);
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Obtener fecha actual
     const now = new Date();
     currentYear = now.getFullYear();
     currentMonth = now.getMonth();
-    
-    // Generar calendario inicial
+
     loadCalendarData(currentYear, currentMonth);
-    
-    // Controles de navegación
+
     document.getElementById('prev-month').addEventListener('click', function() {
         currentMonth--;
         if (currentMonth < 0) {
@@ -827,7 +784,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         loadCalendarData(currentYear, currentMonth);
     });
-    
+
     document.getElementById('next-month').addEventListener('click', function() {
         currentMonth++;
         if (currentMonth > 11) {
@@ -837,31 +794,25 @@ document.addEventListener('DOMContentLoaded', function() {
         loadCalendarData(currentYear, currentMonth);
     });
 
-    // ===================================
-    // FILTROS DE LOGS
-    // ===================================
     const filterButtons = document.querySelectorAll('.log-filter-btn');
     const logItems = document.querySelectorAll('.log-item');
     const searchInput = document.getElementById('log-search');
 
-    // Filtros por acción
     filterButtons.forEach(btn => {
         btn.addEventListener('click', function() {
-            // Remover active de todos
             filterButtons.forEach(b => b.classList.remove('active'));
-            // Agregar active al clickeado
             this.classList.add('active');
-            
+
             const filter = this.dataset.filter;
-            
+
             logItems.forEach(item => {
                 const action = item.dataset.action;
                 const searchText = item.dataset.search;
                 const searchValue = searchInput.value.toLowerCase();
-                
+
                 const matchesFilter = filter === 'all' || action === filter;
                 const matchesSearch = searchValue === '' || searchText.includes(searchValue);
-                
+
                 if (matchesFilter && matchesSearch) {
                     item.style.display = 'block';
                 } else {
@@ -871,19 +822,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Búsqueda en tiempo real
     if (searchInput) {
         searchInput.addEventListener('input', function() {
             const searchValue = this.value.toLowerCase();
             const activeFilter = document.querySelector('.log-filter-btn.active')?.dataset.filter || 'all';
-            
+
             logItems.forEach(item => {
                 const action = item.dataset.action;
                 const searchText = item.dataset.search;
-                
+
                 const matchesFilter = activeFilter === 'all' || action === activeFilter;
                 const matchesSearch = searchValue === '' || searchText.includes(searchValue);
-                
+
                 if (matchesFilter && matchesSearch) {
                     item.style.display = 'block';
                 } else {
@@ -901,97 +851,93 @@ function loadCalendarData(year, month) {
             generateCalendar(year, month, data.actividades, data.usuarios, data.informes);
         })
         .catch(error => {
-            console.log('Usando datos locales');
             generateCalendar(year, month, allActividades, allUsuarios, allInformes);
         });
 }
 
 function generateCalendar(year, month, actividades, usuarios, informes) {
-    const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+    const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
                         'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
     const dayNames = ['D', 'L', 'M', 'X', 'J', 'V', 'S'];
-    
+
     document.getElementById('calendar-month-year').textContent = `${monthNames[month]} ${year}`;
-    
+
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-    
+
     const calendarGrid = document.getElementById('calendar-grid');
     calendarGrid.innerHTML = '';
-    
+
     dayNames.forEach(dayName => {
         const dayHeader = document.createElement('div');
         dayHeader.className = 'text-center text-sm font-bold text-gray-600 dark:text-gray-400 py-2';
         dayHeader.textContent = dayName;
         calendarGrid.appendChild(dayHeader);
     });
-    
+
     for (let i = 0; i < firstDay; i++) {
         const emptyDay = document.createElement('div');
         emptyDay.className = 'calendar-day';
         calendarGrid.appendChild(emptyDay);
     }
-    
+
     const today = new Date();
     for (let day = 1; day <= daysInMonth; day++) {
         const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         const isToday = day === today.getDate() && month === today.getMonth() && year === today.getFullYear();
-        
+
         const tieneActividad = actividades.includes(dateStr);
         const tieneUsuario = usuarios.includes(dateStr);
         const tieneInforme = informes.includes(dateStr);
-        
+
         const dayCell = document.createElement('div');
         dayCell.className = `calendar-day ${
-            isToday 
-                ? 'bg-emerald-500 text-white font-bold shadow-lg ring-2 ring-emerald-300' 
+            isToday
+                ? 'bg-emerald-500 text-white font-bold shadow-lg ring-2 ring-emerald-300'
                 : 'bg-gray-50 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
         }`;
-        
+
         const dayNumber = document.createElement('span');
         dayNumber.className = 'text-sm font-semibold leading-none';
         dayNumber.textContent = day;
         dayCell.appendChild(dayNumber);
-        
+
         if (tieneActividad || tieneUsuario || tieneInforme) {
             const dotsContainer = document.createElement('div');
             dotsContainer.className = 'flex gap-0.5 mt-1';
-            
+
             if (tieneActividad) {
                 const dotActividad = document.createElement('span');
                 dotActividad.className = 'w-1.5 h-1.5 rounded-full bg-emerald-500';
                 dotActividad.title = 'Actividad registrada';
                 dotsContainer.appendChild(dotActividad);
             }
-            
+
             if (tieneUsuario) {
                 const dotUsuario = document.createElement('span');
                 dotUsuario.className = 'w-1.5 h-1.5 rounded-full bg-teal-500';
                 dotUsuario.title = 'Usuario creado';
                 dotsContainer.appendChild(dotUsuario);
             }
-            
+
             if (tieneInforme) {
                 const dotInforme = document.createElement('span');
                 dotInforme.className = 'w-1.5 h-1.5 rounded-full bg-cyan-500';
                 dotInforme.title = 'Informe generado';
                 dotsContainer.appendChild(dotInforme);
             }
-            
+
             dayCell.appendChild(dotsContainer);
         }
-        
+
         calendarGrid.appendChild(dayCell);
     }
 }
 
-// ===================================
-// TOGGLE DETALLES DE LOGS
-// ===================================
 function toggleDetails(id) {
     const details = document.getElementById(`details-${id}`);
     const icon = document.getElementById(`icon-${id}`);
-    
+
     if (details.classList.contains('hidden')) {
         details.classList.remove('hidden');
         icon.classList.add('rotate-180');
@@ -1000,7 +946,7 @@ function toggleDetails(id) {
         icon.classList.remove('rotate-180');
     }
 }
-// FUNCIONES PARA MODALES DE APROBAR/RECHAZAR
+
 function abrirModalAprobar(id, titulo) {
     document.getElementById('tituloActividadAprobar').textContent = titulo;
     document.getElementById('formAprobar').action = `/actividades/${id}/aprobar`;
@@ -1024,6 +970,5 @@ function cerrarModalRechazar() {
 function verDetalles(id) {
     window.location.href = `/actividades/${id}`;
 }
-
 </script>
 @endsection

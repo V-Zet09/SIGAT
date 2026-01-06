@@ -156,11 +156,11 @@ class InformeController extends Controller
             Log::info('📊 Actividades para PDF: ' . $actividades->count());
 
             if ($actividades->count() === 0) {
-                $informe->delete();
-                return back()
-                    ->withErrors(['error' => 'No hay actividades aceptadas en el periodo y dependencias seleccionadas'])
-                    ->withInput();
+                // NO borrar el informe
+                return redirect()->route('informes-generados')
+                    ->with('success', 'Informe guardado, pero no tiene actividades aún. Puedes editarlo después.');
             }
+
 
             // ⭐ MANEJO ROBUSTO DE ERRORES DEL PDF
             try {
@@ -207,7 +207,7 @@ class InformeController extends Controller
             );
 
             // Notificar a roles que pueden ver informes
-            $roles = ['Administrador', 'Presidente Municipal', 'Síndico Procurador', 'Regidor', 'Director de Área'];
+            $roles = ['Administrador', 'Presidente Municipal', 'Síndico Procurador', 'Director de Área'];
             foreach ($roles as $rol) {
                 NotificationHelper::sendToRole(
                     $rol,
@@ -241,10 +241,6 @@ class InformeController extends Controller
     {
         $informe = Informe::findOrFail($id);
 
-        if ($informe->user_id !== Auth::id() && !Auth::user()->hasRole('Administrador')) {
-            abort(403, 'No tienes permiso para editar este informe');
-        }
-
         return view('generar-informe', [
             'informe' => $informe,
             'isEdit' => true
@@ -259,9 +255,6 @@ class InformeController extends Controller
 
         Log::info('=== INICIO UPDATE INFORME ID: ' . $informe->id . ' ===');
 
-        if ($informe->user_id !== Auth::id() && !Auth::user()->hasRole('Administrador')) {
-            abort(403, 'No tienes permiso para editar este informe');
-        }
 
         $validated = $request->validate([
             'portada_imagen' => 'nullable|image|max:5120',
@@ -415,9 +408,7 @@ class InformeController extends Controller
             $informe = Informe::findOrFail($id);
             $municipioNombre = $informe->municipio_nombre;
 
-            if ($informe->user_id !== Auth::id() && !Auth::user()->hasRole('Administrador')) {
-                abort(403, 'No tienes permiso para eliminar este informe');
-            }
+
 
             // Eliminar imágenes del storage
             if (!empty($informe->portada_imagen_path)) {

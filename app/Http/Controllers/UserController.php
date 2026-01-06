@@ -6,25 +6,48 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
-use App\Models\AuditLog; // ← AGREGADO
+use App\Models\AuditLog;
+use App\Helpers\NotificationHelper; // ✅ Importar el Helper
 
 class UserController extends Controller
 {
     // Mostrar CRUD con todos los usuarios
     public function index(Request $request)
     {
-        $query = $request->input('search');
+        $query  = $request->input('search');
+        $estado = $request->input('estado'); // 'conectado' | 'desconectado' | null
 
         $usuarios = User::query()
             ->when($query, function ($q) use ($query) {
-            $q->where('name', 'like', "%{$query}%")
-              ->orWhere('email', 'like', "%{$query}%")
-              ->orWhere('cargo', 'like', "%{$query}%")
-              ->orWhere('area', 'like', "%{$query}%");
-             })
+                $q->where(function ($sub) use ($query) {
+                    $sub->where('name',  'like', "%{$query}%")
+                        ->orWhere('email', 'like', "%{$query}%")
+                        ->orWhere('cargo', 'like', "%{$query}%")
+                        ->orWhere('area',  'like', "%{$query}%");
+                });
+            })
+            ->when($estado === 'conectado', function ($q) {
+                $q->where('last_activity_at', '>=', now()->subMinutes(5));
+            })
+            ->when($estado === 'desconectado', function ($q) {
+                $q->where(function($sub) {
+                    $sub->whereNull('last_activity_at')
+                        ->orWhere('last_activity_at', '<', now()->subMinutes(5));
+                });
+            })
             ->with('roles')
-            ->get();
-        return view('dashboard-users', compact('usuarios'));
+            ->paginate(15);
+
+        $totalUsuarios   = User::count();
+        $usuariosActivos = User::where('last_activity_at', '>=', now()->subMinutes(5))->count();
+
+        return view('dashboard-users', compact(
+            'usuarios',
+            'query',
+            'estado',
+            'totalUsuarios',
+            'usuariosActivos'
+        ));
     }
 
     // Mostrar formulario para crear
@@ -38,36 +61,35 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'sexo' => 'required|string',
-            'email' => 'required|email|unique:users,email',
+            'name'     => 'required|string|max:255',
+            'sexo'     => 'required|string',
+            'email'    => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
-            'cargo' => 'required|string',
-            'area' => 'required|string',
-            'rol' => 'required|exists:roles,name',
+            'cargo'    => 'required|string',
+            'area'     => 'required|string',
+            'rol'      => 'required|exists:roles,name',
         ]);
 
         $avatar = 'default.jpg';
 
         if ($request->hasFile('avatar')) {
-            $file = $request->file('avatar');
-            $avatar = time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('images'), $avatar);
+            $file   = $request->file('avatar');
+            $avatar = time().'.'.$file->getClientOriginalExtension();
+            $file->move(public_path('storage/avatars'), $avatar);
         }
 
         $user = User::create([
-            'name' => $request->name,
-            'sexo' => $request->sexo,
-            'email' => $request->email,
+            'name'     => $request->name,
+            'sexo'     => $request->sexo,
+            'email'    => $request->email,
             'password' => Hash::make($request->password),
-            'cargo' => $request->cargo,
-            'area' => $request->area,
-            'avatar' => $avatar,
+            'cargo'    => $request->cargo,
+            'area'     => $request->area,
+            'avatar'   => $avatar,
         ]);
 
         $user->assignRole($request->rol);
 
-        // ✅ REGISTRAR LOG DE CREACIÓN DE USUARIO (el Auditable trait ya lo hace, pero agregamos info del rol)
         AuditLog::log(
             action: 'crear',
             description: "Creó el usuario: {$request->name} - Cargo: {$request->cargo} - Rol: {$request->rol}",
@@ -75,8 +97,21 @@ class UserController extends Controller
             modelId: $user->id,
             newValues: [
                 'cargo' => $request->cargo,
-                'area' => $request->area,
-                'rol' => $request->rol
+                'area'  => $request->area,
+                'rol'   => $request->rol,
+            ]
+        );
+
+        // 🔔 NOTIFICAR AL ADMINISTRADOR (CREACIÓN)
+        NotificationHelper::sendToRole(
+            'Administrador',
+            'usuario',
+            'Nuevo usuario creado',
+            auth()->user()->name . ' ha creado al usuario: ' . $user->name,
+            [
+                'icon'  => 'ri-user-add-line',
+                'color' => 'green',
+                'link'  => route('usuarios.show', $user->id)
             ]
         );
 
@@ -87,79 +122,80 @@ class UserController extends Controller
     public function show($id)
     {
         $usuario = User::with('roles', 'permissions')->findOrFail($id);
-        
-        // ✅ REGISTRAR LOG DE VISUALIZACIÓN DE USUARIO
+
         AuditLog::log(
             action: 'ver',
             description: "Visualizó el perfil del usuario: {$usuario->name}",
             modelType: 'App\Models\User',
             modelId: $usuario->id
         );
-        
+
         return view('vista-ver-usuarios', compact('usuario'));
     }
 
     public function edit($id)
     {
         $usuario = User::with('roles')->findOrFail($id);
-        $roles = Role::all();
+        $roles   = Role::all();
+
         return view('vista-editar-usuario', compact('usuario', 'roles'));
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'sexo' => 'required|string',
-            'email' => 'required|email|unique:users,email,' . $id,
+            'name'  => 'required|string|max:255',
+            'sexo'  => 'required|string',
+            'email' => 'required|email|unique:users,email,'.$id,
             'cargo' => 'required|string',
-            'area' => 'required|string',
-            'rol' => 'required|exists:roles,name',
+            'area'  => 'required|string',
+            'rol'   => 'required|exists:roles,name',
         ]);
 
-        $usuario = User::findOrFail($id);
-        
-        // ✅ Guardar valores anteriores para el log
+        $usuario = User::with('roles')->findOrFail($id);
+
         $cambios = [];
-        if ($usuario->name !== $request->name) {
-            $cambios[] = "nombre: {$usuario->name} → {$request->name}";
-        }
-        if ($usuario->email !== $request->email) {
-            $cambios[] = "email: {$usuario->email} → {$request->email}";
-        }
-        if ($usuario->cargo !== $request->cargo) {
-            $cambios[] = "cargo: {$usuario->cargo} → {$request->cargo}";
-        }
-        if ($usuario->area !== $request->area) {
-            $cambios[] = "área: {$usuario->area} → {$request->area}";
-        }
-        
-        // Verificar si cambió el rol
+
+        if ($usuario->name !== $request->name) $cambios[] = "nombre";
+        if ($usuario->email !== $request->email) $cambios[] = "email";
+        if ($usuario->cargo !== $request->cargo) $cambios[] = "cargo";
+        if ($usuario->area !== $request->area) $cambios[] = "área";
+
         $rolActual = $usuario->roles->first()?->name;
         if ($rolActual !== $request->rol) {
-            $cambios[] = "rol: {$rolActual} → {$request->rol}";
+            $cambios[] = "rol ({$rolActual} → {$request->rol})";
         }
-        
-        // Actualizar datos básicos
+
         $usuario->update([
-            'name' => $request->name,
-            'sexo' => $request->sexo,
+            'name'  => $request->name,
+            'sexo'  => $request->sexo,
             'email' => $request->email,
             'cargo' => $request->cargo,
-            'area' => $request->area,
+            'area'  => $request->area,
         ]);
-        
-        // Actualizar rol
+
         $usuario->syncRoles([$request->rol]);
 
-        // ✅ REGISTRAR LOG DE EDICIÓN (el Auditable trait registra cambios generales, agregamos detalles)
-        if (!empty($cambios)) {
+        if (! empty($cambios)) {
             AuditLog::log(
                 action: 'editar',
-                description: "Editó el usuario: {$usuario->name} - Cambios: " . implode(', ', $cambios),
+                description: "Editó el usuario: {$usuario->name}",
                 modelType: 'App\Models\User',
                 modelId: $usuario->id,
                 newValues: ['cambios' => $cambios]
+            );
+
+            // 🔔 NOTIFICAR AL ADMINISTRADOR (EDICIÓN)
+            NotificationHelper::sendToRole(
+                'Administrador',
+                'usuario',
+                'Usuario modificado',
+                auth()->user()->name . ' ha editado al usuario: ' . $usuario->name,
+                [
+                    'icon'  => 'ri-user-settings-line',
+                    'color' => 'orange',
+                    'link'  => route('usuarios.show', $usuario->id)
+                ]
             );
         }
 
@@ -174,14 +210,12 @@ class UserController extends Controller
                 ->with('error', 'No puedes eliminar tu propia cuenta');
         }
 
-        $usuario = User::findOrFail($id);
+        $usuario       = User::findOrFail($id);
         $nombreUsuario = $usuario->name;
-        $cargoUsuario = $usuario->cargo;
-        
+        $cargoUsuario  = $usuario->cargo;
+
         $usuario->delete();
 
-        // ✅ LOG DE ELIMINACIÓN (se hace automáticamente con Auditable trait)
-        // Pero podemos agregar un log adicional con más contexto
         AuditLog::log(
             action: 'eliminar',
             description: "Eliminó el usuario: {$nombreUsuario} - Cargo: {$cargoUsuario}",
@@ -189,7 +223,20 @@ class UserController extends Controller
             modelId: $id,
             oldValues: [
                 'nombre' => $nombreUsuario,
-                'cargo' => $cargoUsuario
+                'cargo'  => $cargoUsuario,
+            ]
+        );
+
+        // 🔔 NOTIFICAR AL ADMINISTRADOR (ELIMINACIÓN)
+        NotificationHelper::sendToRole(
+            'Administrador',
+            'usuario',
+            'Usuario eliminado',
+            auth()->user()->name . ' eliminó al usuario: ' . $nombreUsuario,
+            [
+                'icon'  => 'ri-user-unfollow-line',
+                'color' => 'red',
+                'link'  => null // No hay link porque el usuario ya no existe
             ]
         );
 
@@ -200,27 +247,25 @@ class UserController extends Controller
     // Gestión de roles
     public function roles()
     {
-        $roles = Role::with('permissions')->get();
+        $roles       = Role::with('permissions')->get();
         $permissions = \Spatie\Permission\Models\Permission::all();
+
         return view('roles', compact('roles', 'permissions'));
     }
 
     public function guardarPermisos(Request $request, $rolId)
     {
         $request->validate([
-            'permisos' => 'required|array',
-            'permisos.*' => 'exists:permissions,id'
+            'permisos'   => 'required|array',
+            'permisos.*' => 'exists:permissions,id',
         ]);
 
-        $rol = Role::findOrFail($rolId);
+        $rol      = Role::findOrFail($rolId);
         $permisos = \Spatie\Permission\Models\Permission::whereIn('id', $request->permisos)->pluck('name');
-        
-        // ✅ Guardar permisos anteriores para el log
         $permisosAnteriores = $rol->permissions->pluck('name')->toArray();
-        
+
         $rol->syncPermissions($permisos);
 
-        // ✅ REGISTRAR LOG DE CAMBIO DE PERMISOS
         AuditLog::log(
             action: 'editar',
             description: "Actualizó permisos del rol: {$rol->name}",
@@ -229,6 +274,16 @@ class UserController extends Controller
             oldValues: ['permisos' => $permisosAnteriores],
             newValues: ['permisos' => $permisos->toArray()]
         );
+
+        // 🔔 OPCIONAL: Notificar cambio de permisos
+        /*
+        NotificationHelper::sendToRole(
+            'Administrador',
+            'sistema',
+            'Permisos actualizados',
+            'Se actualizaron los permisos del rol: ' . $rol->name
+        );
+        */
 
         return response()->json(['success' => true]);
     }

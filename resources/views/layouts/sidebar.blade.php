@@ -1,5 +1,4 @@
-<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
 
 <style>
     /* Scrollbar personalizado */
@@ -23,7 +22,8 @@
   openMenu: null, 
   userMenuOpen: false
 }" 
-class="min-h-screen bg-gray-50 dark:bg-gray-900">
+class="contents">
+
 
   <!-- ✅ BOTÓN HAMBURGUESA -->
   <button @click="openSidebar = true" 
@@ -162,91 +162,121 @@ class="min-h-screen bg-gray-50 dark:bg-gray-900">
         </div>
       </div>
 
-      <!-- INFORMES -->
-      <div>
-        <button @click="openMenu = (openMenu === 'informes' ? null : 'informes')"
-                class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg 
-                       hover:bg-slate-800/50 dark:hover:bg-gray-800/50 transition group">
-          <span class="flex items-center gap-3 text-sm">
+{{-- INFORMES: ocultar para Auxiliar de Área, Director de Área y Regidor --}}
+@unlessrole('Auxiliar de Área|Director de Área|Regidor')
+<div>
+    <button @click="openMenu = (openMenu === 'informes' ? null : 'informes')"
+            class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg 
+                   hover:bg-slate-800/50 dark:hover:bg-gray-800/50 transition group">
+        <span class="flex items-center gap-3 text-sm">
             <i class="ri-file-list-line text-slate-400 dark:text-gray-400 group-hover:text-green-400 transition"></i>
-            <span class="text-slate-300 dark:text-gray-300 group-hover:text-white transition">Informe</span>
-          </span>
-          <i class="ri-arrow-right-s-line text-slate-400 dark:text-gray-400 transition-transform duration-200"
-             :class="openMenu === 'informes' ? 'rotate-90 text-green-400' : ''"></i>
-        </button>
+            <span class="text-slate-300 dark:text-gray-300 group-hover:text-white transition">
+                Informe
+            </span>
+        </span>
+        <i class="ri-arrow-right-s-line text-slate-400 dark:text-gray-400 transition-transform duration-200"
+           :class="openMenu === 'informes' ? 'rotate-90 text-green-400' : ''"></i>
+    </button>
 
-        <div x-show="openMenu === 'informes'" x-collapse 
-             class="ml-9 mt-1 space-y-0.5 border-l-2 border-slate-700/50 dark:border-gray-700/50 pl-3">          
-          {{-- Solo roles con permiso pueden generar informes --}}
-          @can('generar informes')
+    <div x-show="openMenu === 'informes'" x-collapse 
+         class="ml-9 mt-1 space-y-0.5 border-l-2 border-slate-700/50 dark:border-gray-700/50 pl-3">
+        @can('generar informes')
             <a href="{{ url('generar-informe') }}" 
                class="block px-3 py-2 text-sm rounded-lg transition
-                      {{ request()->is('generar-informe') ? 'text-white bg-slate-800/50 dark:bg-gray-800/50 font-medium' : 'text-slate-400 dark:text-gray-400 hover:text-white hover:bg-slate-800/30 dark:hover:bg-gray-800/30' }}">
-              Generar Informe
+                     {{ request()->is('generar-informe') 
+                        ? 'text-white bg-slate-800/50 dark:bg-gray-800/50 font-medium' 
+                        : 'text-slate-400 dark:text-gray-400 hover:text-white hover:bg-slate-800/30 dark:hover:bg-gray-800/30' }}">
+                Generar Informe
             </a>
-          @endcan
-        </div>
-      </div>
+        @endcan
+    </div>
+</div>
+@endunlessrole
 
-      <!-- ACTIVIDADES -->
-      <div>
-        <button @click="openMenu = (openMenu === 'actividades' ? null : 'actividades')"
-                class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg 
-                       hover:bg-slate-800/50 dark:hover:bg-gray-800/50 transition group">
-          <span class="flex items-center gap-3 text-sm">
+
+
+      {{-- ACTIVIDADES: ocultar totalmente para Síndico Procurador --}}
+@unlessrole('Síndico Procurador')
+<div>
+    <button @click="openMenu = (openMenu === 'actividades' ? null : 'actividades')"
+            class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg 
+                   hover:bg-slate-800/50 dark:hover:bg-gray-800/50 transition group">
+        <span class="flex items-center gap-3 text-sm">
             <i class="ri-calendar-check-line text-slate-400 dark:text-gray-400 group-hover:text-green-400 transition"></i>
-            <span class="text-slate-300 dark:text-gray-300 group-hover:text-white transition">Actividades</span>
-          </span>
-          <i class="ri-arrow-right-s-line text-slate-400 dark:text-gray-400 transition-transform duration-200"
-             :class="openMenu === 'actividades' ? 'rotate-90 text-green-400' : ''"></i>
-        </button>
+            <span class="text-slate-300 dark:text-gray-300 group-hover:text-white transition">
+                Actividades
+            </span>
+        </span>
+        <i class="ri-arrow-right-s-line text-slate-400 dark:text-gray-400 transition-transform duration-200"
+           :class="openMenu === 'actividades' ? 'rotate-90 text-green-400' : ''"></i>
+    </button>
 
-        <div x-show="openMenu === 'actividades'" x-collapse 
-             class="ml-9 mt-1 space-y-0.5 border-l-2 border-slate-700/50 dark:border-gray-700/50 pl-3">
-          
-          {{-- Solo roles con permiso pueden crear actividades --}}
-          @can('crear actividades')
+    <div x-show="openMenu === 'actividades'" x-collapse 
+         class="ml-9 mt-1 space-y-0.5 border-l-2 border-slate-700/50 dark:border-gray-700/50 pl-3">
+        @can('crear actividades')
             <a href="{{ url('dashboard-actividades') }}" 
                class="block px-3 py-2 text-sm rounded-lg transition
-                      {{ request()->is('dashboard-actividades') ? 'text-white bg-slate-800/50 dark:bg-gray-800/50 font-medium' : 'text-slate-400 dark:text-gray-400 hover:text-white hover:bg-slate-800/30 dark:hover:bg-gray-800/30' }}">
-              Generar Actividad
+                     {{ request()->is('dashboard-actividades') 
+                        ? 'text-white bg-slate-800/50 dark:bg-gray-800/50 font-medium' 
+                        : 'text-slate-400 dark:text-gray-400 hover:text-white hover:bg-slate-800/30 dark:hover:bg-gray-800/30' }}">
+                Generar Actividad
             </a>
-          @endcan
-        </div>
-      </div>
+        @endcan
+    </div>
+</div>
+@endunlessrole
 
       <!-- USUARIOS (solo Administrador) -->
-      @role('Administrador')
-      <div>
-        <button @click="openMenu = (openMenu === 'usuarios' ? null : 'usuarios')"
-                class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg 
-                       hover:bg-slate-800/50 dark:hover:bg-gray-800/50 transition group">
-          <span class="flex items-center gap-3 text-sm">
+@role('Administrador')
+<div>
+    <button @click="openMenu = (openMenu === 'usuarios' ? null : 'usuarios')"
+            class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg 
+                   hover:bg-slate-800/50 dark:hover:bg-gray-800/50 transition group">
+        <span class="flex items-center gap-3 text-sm">
             <i class="ri-team-line text-slate-400 dark:text-gray-400 group-hover:text-green-400 transition"></i>
-            <span class="text-slate-300 dark:text-gray-300 group-hover:text-white transition">Usuarios</span>
-          </span>
-          <i class="ri-arrow-right-s-line text-slate-400 dark:text-gray-400 transition-transform duration-200"
-             :class="openMenu === 'usuarios' ? 'rotate-90 text-green-400' : ''"></i>
-        </button>
+            <span class="text-slate-300 dark:text-gray-300 group-hover:text-white transition">
+                Usuarios
+            </span>
+        </span>
+        <i class="ri-arrow-right-s-line text-slate-400 dark:text-gray-400 transition-transform duration-200"
+           :class="openMenu === 'usuarios' ? 'rotate-90 text-green-400' : ''"></i>
+    </button>
 
-        <div x-show="openMenu === 'usuarios'" x-collapse 
-             class="ml-9 mt-1 space-y-0.5 border-l-2 border-slate-700/50 dark:border-gray-700/50 pl-3">
+    <div x-show="openMenu === 'usuarios'" x-collapse
+         class="ml-9 mt-1 space-y-0.5 border-l-2 border-slate-700/50 dark:border-gray-700/50 pl-3">
 
-          <a href="{{ route('dashboard-crear-usuario') }}" 
-             class="block px-3 py-2 text-sm rounded-lg transition
-                    {{ request()->routeIs('dashboard-crear-usuario') ? 'text-white bg-slate-800/50 dark:bg-gray-800/50 font-medium' : 'text-slate-400 dark:text-gray-400 hover:text-white hover:bg-slate-800/30 dark:hover:bg-gray-800/30' }}">
+        <a href="{{ route('dashboard-crear-usuario') }}"
+           class="block px-3 py-2 text-sm rounded-lg transition
+                  {{ request()->routeIs('dashboard-crear-usuario') 
+                        ? 'text-white bg-slate-800/50 dark:bg-gray-800/50 font-medium' 
+                        : 'text-slate-400 dark:text-gray-400 hover:text-white hover:bg-slate-800/30 dark:hover:bg-gray-800/30' }}">
             Crear Usuario
-          </a>
+        </a>
 
-          <a href="{{ route('roles') }}" 
-             class="block px-3 py-2 text-sm rounded-lg transition
-                    {{ request()->routeIs('roles') ? 'text-white bg-slate-800/50 dark:bg-gray-800/50 font-medium' : 'text-slate-400 dark:text-gray-400 hover:text-white hover:bg-slate-800/30 dark:hover:bg-gray-800/30' }}">
+        <a href="{{ route('roles') }}"
+           class="block px-3 py-2 text-sm rounded-lg transition
+                  {{ request()->routeIs('roles') 
+                        ? 'text-white bg-slate-800/50 dark:bg-gray-800/50 font-medium' 
+                        : 'text-slate-400 dark:text-gray-400 hover:text-white hover:bg-slate-800/30 dark:hover:bg-gray-800/30' }}">
             Roles y Permisos
-          </a>
-        </div>
-      </div>
-      @endrole
+        </a>
+    </div>
 
+    {{-- Link simple a Colaboradores (mismo nivel que el botón de Usuarios) --}}
+    <a href="{{ route('colaboradores') }}"
+       class="mt-1 flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg 
+              text-slate-300 dark:text-gray-300 
+              hover:text-white hover:bg-slate-800/50 dark:hover:bg-gray-800/50
+              {{ request()->routeIs('colaboradores') 
+                    ? 'bg-slate-800/50 dark:bg-gray-800/50 font-medium' 
+                    : '' }}">
+        <i class="ri-group-line text-slate-400 dark:text-gray-400"></i>
+        <span>Colaboradores</span>
+    </a>
+</div>
+@endrole
+
+     
     </nav>
 
     <!-- Footer fijo (siempre visible) -->

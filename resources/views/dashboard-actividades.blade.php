@@ -216,6 +216,18 @@ textarea {
 @section('content')
 @php
     $hoy = date('Y-m-d');
+    $user = auth()->user();
+    // Definimos los roles de alto nivel que pueden ver todas las áreas
+    $esAltoNivel = $user->hasRole(['Administrador', 'Presidente Municipal', 'Síndico Procurador', 'Regidor']);
+    
+    // Lista completa de áreas del sistema
+    $todasLasAreas = [
+        'Agua potable', 'Bienestar Social y Desarrollo Rural', 'Catastro', 
+        'Contraloria Interna', 'Deportes', 'DIF', 'Informática', 'Limpia', 
+        'Obras Publicas', 'Oficialia Mayor', 'Presidencia', 'Recursos Humanos', 
+        'Registro Civil', 'Regidores', 'Reglamentos', 'Secretaria General', 
+        'Seguridad Publica', 'Sindicatura', 'Tesoreria', 'Transito'
+    ];
 @endphp
 
 <div class="shadow-2xl rounded-3xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 p-8 mx-auto max-w-[80vw]">
@@ -268,32 +280,38 @@ textarea {
                 </div>
             </div>
 
+            {{-- SELECT DE ÁREA CON LÓGICA DE ROLES --}}
             <div>
                 <label for="tipo_area" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Área</label>
-                <select name="tipo_area" id="tipo_area"
-                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400">
+                
+                {{-- Si NO es alto nivel, mostramos input hidden para enviar el valor correcto aunque el select esté disabled --}}
+                @if(!$esAltoNivel)
+                    <input type="hidden" name="tipo_area" value="{{ $user->area }}">
+                @endif
+
+                <select name="tipo_area" id="tipo_area" required
+                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400 disabled:bg-gray-100 disabled:text-gray-500 dark:disabled:bg-gray-800"
+                        @if(!$esAltoNivel) disabled @endif>
+                    
                     <option value="">Seleccionar área</option>
-                    <option value="Agua potable">Agua potable</option>
-                    <option value="Bienestar Social y Desarrollo Rural">Bienestar Social y Desarrollo Rural</option>
-                    <option value="Catastro">Catastro</option>
-                    <option value="Contraloria Interna">Contraloria Interna</option>
-                    <option value="Deportes">Deportes</option>
-                    <option value="DIF">DIF</option>
-                    <option value="Informática">Informática</option>
-                    <option value="Limpia">Limpia</option>
-                    <option value="Obras Publicas">Obras Publicas</option>
-                    <option value="Oficialia Mayor">Oficialia Mayor</option>
-                    <option value="Presidencia">Presidencia</option>
-                    <option value="Recursos Humanos">Recursos Humanos</option>
-                    <option value="Registro Civil">Registro Civil</option>
-                    <option value="Regidores">Regidores</option>
-                    <option value="Reglamentos">Reglamentos</option>
-                    <option value="Secretaria General">Secretaria General</option>
-                    <option value="Seguridad Publica">Seguridad Publica</option>
-                    <option value="Sindicatura">Sindicatura</option>
-                    <option value="Tesoreria">Tesoreria</option>
-                    <option value="Transito">Transito</option>
+
+                    @foreach($todasLasAreas as $area)
+                        {{-- Solo mostramos la opción si es alto nivel O si coincide con el área del usuario --}}
+                        @if($esAltoNivel || $user->area === $area)
+                            <option value="{{ $area }}" 
+                                {{ (old('tipo_area') == $area || (!$esAltoNivel && $user->area === $area)) ? 'selected' : '' }}>
+                                {{ $area }}
+                            </option>
+                        @endif
+                    @endforeach
                 </select>
+
+                @if(!$esAltoNivel)
+                    <p class="text-xs text-blue-600 dark:text-blue-400 mt-1">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        Tu área está preseleccionada automáticamente: <strong>{{ $user->area }}</strong>
+                    </p>
+                @endif
             </div>
 
             <div>

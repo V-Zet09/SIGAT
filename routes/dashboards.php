@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
@@ -8,9 +9,10 @@ use App\Http\Controllers\{
     RegidorController,
     DirectorDeAreaController,
     AuxiliarDeAreaController,
-    HomeController
-    
+    HomeController,
+    ColaboradorController
 };
+
 Route::get('/', function () {
     if (Auth::check()) {
         $user = Auth::user();
@@ -29,10 +31,9 @@ Route::get('/', function () {
             return redirect()->route('dashboard-auxiliar-de-area');
         }
     }
-    
+
     return redirect()->route('login');
 })->name('home');
-
 
 Route::middleware(['auth', 'prevent-back-history'])->group(function () {
 
@@ -40,7 +41,7 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
     Route::get('/dashboard-administrador', [AdministradorController::class, 'index'])
         ->middleware('role:Administrador')
         ->name('dashboard-administrador');
-    
+
     Route::get('/api/calendario-eventos', [AdministradorController::class, 'getCalendarioEventos'])
         ->middleware('role:Administrador')
         ->name('api.calendario.eventos');
@@ -64,17 +65,22 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
     Route::get('/dashboard-director-de-area', [DirectorDeAreaController::class, 'index'])
         ->middleware('can:acceder dashboard director')
         ->name('dashboard-director-de-area');
-    
+
+    // ✅ APROBAR / RECHAZAR (solo auth, permisos dentro del controlador)
     Route::put('/actividades/{id}/aprobar', [DirectorDeAreaController::class, 'aprobar'])
-        ->middleware('can:acceder dashboard director')
         ->name('actividades.aprobar');
-    
+
     Route::put('/actividades/{id}/rechazar', [DirectorDeAreaController::class, 'rechazar'])
-        ->middleware('can:acceder dashboard director')
         ->name('actividades.rechazar');
 
-    // ✅ DASHBOARD AUXILIAR DE ÁREA (CONSISTENTE CON LOS DEMÁS)
+    // DASHBOARD AUXILIAR DE ÁREA
     Route::get('/dashboard-auxiliar-de-area', [AuxiliarDeAreaController::class, 'index'])
         ->middleware('can:acceder dashboard auxiliar')
         ->name('dashboard-auxiliar-de-area');
+
+
+Route::get('/colaboradores', [ColaboradorController::class, 'index'])
+    ->name('colaboradores')
+    ->middleware(['auth']); // o los middleware que uses
+
 });

@@ -9,23 +9,26 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('notifications', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // A quién va dirigida
-            $table->string('type'); // Tipo: actividad, informe, sistema
-            $table->string('title'); // Título corto
-            $table->text('message'); // Mensaje completo
-            $table->string('icon')->nullable(); // Icono remixicon
-            $table->string('color')->default('blue'); // Color: blue, green, red, yellow
-            $table->string('link')->nullable(); // URL a donde redirige
-            $table->boolean('read')->default(false); // Leída o no
-            $table->timestamp('read_at')->nullable(); // Cuándo se leyó
-            $table->json('data')->nullable(); // Datos adicionales en JSON
-            $table->timestamps();
+
+            $table->uuid('id')->primary();
+
+
+            $table->morphs('notifiable'); 
+
+            $table->string('type'); // Tipo de notificación (clase PHP)
             
-            // Índices para mejorar rendimiento
-            $table->index('user_id');
-            $table->index('read');
-            $table->index('created_at');
+            // --- TUS CAMPOS PERSONALIZADOS (Los mantuve todos) ---
+            $table->string('custom_type')->nullable(); 
+            $table->string('title')->nullable();
+            $table->text('message')->nullable();
+            $table->string('icon')->nullable();
+            $table->string('color')->default('blue');
+            $table->string('link')->nullable();
+            // -----------------------------------------------------
+
+            $table->timestamp('read_at')->nullable();
+            $table->json('data')->nullable(); // Laravel guarda aquí la info por defecto
+            $table->timestamps();
         });
     }
 

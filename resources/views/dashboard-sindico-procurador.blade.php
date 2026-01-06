@@ -4,17 +4,14 @@
 
 @section('content')
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
-
-    <!-- Header del Síndico Procurador - Azul Institucional -->
     <div class="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-700 dark:to-indigo-700 rounded-2xl shadow-xl p-6 mb-6">
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-4">
-                <!-- Avatar del Síndico -->
                 <div class="relative">
                     <div class="w-20 h-20 rounded-full bg-white dark:bg-gray-800 p-1 shadow-lg">
                         @if(Auth::user()->avatar)
-                           <img src="{{ asset('storage/avatars/' . Auth::user()->avatar) }}" 
-                                 alt="{{ Auth::user()->name }}" 
+                           <img src="{{ asset('storage/avatars/' . Auth::user()->avatar) }}"
+                                 alt="{{ Auth::user()->name }}"
                                  class="w-full h-full rounded-full object-cover">
                         @else
                             <div class="w-full h-full rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center">
@@ -26,8 +23,7 @@
                     </div>
                     <span class="absolute bottom-0 right-0 w-6 h-6 bg-green-500 border-4 border-white dark:border-gray-800 rounded-full"></span>
                 </div>
-                
-                <!-- Información del Síndico -->
+
                 <div>
                     <h1 class="text-3xl font-bold text-white mb-1">
                         ¡Bienvenido, {{ Auth::user()->name ?? 'Síndico' }}!
@@ -41,8 +37,7 @@
                     </p>
                 </div>
             </div>
-            
-            <!-- Acceso rápido -->
+
             <div class="hidden md:flex gap-3">
                 <a href="{{ route('actividades.registradas') }}" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg hover:shadow-xl">
                     <i class="fas fa-clipboard-check"></i>
@@ -52,9 +47,7 @@
         </div>
     </div>
 
-    <!-- Estadísticas principales -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <!-- Total Actividades -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
@@ -77,7 +70,6 @@
             <div class="bg-gradient-to-r from-blue-500 to-blue-600 h-1"></div>
         </div>
 
-        <!-- Por Aprobar -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
@@ -99,7 +91,6 @@
             <div class="bg-gradient-to-r from-amber-500 to-amber-600 h-1"></div>
         </div>
 
-        <!-- Aprobadas por Síndico -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
@@ -122,7 +113,6 @@
             <div class="bg-gradient-to-r from-green-500 to-green-600 h-1"></div>
         </div>
 
-        <!-- Rechazadas -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
@@ -145,9 +135,7 @@
             <div class="bg-gradient-to-r from-red-500 to-red-600 h-1"></div>
         </div>
     </div>
-    <!-- ============================================ -->
-    <!-- SECCIÓN: GESTIÓN DE ACTIVIDADES (SÍNDICO) -->
-    <!-- ============================================ -->
+
     <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border-2 border-blue-200 dark:border-blue-800 mb-6">
         <div class="flex items-center justify-between mb-5">
             <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100 flex items-center">
@@ -161,7 +149,7 @@
                 </span>
             @endif
         </div>
-        
+
         <div class="bg-gray-50 dark:bg-gray-900/50 rounded-xl px-4 py-3 overflow-x-auto border border-gray-200 dark:border-gray-800 max-h-[600px] custom-scrollbar">
             <table class="min-w-full text-sm">
                 <thead class="sticky top-0 bg-gray-50 dark:bg-gray-900/50 z-10">
@@ -218,18 +206,15 @@
                             </td>
                             <td class="py-3 px-4">
                                 <div class="flex items-center justify-center gap-2">
-                                    <!-- Ver detalles -->
                                     <button onclick="verDetalles({{ $actividad->id }})" class="text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 p-2 rounded-lg transition-colors" title="Ver detalles">
                                         <i class="fas fa-eye"></i>
                                     </button>
-                                    
+
                                     @if($actividad->estado !== 'Aprobada' && $actividad->estado !== 'Rechazada')
-                                        <!-- Aprobar -->
                                         <button onclick="abrirModalAprobar({{ $actividad->id }}, '{{ addslashes($actividad->titulo) }}')" class="text-green-600 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/40 p-2 rounded-lg transition-colors" title="Aprobar">
                                             <i class="fas fa-check"></i>
                                         </button>
-                                        
-                                        <!-- Rechazar -->
+
                                         <button onclick="abrirModalRechazar({{ $actividad->id }}, '{{ addslashes($actividad->titulo) }}')" class="text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 p-2 rounded-lg transition-colors" title="Rechazar">
                                             <i class="fas fa-times"></i>
                                         </button>
@@ -259,7 +244,6 @@
         </div>
     </div>
 
-    <!-- MODALES PARA APROBAR/RECHAZAR -->
     <div id="modalAprobar" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 animate-fade-in">
             <div class="flex items-center justify-between mb-4">
@@ -271,26 +255,26 @@
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
-            
+
             <p class="text-gray-600 dark:text-gray-400 mb-4">
                 ¿Estás seguro de aprobar la siguiente actividad?
             </p>
-            
+
             <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4 mb-4">
                 <p class="text-sm font-semibold text-green-900 dark:text-green-100" id="tituloActividadAprobar"></p>
             </div>
-            
+
             <form id="formAprobar" method="POST" action="">
                 @csrf
                 @method('PUT')
-                
+
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Observaciones (opcional)
                     </label>
                     <textarea name="observaciones" rows="3" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-gray-100" placeholder="Comentarios adicionales..."></textarea>
                 </div>
-                
+
                 <div class="flex gap-3">
                     <button type="button" onclick="cerrarModalAprobar()" class="flex-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 py-2 px-4 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
                         Cancelar
@@ -315,26 +299,26 @@
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
-            
+
             <p class="text-gray-600 dark:text-gray-400 mb-4">
                 ¿Estás seguro de rechazar la siguiente actividad?
             </p>
-            
+
             <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-4">
                 <p class="text-sm font-semibold text-red-900 dark:text-red-100" id="tituloActividadRechazar"></p>
             </div>
-            
+
             <form id="formRechazar" method="POST" action="">
                 @csrf
                 @method('PUT')
-                
+
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Motivo del rechazo <span class="text-red-500">*</span>
                     </label>
                     <textarea name="motivo_rechazo" rows="4" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-100" placeholder="Explica por qué rechazas esta actividad..."></textarea>
                 </div>
-                
+
                 <div class="flex gap-3">
                     <button type="button" onclick="cerrarModalRechazar()" class="flex-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 py-2 px-4 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
                         Cancelar
@@ -348,10 +332,7 @@
         </div>
     </div>
 
-    <!-- Sección principal: Acciones rápidas + Resumen de Revisión -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        
-        <!-- Acciones rápidas -->
         <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
             <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
                 <i class="fas fa-bolt mr-2 text-yellow-500"></i>
@@ -369,8 +350,7 @@
                 </a>
             </div>
         </div>
-        
-        <!-- Resumen de Revisión Legal -->
+
         <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
             <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
                 <i class="fas fa-scale-balanced mr-2 text-blue-600"></i>
@@ -414,9 +394,7 @@
         </div>
     </div>
 
-    <!-- Gráficas -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <!-- Gráfica de Aprobaciones por Área -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
             <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
                 <i class="fas fa-chart-pie mr-2 text-blue-600"></i>
@@ -425,7 +403,6 @@
             <div id="chart-aprobaciones-area" class="h-80"></div>
         </div>
 
-        <!-- Gráfica de Tendencia de Revisiones -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
             <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
                 <i class="fas fa-chart-line mr-2 text-indigo-600"></i>
@@ -435,9 +412,7 @@
         </div>
     </div>
 
-    <!-- Tablas de Actividades -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <!-- Actividades Pendientes de Revisión -->
         <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
             <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
                 <i class="fas fa-gavel mr-2 text-amber-600 dark:text-amber-400"></i>Pendientes de Revisión Legal
@@ -484,7 +459,6 @@
             @endif
         </div>
 
-        <!-- Últimas Actividades Aprobadas -->
         <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
             <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
                 <i class="fas fa-check-circle mr-2 text-green-600 dark:text-green-400"></i>Últimas Aprobadas
@@ -529,7 +503,6 @@
         </div>
     </div>
 
-    <!-- Informes Generados -->
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
         <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
             <i class="fas fa-file-alt mr-2 text-cyan-600"></i>
@@ -556,7 +529,6 @@
 </div>
 
 <style>
-    /* Scrollbar personalizado */
     .custom-scrollbar::-webkit-scrollbar {
         width: 8px;
         height: 8px;
@@ -584,9 +556,6 @@
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // ===================================
-    // GRÁFICA: Aprobaciones por Área
-    // ===================================
     const aprobacionesPorArea = @json($aprobacionesPorArea);
     const areas = Object.keys(aprobacionesPorArea);
     const cantidades = Object.values(aprobacionesPorArea);
@@ -631,9 +600,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const chartArea = new ApexCharts(document.querySelector("#chart-aprobaciones-area"), optionsArea);
     chartArea.render();
 
-    // ===================================
-    // GRÁFICA: Tendencia de Revisiones
-    // ===================================
     const tendenciaRevisiones = @json($tendenciaRevisiones);
     const meses = Object.keys(tendenciaRevisiones);
     const aprobadas = meses.map(mes => tendenciaRevisiones[mes].aprobadas || 0);
@@ -702,7 +668,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const chartTendencia = new ApexCharts(document.querySelector("#chart-tendencia-revisiones"), optionsTendencia);
     chartTendencia.render();
 });
-// FUNCIONES PARA MODALES DE APROBAR/RECHAZAR
+
 function abrirModalAprobar(id, titulo) {
     document.getElementById('tituloActividadAprobar').textContent = titulo;
     document.getElementById('formAprobar').action = `/actividades/${id}/aprobar`;
@@ -726,6 +692,5 @@ function cerrarModalRechazar() {
 function verDetalles(id) {
     window.location.href = `/actividades/${id}`;
 }
-
 </script>
 @endsection

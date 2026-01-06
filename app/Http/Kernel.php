@@ -9,8 +9,6 @@ class Kernel extends HttpKernel
     /**
      * The application's global HTTP middleware stack.
      *
-     * These middleware are run during every request to your application.
-     *
      * @var array<int, class-string|string>
      */
     protected $middleware = [
@@ -38,6 +36,9 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \App\Http\Middleware\Localization::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+
+            // 👉 Middleware para actualizar última actividad
+            \App\Http\Middleware\UpdateLastActivity::class,
         ],
 
         'api' => [
@@ -49,12 +50,10 @@ class Kernel extends HttpKernel
 
     /**
      * The application's middleware aliases.
-     * 
-     * ✅ CAMBIO: $routeMiddleware → $middlewareAliases (Laravel 11+)
      *
      * @var array<string, class-string|string>
      */
-    protected $middlewareAliases = [  // ✅ CAMBIO AQUÍ
+    protected $middlewareAliases = [
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
@@ -67,5 +66,7 @@ class Kernel extends HttpKernel
         'prevent-back-history' => \App\Http\Middleware\PreventBackHistory::class,
         'prevent.back' => \App\Http\Middleware\PreventBackHistory::class,
         'role' => \App\Http\Middleware\CheckRole::class,
+
+        'last.activity' => \App\Http\Middleware\UpdateLastActivity::class,
     ];
 }

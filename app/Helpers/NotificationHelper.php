@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\Notification;
 use App\Models\User;
+use Illuminate\Support\Str; // Necesario para generar UUID
 
 class NotificationHelper
 {
@@ -12,15 +13,31 @@ class NotificationHelper
      */
     public static function send($userId, $type, $title, $message, $options = [])
     {
-        return Notification::create([
-            'user_id' => $userId,
-            'type' => $type,
-            'title' => $title,
+        // Generamos los datos que van dentro del JSON 'data'
+        $dataContent = [
+            'title'   => $title,
             'message' => $message,
-            'icon' => $options['icon'] ?? self::getDefaultIcon($type),
-            'color' => $options['color'] ?? self::getDefaultColor($type),
-            'link' => $options['link'] ?? null,
-            'data' => $options['data'] ?? null,
+            'icon'    => $options['icon'] ?? self::getDefaultIcon($type),
+            'color'   => $options['color'] ?? self::getDefaultColor($type),
+            'link'    => $options['link'] ?? null,
+            'extra'   => $options['data'] ?? null // Datos adicionales opcionales
+        ];
+
+        return Notification::create([
+            'id'              => (string) Str::uuid(), // Generar UUID manual
+            'notifiable_type' => 'App\Models\User',     // Polimorfismo: Modelo de Usuario
+            'notifiable_id'   => $userId,               // ID del usuario
+            'type'            => $type,                 // Tu tipo personalizado (ej: 'actividad')
+            'data'            => $dataContent,          // Todo el contenido va en JSON ahora
+            'read_at'         => null,
+            
+            // Si dejaste estas columnas en la migración para compatibilidad,
+            // puedes llenarlas también (opcional pero recomendado si tu vista las usa):
+            'title'           => $title,
+            'message'         => $message,
+            'icon'            => $options['icon'] ?? self::getDefaultIcon($type),
+            'color'           => $options['color'] ?? self::getDefaultColor($type),
+            'link'            => $options['link'] ?? null,
         ]);
     }
 
@@ -50,9 +67,9 @@ class NotificationHelper
     {
         $icons = [
             'actividad' => 'ri-calendar-check-line',
-            'informe' => 'ri-file-list-line',
-            'sistema' => 'ri-settings-line',
-            'usuario' => 'ri-user-line',
+            'informe'   => 'ri-file-list-line',
+            'sistema'   => 'ri-settings-line',
+            'usuario'   => 'ri-user-line',
         ];
 
         return $icons[$type] ?? 'ri-notification-line';
@@ -65,9 +82,9 @@ class NotificationHelper
     {
         $colors = [
             'actividad' => 'blue',
-            'informe' => 'green',
-            'sistema' => 'yellow',
-            'usuario' => 'purple',
+            'informe'   => 'green',
+            'sistema'   => 'yellow',
+            'usuario'   => 'purple',
         ];
 
         return $colors[$type] ?? 'gray';

@@ -4,17 +4,14 @@
 
 @section('content')
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
-
-    <!-- Header del Regidor - Púrpura Institucional -->
     <div class="bg-gradient-to-r from-purple-600 to-violet-600 dark:from-purple-700 dark:to-violet-700 rounded-2xl shadow-xl p-6 mb-6">
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-4">
-                <!-- Avatar del Regidor -->
                 <div class="relative">
                     <div class="w-20 h-20 rounded-full bg-white dark:bg-gray-800 p-1 shadow-lg">
                         @if(Auth::user()->avatar)
-                           <img src="{{ asset('storage/avatars/' . Auth::user()->avatar) }}" 
-                                 alt="{{ Auth::user()->name }}" 
+                           <img src="{{ asset('storage/avatars/' . Auth::user()->avatar) }}"
+                                 alt="{{ Auth::user()->name }}"
                                  class="w-full h-full rounded-full object-cover">
                         @else
                             <div class="w-full h-full rounded-full bg-gradient-to-br from-purple-400 to-violet-500 flex items-center justify-center">
@@ -26,8 +23,7 @@
                     </div>
                     <span class="absolute bottom-0 right-0 w-6 h-6 bg-green-500 border-4 border-white dark:border-gray-800 rounded-full"></span>
                 </div>
-                
-                <!-- Información del Regidor -->
+
                 <div>
                     <h1 class="text-3xl font-bold text-white mb-1">
                         ¡Bienvenido, {{ Auth::user()->name ?? 'Regidor' }}!
@@ -41,8 +37,7 @@
                     </p>
                 </div>
             </div>
-            
-            <!-- Acceso rápido -->
+
             <div class="hidden md:flex gap-3">
                 <a href="{{ route('actividades.create') }}" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg hover:shadow-xl">
                     <i class="fas fa-plus-circle"></i>
@@ -52,9 +47,7 @@
         </div>
     </div>
 
-    <!-- Estadísticas principales -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <!-- Total Actividades -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
@@ -76,7 +69,6 @@
             <div class="bg-gradient-to-r from-purple-500 to-purple-600 h-1"></div>
         </div>
 
-        <!-- Mis Actividades -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
@@ -98,7 +90,6 @@
             <div class="bg-gradient-to-r from-violet-500 to-violet-600 h-1"></div>
         </div>
 
-        <!-- Actividades Aprobadas -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
@@ -120,7 +111,6 @@
             <div class="bg-gradient-to-r from-green-500 to-green-600 h-1"></div>
         </div>
 
-        <!-- Informes Disponibles -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
@@ -143,10 +133,7 @@
         </div>
     </div>
 
-    <!-- Sección principal: Acciones rápidas + Resumen -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        
-        <!-- Acciones rápidas -->
         <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
             <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
                 <i class="fas fa-bolt mr-2 text-yellow-500"></i>
@@ -164,8 +151,7 @@
                 </a>
             </div>
         </div>
-        
-        <!-- Resumen Personal -->
+
         <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
             <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
                 <i class="fas fa-chart-pie mr-2 text-purple-600"></i>
@@ -209,9 +195,7 @@
         </div>
     </div>
 
-    <!-- Gráficas -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <!-- Gráfica de Actividades por Área -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
             <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
                 <i class="fas fa-chart-bar mr-2 text-purple-600"></i>
@@ -220,7 +204,6 @@
             <div id="chart-actividades-area" class="h-80"></div>
         </div>
 
-        <!-- Gráfica de Tendencia -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
             <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
                 <i class="fas fa-chart-line mr-2 text-violet-600"></i>
@@ -230,9 +213,7 @@
         </div>
     </div>
 
-    <!-- Tablas de Actividades -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <!-- Mis Últimas Actividades -->
         <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
             <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
                 <i class="fas fa-user-edit mr-2 text-purple-600 dark:text-purple-400"></i>Mis Últimas Actividades
@@ -293,7 +274,6 @@
             @endif
         </div>
 
-        <!-- Actividades Recientes del Municipio -->
         <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
             <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
                 <i class="fas fa-building mr-2 text-cyan-600 dark:text-cyan-400"></i>Actividades Recientes del Municipio
@@ -338,7 +318,6 @@
         </div>
     </div>
 
-    <!-- Informes Disponibles -->
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
         <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
             <i class="fas fa-file-invoice mr-2 text-cyan-600"></i>
@@ -365,7 +344,6 @@
 </div>
 
 <style>
-    /* Scrollbar personalizado */
     .custom-scrollbar::-webkit-scrollbar {
         width: 8px;
         height: 8px;
@@ -393,9 +371,6 @@
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // ===================================
-    // GRÁFICA: Actividades por Área
-    // ===================================
     const actividadesPorArea = @json($actividadesPorArea);
     const areas = Object.keys(actividadesPorArea);
     const cantidades = Object.values(actividadesPorArea);
@@ -449,9 +424,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const chartArea = new ApexCharts(document.querySelector("#chart-actividades-area"), optionsArea);
     chartArea.render();
 
-    // ===================================
-    // GRÁFICA: Tendencia
-    // ===================================
     const tendencia = @json($tendenciaActividades);
     const meses = Object.keys(tendencia);
     const valores = Object.values(tendencia);

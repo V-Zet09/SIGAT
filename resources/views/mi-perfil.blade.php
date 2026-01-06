@@ -404,9 +404,17 @@
                         </span>
                     </div>
                     
-                    @if($user->login_history && count($user->login_history) > 0)
+                    @php
+                        $loginHistory = is_string($user->login_history) 
+                            ? json_decode($user->login_history, true) 
+                            : $user->login_history;
+                        $loginHistory = $loginHistory ?? [];
+                    @endphp
+                    
+                    @if(is_array($loginHistory) && count($loginHistory) > 0)
                         <div class="space-y-3 max-h-96 overflow-y-auto">
-                            @foreach($user->login_history as $index => $login)
+                            @foreach($loginHistory as $index => $login)
+
                                 <div class="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
                                     <div class="flex-shrink-0">
                                         @if($index === 0)
@@ -489,7 +497,7 @@
                                 <span class="text-sm text-gray-600 dark:text-gray-400">Cuenta creada:</span>
                             </div>
                             <span class="text-sm font-medium text-gray-900 dark:text-gray-100">
-                                {{ $user->created_at->format('d/m/Y') }}
+                                {{ $user->created_at ? \Carbon\Carbon::parse($user->created_at)->format('d/m/Y') : 'N/A' }}
                             </span>
                         </div>
                         
@@ -499,7 +507,7 @@
                                 <span class="text-sm text-gray-600 dark:text-gray-400">Último inicio de sesión:</span>
                             </div>
                             <span class="text-sm font-medium text-gray-900 dark:text-gray-100">
-                                {{ $user->last_login_at ? $user->last_login_at->format('d/m/Y H:i') : 'N/A' }}
+                                {{ $user->last_login_at ? \Carbon\Carbon::parse($user->last_login_at)->format('d/m/Y H:i') : 'N/A' }}
                             </span>
                         </div>
                         
