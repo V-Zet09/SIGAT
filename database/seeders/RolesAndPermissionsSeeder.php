@@ -10,24 +10,25 @@ class RolesAndPermissionsSeeder extends Seeder
 {
     public function run(): void
     {
-        $this->call(RolesAndPermissionsSeeder::class);
-        // Reset cache
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // Crear permisos
-        Permission::create(['name' => 'ver usuarios']);
-        Permission::create(['name' => 'crear usuarios']);
-        Permission::create(['name' => 'editar usuarios']);
-        Permission::create(['name' => 'eliminar usuarios']);
+        $permisos = [
+            'ver usuarios',
+            'crear usuarios',
+            'editar usuarios',
+            'eliminar usuarios',
+        ];
 
-        // Crear roles
-        $admin = Role::create(['name' => 'admin']);
-        $editor = Role::create(['name' => 'editor']);
-        $viewer = Role::create(['name' => 'viewer']);
+        foreach ($permisos as $p) {
+            Permission::firstOrCreate(['name' => $p]);
+        }
 
-        // Asignar permisos a roles
-        $admin->givePermissionTo(Permission::all());
-        $editor->givePermissionTo(['ver usuarios', 'editar usuarios']);
-        $viewer->givePermissionTo(['ver usuarios']);
+        $admin  = Role::firstOrCreate(['name' => 'admin']);
+        $editor = Role::firstOrCreate(['name' => 'editor']);
+        $viewer = Role::firstOrCreate(['name' => 'viewer']);
+
+        $admin->syncPermissions(Permission::all());
+        $editor->syncPermissions(['ver usuarios', 'editar usuarios']);
+        $viewer->syncPermissions(['ver usuarios']);
     }
 }

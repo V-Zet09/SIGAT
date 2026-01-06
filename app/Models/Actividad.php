@@ -24,7 +24,7 @@ class Actividad extends Model
         'tipo_presupuesto',
         'numero',
         'fase',
-        'fotos', // Solo este campo
+        'fotos', 
         'creado_por_id',
         'responsable_id',
         'estado',

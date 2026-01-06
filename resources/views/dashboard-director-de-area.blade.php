@@ -4,17 +4,14 @@
 
 @section('content')
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
-
-    <!-- Header del Director de Área - Naranja/Ámbar Institucional -->
     <div class="bg-gradient-to-r from-orange-600 to-amber-600 dark:from-orange-700 dark:to-amber-700 rounded-2xl shadow-xl p-6 mb-6">
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-4">
-                <!-- Avatar del Director -->
                 <div class="relative">
                     <div class="w-20 h-20 rounded-full bg-white dark:bg-gray-800 p-1 shadow-lg">
                         @if(Auth::user()->avatar)
-                           <img src="{{ asset('storage/avatars/' . Auth::user()->avatar) }}" 
-                                 alt="{{ Auth::user()->name }}" 
+                           <img src="{{ asset('storage/avatars/' . Auth::user()->avatar) }}"
+                                 alt="{{ Auth::user()->name }}"
                                  class="w-full h-full rounded-full object-cover">
                         @else
                             <div class="w-full h-full rounded-full bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center">
@@ -26,8 +23,7 @@
                     </div>
                     <span class="absolute bottom-0 right-0 w-6 h-6 bg-green-500 border-4 border-white dark:border-gray-800 rounded-full"></span>
                 </div>
-                
-                <!-- Información del Director -->
+
                 <div>
                     <h1 class="text-3xl font-bold text-white mb-1">
                         ¡Bienvenido, {{ Auth::user()->name ?? 'Director' }}!
@@ -50,10 +46,9 @@
                     </p>
                 </div>
             </div>
-            
-            <!-- Acceso rápido -->
+
             <div class="hidden md:flex gap-3">
-                 <a href="{{ route('actividades.create') }}"  class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg hover:shadow-xl">
+                 <a href="{{ route('actividades.create') }}" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg hover:shadow-xl">
                     <i class="fas fa-plus-circle"></i>
                     Nueva Actividad
                 </a>
@@ -61,9 +56,7 @@
         </div>
     </div>
 
-    <!-- Estadísticas principales -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <!-- Total Actividades -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
@@ -96,7 +89,6 @@
             <div class="bg-gradient-to-r from-orange-500 to-orange-600 h-1"></div>
         </div>
 
-        <!-- Creadas por mí -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
@@ -118,7 +110,6 @@
             <div class="bg-gradient-to-r from-amber-500 to-amber-600 h-1"></div>
         </div>
 
-        <!-- Pendientes -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
@@ -140,7 +131,6 @@
             <div class="bg-gradient-to-r from-yellow-500 to-yellow-600 h-1"></div>
         </div>
 
-        <!-- Aprobadas -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
@@ -170,41 +160,34 @@
         </div>
     </div>
 
-    <!-- Sección principal: Acciones rápidas + Resumen del Área -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        
-<!-- Acciones rápidas -->
-<div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
-    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-        <i class="fas fa-bolt mr-2 text-yellow-500"></i>
-        Acciones rápidas
-    </h3>
-    <div class="grid grid-cols-1 gap-3">
-        {{-- Botón: Registrar Nueva Actividad --}}
-        @can('crear actividades')
-        <a href="{{ route('actividades.create') }}" 
-           class="bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white text-center py-4 text-base font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
-            <i class="fas fa-plus-circle mr-2"></i>Registrar Nueva Actividad
-        </a>
-        @endcan
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
+            <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
+                <i class="fas fa-bolt mr-2 text-yellow-500"></i>
+                Acciones rápidas
+            </h3>
+            <div class="grid grid-cols-1 gap-3">
+                @can('crear actividades')
+                <a href="{{ route('actividades.create') }}"
+                   class="bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white text-center py-4 text-base font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+                    <i class="fas fa-plus-circle mr-2"></i>Registrar Nueva Actividad
+                </a>
+                @endcan
 
-        {{-- Botón: Ver Mis Actividades --}}
-        <a href="{{ route('actividades.registradas') }}" 
-           class="bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white text-center py-4 text-base font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
-            <i class="fas fa-edit mr-2"></i>Ver Mis Actividades
-        </a>
+                <a href="{{ route('actividades.registradas') }}"
+                   class="bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white text-center py-4 text-base font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+                    <i class="fas fa-edit mr-2"></i>Ver Mis Actividades
+                </a>
 
-        {{-- Botón: Ver Informes --}}
-        @can('generar informes')
-        <a href="{{ route('informes-generados') }}" 
-           class="bg-gradient-to-r from-cyan-600 to-cyan-700 hover:from-cyan-700 hover:to-cyan-800 text-white text-center py-4 text-base font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
-            <i class="fas fa-file-alt mr-2"></i>Ver Informes
-        </a>
-        @endcan
-    </div>
-</div>
+                @can('generar informes')
+                <a href="{{ route('informes-generados') }}"
+                   class="bg-gradient-to-r from-cyan-600 to-cyan-700 hover:from-cyan-700 hover:to-cyan-800 text-white text-center py-4 text-base font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+                    <i class="fas fa-file-alt mr-2"></i>Ver Informes
+                </a>
+                @endcan
+            </div>
+        </div>
 
-        <!-- Resumen del Área -->
         <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
             <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
                 <i class="fas fa-chart-pie mr-2 text-orange-600"></i>
@@ -269,9 +252,6 @@
         </div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- SECCIÓN PRINCIPAL: GESTIÓN DE ACTIVIDADES -->
-    <!-- ============================================ -->
     <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border-2 border-orange-200 dark:border-orange-800 mb-6">
         <div class="flex items-center justify-between mb-5">
             <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100 flex items-center">
@@ -289,7 +269,7 @@
                 </span>
             @endif
         </div>
-        
+
         <div class="bg-gray-50 dark:bg-gray-900/50 rounded-xl px-4 py-3 overflow-x-auto border border-gray-200 dark:border-gray-800 max-h-[600px] custom-scrollbar">
             <table class="min-w-full text-sm">
                 <thead class="sticky top-0 bg-gray-50 dark:bg-gray-900/50 z-10">
@@ -350,18 +330,15 @@
                             </td>
                             <td class="py-3 px-4">
                                 <div class="flex items-center justify-center gap-2">
-                                    <!-- Ver detalles -->
                                     <button onclick="verDetalles({{ $actividad->id }})" class="text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 p-2 rounded-lg transition-colors" title="Ver detalles">
                                         <i class="fas fa-eye"></i>
                                     </button>
-                                    
+
                                     @if($actividad->estado !== 'Aprobada' && $actividad->estado !== 'Rechazada')
-                                        <!-- Aprobar -->
                                         <button onclick="abrirModalAprobar({{ $actividad->id }}, '{{ addslashes($actividad->titulo) }}')" class="text-green-600 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/40 p-2 rounded-lg transition-colors" title="Aprobar">
                                             <i class="fas fa-check"></i>
                                         </button>
-                                        
-                                        <!-- Rechazar -->
+
                                         <button onclick="abrirModalRechazar({{ $actividad->id }}, '{{ addslashes($actividad->titulo) }}')" class="text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 p-2 rounded-lg transition-colors" title="Rechazar">
                                             <i class="fas fa-times"></i>
                                         </button>
@@ -391,9 +368,7 @@
         </div>
     </div>
 
-    <!-- Gráficas -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <!-- Gráfica de Actividades por Mes -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
             <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
                 <i class="fas fa-chart-line mr-2 text-orange-600"></i>
@@ -406,7 +381,6 @@
             <div id="chart-actividades-mes" class="h-80"></div>
         </div>
 
-        <!-- Gráfica de Estado de Actividades -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
             <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
                 <i class="fas fa-chart-pie mr-2 text-amber-600"></i>
@@ -420,9 +394,7 @@
         </div>
     </div>
 
-    <!-- Tablas de Actividades -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <!-- Últimas Actividades -->
         <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
             <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
                 <i class="fas fa-list mr-2 text-orange-600 dark:text-orange-400"></i>
@@ -491,7 +463,6 @@
             @endif
         </div>
 
-        <!-- Actividades Rechazadas -->
         <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
             <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
                 <i class="fas fa-times-circle mr-2 text-red-600 dark:text-red-400"></i>Actividades Rechazadas
@@ -543,9 +514,6 @@
     </div>
 </div>
 
-<!-- ============================================ -->
-<!-- MODAL APROBAR ACTIVIDAD -->
-<!-- ============================================ -->
 <div id="modalAprobar" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 animate-fade-in">
         <div class="flex items-center justify-between mb-4">
@@ -557,26 +525,26 @@
                 <i class="fas fa-times text-xl"></i>
             </button>
         </div>
-        
+
         <p class="text-gray-600 dark:text-gray-400 mb-4">
             ¿Estás seguro de aprobar la siguiente actividad?
         </p>
-        
+
         <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4 mb-4">
             <p class="text-sm font-semibold text-green-900 dark:text-green-100" id="tituloActividadAprobar"></p>
         </div>
-        
+
         <form id="formAprobar" method="POST" action="">
             @csrf
             @method('PUT')
-            
+
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Observaciones (opcional)
                 </label>
                 <textarea name="observaciones" rows="3" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-gray-100" placeholder="Comentarios adicionales..."></textarea>
             </div>
-            
+
             <div class="flex gap-3">
                 <button type="button" onclick="cerrarModalAprobar()" class="flex-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 py-2 px-4 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
                     Cancelar
@@ -590,9 +558,6 @@
     </div>
 </div>
 
-<!-- ============================================ -->
-<!-- MODAL RECHAZAR ACTIVIDAD -->
-<!-- ============================================ -->
 <div id="modalRechazar" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 animate-fade-in">
         <div class="flex items-center justify-between mb-4">
@@ -604,26 +569,26 @@
                 <i class="fas fa-times text-xl"></i>
             </button>
         </div>
-        
+
         <p class="text-gray-600 dark:text-gray-400 mb-4">
             ¿Estás seguro de rechazar la siguiente actividad?
         </p>
-        
+
         <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-4">
             <p class="text-sm font-semibold text-red-900 dark:text-red-100" id="tituloActividadRechazar"></p>
         </div>
-        
+
         <form id="formRechazar" method="POST" action="">
             @csrf
             @method('PUT')
-            
+
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Motivo del rechazo <span class="text-red-500">*</span>
                 </label>
                 <textarea name="motivo_rechazo" rows="4" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-100" placeholder="Explica por qué rechazas esta actividad..."></textarea>
             </div>
-            
+
             <div class="flex gap-3">
                 <button type="button" onclick="cerrarModalRechazar()" class="flex-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 py-2 px-4 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
                     Cancelar
@@ -638,7 +603,6 @@
 </div>
 
 <style>
-    /* Scrollbar personalizado */
     .custom-scrollbar::-webkit-scrollbar {
         width: 8px;
         height: 8px;
@@ -681,9 +645,6 @@
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // ===================================
-    // GRÁFICA: Actividades por Mes
-    // ===================================
     const actividadesPorMes = @json($actividadesPorMes);
     const meses = Object.keys(actividadesPorMes);
     const valores = Object.values(actividadesPorMes);
@@ -741,9 +702,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const chartMes = new ApexCharts(document.querySelector("#chart-actividades-mes"), optionsMes);
     chartMes.render();
 
-    // ===================================
-    // GRÁFICA: Estado de Actividades
-    // ===================================
     const estadoActividades = @json($estadoActividades);
 
     const optionsEstado = {
@@ -791,12 +749,9 @@ document.addEventListener('DOMContentLoaded', function() {
     chartEstado.render();
 });
 
-// ===================================
-// FUNCIONES MODALES
-// ===================================
 function abrirModalAprobar(id, titulo) {
     document.getElementById('tituloActividadAprobar').textContent = titulo;
-    document.getElementById('formAprobar').action = `/actividades/${id}/aprobar`; // ✅ CORREGIDO
+    document.getElementById('formAprobar').action = `/actividades/${id}/aprobar`;
     document.getElementById('modalAprobar').classList.remove('hidden');
 }
 
@@ -806,7 +761,7 @@ function cerrarModalAprobar() {
 
 function abrirModalRechazar(id, titulo) {
     document.getElementById('tituloActividadRechazar').textContent = titulo;
-    document.getElementById('formRechazar').action = `/actividades/${id}/rechazar`; // ✅ CORREGIDO
+    document.getElementById('formRechazar').action = `/actividades/${id}/rechazar`;
     document.getElementById('modalRechazar').classList.remove('hidden');
 }
 

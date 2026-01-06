@@ -2,45 +2,33 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use Spatie\Permission\Traits\HasRoles;
-use App\Traits\Auditable; // ← AGREGADO
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Carbon;
+use Spatie\Permission\Traits\HasRoles; // si usas Spatie
 
-/**
- * @method bool hasRole(string $roleName)
- * @method \Illuminate\Database\Eloquent\Relations\HasMany notifications()
- * @method \Illuminate\Database\Eloquent\Relations\HasMany unreadNotifications()
- */
-class User extends Authenticatable
+class User extends Authenticatable implements AuthenticatableContract
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, Auditable; // ← AGREGADO Auditable
+    use HasFactory, Notifiable, HasRoles;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var string[]
+     * Atributos que se pueden asignar en masa.
      */
     protected $fillable = [
         'name',
         'sexo',
-        'area',
-        'cargo',
         'email',
         'password',
+        'cargo',
+        'area',
         'avatar',
-        'last_login_at',    
-        'last_login_ip',     
-        'login_history',       
+        'last_activity_at',   // importante para el estado en línea
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array
+     * Atributos ocultos para arrays/JSON.
      */
     protected $hidden = [
         'password',
@@ -48,123 +36,40 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be cast.
-     *
-     * @var array
+     * Casting de atributos.
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'last_login_at' => 'datetime',     
-        'login_history' => 'array',        
+        'last_activity_at'  => 'datetime',  // para usar Carbon directamente
     ];
 
-    // =======================
-    // 🔗 RELACIONES
-    // =======================
-    
     /**
-     * Relación con notificaciones
+     * Scope: usuarios considerados activos (online).
      */
-    public function notifications()
+    public function scopeActive($query, int $minutes = 5)
     {
-        return $this->hasMany(Notification::class)->latest();
+        return $query->where('last_activity_at', '>=', now()->subMinutes($minutes));
     }
 
     /**
-     * Notificaciones no leídas
+     * Scope: usuarios inactivos (offline).
      */
-    public function unreadNotifications()
+    public function scopeInactive($query, int $minutes = 5)
     {
-        return $this->notifications()->unread();
+        return $query
+            ->whereNotNull('last_activity_at')
+            ->where('last_activity_at', '<', now()->subMinutes($minutes));
     }
 
     /**
-     * Contar notificaciones no leídas
+     * Saber si el usuario está en línea.
      */
-    public function unreadNotificationsCount()
+    public function isOnline(int $minutes = 5): bool
     {
-        return $this->unreadNotifications()->count();
-    }
-
-    /**
-     * Logs de auditoría del usuario
-     */
-    public function auditLogs()
-    {
-        return $this->hasMany(AuditLog::class)->latest();
-    }
-
-    /**
-     * Última actividad registrada
-     */
-    public function lastActivity()
-    {
-        return $this->hasOne(AuditLog::class)->latest();
-    }
-
-    /**
-     * Actividades creadas por este usuario
-     */
-    public function actividadesCreadas()
-    {
-        return $this->hasMany(Actividad::class, 'creado_por_id');
-    }
-
-    /**
-     * Actividades donde es responsable
-     */
-    public function actividadesResponsable()
-    {
-        return $this->hasMany(Actividad::class, 'responsable_id');
-    }
-
-    /**
-     * Informes creados por este usuario
-     */
-    public function informes()
-    {
-        return $this->hasMany(Informe::class, 'user_id');
-    }
-
-    // =======================
-    // 🎯 MÉTODOS DE ESTADO
-    // =======================
-    
-    /**
-     * Verificar si el usuario está en línea (últimos 5 minutos)
-     */
-    public function isOnline()
-    {
-        return $this->last_login_at && 
-               $this->last_login_at->diffInMinutes(now()) < 5;
-    }
-
-    /**
-     * Obtener el estado del usuario (online, away, offline)
-     */
-    public function getStatusAttribute()
-    {
-        if ($this->isOnline()) {
-            return 'online';
+        if (! $this->last_activity_at instanceof Carbon) {
+            return false;
         }
-        
-        if ($this->last_login_at && $this->last_login_at->diffInHours(now()) < 24) {
-            return 'away';
-        }
-        
-        return 'offline';
-    }
 
-    /**
-     * Obtener texto del estado
-     */
-    public function getStatusTextAttribute()
-    {
-        return match($this->status) {
-            'online' => 'En línea',
-            'away' => 'Ausente',
-            'offline' => 'Desconectado',
-            default => 'Desconocido',
-        };
+        return $this->last_activity_at->gte(now()->subMinutes($minutes));
     }
 }

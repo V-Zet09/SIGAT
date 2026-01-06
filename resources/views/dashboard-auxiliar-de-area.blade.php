@@ -4,17 +4,14 @@
 
 @section('content')
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
-
-    <!-- Header del Auxiliar de Área - Teal/Turquesa -->
     <div class="bg-gradient-to-r from-teal-600 to-cyan-600 dark:from-teal-700 dark:to-cyan-700 rounded-2xl shadow-xl p-8 mb-8">
         <div class="flex items-center justify-between flex-wrap gap-4">
             <div class="flex items-center gap-4">
-                <!-- Avatar del Auxiliar -->
                 <div class="relative">
                     <div class="w-20 h-20 rounded-full bg-white dark:bg-gray-800 p-1 shadow-lg">
                         @if(Auth::user()->avatar)
-                           <img src="{{ asset('storage/avatars/' . Auth::user()->avatar) }}" 
-                                 alt="{{ Auth::user()->name }}" 
+                           <img src="{{ asset('storage/avatars/' . Auth::user()->avatar) }}"
+                                 alt="{{ Auth::user()->name }}"
                                  class="w-full h-full rounded-full object-cover">
                         @else
                             <div class="w-full h-full rounded-full bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center">
@@ -26,8 +23,7 @@
                     </div>
                     <span class="absolute bottom-0 right-0 w-6 h-6 bg-green-500 border-4 border-white dark:border-gray-800 rounded-full"></span>
                 </div>
-                
-                <!-- Información del Auxiliar -->
+
                 <div>
                     <h1 class="text-3xl font-bold text-white mb-2">
                         ¡Bienvenido, {{ Auth::user()->name ?? 'Auxiliar' }}!
@@ -50,8 +46,7 @@
                     </p>
                 </div>
             </div>
-            
-            <!-- Acceso rápido -->
+
             <div class="hidden md:flex gap-3">
                 <a href="{{ route('actividades.create') }}" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg hover:shadow-xl">
                     <i class="fas fa-plus-circle"></i>
@@ -61,9 +56,7 @@
         </div>
     </div>
 
-    <!-- Estadísticas principales -->
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
-        <!-- Mis Actividades Registradas -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
@@ -85,7 +78,6 @@
             <div class="bg-gradient-to-r from-teal-500 to-teal-600 h-1"></div>
         </div>
 
-        <!-- Actividades del Área -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
@@ -107,7 +99,6 @@
             <div class="bg-gradient-to-r from-cyan-500 to-cyan-600 h-1"></div>
         </div>
 
-        <!-- Pendientes de Aprobación -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
@@ -129,7 +120,6 @@
             <div class="bg-gradient-to-r from-amber-500 to-amber-600 h-1"></div>
         </div>
 
-        <!-- Aprobadas -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
@@ -152,33 +142,27 @@
         </div>
     </div>
 
-    <!-- Sección rediseñada: Grid de 3 columnas -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        
-        <!-- Acciones rápidas - ahora más compacta -->
         <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg lg:col-span-1">
             <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-6 flex items-center">
                 <i class="fas fa-bolt mr-2 text-yellow-500"></i>
                 Acciones Rápidas
             </h3>
             <div class="space-y-3">
-                {{-- Registrar Nueva Actividad --}}
                 @can('crear actividades')
-                <a href="{{ route('actividades.create') }}" 
+                <a href="{{ route('actividades.create') }}"
                    class="bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white text-center py-4 text-sm font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 group">
                     <i class="fas fa-plus-circle text-lg group-hover:scale-110 transition-transform"></i>
                     <span>Registrar Actividad</span>
                 </a>
                 @endcan
 
-                {{-- Editar / Ver mis actividades --}}
-                <a href="{{ route('actividades.registradas') }}" 
+                <a href="{{ route('actividades.registradas') }}"
                    class="bg-gradient-to-r from-cyan-600 to-cyan-700 hover:from-cyan-700 hover:to-cyan-800 text-white text-center py-4 text-sm font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 group">
                     <i class="fas fa-edit text-lg group-hover:scale-110 transition-transform"></i>
                     <span>Editar Actividades</span>
                 </a>
 
-                {{-- Información adicional --}}
                 <div class="bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 rounded-xl p-4 border border-teal-200 dark:border-teal-800 mt-6">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 bg-teal-500 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -193,7 +177,6 @@
             </div>
         </div>
 
-        <!-- Mi Resumen de Trabajo - ahora ocupa 2 columnas -->
         <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg lg:col-span-2">
             <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-6 flex items-center">
                 <i class="fas fa-clipboard-check mr-2 text-teal-600"></i>
@@ -251,7 +234,6 @@
         </div>
     </div>
 
-    <!-- TABLA: MIS ACTIVIDADES PARA EDITAR -->
     <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 mb-8">
         <div class="flex items-center justify-between mb-6">
             <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center">
@@ -259,7 +241,7 @@
                 Mis Actividades - Gestión
             </h3>
         </div>
-        
+
         <div class="bg-gray-50 dark:bg-gray-900/50 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800">
             <div class="overflow-x-auto max-h-[500px] custom-scrollbar">
                 <table class="min-w-full text-sm">
@@ -303,15 +285,13 @@
                                 </td>
                                 <td class="py-4 px-4">
                                     <div class="flex items-center justify-center gap-2">
-                                        {{-- Ver detalles (show) --}}
                                         <a href="{{ route('actividades.show', $actividad->id) }}"
                                            class="text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 p-2 rounded-lg transition-colors"
                                            title="Ver detalles">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        
+
                                         @if($actividad->estado === 'Pendiente' || $actividad->estado === 'Rechazada')
-                                            {{-- Editar (solo si está pendiente o rechazada) --}}
                                             <a href="{{ route('actividades.edit', $actividad->id) }}"
                                                class="text-teal-600 dark:text-teal-400 hover:bg-teal-100 dark:hover:bg-teal-900/40 p-2 rounded-lg transition-colors"
                                                title="Editar actividad">
@@ -320,9 +300,8 @@
                                         @else
                                             <span class="text-gray-400 text-xs px-2">Aprobada</span>
                                         @endif
-                                        
+
                                         @if($actividad->estado === 'Rechazada')
-                                            {{-- Ver motivo de rechazo (modal) --}}
                                             <button type="button"
                                                     onclick="verMotivoRechazo('{{ addslashes($actividad->motivo_rechazo ?? 'Sin motivo especificado') }}')"
                                                     class="text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 p-2 rounded-lg transition-colors"
@@ -348,9 +327,7 @@
         </div>
     </div>
 
-    <!-- Gráfica y Actividades del Área -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <!-- Gráfica de Actividades por Mes -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
             <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-6 flex items-center">
                 <i class="fas fa-chart-line mr-2 text-teal-600"></i>
@@ -359,7 +336,6 @@
             <div id="chart-mis-actividades" class="h-80"></div>
         </div>
 
-        <!-- Actividades del Área (solo lectura) -->
         <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
             <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-6 flex items-center">
                 <i class="fas fa-building mr-2 text-cyan-600 dark:text-cyan-400"></i>
@@ -420,7 +396,6 @@
     </div>
 </div>
 
-<!-- MODAL VER MOTIVO DE RECHAZO -->
 <div id="modalMotivoRechazo" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6">
         <div class="flex items-center justify-between mb-4">
@@ -432,11 +407,11 @@
                 <i class="fas fa-times"></i>
             </button>
         </div>
-        
+
         <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-4">
             <p class="text-sm text-red-900 dark:text-red-100" id="motivoRechazoTexto"></p>
         </div>
-        
+
         <button onclick="cerrarModalMotivo()" class="w-full bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white py-3 px-4 rounded-lg font-semibold transition-all duration-200">
             Entendido
         </button>
@@ -444,7 +419,6 @@
 </div>
 
 <style>
-    /* Scrollbar personalizado */
     .custom-scrollbar::-webkit-scrollbar {
         width: 10px;
         height: 10px;

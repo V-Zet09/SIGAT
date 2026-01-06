@@ -13,8 +13,10 @@ class NotificationController extends Controller
      */
     public function index()
     {
+        // Ordenamos por fecha de creación descendente (más nuevas primero)
         $notifications = Auth::user()
             ->notifications()
+            ->latest() 
             ->paginate(20);
 
         return view('notifications.index', compact('notifications'));
@@ -27,10 +29,12 @@ class NotificationController extends Controller
     {
         $notifications = Auth::user()
             ->notifications()
+            ->latest()
             ->take(10)
             ->get();
 
-        $unreadCount = Auth::user()->unreadNotificationsCount();
+        // CORRECCIÓN: Laravel usa la relación unreadNotifications()
+        $unreadCount = Auth::user()->unreadNotifications()->count();
 
         return response()->json([
             'notifications' => $notifications,
@@ -47,7 +51,7 @@ class NotificationController extends Controller
             ->notifications()
             ->findOrFail($id);
 
-        $notification->markAsRead();
+        $notification->markAsRead(); // Este método ya lo arreglamos en el Modelo
 
         return response()->json([
             'success' => true,
@@ -60,10 +64,10 @@ class NotificationController extends Controller
      */
     public function markAllAsRead()
     {
+        // CORRECCIÓN: Solo actualizamos read_at, quitamos la columna 'read'
         Auth::user()
             ->unreadNotifications()
             ->update([
-                'read' => true,
                 'read_at' => now(),
             ]);
 
@@ -95,9 +99,10 @@ class NotificationController extends Controller
      */
     public function clearRead()
     {
+        // CORRECCIÓN: Usamos el scope que ya viene con el trait o el modelo
+        // Auth::user()->readNotifications() devuelve las leídas.
         Auth::user()
-            ->notifications()
-            ->read()
+            ->readNotifications() 
             ->delete();
 
         return response()->json([

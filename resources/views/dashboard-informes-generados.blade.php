@@ -400,29 +400,43 @@
                     </thead>
                     <tbody id="informesTableBody" class="divide-y divide-gray-200 dark:divide-gray-600 bg-white dark:bg-gray-800">
                         @forelse ($informes as $informe)
+                        @php
+                            $titulo = $informe->titulo ?? ('Informe ' . $loop->iteration);
+
+                            $inicio = $informe->actividades_fecha_inicio
+                                ? \Carbon\Carbon::parse($informe->actividades_fecha_inicio)->format('d/m/Y')
+                                : 'N/A';
+
+                            $fin = $informe->actividades_fecha_fin
+                                ? \Carbon\Carbon::parse($informe->actividades_fecha_fin)->format('d/m/Y')
+                                : 'N/A';
+
+                            $periodoTexto = $inicio . ' - ' . $fin;
+                        @endphp
+
                         <tr class="table-row border-b border-gray-200 dark:border-gray-700 transition hover:bg-gray-50 dark:hover:bg-gray-700/50"
-                            data-titulo="{{ strtolower($informe->titulo ?? 'Informe ' . ($loop->iteration)) }}"
-                            data-periodo="{{ strtolower(\Carbon\Carbon::parse($informe->periodo)->format('d/m/Y')) }}"
-                            data-municipio="{{ strtolower($informe->municipio_nombre) }}">
+                            data-titulo="{{ strtolower($titulo) }}"
+                            data-periodo="{{ strtolower($periodoTexto) }}"
+                            data-municipio="{{ strtolower($informe->municipio_nombre ?? '') }}">
                             <td class="px-6 py-4">
                                 <div class="flex items-center space-x-3">
                                     <i class="fas fa-file-alt text-2xl text-green-600 dark:text-green-400"></i>
                                     <span class="font-medium text-gray-900 dark:text-gray-200">
-                                        {{ $informe->titulo ?? 'Informe ' . ($loop->iteration) }}
+                                        {{ $titulo }}
                                     </span>
                                 </div>
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <span class="inline-flex items-center space-x-2 rounded-full bg-blue-100 dark:bg-blue-500/20 px-3 py-1 text-sm font-medium text-blue-700 dark:text-blue-300">
                                     <i class="fas fa-calendar-alt"></i>
-                                    <span>{{ \Carbon\Carbon::parse($informe->periodo)->format('d/m/Y') }}</span>
+                                    <span>{{ $periodoTexto }}</span>
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <span class="text-gray-700 dark:text-gray-300">{{ $informe->municipio_nombre }}</span>
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <span class="text-gray-600 dark:text-gray-400">{{ \Carbon\Carbon::parse($informe->created_at)->format('d/m/Y') }}</span>
+                                <span class="text-gray-600 dark:text-gray-400">{{ optional($informe->created_at)->format('d/m/Y') ?? 'N/A' }}</span>
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <span id="descargas-{{ $informe->id }}" class="inline-flex items-center space-x-2 rounded-full bg-purple-100 dark:bg-purple-500/20 px-3 py-1 text-sm font-medium text-purple-700 dark:text-purple-300">
@@ -466,13 +480,19 @@
                                                 class="z-[9999] rounded-lg bg-white dark:bg-gray-800 shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none">
                                                 
                                                 <div class="py-1">
-                                                    <a href="#" 
+                                                    @if(!empty($informe->pdf_path))
+                                                    <a href="#"
                                                     @click.prevent="descargarPDF(event, {{ $informe->id }}); open = false"
                                                     class="group flex items-center px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition">
                                                         <i class="fas fa-file-pdf mr-3 text-red-500"></i>
                                                         <span>Descargar PDF</span>
                                                     </a>
-
+                                                @else
+                                                    <div class="flex items-center px-4 py-3 text-sm text-gray-400 cursor-not-allowed select-none">
+                                                        <i class="fas fa-file-pdf mr-3 text-gray-400"></i>
+                                                        <span>PDF pendiente</span>
+                                                    </div>
+                                                @endif
                                                     <a href="{{ route('informes.editar', $informe->id) }}"
                                                     @click="open = false"
                                                     class="group flex items-center px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 transition">

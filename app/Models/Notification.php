@@ -10,41 +10,52 @@ class Notification extends Model
 {
     use HasFactory;
 
+    // IMPORTANTE: Decirle a Eloquent que el ID no es auto-incrementable (es UUID)
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
-        'user_id',
+        'id',               // Necesario para guardar el UUID manual
+        'notifiable_id',    // Nuevo campo
+        'notifiable_type',  // Nuevo campo
         'type',
         'title',
         'message',
         'icon',
         'color',
         'link',
-        'read',
-        'read_at',
+        'read_at',          // Usaremos esto para saber si está leída
         'data',
     ];
 
     protected $casts = [
-        'read' => 'boolean',
         'read_at' => 'datetime',
         'data' => 'array',
     ];
 
-    // ✅ Relación con usuario
-    public function user()
+    // ✅ Relación Polimórfica (Reemplaza a user())
+    public function notifiable()
     {
-        return $this->belongsTo(User::class);
+        return $this->morphTo();
     }
 
-    // ✅ Scope: Solo no leídas
+    // ✅ Helper para obtener el usuario fácilmente (si siempre son usuarios)
+    public function user()
+    {
+        // Esto asume que el notifiable_type siempre es App\Models\User
+        return $this->belongsTo(User::class, 'notifiable_id');
+    }
+
+    // ✅ Scope: Solo no leídas (Ahora se basa en si read_at es null)
     public function scopeUnread($query)
     {
-        return $query->where('read', false);
+        return $query->whereNull('read_at');
     }
 
     // ✅ Scope: Solo leídas
     public function scopeRead($query)
     {
-        return $query->where('read', true);
+        return $query->whereNotNull('read_at');
     }
 
     // ✅ Scope: Por tipo
@@ -56,22 +67,28 @@ class Notification extends Model
     // ✅ Marcar como leída
     public function markAsRead()
     {
-        $this->update([
-            'read' => true,
-            'read_at' => now(),
-        ]);
+        if (is_null($this->read_at)) {
+            $this->update([
+                'read_at' => now(),
+            ]);
+        }
     }
 
     // ✅ Marcar como no leída
     public function markAsUnread()
     {
         $this->update([
-            'read' => false,
             'read_at' => null,
         ]);
     }
 
-    // ✅ Tiempo desde creación (hace 5 minutos, hace 2 horas, etc.)
+    // ✅ Atributo virtual 'read' para compatibilidad con tu código viejo
+    public function getReadAttribute()
+    {
+        return !is_null($this->read_at);
+    }
+
+    // ✅ Tiempo desde creación
     public function getTimeAgoAttribute()
     {
         return $this->created_at->diffForHumans();
